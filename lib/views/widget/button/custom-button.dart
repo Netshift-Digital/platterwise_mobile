@@ -1,28 +1,29 @@
 
 import 'package:flutter/material.dart';
+import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/enum/app_state.dart';
-import 'package:provider/provider.dart';
 
-class CribButton extends StatelessWidget {
+
+class PlatButton extends StatelessWidget {
   final String title;
   final Function() onTap;
   final double width, height,radius,textSize,padding,iconSize,spacing;
   final  Color? iconColor,color,textColor;
   final Widget? icon;
   final AppState appState;
-  const CribButton({
+  const PlatButton({
     this.icon,
     this.radius=10,
     this.appState=AppState.idle,
     this.width = double.maxFinite,
-    this.height = 49,
+    this.height = 54,
     this.color,
     this.textColor,
     this.iconColor,
     required this.title,
     required this.onTap,
-     this.textSize=16,
+     this.textSize=18,
     this.iconSize=17,
      this.padding=15,
     this.spacing=0,
@@ -37,7 +38,7 @@ class CribButton extends StatelessWidget {
         width:width,
         height: height,
         decoration: BoxDecoration(
-          //color:color??model.themeData.iconTheme.color,
+          color:AppColor.p300,
           borderRadius: BorderRadius.circular(radius),
         ),
         child: Padding(
@@ -49,10 +50,12 @@ class CribButton extends StatelessWidget {
               width: 20,
               child: CircularProgressIndicator(),
             ):Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                Text(title,style:AppTextTheme.h3.copyWith(
                  fontSize:textSize ,
+                 fontWeight: FontWeight.w500,
+                 color: AppColor.g0
                ) ,),
               ],
             ),

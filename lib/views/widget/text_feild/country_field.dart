@@ -1,14 +1,14 @@
 
 import 'package:flutter/material.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
-import 'package:platterwave/res/theme.dart';
-import 'package:provider/provider.dart';
 
 
 
 
-class Field extends StatefulWidget {
+
+class CountryField extends StatefulWidget {
   final TextEditingController controller;
   final String hint;
   final Widget? prefixIcon;
@@ -19,7 +19,7 @@ class Field extends StatefulWidget {
   final bool isPassword,enable;
   final Function? onTap;
   final Widget? suffixIcon;
-  const Field({
+  const CountryField({
     required this.controller,
     this.height=54,
     this.onTap,
@@ -36,27 +36,28 @@ class Field extends StatefulWidget {
     Key? key}) : super(key: key);
 
   @override
-  State<Field> createState() => _FieldState();
+  State<CountryField> createState() => _CountryFieldState();
 }
 
-class _FieldState extends State<Field> {
+class _CountryFieldState extends State<CountryField> {
   bool secure = false;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return IntlPhoneField(
       onTap: (){
         widget.onTap;
       },
       obscureText: secure,
       enabled: widget.enable,
+      initialCountryCode: 'NG',
       controller:widget.controller ,
       keyboardType: widget.textInputType,
       validator: (e){
-        return widget.validate==null?null:widget.validate!(e!);
+        return widget.validate==null?null:widget.validate!(e!.number);
       },
       decoration: InputDecoration(
-       hintText: widget.hint,
+        hintText: widget.hint,
         prefixIcon: widget.prefixIcon,
         disabledBorder:const OutlineInputBorder(
           borderSide:  BorderSide(
