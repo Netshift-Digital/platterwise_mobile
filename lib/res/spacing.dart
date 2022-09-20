@@ -1,0 +1,10 @@
+const double four = 4;
+const double eight = 8;
+const double twelve = 12;
+const double sixteen = 16;
+const double twenty = 20;
+const double twentyFour = 20;
+const double fiftyEight = 58;
+const double sixtyFour = 64;
+const double sevenTwo = 72;
+const double eighty = 80;
