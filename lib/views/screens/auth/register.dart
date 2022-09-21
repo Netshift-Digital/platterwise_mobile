@@ -3,6 +3,8 @@ import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/spacing.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
+import 'package:platterwave/utils/nav.dart';
+import 'package:platterwave/views/screens/auth/otp.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/text_feild/country_field.dart';
@@ -84,7 +86,7 @@ class Register extends StatelessWidget {
                     PlatButton(
                         title: "Create your account",
                         onTap: (){
-
+                            nav(context,Otp());
                         }
                     ),
                     const SizedBox(height: eighteen,),
