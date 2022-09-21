@@ -1,10 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:platterwave/constant/index.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/views/screens/auth/register.dart';
 
-void main() {
+void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -13,6 +14,7 @@ void main() {
           statusBarIconBrightness: Brightness.light,
           systemNavigationBarColor: Colors.black,
           systemNavigationBarIconBrightness: Brightness.light));
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

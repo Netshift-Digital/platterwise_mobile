@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "63435512296",
+    "project_id": "learnlyapp-technifyinc",
+    "storage_bucket": "learnlyapp-technifyinc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:63435512296:android:3950b8389d6fcd3f4b6c5d",
+        "android_client_info": {
+          "package_name": "com.platterwise.net"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "63435512296-2mts3t3rc87moge8nvnal6o4tfl622qr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoN_FRvZQHqXNejpSpBXgkpUA7b1d_ot4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "63435512296-2mts3t3rc87moge8nvnal6o4tfl622qr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
