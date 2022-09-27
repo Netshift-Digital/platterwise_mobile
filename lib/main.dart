@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:platterwave/constant/index.dart';
 import 'package:platterwave/res/theme.dart';
+import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/views/screens/auth/register.dart';
+import 'package:provider/provider.dart';
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +17,11 @@ void main()async {
           systemNavigationBarColor: Colors.black,
           systemNavigationBarIconBrightness: Brightness.light));
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_)=>PageViewModel()),
+    ],
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

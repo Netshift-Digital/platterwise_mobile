@@ -40,36 +40,24 @@ class _BottomNavState extends State<BottomNav> {
   Widget build(BuildContext context) {
     var pageViewModel = context.watch<PageViewModel>();
     return Scaffold(
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(left:20,right: 20 ,bottom: 10),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(24),
-              topLeft: Radius.circular(24),
-              bottomRight: Radius.circular(24),
-              bottomLeft: Radius.circular(24)
-
-          ),
-          child: BottomNavigationBar(
-            iconSize: 18,
-            selectedLabelStyle: AppTextTheme.h5.copyWith(
-                fontSize: 9
-            ),
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: AppColor.p300,
-            unselectedItemColor: AppColor.g700,
-            currentIndex: pageViewModel.appIndex,
-            onTap: (index) {
-              pageViewModel.setIndex(index);
-            },
-            items: bottomNav.map((e) {
-              return BottomNavigationBarItem(
-                label:"\n${e.title}",
-                icon:e.icon.isEmpty?const Icon(Icons.add_circle):SvgIcon(e.icon),
-              );
-            }).toList(),
-          ),
+      bottomNavigationBar: BottomNavigationBar(
+        iconSize: 18,
+        selectedLabelStyle: AppTextTheme.h5.copyWith(
+            fontSize: 9
         ),
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: AppColor.p300,
+        unselectedItemColor: AppColor.g700,
+        currentIndex: pageViewModel.appIndex,
+        onTap: (index) {
+          pageViewModel.setIndex(index);
+        },
+        items: bottomNav.map((e) {
+          return BottomNavigationBarItem(
+            label:"\n${e.title}",
+            icon:e.icon.isEmpty?const Icon(Icons.add_circle):SvgIcon(e.icon),
+          );
+        }).toList(),
       ),
 
     );

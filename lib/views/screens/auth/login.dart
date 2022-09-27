@@ -6,6 +6,7 @@ import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/views/screens/auth/otp.dart';
+import 'package:platterwave/views/screens/bottom_nav/bottom_nav.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/text_feild/country_field.dart';
@@ -74,9 +75,9 @@ final _formKey = GlobalKey<FormState>();
                      SizedBox(height: size.height*0.07,),
                       PlatButton(
                        // color: _formKey.currentState!.validate()?null :AppColor.g500,
-                          title: "Create your account",
+                          title: "Sign in",
                           onTap: (){
-                            nav(context,Otp());
+                           nav(context, BottomNav());
                           }
                       ),
                       SizedBox(height: size.height*0.05,),
