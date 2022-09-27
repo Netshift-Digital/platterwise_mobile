@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "63435512296",
-    "project_id": "learnlyapp-technifyinc",
-    "storage_bucket": "learnlyapp-technifyinc.appspot.com"
+    "project_number": "487663652425",
+    "firebase_url": "https://platterwise-default-rtdb.firebaseio.com",
+    "project_id": "platterwise",
+    "storage_bucket": "platterwise.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:63435512296:android:3950b8389d6fcd3f4b6c5d",
+        "mobilesdk_app_id": "1:487663652425:android:b0916125994471a1f2b998",
         "android_client_info": {
           "package_name": "com.platterwise.net"
         }
       },
       "oauth_client": [
         {
-          "client_id": "63435512296-2mts3t3rc87moge8nvnal6o4tfl622qr.apps.googleusercontent.com",
+          "client_id": "487663652425-68ga0o36fthkq9f2ebmdibtl5n28nhtu.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDoN_FRvZQHqXNejpSpBXgkpUA7b1d_ot4"
+          "current_key": "AIzaSyBLNHyvPmLhsrk6M8Oy9U-38iQfiLD7foo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "63435512296-2mts3t3rc87moge8nvnal6o4tfl622qr.apps.googleusercontent.com",
+              "client_id": "487663652425-68ga0o36fthkq9f2ebmdibtl5n28nhtu.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
