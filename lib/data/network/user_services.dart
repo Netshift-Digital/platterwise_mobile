@@ -16,16 +16,13 @@ class UserService{
 
   Future<dynamic> signUp(RegisterModel registerModel) async {
     var body = jsonEncode(registerModel.toJson());
-    print(registerModel.toJson());
     try {
       var response =
       await client.post(Uri.parse("${baseurl}createacc_json.php"), body: body, headers: {
         "Content-type": "application/json",
       });
       var data = jsonDecode(response.body);
-      print(data);
       if(response.statusCode==200){
-
         return data;
       }else{
         RandomFunction.toast(data['status']??"");
