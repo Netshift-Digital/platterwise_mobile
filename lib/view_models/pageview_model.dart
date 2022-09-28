@@ -1,4 +1,4 @@
-import '../common/base_veiw_model.dart';
+import '../common/base_view_model.dart';
 
 class PageViewModel extends BaseViewModel{
   int _appIndex = 0;

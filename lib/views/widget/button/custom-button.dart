@@ -48,7 +48,9 @@ class PlatButton extends StatelessWidget {
             child:appState==AppState.busy?const SizedBox(
               height: 20,
               width: 20,
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(Colors.white),
+              ),
             ):Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

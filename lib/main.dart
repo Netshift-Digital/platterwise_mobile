@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:platterwave/constant/index.dart';
 import 'package:platterwave/res/theme.dart';
+import 'package:platterwave/utils/locator.dart';
+import 'package:platterwave/view_models/User_view_model.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/views/screens/auth/register.dart';
 import 'package:provider/provider.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,10 +19,12 @@ void main()async {
           statusBarIconBrightness: Brightness.light,
           systemNavigationBarColor: Colors.black,
           systemNavigationBarIconBrightness: Brightness.light));
+  setupLocator();
   await Firebase.initializeApp();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_)=>PageViewModel()),
+      ChangeNotifierProvider(create: (_)=>UserViewModel()),
     ],
       child: const MyApp()));
 }
@@ -30,11 +35,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: appName,
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      home: Register(),
+    return OverlaySupport.global(
+      child: MaterialApp(
+        title: appName,
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
+        home: Register(),
+      ),
     );
   }
 }
