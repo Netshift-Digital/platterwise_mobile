@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:platterwave/main.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/spacing.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/nav.dart';
+import 'package:platterwave/view_models/User_view_model.dart';
 import 'package:platterwave/views/screens/auth/otp.dart';
 import 'package:platterwave/views/screens/bottom_nav/bottom_nav.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/text_feild/country_field.dart';
 import 'package:platterwave/views/widget/text_feild/text_feild.dart';
+import 'package:provider/provider.dart';
 import 'package:the_validator/the_validator.dart';
 
 class Login extends StatelessWidget {
@@ -74,10 +77,11 @@ final _formKey = GlobalKey<FormState>();
                      ),
                      SizedBox(height: size.height*0.07,),
                       PlatButton(
+                          appState:context.watch<UserViewModel>().appState ,
                        // color: _formKey.currentState!.validate()?null :AppColor.g500,
                           title: "Sign in",
                           onTap: (){
-                           nav(context, BottomNav());
+                            login(context);
                           }
                       ),
                       SizedBox(height: size.height*0.05,),
@@ -147,5 +151,17 @@ final _formKey = GlobalKey<FormState>();
         ),
       ),
     );
+  }
+
+  void login(BuildContext context) {
+    //nav(context, const BottomNav());
+    context.read<UserViewModel>().login(
+        _email.text,
+        _password.text
+    ).then((value){
+      if(value!=null){
+        nav(context, const MainPage(),remove: true);
+      }
+    });
   }
 }

@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:platterwave/constant/endpoint.dart';
 import 'package:platterwave/model/Failure.dart';
-import 'package:platterwave/model/request_model/register.dart';
+import 'package:platterwave/model/request_model/register_model.dart';
 import 'package:platterwave/utils/random_functions.dart';
 
 

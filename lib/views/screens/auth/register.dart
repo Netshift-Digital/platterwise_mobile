@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:platterwave/model/request_model/register.dart';
+import 'package:platterwave/model/request_model/register_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/spacing.dart';
 import 'package:platterwave/res/text-theme.dart';
@@ -158,8 +158,10 @@ class Register extends StatelessWidget {
             email: _email.text,
             password: _password.text,
             phone: _phoneNumber.text,
-            username: _username.text
-        )).then((value){
+            username: _username.text,
+          imageUrl: "",
+          authId: ""
+        ),"").then((value){
               if(value==true){
                 nav(context,Otp());
               }

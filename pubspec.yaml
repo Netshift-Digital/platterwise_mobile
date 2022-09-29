@@ -42,6 +42,8 @@ dependencies:
   cloud_firestore: ^3.4.8
   overlay_support: ^2.0.1
   jiffy: ^5.0.0
+  firebase_storage: ^10.3.9
+  advance_image_picker: ^0.1.7+1
   flutter:
     sdk: flutter
 
