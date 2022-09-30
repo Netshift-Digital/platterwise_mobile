@@ -37,7 +37,7 @@ class _CreatePostState extends State<CreatePost> {
             children: [
               const SizedBox(width: 30,),
               vidImage(
-                image:"assest/icon/gallery.svg",
+                image:"assets/icon/gallery.svg",
                 text:"Pictures",
                 onTap:(){
                   pickImage();
@@ -45,7 +45,7 @@ class _CreatePostState extends State<CreatePost> {
               ),
               const SizedBox(width: 16,),
               vidImage(
-                  image:"assest/icon/video-square.svg",
+                  image:"assets/icon/video-square.svg",
                   text:"Videos",
                   onTap:(){
                     pickVideo();
