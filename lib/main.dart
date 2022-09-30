@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:platterwave/constant/index.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/locator.dart';
-import 'package:platterwave/view_models/User_view_model.dart';
+import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/views/screens/auth/register.dart';
 import 'package:provider/provider.dart';
