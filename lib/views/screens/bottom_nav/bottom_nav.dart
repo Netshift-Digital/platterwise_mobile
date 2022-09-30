@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:platterwave/model/bottom_nav_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
+import 'package:platterwave/views/screens/home/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_icon/svg_icon.dart';
 import '../../../res/text-theme.dart';
@@ -17,21 +18,21 @@ class _BottomNavState extends State<BottomNav> {
   final List<BottomNavigationModel> bottomNav = [
     BottomNavigationModel(
         title: "Home",
-        icon: "assest/icon/home-2.svg",
-        screen: const SizedBox()
+        icon: "assets/icon/home-2.svg",
+        screen: HomeScreen()
     ),
     BottomNavigationModel(
         title: "Explore",
-        icon: "assest/icon/search-normal.svg",
+        icon: "assets/icon/search-normal.svg",
         screen: const SizedBox()),
     BottomNavigationModel(
         title: "Save",
-        icon: "assest/icon/bookmarke.svg",
+        icon: "assets/icon/bookmark.svg",
         screen: const SizedBox()
     ),
     BottomNavigationModel(
         title: "Profile",
-        icon: "assest/icon/user.svg",
+        icon: "assets/icon/user.svg",
         screen: const SizedBox()
     ),
 

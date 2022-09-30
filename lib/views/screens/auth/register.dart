@@ -5,13 +5,13 @@ import 'package:platterwave/res/spacing.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/nav.dart';
-import 'package:platterwave/view_models/User_view_model.dart';
+import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/screens/auth/login.dart';
 import 'package:platterwave/views/screens/auth/otp.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/text_feild/country_field.dart';
-import 'package:platterwave/views/widget/text_feild/text_feild.dart';
+import 'package:platterwave/views/widget/text_feild/text_field.dart';
 import 'package:provider/provider.dart';
 import 'package:the_validator/the_validator.dart';
 

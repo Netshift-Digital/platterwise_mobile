@@ -8,8 +8,6 @@ class AppTheme{
     brightness: Brightness.light,
   );
 
-
-
 }
 
 

@@ -24,9 +24,6 @@ class AppTextTheme{
       fontSize: 18,
       color: AppColor.g900
   );
-
-
-
   static  TextStyle h3 =  const TextStyle(
       fontWeight:FontWeight.w400,
       fontSize: 16,
