@@ -44,6 +44,7 @@ dependencies:
   jiffy: ^5.0.0
   firebase_storage: ^10.3.9
   advance_image_picker: ^0.1.7+1
+  image_picker: ^0.8.5+3
   flutter:
     sdk: flutter
 
