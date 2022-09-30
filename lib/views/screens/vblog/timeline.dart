@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/res/color.dart';
@@ -19,7 +20,8 @@ class _TimelineState extends State<Timeline> {
         backgroundColor: AppColor.p300,
         child: SvgPicture.asset('assest/icon/edit.svg'),
         onPressed: (){
-         nav(context, const CreatePost());
+         //nav(context, const CreatePost());
+         FirebaseAuth.instance.signOut();
         },
       ),
     );

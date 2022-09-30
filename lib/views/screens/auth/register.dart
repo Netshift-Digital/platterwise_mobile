@@ -8,6 +8,7 @@ import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/view_models/User_view_model.dart';
 import 'package:platterwave/views/screens/auth/login.dart';
 import 'package:platterwave/views/screens/auth/otp.dart';
+import 'package:platterwave/views/screens/auth/profile_pic.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/text_feild/country_field.dart';
@@ -105,11 +106,11 @@ class Register extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Row(),
-                          Text("we wont share your information without your permission",
+                          Text("We won't share your information without your permission",
                               style: AppTextTheme.hint.copyWith(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
-                                  color: AppColor.g500
+                                  color: AppColor.g100
                               )
                           ),
                           const SizedBox(height: hintSpacing,),
@@ -151,16 +152,18 @@ class Register extends StatelessWidget {
     );
   }
 
-  void register(BuildContext context) {
-    context.read<UserViewModel>().registerUser(
+  void register(BuildContext context) async{
+    var model =  context.read<UserViewModel>();
+    //var imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context)=>const ProfilePic()));
+    model.registerUser(
         RegisterModel(
-            fullName: _fullName.text,
-            email: _email.text,
-            password: _password.text,
-            phone: _phoneNumber.text,
-            username: _username.text,
-          imageUrl: "",
-          authId: ""
+             fullName: _fullName.text,
+             email: _email.text,
+             password: _password.text,
+             phone: _phoneNumber.text,
+             username: _username.text,
+             imageUrl:"",
+             authId: ""
         ),"").then((value){
               if(value==true){
                 nav(context,Otp());
