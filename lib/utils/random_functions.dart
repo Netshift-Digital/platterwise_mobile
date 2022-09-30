@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -32,6 +33,26 @@ class RandomFunction {
       "hour": d.hour,
       "minute":d.minute
     });
+  }
+
+
+
+  static sheet(BuildContext context,Widget body,{double? height}) {
+    var size = MediaQuery.of(context).size;
+    showCupertinoModalPopup(
+        context: context,
+        builder: (context){
+          return Container(
+            height:height??size.height-120,
+            width: size.width,
+            decoration: const BoxDecoration(
+                color:Colors.white,
+
+            ),
+            child: body,
+          );
+        }
+    );
   }
 
 

@@ -19,14 +19,14 @@ class UserViewModel extends BaseViewModel{
   Future<bool> registerUser(RegisterModel registerModel,String imagePath)async{
     try{
       setState(AppState.busy);
-      var image = await uploadImage(imagePath);
+      //var image = await uploadImage(imagePath);
       var user = await firebaseAuth.createUserWithEmailAndPassword(
           email: registerModel.email,
           password: registerModel.password);
 
       var data = await userService.signUp(
           registerModel.copyWith(
-         imageUrl: image,
+         imageUrl: '',
          authId: user.user!.uid
       ));
       setState(AppState.idle);

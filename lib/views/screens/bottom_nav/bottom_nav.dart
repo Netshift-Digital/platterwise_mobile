@@ -3,6 +3,7 @@ import 'package:platterwave/model/bottom_nav_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/views/screens/home/home_screen.dart';
+
 import 'package:provider/provider.dart';
 import 'package:svg_icon/svg_icon.dart';
 import '../../../res/text-theme.dart';
@@ -41,6 +42,7 @@ class _BottomNavState extends State<BottomNav> {
   Widget build(BuildContext context) {
     var pageViewModel = context.watch<PageViewModel>();
     return Scaffold(
+      body: bottomNav[pageViewModel.appIndex].screen,
       bottomNavigationBar: BottomNavigationBar(
         iconSize: 18,
         selectedLabelStyle: AppTextTheme.h5.copyWith(
