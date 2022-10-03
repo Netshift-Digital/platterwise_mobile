@@ -5,9 +5,9 @@ import 'package:platterwave/utils/size_config/size_extensions.dart';
 
 class PlatterwiseAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool automaticallyImplyLeading;
-  PreferredSizeWidget? bottom;
+  final PreferredSizeWidget? bottom;
 
-  PlatterwiseAppBar({
+  const PlatterwiseAppBar({
     Key? key,
     this.bottom,
     this.automaticallyImplyLeading = true

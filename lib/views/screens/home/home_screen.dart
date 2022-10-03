@@ -4,8 +4,8 @@ import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
-import 'package:platterwave/views/screens/home/popular_page.dart';
-import 'package:platterwave/views/screens/home/trending_page.dart';
+import 'package:platterwave/views/screens/vblog/popular_page.dart';
+import 'package:platterwave/views/screens/vblog/trending_page.dart';
 import 'package:platterwave/views/widget/appbar/appbar_platterwise.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
 import 'package:platterwave/views/widget/text_feild/text_field.dart';
@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
     final searchTextController = TextEditingController();
     SizeConfig.init(context);
     return Scaffold(
-      appBar: PlatterwiseAppBar(),
+      appBar:const PlatterwiseAppBar(),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.only(right: 120.w),
                           child: TabBar(
-                            tabs: [
+                            tabs: const [
                               Tab(text: "Trending",),
                               Tab(text: "Popular",)
                             ],
@@ -59,7 +59,7 @@ class HomeScreen extends StatelessWidget {
 
                           ),
                         ),
-                        Expanded(
+                       const Expanded(
                             child: TabBarView(
                               children: [
                                 TrendingPage(),
