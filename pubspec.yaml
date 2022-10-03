@@ -45,7 +45,7 @@ dependencies:
   firebase_storage: ^10.3.9
   advance_image_picker: ^0.1.7+1
   image_picker: ^0.8.5+3
-
+  readmore: ^2.2.0
   flutter:
     sdk: flutter
 

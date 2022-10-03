@@ -3,6 +3,7 @@ import 'package:platterwave/model/bottom_nav_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/views/screens/home/home_screen.dart';
+import 'package:platterwave/views/screens/vblog/timeline.dart';
 
 import 'package:provider/provider.dart';
 import 'package:svg_icon/svg_icon.dart';
@@ -20,7 +21,7 @@ class _BottomNavState extends State<BottomNav> {
     BottomNavigationModel(
         title: "Home",
         icon: "assets/icon/home-2.svg",
-        screen: HomeScreen()
+        screen: const Timeline()
     ),
     BottomNavigationModel(
         title: "Explore",

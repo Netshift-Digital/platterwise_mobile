@@ -7,7 +7,15 @@ class TrendingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: TimelinePostContainer(),
+      body: ListView.builder(
+          padding: EdgeInsets.zero,
+          physics: const BouncingScrollPhysics(),
+          shrinkWrap: true,
+        itemCount: 3,
+        itemBuilder: (context,index) {
+          return const TimelinePostContainer();
+        }
+      ),
     );
   }
 }
