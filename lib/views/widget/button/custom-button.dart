@@ -18,7 +18,7 @@ class PlatButton extends StatelessWidget {
     this.appState=AppState.idle,
     this.width = double.maxFinite,
     this.height = 54,
-    this.color,
+    this.color = AppColor.p300,
     this.textColor,
     this.iconColor,
     required this.title,
@@ -38,7 +38,7 @@ class PlatButton extends StatelessWidget {
         width:width,
         height: height,
         decoration: BoxDecoration(
-          color:AppColor.p300,
+          color: color,
           borderRadius: BorderRadius.circular(radius),
         ),
         child: Padding(

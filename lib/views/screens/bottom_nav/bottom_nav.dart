@@ -3,6 +3,8 @@ import 'package:platterwave/model/bottom_nav_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/views/screens/home/home_screen.dart';
+import 'package:platterwave/views/screens/profile/profile_screen.dart';
+import 'package:platterwave/views/screens/save/save_screen.dart';
 import 'package:platterwave/views/screens/vblog/timeline.dart';
 
 import 'package:provider/provider.dart';
@@ -30,12 +32,12 @@ class _BottomNavState extends State<BottomNav> {
     BottomNavigationModel(
         title: "Save",
         icon: "assets/icon/bookmark.svg",
-        screen: const SizedBox()
+        screen: const SaveScreen()
     ),
     BottomNavigationModel(
         title: "Profile",
         icon: "assets/icon/user.svg",
-        screen: const SizedBox()
+        screen: const ProfileScreen()
     ),
 
   ];
