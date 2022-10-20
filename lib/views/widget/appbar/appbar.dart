@@ -6,5 +6,6 @@ AppBar appBar(BuildContext context){
     backgroundColor: Colors.transparent,
     systemOverlayStyle: kOverlay,
     elevation: 0,
+    automaticallyImplyLeading: true,
   );
 }
