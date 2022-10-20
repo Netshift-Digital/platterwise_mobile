@@ -6,6 +6,7 @@ import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/locator.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
+import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/auth/register.dart';
 import 'package:provider/provider.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -29,6 +30,7 @@ void main()async {
     providers: [
       ChangeNotifierProvider(create: (_)=>PageViewModel()),
       ChangeNotifierProvider(create: (_)=>UserViewModel()),
+      ChangeNotifierProvider(create: (_)=>VBlogViewModel()),
     ],
       child: const MyApp()));
 }

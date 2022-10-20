@@ -7,10 +7,12 @@ import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/vblog/popular_page.dart';
 import 'package:platterwave/views/screens/vblog/create_post/create_post.dart';
 import 'package:platterwave/views/screens/vblog/trending_page.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
+import 'package:provider/provider.dart';
 
 class Timeline extends StatefulWidget {
   const Timeline({Key? key}) : super(key: key);
@@ -37,7 +39,6 @@ class _TimelineState extends State<Timeline> {
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(left: 16,right: 15),
-
             child: DefaultTabController(
               length: 2,
               child: NestedScrollView(
@@ -120,5 +121,16 @@ class _TimelineState extends State<Timeline> {
         ),
       ),
     );
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPost();
+  }
+
+  void getPost() {
+    var model = context.read<VBlogViewModel>();
+    model.getPost();
   }
 }
