@@ -51,7 +51,7 @@ class UsersComment {
     username: json["username"]??"User",
     comment: json["comment"]??"No comment",
     profileUrl: json["profileURL"] ??"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-    timestamp: DateTime.parse(json["timestamp"]),
+    timestamp:json["timestamp"]==null?DateTime.now():DateTime.parse(json["timestamp"]),
   );
 
   Map<String, dynamic> toJson() => {

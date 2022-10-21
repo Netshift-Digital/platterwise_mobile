@@ -77,6 +77,7 @@ class VBlogService{
 
   Future<dynamic> createPost(PostData postData) async {
     var body = jsonEncode(postData.toJson());
+    print(body);
     try {
       var response =
       await client.post(Uri.parse("${baseurl}create_post.php"),
@@ -84,6 +85,7 @@ class VBlogService{
             "Content-type": "application/json",
           });
       var data = jsonDecode(response.body);
+      print(data);
       if(response.statusCode==200){
         return data;
       }else{
@@ -168,8 +170,8 @@ class VBlogService{
   Future<dynamic> commentToPost(int postId, String uid,String comment) async {
     var body = jsonEncode(
         {
-          "user_id":64,
-          "post_id":2,
+          "user_id":uid,
+          "post_id":postId,
           "comment_post":comment
         }
     );
@@ -180,6 +182,7 @@ class VBlogService{
             "Content-type": "application/json",
           });
       var data = jsonDecode(response.body);
+      print(data);
       if(response.statusCode==200){
         return data;
       }else{

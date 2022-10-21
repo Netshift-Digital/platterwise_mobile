@@ -26,7 +26,6 @@ class UserViewModel extends BaseViewModel{
 
       var data = await userService.signUp(
           registerModel.copyWith(
-         imageUrl: '',
          authId: user.user!.uid
       ));
       setState(AppState.idle);

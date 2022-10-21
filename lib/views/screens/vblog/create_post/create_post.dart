@@ -4,12 +4,18 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:platterwave/constant/post_type.dart';
+import 'package:platterwave/model/request_model/post_data.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/spacing.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
+import 'package:platterwave/utils/enum/app_state.dart';
+import 'package:platterwave/utils/random_functions.dart';
+import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/dialog/alert_dialog.dart';
+import 'package:provider/provider.dart';
 
 class CreatePost extends StatefulWidget {
   const CreatePost({Key? key}) : super(key: key);
@@ -19,12 +25,13 @@ class CreatePost extends StatefulWidget {
 }
 
 class _CreatePostState extends State<CreatePost> {
-  bool isImage = false;
+  String type = PostType.text;
   final ImagePicker _picker = ImagePicker();
-  List<XFile> images  =[];
-  XFile? video;
+  XFile? path;
+  TextEditingController commentController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    var model = context.watch<VBlogViewModel>();
     return WillPopScope(
       onWillPop: ()async{
         cancel(context);
@@ -66,6 +73,14 @@ class _CreatePostState extends State<CreatePost> {
           actions: [
             Row(
               children: [
+                model.appState==AppState.busy?
+                   const SizedBox(
+                      height: 30,
+                        width: 30,
+                        child: CircularProgressIndicator(
+                           strokeWidth: 5,
+                           valueColor: AlwaysStoppedAnimation(AppColor.p300),
+                        )):
                 PlatButton(
                   padding: 3,
                     height: 32,
@@ -74,6 +89,9 @@ class _CreatePostState extends State<CreatePost> {
                     title: "Post",
                     radius: 6,
                     onTap: (){
+                    if(model.appState==AppState.idle){
+                      createPost(context);
+                    }
 
                     }
                 ),
@@ -102,6 +120,7 @@ class _CreatePostState extends State<CreatePost> {
                    const SizedBox(width:twentyFour ,),
                     Expanded(
                             child: TextFormField(
+                              controller: commentController,
                             maxLines: null,
                             minLines: null,
                             decoration: const InputDecoration(
@@ -140,12 +159,12 @@ Widget  vidImage({required String image, required String text, required  Functio
 
 }
 
-  void pickImage({ImageSource imageSource =ImageSource.gallery }) async{
+  void pickImage({ImageSource imageSource =ImageSource.camera }) async{
     final List<XFile>? selectedImages = await _picker.pickMultiImage();
     if(selectedImages!=null){
       setState(() {
-        isImage=true;
-        images.addAll(selectedImages);
+        type=PostType.image;
+        path = selectedImages.first;
       });
 
     }
@@ -156,57 +175,46 @@ Widget  vidImage({required String image, required String text, required  Functio
     final XFile? selectedVideo = await _picker.pickVideo(source: imageSource);
     if(selectedVideo!=null){
       setState(() {
-        video=selectedVideo;
-        isImage=false;
+        path=selectedVideo;
+        type=PostType.video;
       });
     }
   }
 
 Widget  imageList() {
-    return SizedBox(
-      height:92 ,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        itemCount: images.length,
-          itemBuilder: (context,index){
-             var image = images[index];
-             return Padding(
-               padding:const EdgeInsets.symmetric(horizontal:6 ),
-               child: Container(
-                 height:92 ,
-                 width: 92,
-                 decoration: BoxDecoration(
-                   borderRadius: BorderRadius.circular(6),
-                   image: DecorationImage(
-                     image: FileImage(File(image.path)),
-                     fit: BoxFit.cover
-                   )
-                 ),
-                 child: Row(
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                   mainAxisAlignment: MainAxisAlignment.end,
-                   children: [
-                     Padding(
-                       padding: const EdgeInsets.all(8.0),
-                       child: GestureDetector(
-                         onTap: (){
-                          setState(() {
-                            images.removeAt(index);
-                          });
-                         },
-                         child: const CircleAvatar(
-                           radius: 10,
-                           backgroundColor: Color(0xff4F4F4F),
-                           child:  Icon(Icons.clear,color: Colors.white,size: 13,),
-                         ),
-                       ),
-                     )
-                   ],
-                 ),
-               ),
-             );
-          }
+    return path==null?const SizedBox():Padding(
+      padding:const EdgeInsets.symmetric(horizontal:6 ),
+      child: Container(
+        height:200 ,
+        width: double.maxFinite,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            image: DecorationImage(
+                image: FileImage(File(path!.path)),
+                fit: BoxFit.cover
+            )
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onTap: (){
+                  setState(() {
+                   path = null;
+                  });
+                },
+                child: const CircleAvatar(
+                  radius: 10,
+                  backgroundColor: Color(0xff4F4F4F),
+                  child:  Icon(Icons.clear,color: Colors.white,size: 13,),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
 }
@@ -219,5 +227,25 @@ Widget  imageList() {
           Navigator.pop(context);
         }
     ).show();
+  }
+
+  void createPost(BuildContext context) {
+    var model = context.read<VBlogViewModel>();
+    if(commentController.text.isNotEmpty){
+      PostData postData =
+      PostData(
+          userId: 64,
+          contentPost: commentController.text,
+          contentType: type,
+          contentUrl: '');
+      model.createPost(postData,
+          imagePath: path==null?null:path!.path).
+      then((value){
+        model.getPost();
+       Navigator.pop(context);
+      });
+    }else{
+      RandomFunction.toast("Enter a text");
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:like_button/like_button.dart';
+import 'package:platterwave/constant/post_type.dart';
 import 'package:platterwave/constant/screen_constants.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/res/color.dart';
@@ -108,8 +109,8 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
               moreStyle: const  TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 11.h,),
-            widget.post.contentType=="video"?
-                videoWid():
+            widget.post.contentType==PostType.video?
+                videoWid():widget.post.contentType==PostType.image?
             Container(
               height: 239.h,
               width: 343.w,
@@ -119,7 +120,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                 shape: BoxShape.rectangle
               ),
               child: ImageCacheR(widget.post.contentUrl),
-            ),
+            ):const SizedBox(),
             SizedBox(height: 18.h,),
             Row(
               children: [

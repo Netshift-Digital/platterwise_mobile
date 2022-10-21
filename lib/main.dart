@@ -17,6 +17,7 @@ import 'package:platterwave/views/screens/bottom_nav/bottom_nav.dart';
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -25,7 +26,6 @@ void main()async {
           systemNavigationBarColor: Colors.black,
           systemNavigationBarIconBrightness: Brightness.light));
   setupLocator();
-  await Firebase.initializeApp();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_)=>PageViewModel()),
