@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:like_button/like_button.dart';
 import 'package:platterwave/constant/post_type.dart';
 import 'package:platterwave/constant/screen_constants.dart';
+import 'package:platterwave/data/local/post.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
@@ -91,7 +92,32 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                   ],
                 ),
                 const Spacer(),
-                SvgPicture.asset("assets/icon/option.svg")
+               // SvgPicture.asset("assets/icon/option.svg"),
+                PopupMenuButton<int>(
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 2,
+                      onTap: (){
+                        LocalPost().savePost(widget.post.toJson());
+                      },
+                      // row has two child icon and text
+                      child: Row(
+                        children:const [
+                          Icon(Icons.save),
+                          SizedBox(
+                            // sized box with width 10
+                            width: 10,
+                          ),
+                          Text("Save")
+                        ],
+                      ),
+                    ),
+                  ],
+                  offset: Offset(0, 100),
+                  color: Colors.grey,
+                  elevation: 2,
+                ),
+
               ],
             ),
             SizedBox(

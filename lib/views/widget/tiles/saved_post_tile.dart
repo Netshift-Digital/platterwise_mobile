@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:platterwave/constant/post_type.dart';
+import 'package:platterwave/model/vblog/post_model.dart';
+import 'package:platterwave/res/text-theme.dart';
+import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/views/widget/containers/timeline_post_container.dart';
+import 'package:platterwave/views/widget/custom/cache-image.dart';
 
 import '../../../res/color.dart';
 
 class SavedPostTile extends StatelessWidget {
   final void Function()? onTap;
   final void Function()? onOptionsTap;
-
+  final Post post;
   const SavedPostTile({
     Key? key,
     this.onTap,
-    this.onOptionsTap
+    this.onOptionsTap, required this.post
   }) : super(key: key);
 
   @override
@@ -35,33 +41,33 @@ class SavedPostTile extends StatelessWidget {
                 left: 20.w,
                 bottom: 20.h
             ),
-            child: Container(
-              width: 113.w,
-              height: 64.h,
-              decoration: BoxDecoration(
-                  color: AppColor.p300,
-                  borderRadius: BorderRadius.circular(10)
-              ),
-            ),
+            child: post.contentType==PostType.video?
+            videoWid():post.contentType==PostType.image?ImageCacheR(
+                height: 64.h,
+                width: 100.w,
+                post.contentUrl
+            ):const SizedBox(),
           ),
           SizedBox(width: 12.w,),
             SizedBox(
               width: 166.w,
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 20.0),
+                padding:const EdgeInsets.symmetric(vertical: 20.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Flexible(
-                        child: Text(
-                            "Aliqua dolor do amet sint.Velit officia conseqejnbt",
-                          overflow: TextOverflow.ellipsis,
-                          softWrap: true,
-                          maxLines: 2,
-                        )
+                  children:  [
+                    Text(
+                      post.contentPost,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                      maxLines: 2,
                     ),
-                    Text("By Ester Howard")
+                   const SizedBox(height: 8,),
+                    Text(post.username,style: AppTextTheme.h4.copyWith(
+                      fontSize: 12,
+                      color: AppColor.g900
+                    ),)
                   ],
                 ),
               ),
@@ -84,4 +90,19 @@ class SavedPostTile extends StatelessWidget {
       ),
     );
   }
+
+
+  Widget  videoWid() {
+    return Container(
+      height: 64.h,
+      width: 100.w,
+      decoration: BoxDecoration(
+          color: AppColor.p300,
+          borderRadius: BorderRadius.circular(15),
+          shape: BoxShape.rectangle
+      ),
+      child:ImageCacheR(vidImage),
+    );
+  }
 }
+

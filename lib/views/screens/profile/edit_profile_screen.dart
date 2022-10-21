@@ -15,51 +15,54 @@ class EditProfileScreen extends StatelessWidget {
       appBar: appBar(context),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 18.w),
-        child: Column(
-          children: [
-            SizedBox(height: 100.h,),
-            Align(
-              alignment: Alignment.topLeft,
-                child: Text("Display Name")
-            ),
-            SizedBox(height: 8.h,),
-            AppTextField(
-              hintText: "John Doe",
-            ),
-            SizedBox(height: 18.h,),
-            Align(
+        child: SingleChildScrollView(
+          physics:const BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              SizedBox(height: 100.h,),
+              Align(
                 alignment: Alignment.topLeft,
-                child: Text("Username")
-            ),
-            SizedBox(height: 8.h,),
-            AppTextField(
-              hintText: "Johndoe12",
-            ),
-            SizedBox(height: 18.h,),
-            Align(
-                alignment: Alignment.topLeft,
-                child: Text("Gender")
-            ),
-            SizedBox(height: 8.h,),
-            AppTextField(
-              hintText: "Male",
-            ),
-            SizedBox(height: 18.h,),
-            Align(
-                alignment: Alignment.topLeft,
-                child: Text("Add bio")
-            ),
-            SizedBox(height: 8.h,),
-            AppTextField(
-              hintText: "Add a brief introduction about you.",
-              maxLines: 6,
-            ),
-            SizedBox(height: 70.h,),
-            PlatButton(
-                title: "Update",
-                onTap: (){}
-            )
-          ],
+                  child: Text("Display Name")
+              ),
+              SizedBox(height: 8.h,),
+              AppTextField(
+                hintText: "John Doe",
+              ),
+              SizedBox(height: 18.h,),
+              Align(
+                  alignment: Alignment.topLeft,
+                  child: Text("Username")
+              ),
+              SizedBox(height: 8.h,),
+              AppTextField(
+                hintText: "Johndoe12",
+              ),
+              SizedBox(height: 18.h,),
+              Align(
+                  alignment: Alignment.topLeft,
+                  child: Text("Gender")
+              ),
+              SizedBox(height: 8.h,),
+              AppTextField(
+                hintText: "Male",
+              ),
+              SizedBox(height: 18.h,),
+              Align(
+                  alignment: Alignment.topLeft,
+                  child: Text("Add bio")
+              ),
+              SizedBox(height: 8.h,),
+              AppTextField(
+                hintText: "Add a brief introduction about you.",
+                maxLines: 6,
+              ),
+              SizedBox(height: 70.h,),
+              PlatButton(
+                  title: "Update",
+                  onTap: (){}
+              )
+            ],
+          ),
         ),
       ),
     );

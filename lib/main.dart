@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:platterwave/constant/index.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/locator.dart';
@@ -11,13 +15,15 @@ import 'package:platterwave/views/screens/auth/register.dart';
 import 'package:provider/provider.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:platterwave/views/screens/auth/login.dart';
 import 'package:platterwave/views/screens/bottom_nav/bottom_nav.dart';
 
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  Directory tempDir = await getApplicationDocumentsDirectory();
+  Hive.init(tempDir.path);
+  await Hive.openBox("post");
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,

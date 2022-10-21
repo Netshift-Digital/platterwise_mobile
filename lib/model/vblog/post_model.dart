@@ -49,7 +49,7 @@ class Post {
   String firebaseAuthId;
   DateTime timestamp;
 
-  factory Post.fromJson(Map<String, dynamic> json) => Post(
+  factory Post.fromJson(Map<dynamic, dynamic> json) => Post(
     contentPost: json["content_post"],
     postId: json["post_id"],
     contentType: json["content_type"]??"image",
