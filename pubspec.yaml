@@ -50,6 +50,8 @@ dependencies:
   like_button: ^2.0.5
   path_provider: ^2.0.11
   hive: ^2.2.3
+  share_plus: ^6.0.1
+
   flutter:
     sdk: flutter
 

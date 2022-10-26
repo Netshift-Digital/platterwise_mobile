@@ -5,7 +5,7 @@ import 'package:platterwave/utils/size_config/size_extensions.dart';
 
 class CustomAppIcon extends StatelessWidget {
   final String icon;
-  final int count;
+  final String count;
   final Widget? like;
   final void Function()? onTap;
 
@@ -27,7 +27,7 @@ class CustomAppIcon extends StatelessWidget {
             child: SvgPicture.asset(icon)
         ),
         SizedBox(width: 8.w,),
-        Text("${count}")
+        Text(count)
       ],
     );
   }

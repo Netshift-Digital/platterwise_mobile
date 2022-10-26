@@ -1,13 +1,18 @@
 import 'dart:typed_data';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:platterwave/model/request_model/edit_data.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
+import 'package:provider/provider.dart';
+import 'package:the_validator/the_validator.dart';
 
 import '../../../res/color.dart';
 import '../../../res/text-theme.dart';
@@ -52,8 +57,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     // );
     // setState(() => isUploading = false);
   }
+  var user = FirebaseAuth.instance.currentUser!;
+  final TextEditingController _bio = TextEditingController();
+  final TextEditingController _address = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    var model = context.watch<UserViewModel>();
     SizeConfig.init(context);
     return Scaffold(
       appBar: appBar(context),
@@ -61,69 +71,71 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         padding: EdgeInsets.symmetric(horizontal: 18.w),
         child: SingleChildScrollView(
           physics:const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              Center(
-                child: profilePicture(),
-              ),
-              SizedBox(height: 20.h,),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "Esther Howard",
-                  style: AppTextTheme.h1,
+          child: Form(
+            key:_formKey ,
+            child: Column(
+              children: [
+                Center(
+                  child: profilePicture(),
                 ),
-              ),
-              SizedBox(height: 4.h,),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "@annaclaramm",
-                  style: AppTextTheme.h4,
+                SizedBox(height: 20.h,),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "Eti chisom",
+                    style: AppTextTheme.h1,
+                  ),
                 ),
-              ),
-              SizedBox(height: 24.h,),              Align(
-                alignment: Alignment.topLeft,
-                  child: Text("Display Name")
-              ),
-              SizedBox(height: 8.h,),
-              AppTextField(
-                hintText: "John Doe",
-              ),
-              SizedBox(height: 18.h,),
-              Align(
+                SizedBox(height: 4.h,),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    user.email??"",
+                    style: AppTextTheme.h4,
+                  ),
+                ),
+                SizedBox(height: 30.h,),
+                const Align(
                   alignment: Alignment.topLeft,
-                  child: Text("Username")
-              ),
-              SizedBox(height: 8.h,),
-              AppTextField(
-                hintText: "Johndoe12",
-              ),
-              SizedBox(height: 18.h,),
-              // Align(
-              //     alignment: Alignment.topLeft,
-              //     child: Text("Gender")
-              // ),
-              // SizedBox(height: 8.h,),
-              // AppTextField(
-              //   hintText: "Male",
-              // ),
-              SizedBox(height: 18.h,),
-              Align(
-                  alignment: Alignment.topLeft,
-                  child: Text("Add bio")
-              ),
-              SizedBox(height: 8.h,),
-              AppTextField(
-                hintText: "Add a brief introduction about you.",
-                maxLines: 6,
-              ),
-              SizedBox(height: 70.h,),
-              PlatButton(
-                  title: "Update",
-                  onTap: (){}
-              )
-            ],
+                    child: Text("Address")
+                ),
+                SizedBox(height: 8.h,),
+                AppTextField(
+                  controller: _address,
+                  hintText: "my current location",
+                  validator: FieldValidator.minLength(5,message: "minimum length of bio is 5 letters "),
+                ),
+                SizedBox(height: 20.h,),
+               const Align(
+                    alignment: Alignment.topLeft,
+                    child: Text("Add bio")
+                ),
+                SizedBox(height: 8.h,),
+                AppTextField(
+                  controller: _bio,
+                  hintText: "Add a brief introduction about you.",
+                  maxLines: 6,
+                  validator: FieldValidator.minLength(10,message: "minimum length of bio is 10 letters "),
+                ),
+                SizedBox(height: 50.h,),
+                PlatButton(
+                    appState: model.appState,
+                    title: "Update",
+                    onTap: (){
+                      if(_formKey.currentState!.validate()){
+                        var editData = EditData(
+                            firebaseAuthID: "hhjhgvv",
+                            bio: _bio.text,
+                            location: _address.text
+                        );
+                        model.editUser(editData).then((value){
+                          Navigator.pop(context);
+                        });
+                      }
+                    }
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -147,8 +159,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   : Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(36),
-                    image: DecorationImage(
-                        image: NetworkImage(""),
+                    image: const DecorationImage(
+                        image: NetworkImage("https://thumbs.dreamstime.com/b/lonely-elephant-against-sunset-beautiful-sun-clouds-savannah-serengeti-national-park-africa-tanzania-artistic-imag-image-106950644.jpg"),
                         fit: BoxFit.cover)),
               )),
           Positioned(

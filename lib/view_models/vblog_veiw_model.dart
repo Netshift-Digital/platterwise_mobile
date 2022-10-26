@@ -22,6 +22,7 @@ class VBlogViewModel extends BaseViewModel{
       var data = await vBlogService.getPost();
       if(data!=null){
         var post = PostModel.fromJson(data as Map);
+        posts=[];
         for (var element in post.allUsersPosts) {
           posts.add(element);
         }

@@ -6,9 +6,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:platterwave/common/base_view_model.dart';
 import 'package:platterwave/data/network/user_services.dart';
+import 'package:platterwave/model/request_model/edit_data.dart';
 import 'package:platterwave/model/request_model/register_model.dart';
 import 'package:platterwave/utils/enum/app_state.dart';
 import 'package:platterwave/utils/locator.dart';
+import 'package:platterwave/utils/random_functions.dart';
 
 class UserViewModel extends BaseViewModel{
   UserService userService = locator<UserService>();
@@ -75,5 +77,43 @@ class UserViewModel extends BaseViewModel{
 
 
 
+  }
+
+  Future<bool> changePassword(String newPassword,String currentPassword)async{
+    final user =  FirebaseAuth.instance.currentUser!;
+    final cred = EmailAuthProvider.credential(
+        email: user.email!, password: currentPassword);
+    setState(AppState.busy);
+    user.reauthenticateWithCredential(cred).then((value) {
+      user.updatePassword(newPassword).then((_) {
+        setState(AppState.idle);
+        RandomFunction.toast("Password updated");
+        return true;
+      }).catchError((error) {
+        setState(AppState.idle);
+        RandomFunction.toast(error.toString());
+        return false;
+      });
+    }).catchError((err) {
+      setState(AppState.idle);
+      RandomFunction.toast(err.toString());
+    });
+    return false;
+
+  }
+
+  Future<bool?> editUser(EditData editData)async{
+    try{
+      setState(AppState.busy);
+      var data = await userService.editProfile(editData);
+      setState(AppState.idle);
+      if(data!=null){
+        return true;
+      }
+    }catch(e){
+      RandomFunction.toast("something went wrong");
+      setState(AppState.idle);
+    }
+    return null;
   }
 }

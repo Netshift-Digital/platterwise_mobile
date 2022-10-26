@@ -7,6 +7,7 @@ import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
+import 'package:platterwave/views/screens/auth/forgot_password.dart';
 import 'package:platterwave/views/screens/auth/otp.dart';
 import 'package:platterwave/views/screens/bottom_nav/bottom_nav.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
@@ -66,14 +67,19 @@ final _formKey = GlobalKey<FormState>();
                         validate: FieldValidator.minLength(3),
                       ),
                      const SizedBox(height:four,),
-                     Row(
-                       mainAxisAlignment: MainAxisAlignment.end,
-                       children: [
-                         Text("Forgot password",style: AppTextTheme.h4.copyWith(
-                           fontSize: 14,
-                           fontWeight: FontWeight.w500
-                         ),)
-                       ],
+                     GestureDetector(
+                       onTap: (){
+                         nav(context, ForgotPassword());
+                       },
+                       child: Row(
+                         mainAxisAlignment: MainAxisAlignment.end,
+                         children: [
+                           Text("Forgot password",style: AppTextTheme.h4.copyWith(
+                             fontSize: 14,
+                             fontWeight: FontWeight.w500
+                           ),)
+                         ],
+                       ),
                      ),
                      SizedBox(height: size.height*0.07,),
                       PlatButton(

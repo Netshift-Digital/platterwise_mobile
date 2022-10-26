@@ -16,6 +16,7 @@ import 'package:platterwave/views/screens/vblog/post_details.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/icon/custom_app_icon.dart';
 import 'package:readmore/readmore.dart';
+import 'package:share_plus/share_plus.dart';
 
 
 var vidImage = "https://www.balmoraltanks.com/images/common/video-icon-image.jpg";
@@ -166,19 +167,25 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                       setState(() {});
                     },
                   ) ,
-                  count: like,
+                  count: like.toString(),
                 ),
                const Spacer(flex: 1,),
                 CustomAppIcon(
-                  onTap: (){},
+                  onTap: (){
+                    if(widget.tap){
+                      nav(context, PostDetails(post: widget.post));
+                    }
+                  },
                   icon: "assets/icon/comment.svg",
-                  count: 500,
+                  count: widget.post.commentCount,
                 ),
                 const Spacer(flex: 1,),
                 CustomAppIcon(
-                  onTap: (){},
+                  onTap: (){
+                    Share.share(widget.post.contentPost);
+                  },
                   icon: "assets/icon/share.svg",
-                  count: 500,
+                  count:"",
                 ),
                const Spacer(
                   flex: 3,
@@ -208,4 +215,12 @@ Widget  videoWid() {
       child:ImageCacheR(vidImage),
     );
 }
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      like=num.parse(widget.post.likeCount).toInt();
+    });
+  }
 }
