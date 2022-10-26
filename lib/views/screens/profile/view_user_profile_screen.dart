@@ -129,13 +129,13 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                         children: [
                           Text(user.displayName??"Eti chisom",style: AppTextTheme.h1,),
                           SizedBox(height: 4.h,),
-                          Text(user.email??"")
+                          Text(user.email ?? "", style: AppTextTheme.h4,)
                         ],
                       )
                     ],
                   ),
                   SizedBox(height: 30.h,),
-                 const Text("i am a mobile developer"),
+                  Text("i am a mobile developer", style: AppTextTheme.h3,),
                   SizedBox(height: 30.h,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -143,15 +143,22 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("0"),
-                          Text("Following")
+                          Text("0", style: AppTextTheme.h3,),
+                          Text(
+                            "Following",
+                            style: AppTextTheme.h4.copyWith(
+                                color: AppColor.g300),
+                          )
                         ],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("0"),
-                          Text("Followers")
+                          Text("0",style: AppTextTheme.h3,),
+                          Text(
+                            "Followers",
+                            style: AppTextTheme.h4.copyWith(
+                              color: AppColor.g300),)
                         ],
                       ),
                       PlatButton(

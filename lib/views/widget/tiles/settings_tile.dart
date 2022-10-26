@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:platterwave/res/text-theme.dart';
 
 class SettingsTile extends StatelessWidget {
   final String title;
@@ -21,7 +22,7 @@ class SettingsTile extends StatelessWidget {
     return ListTile(
       leading: SvgPicture.asset(leading, color: color,),
       onTap: onTap,
-      title: Text(title,),
+      title: Text(title,style: AppTextTheme.h3,),
       trailing: Visibility(
           visible: trailingVisible,
           child: Icon(Icons.chevron_right)
