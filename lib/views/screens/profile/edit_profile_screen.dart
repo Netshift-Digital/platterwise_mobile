@@ -82,7 +82,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    "Eti chisom",
+                    "Eti Chisom",
                     style: AppTextTheme.h1,
                   ),
                 ),
@@ -102,7 +102,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 SizedBox(height: 8.h,),
                 AppTextField(
                   controller: _address,
-                  hintText: "my current location",
+                  hintText: "My current location",
                   validator: FieldValidator.minLength(5,message: "minimum length of bio is 5 letters "),
                 ),
                 SizedBox(height: 20.h,),

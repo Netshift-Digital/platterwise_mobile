@@ -39,61 +39,69 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Form(
             key:_forKey ,
-            child: Column(
-              children: [
-                SizedBox(height: 100.h,),
-                const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("Current Password")
-                ),
-                SizedBox(height: 8.h,),
-                AppTextField(
-                  obscureText: true,
-                  controller: _currentPassword,
-                  validator: FieldValidator.password(),
-                ),
-                SizedBox(height: 20.h,),
-               const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("New Password")
-                ),
-                SizedBox(height: 8.h,),
-                AppTextField(
-                  obscureText: true,
-                  controller: _password,
-                  validator: FieldValidator.password(),
-                ),
-                SizedBox(height: 20.h,),
-               const  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("Confirm New Password")
-                ),
-                SizedBox(height: 8.h,),
-                AppTextField(
-                  obscureText: true,
-                  controller: _confirmPassword,
-                  validator: (e){
-                    if(_confirmPassword.text.trim()!=e){
-                      return "password does not match";
-                    }
-                  },
-                ),
-                SizedBox(height: 220.h,),
-                PlatButton(
-                  appState: model.appState,
-                    title: "Change Password",
-                    onTap: (){
-                      if(_forKey.currentState!.validate()){
-                        model.changePassword(_password.text,_currentPassword.text).then((value){
-                          if(value){
-                            Navigator.pop(context);
-                          }
-                        });
+            child: SizedBox(
+              height: SizeConfig.screenHeight,
+              width: SizeConfig.screenWidth,
+              child: Column(
+                children: [
+                  SizedBox(height: 100.h,),
+                  const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("Current Password")
+                  ),
+                  SizedBox(height: 8.h,),
+                  AppTextField(
+                    obscureText: true,
+                    controller: _currentPassword,
+                    validator: FieldValidator.password(),
+                  ),
+                  SizedBox(height: 20.h,),
+                 const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("New Password")
+                  ),
+                  SizedBox(height: 8.h,),
+                  AppTextField(
+                    obscureText: true,
+                    controller: _password,
+                    validator: FieldValidator.password(),
+                  ),
+                  SizedBox(height: 20.h,),
+                 const  Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("Confirm New Password")
+                  ),
+                  SizedBox(height: 8.h,),
+                  AppTextField(
+                    obscureText: true,
+                    controller: _confirmPassword,
+                    validator: (e){
+                      if(_confirmPassword.text.trim()!=e){
+                        return "password does not match";
                       }
+                    },
+                  ),
+                  SizedBox(
+                    height: 200.h,
+                  ),
+                  Flexible(
+                    child: PlatButton(
+                      appState: model.appState,
+                        title: "Change Password",
+                        onTap: (){
+                          if(_forKey.currentState!.validate()){
+                            model.changePassword(_password.text,_currentPassword.text).then((value){
+                              if(value){
+                                Navigator.pop(context);
+                              }
+                            });
+                          }
 
-                    }
-                )
-              ],
+                        }
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
