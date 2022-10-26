@@ -61,26 +61,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: Column(
           children: [
-            Center(
-              child: profilePicture(),
-            ),
-            SizedBox(height: 20.h,),
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                  "Esther Howard",
-                style: AppTextTheme.h1,
-              ),
-            ),
-            SizedBox(height: 4.h,),
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                "@annaclaramm",
-                style: AppTextTheme.h4,
-              ),
-            ),
-            SizedBox(height: 24.h,),
             Divider(
               thickness: 1,
               color: AppColor.g40,
@@ -90,11 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: "Profile",
               leading: "assets/icon/user.svg",
               onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context){
-                      return EditProfileScreen();
-                })
-                );
+
               },
             ),
             SizedBox(height: 25.h,),
@@ -134,42 +110,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget profilePicture() {
-    return Stack(
-        children: <Widget>[
-      //TODO: Switch Person Image and connect to backend
-      CircleAvatar(
-          radius: 36,
-          backgroundColor: AppColor.g600,
-          child: _imageFile != null
-              ? Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(36),
-                image: DecorationImage(
-                    image: MemoryImage(_imageFile!), fit: BoxFit.cover)),
-          )
-              : Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(36),
-                image: DecorationImage(
-                    image: NetworkImage(""),
-                    fit: BoxFit.cover)),
-          )),
-      Positioned(
-        right: 0,
-        bottom: 0,
-        child: InkWell(
-          onTap: _pickImage,
-          child: isUploading
-              ? const SizedBox(
-              width: 10, height: 10, child: CircularProgressIndicator())
-              : SvgPicture.asset(
-            "assets/icon/edit-pen.svg",
-            width: 28,
-            height: 28,
-          ),
-        ),
-      )
-    ]);
-  }
+
 }

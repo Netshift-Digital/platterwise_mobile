@@ -4,6 +4,7 @@ import 'package:platterwave/res/color.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/views/screens/home/home_screen.dart';
 import 'package:platterwave/views/screens/profile/profile_screen.dart';
+import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/save/save_screen.dart';
 import 'package:platterwave/views/screens/vblog/timeline.dart';
 
@@ -37,7 +38,7 @@ class _BottomNavState extends State<BottomNav> {
     BottomNavigationModel(
         title: "Profile",
         icon: "assets/icon/user.svg",
-        screen: const ProfileScreen()
+        screen: const ViewUserProfileScreen()
     ),
 
   ];
