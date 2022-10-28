@@ -12,6 +12,7 @@ import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/auth/register.dart';
+import 'package:platterwave/views/screens/auth/splash.dart';
 import 'package:provider/provider.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -52,32 +53,9 @@ class MyApp extends StatelessWidget {
         title: appName,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
-        home: const MainPage(),
+        home: const SplashScreen(),
       ),
     );
   }
 }
-
-
-class MainPage extends StatelessWidget {
-  const MainPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.userChanges(),
-        builder: (context, user){
-          if(user.hasData){
-            return const BottomNav();
-          }if (user.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          else{
-            return Register();
-          }
-        }
-    );
-  }
-}
-
 

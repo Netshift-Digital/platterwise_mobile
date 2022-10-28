@@ -14,6 +14,7 @@ import 'package:platterwave/utils/enum/app_state.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
+import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/dialog/alert_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -132,7 +133,7 @@ class _CreatePostState extends State<CreatePost> {
                   ],
                 ),
                const SizedBox(height: 50,),
-                imageList()
+                path==null?const SizedBox():type==PostType.video?videoWid():imageList()
               ],
             ),
           ),
@@ -171,7 +172,7 @@ Widget  vidImage({required String image, required String text, required  Functio
 
   }
 
-  void pickVideo({ImageSource imageSource =ImageSource.gallery })async{
+  void pickVideo({ImageSource imageSource =ImageSource.camera })async{
     final XFile? selectedVideo = await _picker.pickVideo(source: imageSource);
     if(selectedVideo!=null){
       setState(() {
@@ -179,6 +180,18 @@ Widget  vidImage({required String image, required String text, required  Functio
         type=PostType.video;
       });
     }
+  }
+  Widget  videoWid() {
+    return Container(
+      height:200 ,
+      width: double.maxFinite,
+      decoration: BoxDecoration(
+          color: AppColor.p300,
+          borderRadius: BorderRadius.circular(15),
+          shape: BoxShape.rectangle
+      ),
+      child:const ImageCacheR("https://www.balmoraltanks.com/images/common/video-icon-image.jpg"),
+    );
   }
 
 Widget  imageList() {

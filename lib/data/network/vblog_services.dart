@@ -44,6 +44,33 @@ class VBlogService{
     return null;
   }
 
+  Future<dynamic> getUserPost(String id) async {
+    var body = jsonEncode({
+      "firebaseAuthID":id
+    });
+    try {
+      var response =
+      await client.post(Uri.parse("${baseurl}get_post.php"),
+          body: body, headers: {
+            "Content-type": "application/json",
+          });
+      var data = jsonDecode(response.body);
+      if(response.statusCode==200){
+        return data;
+      }else{
+        RandomFunction.toast(data['status']??"");
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
 
 
   Future<dynamic> getComment(int postId) async {
@@ -77,7 +104,6 @@ class VBlogService{
 
   Future<dynamic> createPost(PostData postData) async {
     var body = jsonEncode(postData.toJson());
-    print(body);
     try {
       var response =
       await client.post(Uri.parse("${baseurl}create_post.php"),
@@ -85,7 +111,6 @@ class VBlogService{
             "Content-type": "application/json",
           });
       var data = jsonDecode(response.body);
-      print(data);
       if(response.statusCode==200){
         return data;
       }else{
@@ -149,6 +174,7 @@ class VBlogService{
             "Content-type": "application/json",
           });
       var data = jsonDecode(response.body);
+      print(data);
       if(response.statusCode==200){
         return data;
       }else{
@@ -187,6 +213,65 @@ class VBlogService{
         return data;
       }else{
         RandomFunction.toast(data['status']??"");
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+  Future<dynamic> fellowUser(String uId) async {
+    var body = jsonEncode({
+      "follower_AuthID":FirebaseAuth.instance.currentUser!.uid,
+      "followed_AuthID":uId
+    });
+    try {
+      var response =
+      await client.post(Uri.parse("${baseurl}follow_user.php"),
+          body: body, headers: {
+            "Content-type": "application/json",
+          });
+      var data = jsonDecode(response.body);
+      if(response.statusCode==200){
+        return data;
+      }else{
+        //RandomFunction.toast(data['status']??"");
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+
+  Future<dynamic> unFellowUser(String uId) async {
+    var body = jsonEncode({
+      "follower_AuthID":FirebaseAuth.instance.currentUser!.uid,
+      "followed_AuthID":uId
+    });
+    try {
+      var response =
+      await client.post(Uri.parse("${baseurl}unfollow_user.php"),
+          body: body, headers: {
+            "Content-type": "application/json",
+          });
+      var data = jsonDecode(response.body);
+      if(response.statusCode==200){
+        return data;
+      }else{
+        //RandomFunction.toast(data['status']??"");
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");

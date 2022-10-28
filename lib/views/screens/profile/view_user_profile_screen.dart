@@ -1,16 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:platterwave/model/profile/user_data.dart';
+import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/user_view_model.dart';
+import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/auth/login.dart';
 import 'package:platterwave/views/screens/profile/settings_screen.dart';
 import 'package:platterwave/views/screens/profile/view_likes_page.dart';
 import 'package:platterwave/views/screens/profile/view_posts_page.dart';
 import 'package:platterwave/views/widget/appbar/custom_app_bar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
+import 'package:platterwave/views/widget/custom/cache-image.dart';
+import 'package:provider/provider.dart';
 
 import '../../../utils/nav.dart';
 import '../../widget/tiles/settings_tile.dart';
@@ -18,7 +25,8 @@ import '../vblog/create_post/create_post.dart';
 import 'edit_profile_screen.dart';
 
 class ViewUserProfileScreen extends StatefulWidget {
-  const ViewUserProfileScreen({Key? key}) : super(key: key);
+  final String? id;
+  const ViewUserProfileScreen({Key? key, this.id}) : super(key: key);
 
   @override
   State<ViewUserProfileScreen> createState() => _ViewUserProfileScreenState();
@@ -26,8 +34,12 @@ class ViewUserProfileScreen extends StatefulWidget {
 
 class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
   var user = FirebaseAuth.instance.currentUser!;
+  List<Post> myPost =  [];
+  UserData? userData;
   @override
   Widget build(BuildContext context) {
+    var userModel = context.watch<UserViewModel>();
+    var blogModel = context.watch<VBlogViewModel>();
     SizeConfig.init(context);
     return Scaffold(
       appBar: CustomAppBar(
@@ -99,10 +111,11 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
         },
         trailing: "assets/icon/option.svg",
       ),
-      body: Column(
+      body: userData==null?const Center(child: CircularProgressIndicator())
+          :Column(
         children: [
           Container(
-            color: AppColor.g20,
+            color: Colors.transparent,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Column(
@@ -110,16 +123,10 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        height: 88.h,
-                        width: 88.w,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColor.p300,
-                          image: DecorationImage(
-                        image: NetworkImage("https://thumbs.dreamstime.com/b/lonely-elephant-against-sunset-beautiful-sun-clouds-savannah-serengeti-national-park-africa-tanzania-artistic-imag-image-106950644.jpg"),
-                       fit: BoxFit.cover)
-                        ),
+                      ImageCacheCircle(
+                        userData!.userProfile.profileUrl,
+                        height: 80,
+                        width: 80,
                       ),
                       SizedBox(
                         width: 12.w,
@@ -127,15 +134,15 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(user.displayName??"Eti chisom",style: AppTextTheme.h1,),
+                          Text(userData!.userProfile.username,style: AppTextTheme.h1,),
                           SizedBox(height: 4.h,),
-                          Text(user.email ?? "", style: AppTextTheme.h4,)
+                          Text(userData!.userProfile.fullName, style: AppTextTheme.h4,)
                         ],
                       )
                     ],
                   ),
                   SizedBox(height: 30.h,),
-                  Text("i am a mobile developer", style: AppTextTheme.h3,),
+                  Text(userData!.userProfile.bio, style: AppTextTheme.h3,),
                   SizedBox(height: 30.h,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -143,7 +150,15 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("0", style: AppTextTheme.h3,),
+                          StreamBuilder<QuerySnapshot>(
+                            stream:FirebaseFirestore.instance.collection("following").
+                            doc("users").collection(widget.id??FirebaseAuth.instance.currentUser!.uid).snapshots(),
+                            builder: (context, snapshot) {
+
+                              return Text(snapshot.hasData?snapshot.data!.docs.length.toString():
+                              "0", style: AppTextTheme.h3,);
+                            }
+                          ),
                           Text(
                             "Following",
                             style: AppTextTheme.h4.copyWith(
@@ -154,23 +169,42 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("0",style: AppTextTheme.h3,),
+                          StreamBuilder<QuerySnapshot>(
+                              stream:FirebaseFirestore.instance.collection("followers").
+                              doc("users").collection(widget.id??FirebaseAuth.instance.currentUser!.uid).snapshots(),
+                              builder: (context, snapshot) {
+
+                                return Text(snapshot.hasData?snapshot.data!.docs.length.toString():
+                                "0", style: AppTextTheme.h3,);
+                              }
+                          ),
                           Text(
                             "Followers",
                             style: AppTextTheme.h4.copyWith(
                               color: AppColor.g300),)
                         ],
                       ),
-                      PlatButton(
+                      widget.id!=null?PlatButton(
+                        title: blogModel.getIsFollowed(userData!.userProfile.email)?"Unfollow":"Follow",
+                        padding: 0,
+                        textSize: 14,
+                        onTap: (){
+                          //blogModel.following.add(userData!.userProfile);
+                          if(blogModel.getIsFollowed(userData!.userProfile.email)){
+                            blogModel.unFollowUser(widget.id!, userData!.userProfile);
+                          }else{
+                           blogModel.followUser(widget.id!, userData!.userProfile);
+
+                          }
+                        },
+                        width: 95.w,
+                        height: 38.h,
+                      ) : PlatButton(
                         title: "Edit Profile",
                         padding: 0,
                         textSize: 14,
                         onTap: (){
-                          Navigator.push(
-                              context, MaterialPageRoute(builder: (context){
-                            return EditProfileScreen();
-                          })
-                          );
+                          settings(context);
                         },
                         width: 95.w,
                         height: 38.h,
@@ -210,7 +244,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                     Expanded(
                         child: TabBarView(
                           children: [
-                            ViewPostsPage(),
+                            ViewPostsPage(post: myPost,),
                             ViewLikesPage(),
                           ],)
                     )
@@ -220,13 +254,83 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColor.p300,
-        child: SvgPicture.asset('assets/icon/post.svg'),
-        onPressed: (){
-          nav(context, const CreatePost());
-        },
-      ),
+     floatingActionButton: FloatingActionButton(
+       onPressed: (){
+         getPost();
+       },
+     ),
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 20),(){
+      getData();
+      getPost();
+    });
+  }
+
+  void getData() async{
+    var userModel = context.read<UserViewModel>();
+    var blogModel = context.read<VBlogViewModel>();
+    if(widget.id==null){
+      if(userModel.user!=null){
+        userData=userModel.user;
+      }else{
+        userModel.getMyProfile().then((value){
+          setState(() {
+            userData=value;
+          });
+        });
+      }
+    }else{
+      userModel.getUserProfile(widget.id!).then((value){
+        if(value!=null){
+          setState(() {
+            userData=value;
+          });
+        }
+      });
+    }
+
+    // await blogModel.getFollowers();
+    // await  blogModel.getFollowing();
+  }
+
+  void getPost() {
+    var blogModel = context.read<VBlogViewModel>();
+    if(widget.id==null){
+      if(blogModel.myPosts.isEmpty){
+        blogModel.getMyPost().then((value){
+          if(value!=null){
+            myPost=value;
+          }
+        });
+      }
+    }else{
+      blogModel.getUserPost(widget.id!).then((value){
+        if(value!=null){
+          myPost=value;
+        }
+      });
+    }
+
+  }
+
+  void settings(BuildContext context) async{
+    var userModel = context.read<UserViewModel>();
+   await Navigator.push(
+        context, MaterialPageRoute(builder: (context){
+      return EditProfileScreen(userData: userData!,);
+    })
+    );
+   userModel.getMyProfile().then((value){
+     setState(() {
+       userData=value;
+     });
+   });
+
   }
 }

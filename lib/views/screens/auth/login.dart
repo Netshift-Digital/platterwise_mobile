@@ -166,7 +166,7 @@ final _formKey = GlobalKey<FormState>();
         _password.text
     ).then((value){
       if(value!=null){
-        nav(context, const MainPage(),remove: true);
+        nav(context, const BottomNav(),remove: true);
       }
     });
   }

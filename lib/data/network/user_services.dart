@@ -67,4 +67,30 @@ class UserService{
     return null;
   }
 
+
+  Future<Map<String, dynamic>?> getUser(String uid) async {
+    var body = jsonEncode({
+      "firebaseAuthID":uid
+    });
+    try {
+      var response =
+      await client.post(Uri.parse("${baseurl}get_profile.php"), body: body, headers: {
+        "Content-type": "application/json",
+      });
+      var data = jsonDecode(response.body);
+      print(data);
+      if(response.statusCode==200){
+        return data;
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
 }

@@ -12,9 +12,13 @@ import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/vblog_veiw_model.dart';
+import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/vblog/post_details.dart';
+import 'package:platterwave/views/screens/vblog/video_player.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/icon/custom_app_icon.dart';
+import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -36,6 +40,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
   int like = 0;
   @override
   Widget build(BuildContext context) {
+    var blogModel = context.watch<VBlogViewModel>();
     SizeConfig.init(context);
     return GestureDetector(
       onTap: (){
@@ -54,13 +59,15 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
             ),
             Row(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(34),
-                  child: ImageCacheR(
-                    widget.post.profileUrl,
-                    height: 50,
-                    width: 54,
-                  ),
+                GestureDetector(
+                  onTap: (){
+                    nav(context, ViewUserProfileScreen(
+                      id: widget.post.firebaseAuthId,
+                    ));
+                  },
+                  child: ImageCacheCircle(widget.post.profileUrl,
+                  height: 68,
+                  width: 68,),
                 ),
                const SizedBox(width: 12,),
                 Column(
@@ -73,21 +80,16 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                           fontSize: 18,
                           fontWeight: FontWeight.w700),
                     ),
+                    const SizedBox(height: 8,),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                      // const Text("@annaclaramm"),
-                      //   Container(
-                      //     width: 4,
-                      //     height: 4,
-                      //     decoration: const BoxDecoration(
-                      //         shape: BoxShape.circle,
-                      //         color: AppColor.g600
-                      //     )
-                      //   ),
-                        //SizedBox(width: 5.w,),
-                       Text(RandomFunction.date(widget.post.timestamp.toString()).yMMMdjm),
+                       Text(RandomFunction.date(widget.post.timestamp.toString()).yMMMdjm,
+                       style: AppTextTheme.h6.copyWith(
+                         fontSize: 12,
+                         color: AppColor.g600
+                       ),),
                       ],
                     )
                   ],
@@ -104,7 +106,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                       // row has two child icon and text
                       child: Row(
                         children:const [
-                          Icon(Icons.save),
+                          //Icon(Icons.),
                           SizedBox(
                             // sized box with width 10
                             width: 10,
@@ -114,7 +116,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                       ),
                     ),
                   ],
-                  offset: Offset(0, 100),
+                  offset:const Offset(0, 100),
                   color: Colors.grey,
                   elevation: 2,
                 ),
@@ -155,19 +157,20 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                   onTap: (){},
                   icon: "assets/icon/like.svg",
                   like:  LikeButton(
-                    isLiked:likes.contains(widget.post.postId),
+                    isLiked:blogModel.checkIsLiked(widget.post.postId),
                     onTap: (v)async{
-                      if(likes.contains(widget.post.postId)){
-                        likes.remove(widget.post.postId);
-                       like= like-1;
+                      if(blogModel.checkIsLiked(widget.post.postId)==false){
+                        blogModel.likePost(widget.post);
+                        setState(() {
+                          widget.post.likeCount=(int.parse(widget.post.likeCount)+1).toString();
+                        });
                       }else{
-                        likes.add(widget.post.postId);
-                        like= like+1;
+
                       }
                       setState(() {});
                     },
                   ) ,
-                  count: like.toString(),
+                  count:widget.post.likeCount,
                 ),
                const Spacer(flex: 1,),
                 CustomAppIcon(
@@ -204,15 +207,20 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
   }
 
 Widget  videoWid() {
-    return Container(
-      height: 239.h,
-      width: 343.w,
-      decoration: BoxDecoration(
-          color: AppColor.p300,
-          borderRadius: BorderRadius.circular(15),
-          shape: BoxShape.rectangle
+    return GestureDetector(
+      onTap: (){
+        nav(context, VideoPlay(url: widget.post.contentUrl,));
+      },
+      child: Container(
+        height: 239.h,
+        width: 343.w,
+        decoration: BoxDecoration(
+            color: AppColor.p300,
+            borderRadius: BorderRadius.circular(15),
+            shape: BoxShape.rectangle
+        ),
+        child:ImageCacheR(vidImage),
       ),
-      child:ImageCacheR(vidImage),
     );
 }
 @override

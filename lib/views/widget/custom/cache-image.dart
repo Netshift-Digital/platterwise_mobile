@@ -77,12 +77,12 @@ class ImageCacheR extends StatelessWidget {
 
 
 
-class ImageCacheR2 extends StatelessWidget {
+class ImageCacheCircle extends StatelessWidget {
   final double height,width,topRadius,topBottom,blend;
   final String image;
   final bool fit;
 
-  const ImageCacheR2(this.image,{this.height=double.maxFinite,
+  const ImageCacheCircle(this.image,{this.height=double.maxFinite,
     this.topRadius=10,
     this.fit=true,
     this.blend=0,
@@ -103,7 +103,7 @@ class ImageCacheR2 extends StatelessWidget {
       imageUrl: image,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
-          borderRadius: radius,
+          shape: BoxShape.circle,
           image: DecorationImage(
               image: imageProvider,
               fit: fit?BoxFit.cover:BoxFit.scaleDown,
@@ -126,11 +126,12 @@ class ImageCacheR2 extends StatelessWidget {
           width: width,
           height: height,
           decoration:BoxDecoration(
+            shape: BoxShape.circle,
             image: DecorationImage(
-                image:const AssetImage('Rectangle 2730.png'),
-                fit:fit?BoxFit.cover:BoxFit.scaleDown
+                image:const NetworkImage('https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt67a59125151d76ef/625e7dffceb10b47dfaba4dc/GettyImages-1348618431.jpg'),
+                fit:BoxFit.cover
             ),
-            borderRadius:radius,
+
           ),
         );
       },

@@ -9,6 +9,7 @@ import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/screens/auth/login.dart';
 import 'package:platterwave/views/screens/auth/otp.dart';
 import 'package:platterwave/views/screens/auth/profile_pic.dart';
+import 'package:platterwave/views/screens/bottom_nav/bottom_nav.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/text_feild/country_field.dart';
@@ -16,14 +17,28 @@ import 'package:platterwave/views/widget/text_feild/text_field.dart';
 import 'package:provider/provider.dart';
 import 'package:the_validator/the_validator.dart';
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
    Register({Key? key}) : super(key: key);
+
+  @override
+  State<Register> createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
     final TextEditingController _fullName =  TextEditingController();
+
    final TextEditingController _email =  TextEditingController();
+
    final TextEditingController _username =  TextEditingController();
+
    final TextEditingController _password =  TextEditingController();
+
+   final TextEditingController _confirmPassword =  TextEditingController();
+
    final TextEditingController _phoneNumber =  TextEditingController();
+
    final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -154,7 +169,7 @@ class Register extends StatelessWidget {
 
   void register(BuildContext context) async{
     var model =  context.read<UserViewModel>();
-    //var imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context)=>const ProfilePic()));
+   // var imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context)=>const ProfilePic()));
     model.registerUser(
         RegisterModel(
              fullName: _fullName.text,
@@ -162,11 +177,11 @@ class Register extends StatelessWidget {
              password: _password.text,
              phone: _phoneNumber.text,
              username: _username.text,
-             imageUrl:"",
+             imageUrl:"https://firebasestorage.googleapis.com/v0/b/platterwise.appspot.com/o/profile%2Fplaterwise?alt=media&token=b2ad90b0-0ec1-4011-9a49-8e1e1bfef60e",
              authId: ""
         ),"").then((value){
               if(value==true){
-                nav(context,Otp());
+               // nav(context,BottomNav());
               }
     });
   }

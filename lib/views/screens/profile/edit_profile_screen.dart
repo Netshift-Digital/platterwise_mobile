@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:platterwave/model/profile/user_data.dart';
 import 'package:platterwave/model/request_model/edit_data.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
@@ -18,7 +19,8 @@ import '../../../res/color.dart';
 import '../../../res/text-theme.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+final  UserData userData;
+  const EditProfileScreen({Key? key, required this.userData}) : super(key: key);
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -65,76 +67,81 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     var model = context.watch<UserViewModel>();
     SizeConfig.init(context);
-    return Scaffold(
-      appBar: appBar(context),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 18.w),
-        child: SingleChildScrollView(
-          physics:const BouncingScrollPhysics(),
-          child: Form(
-            key:_formKey ,
-            child: Column(
-              children: [
-                Center(
-                  child: profilePicture(),
-                ),
-                SizedBox(height: 20.h,),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Eti Chisom",
-                    style: AppTextTheme.h1,
+    return GestureDetector(
+      onTap: (){
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: appBar(context),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 18.w),
+          child: SingleChildScrollView(
+            physics:const BouncingScrollPhysics(),
+            child: Form(
+              key:_formKey ,
+              child: Column(
+                children: [
+                  Center(
+                    child: profilePicture(),
                   ),
-                ),
-                SizedBox(height: 4.h,),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    user.email??"",
-                    style: AppTextTheme.h4,
+                  SizedBox(height: 20.h,),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Eti Chisom",
+                      style: AppTextTheme.h1,
+                    ),
                   ),
-                ),
-                SizedBox(height: 30.h,),
-                const Align(
-                  alignment: Alignment.topLeft,
-                    child: Text("Address")
-                ),
-                SizedBox(height: 8.h,),
-                AppTextField(
-                  controller: _address,
-                  hintText: "My current location",
-                  validator: FieldValidator.minLength(5,message: "minimum length of bio is 5 letters "),
-                ),
-                SizedBox(height: 20.h,),
-               const Align(
+                  SizedBox(height: 4.h,),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      user.email??"",
+                      style: AppTextTheme.h4,
+                    ),
+                  ),
+                  SizedBox(height: 30.h,),
+                  const Align(
                     alignment: Alignment.topLeft,
-                    child: Text("Add bio")
-                ),
-                SizedBox(height: 8.h,),
-                AppTextField(
-                  controller: _bio,
-                  hintText: "Add a brief introduction about you.",
-                  maxLines: 6,
-                  validator: FieldValidator.minLength(10,message: "minimum length of bio is 10 letters "),
-                ),
-                SizedBox(height: 50.h,),
-                PlatButton(
-                    appState: model.appState,
-                    title: "Update",
-                    onTap: (){
-                      if(_formKey.currentState!.validate()){
-                        var editData = EditData(
-                            firebaseAuthID: "hhjhgvv",
-                            bio: _bio.text,
-                            location: _address.text
-                        );
-                        model.editUser(editData).then((value){
-                          Navigator.pop(context);
-                        });
+                      child: Text("Address")
+                  ),
+                  SizedBox(height: 8.h,),
+                  AppTextField(
+                    controller: _address,
+                    hintText: "My current location",
+                    validator: FieldValidator.minLength(5,message: "minimum length of bio is 5 letters "),
+                  ),
+                  SizedBox(height: 20.h,),
+                 const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("Add bio")
+                  ),
+                  SizedBox(height: 8.h,),
+                  AppTextField(
+                    controller: _bio,
+                    hintText: "Add a brief introduction about you.",
+                    maxLines: 6,
+                    validator: FieldValidator.minLength(10,message: "minimum length of bio is 10 letters "),
+                  ),
+                  SizedBox(height: 50.h,),
+                  PlatButton(
+                      appState: model.appState,
+                      title: "Update",
+                      onTap: (){
+                        if(_formKey.currentState!.validate()){
+                          var editData = EditData(
+                              firebaseAuthID: FirebaseAuth.instance.currentUser!.uid,
+                              bio: _bio.text,
+                              location: _address.text
+                          );
+                          model.editUser(editData).then((value){
+                            Navigator.pop(context);
+                          });
+                        }
                       }
-                    }
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -179,5 +186,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
           )
         ]);
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _address.text=widget.userData.userProfile.location;
+    _bio.text=widget.userData.userProfile.bio;
   }
 }

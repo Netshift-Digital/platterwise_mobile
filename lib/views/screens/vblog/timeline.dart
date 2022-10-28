@@ -60,23 +60,23 @@ class _TimelineState extends State<Timeline> {
                              width: 161.w,
                            )
                        ),
-                       flexibleSpace:  Column(
-                         mainAxisAlignment: MainAxisAlignment.end,
-                         crossAxisAlignment: CrossAxisAlignment.start,
-                         children: [
-                           SizedBox(height: 10.h,),
-                           AppTextField(
-                             fillColor: AppColor.g30,
-                             isSearch: true,
-                             hasBorder: false,
-                             controller: searchTextController,
-                             hintText: "Search for a post or people",
-                             prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
-                           ),
-                           SizedBox(height: 10.h,),
-                         ],
-                       ),
-                       collapsedHeight:140 ,
+                       // flexibleSpace:  Column(
+                       //   mainAxisAlignment: MainAxisAlignment.end,
+                       //   crossAxisAlignment: CrossAxisAlignment.start,
+                       //   children: [
+                       //     SizedBox(height: 10.h,),
+                       //     // AppTextField(
+                       //     //   fillColor: AppColor.g30,
+                       //     //   isSearch: true,
+                       //     //   hasBorder: false,
+                       //     //   controller: searchTextController,
+                       //     //   hintText: "Search for a post or people",
+                       //     //   prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
+                       //     // ),
+                       //   //  SizedBox(height: 10.h,),
+                       //   ],
+                       // ),
+                       //collapsedHeight:140 ,
                      ),
                      SliverAppBar(
                        backgroundColor:AppColor.g0,

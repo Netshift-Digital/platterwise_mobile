@@ -62,7 +62,7 @@ class RegisterModel {
     "password": password,
     "phone": phone,
     "username": username,
-    "imageUrl": imageUrl,
-    "authID": authId,
+    "profileURL": imageUrl,
+    "firebaseAuthID": authId,
   };
 }

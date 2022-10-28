@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:platterwave/model/bottom_nav_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
+import 'package:platterwave/view_models/user_view_model.dart';
+import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/home/home_screen.dart';
 import 'package:platterwave/views/screens/profile/profile_screen.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
@@ -68,6 +70,23 @@ class _BottomNavState extends State<BottomNav> {
       ),
 
     );
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 50),(){
+      getData();
+    });
+  }
+
+  void getData() async{
+    var userModel = context.read<UserViewModel>();
+    var blogModel = context.read<VBlogViewModel>();
+
+  await  userModel.getMyProfile();
+   await blogModel.getFollowers();
+  await  blogModel.getFollowing();
   }
 }
 

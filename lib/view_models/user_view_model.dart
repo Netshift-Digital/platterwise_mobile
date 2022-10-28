@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:platterwave/common/base_view_model.dart';
 import 'package:platterwave/data/network/user_services.dart';
+import 'package:platterwave/model/profile/user_data.dart';
 import 'package:platterwave/model/request_model/edit_data.dart';
 import 'package:platterwave/model/request_model/register_model.dart';
 import 'package:platterwave/utils/enum/app_state.dart';
@@ -17,6 +18,7 @@ class UserViewModel extends BaseViewModel{
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+  UserData? user;
 
   Future<bool> registerUser(RegisterModel registerModel,String imagePath)async{
     try{
@@ -25,16 +27,18 @@ class UserViewModel extends BaseViewModel{
       var user = await firebaseAuth.createUserWithEmailAndPassword(
           email: registerModel.email,
           password: registerModel.password);
-
-      var data = await userService.signUp(
-          registerModel.copyWith(
+     var reg =   registerModel.copyWith(
          authId: user.user!.uid
-      ));
+     );
+      print(reg.toJson());
+      var data = await userService.signUp(reg);
+
       setState(AppState.idle);
       if(data!=null){
         return data["status"].toString().toLowerCase().contains("success");
       }
     }on FirebaseAuthException catch(e){
+      setState(AppState.idle);
       if (kDebugMode) {
         print(e.code);
       }
@@ -65,6 +69,7 @@ class UserViewModel extends BaseViewModel{
     try{
       setState(AppState.busy);
       var data = await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      setState(AppState.idle);
       return data.user;
     }on FirebaseAuthException catch(e){
       setState(AppState.idle);
@@ -110,6 +115,37 @@ class UserViewModel extends BaseViewModel{
       if(data!=null){
         return true;
       }
+    }catch(e){
+      RandomFunction.toast("something went wrong");
+      setState(AppState.idle);
+    }
+    return null;
+  }
+
+  Future<UserData?> getMyProfile()async{
+    try{
+      var data = await userService.getUser(FirebaseAuth.instance.currentUser!.uid);
+      if(data!=null){
+        var userData = UserData.fromJson(data);
+        user = userData;
+        notifyListeners();
+        return user;
+      }
+      setState(AppState.idle);
+    }catch(e){
+      RandomFunction.toast("something went wrong");
+      setState(AppState.idle);
+    }
+    return null;
+  }
+
+  Future<UserData?> getUserProfile(String uid)async{
+    try{
+      var data = await userService.getUser(uid);
+      if(data!=null){
+       return UserData.fromJson(data);
+      }
+      setState(AppState.idle);
     }catch(e){
       RandomFunction.toast("something went wrong");
       setState(AppState.idle);

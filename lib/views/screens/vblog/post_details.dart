@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/model/vblog/comment.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
@@ -8,6 +9,7 @@ import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
+import 'package:platterwave/views/widget/containers/empty_content_container.dart';
 import 'package:platterwave/views/widget/containers/timeline_post_container.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +53,29 @@ class _PostDetailsState extends State<PostDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                      TimelinePostContainer(widget.post,tap: false,),
-                    ListView.builder(
+                   const SizedBox(height: 14,),
+                   Column(
+                     children: [
+                       Text("Comments (${comments.length})",
+                       style: AppTextTheme.h3.copyWith(
+                         fontWeight: FontWeight.w500,
+                         fontSize: 14
+                       ),),
+                       const SizedBox(height: 3,),
+                       Container(
+                         height: 1,
+                           width: 32,
+                         color: AppColor.p200,
+                       )
+                     ],
+                   ),
+                    const SizedBox(height: 14,),
+                   comments.isEmpty?
+                  const Center(
+                    child:  EmptyContentContainer(
+                       errorText: "Be the first to comment",
+                     ),
+                  ) :ListView.builder(
                       itemCount: comments.length,
                         primary: false,
                         shrinkWrap: true,
@@ -190,9 +214,12 @@ class _PostDetailsState extends State<PostDetails> {
     var model = context.read<VBlogViewModel>();
     model.getComment(int.parse(widget.post.postId))
     .then((value){
-      setState(() {
-        comments=value;
-      });
+      if(mounted){
+        setState(() {
+          comments=value;
+        });
+      }
+
     });
   }
 

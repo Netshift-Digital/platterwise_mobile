@@ -57,7 +57,7 @@ class PlatButton extends StatelessWidget {
                Text(title,style:AppTextTheme.h3.copyWith(
                  fontSize:textSize ,
                  fontWeight: FontWeight.w500,
-                 color: AppColor.g0
+                 color:textColor?? AppColor.g0
                ) ,),
               ],
             ),

@@ -23,6 +23,7 @@ class PlatterwiseAppBar extends StatelessWidget implements PreferredSizeWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: AppBar(
         bottom: bottom,
+        iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
         automaticallyImplyLeading: automaticallyImplyLeading,
         centerTitle: false,
