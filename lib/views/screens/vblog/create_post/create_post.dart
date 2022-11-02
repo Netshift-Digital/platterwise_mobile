@@ -12,6 +12,7 @@ import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/enum/app_state.dart';
 import 'package:platterwave/utils/random_functions.dart';
+import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
@@ -244,10 +245,11 @@ Widget  imageList() {
 
   void createPost(BuildContext context) {
     var model = context.read<VBlogViewModel>();
+    var uid = context.read<UserViewModel>().user!.userProfile.userId;
     if(commentController.text.isNotEmpty){
       PostData postData =
       PostData(
-          userId: 64,
+         userId: int.parse(uid),
           contentPost: commentController.text,
           contentType: type,
           contentUrl: '');

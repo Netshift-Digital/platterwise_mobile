@@ -1,7 +1,10 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:linkfy_text/linkfy_text.dart';
 import 'package:platterwave/model/profile/user_data.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/res/color.dart';
@@ -11,6 +14,7 @@ import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/auth/login.dart';
+import 'package:platterwave/views/screens/profile/followers_list.dart';
 import 'package:platterwave/views/screens/profile/settings_screen.dart';
 import 'package:platterwave/views/screens/profile/view_likes_page.dart';
 import 'package:platterwave/views/screens/profile/view_posts_page.dart';
@@ -18,6 +22,7 @@ import 'package:platterwave/views/widget/appbar/custom_app_bar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../utils/nav.dart';
 import '../../widget/tiles/settings_tile.dart';
@@ -50,7 +55,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
               builder: (context){
                 return Container(
                   height: 350.h,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16),
@@ -62,7 +67,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                     child: Column(
                       children: [
                         SizedBox(height: 18.h,),
-                        Divider(
+                       const Divider(
                           thickness: 2,
                           indent: 150,
                           endIndent: 150,
@@ -142,47 +147,81 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                     ],
                   ),
                   SizedBox(height: 30.h,),
-                  Text(userData!.userProfile.bio, style: AppTextTheme.h3,),
+                  LinkifyText(
+                    userData!.userProfile.bio,
+                     textStyle: AppTextTheme.h3,
+                      linkStyle:AppTextTheme.h3.copyWith(
+                        color: Colors.blue[900],
+                        decoration: TextDecoration.underline
+                      ) ,
+                      linkTypes: [LinkType.url],
+                     onTap: (link){
+                      launchLink(link.value!);
+                  },),
                   SizedBox(height: 30.h,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          StreamBuilder<QuerySnapshot>(
-                            stream:FirebaseFirestore.instance.collection("following").
-                            doc("users").collection(widget.id??FirebaseAuth.instance.currentUser!.uid).snapshots(),
-                            builder: (context, snapshot) {
+                      GestureDetector(
+                        onTap: (){
+                          nav(context,  FollowersList(
+                            index: 0,
+                            id: widget.id??FirebaseAuth.instance.currentUser!.uid,
 
-                              return Text(snapshot.hasData?snapshot.data!.docs.length.toString():
-                              "0", style: AppTextTheme.h3,);
-                            }
+                          ));
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              StreamBuilder<QuerySnapshot>(
+                                stream:FirebaseFirestore.instance.collection("following").
+                                doc("users").collection(widget.id??FirebaseAuth.instance.currentUser!.uid).snapshots(),
+                                builder: (context, snapshot) {
+
+                                  return Text(snapshot.hasData?snapshot.data!.docs.length.toString():
+                                  "0", style: AppTextTheme.h3,);
+                                }
+                              ),
+                              Text(
+                                "Following",
+                                style: AppTextTheme.h4.copyWith(
+                                    color: AppColor.g300),
+                              )
+                            ],
                           ),
-                          Text(
-                            "Following",
-                            style: AppTextTheme.h4.copyWith(
-                                color: AppColor.g300),
-                          )
-                        ],
+                        ),
+
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          StreamBuilder<QuerySnapshot>(
-                              stream:FirebaseFirestore.instance.collection("followers").
-                              doc("users").collection(widget.id??FirebaseAuth.instance.currentUser!.uid).snapshots(),
-                              builder: (context, snapshot) {
+                      GestureDetector(
+                        onTap: (){
+                          nav(context,  FollowersList(
+                            index: 1,
+                            id: widget.id??FirebaseAuth.instance.currentUser!.uid,
+                          ));
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              StreamBuilder<QuerySnapshot>(
+                                  stream:FirebaseFirestore.instance.collection("followers").
+                                  doc("users").collection(widget.id??FirebaseAuth.instance.currentUser!.uid).snapshots(),
+                                  builder: (context, snapshot) {
 
-                                return Text(snapshot.hasData?snapshot.data!.docs.length.toString():
-                                "0", style: AppTextTheme.h3,);
-                              }
+                                    return Text(snapshot.hasData?snapshot.data!.docs.length.toString():
+                                    "0", style: AppTextTheme.h3,);
+                                  }
+                              ),
+                              Text(
+                                "Followers",
+                                style: AppTextTheme.h4.copyWith(
+                                  color: AppColor.g300),)
+                            ],
                           ),
-                          Text(
-                            "Followers",
-                            style: AppTextTheme.h4.copyWith(
-                              color: AppColor.g300),)
-                        ],
+                        ),
                       ),
                       widget.id!=null?PlatButton(
                         title: blogModel.getIsFollowed(userData!.userProfile.email)?"Unfollow":"Follow",
@@ -217,7 +256,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
             ),
           ),
           DefaultTabController(
-              initialIndex: 1,
+              initialIndex: 0,
               length: 2,
               child: Expanded(
                 child: Column(
@@ -254,11 +293,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
           )
         ],
       ),
-     floatingActionButton: FloatingActionButton(
-       onPressed: (){
-         getPost();
-       },
-     ),
+
     );
   }
 
@@ -333,4 +368,12 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
    });
 
   }
+
+  void launchLink(String link) async{
+    if (!await launchUrl(Uri.parse(link))) {
+    throw 'Could not launch $link';
+    }
+  }
+
+
 }

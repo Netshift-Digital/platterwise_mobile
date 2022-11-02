@@ -9,6 +9,7 @@ import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/screens/auth/forgot_password.dart';
 import 'package:platterwave/views/screens/auth/otp.dart';
+import 'package:platterwave/views/screens/auth/register.dart';
 import 'package:platterwave/views/screens/bottom_nav/bottom_nav.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
@@ -123,7 +124,7 @@ final _formKey = GlobalKey<FormState>();
                           SizedBox(height: size.height*0.04,),
                           GestureDetector(
                             onTap: (){
-                              Navigator.pop(context);
+                             nav(context, Register());
                             },
                             child: RichText(
                               text: TextSpan(

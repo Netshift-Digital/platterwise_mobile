@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
@@ -24,7 +25,7 @@ class _SignInSignUpState extends State<SignInSignUp> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(),
-            Text('Welcome to Platterwise',style: AppTextTheme.h1.copyWith(
+            Text('Welcome to Platterwise',style: GoogleFonts.roboto(
               fontWeight: FontWeight.w900,
               fontSize: 40
             ),),

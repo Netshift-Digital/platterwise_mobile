@@ -75,7 +75,7 @@ class VBlogService{
 
   Future<dynamic> getComment(int postId) async {
     var body = jsonEncode({
-      "firebaseAuthID":"hhjhgvv",
+      "firebaseAuthID":FirebaseAuth.instance.currentUser!.uid,
       "post_id":postId
     });
     try {
@@ -268,6 +268,7 @@ class VBlogService{
             "Content-type": "application/json",
           });
       var data = jsonDecode(response.body);
+      print(data);
       if(response.statusCode==200){
         return data;
       }else{

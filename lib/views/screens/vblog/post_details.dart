@@ -7,6 +7,7 @@ import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/random_functions.dart';
+import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/containers/empty_content_container.dart';
@@ -226,8 +227,9 @@ class _PostDetailsState extends State<PostDetails> {
   postComment(String e){
     commentController.clear();
     var model = context.read<VBlogViewModel>();
+    var uid = context.read<UserViewModel>().user!.userProfile.userId;
     model.commentOnPost(int.parse(widget.post.postId),
-        64.toString(), e).then((value){
+        uid, e).then((value){
           getComment();
     });
   }
