@@ -179,7 +179,7 @@ class VBlogService{
       if(response.statusCode==200){
         return data;
       }else{
-        RandomFunction.toast(data['status']??"");
+        //RandomFunction.toast(data['status']??"");
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");

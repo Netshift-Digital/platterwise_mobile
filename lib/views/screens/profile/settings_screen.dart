@@ -47,7 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               stream: FirebaseFirestore.instance.collection('followButton')
                   .doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
               builder: (context, snapshot) {
-                if(snapshot.data!=null){
+                if(snapshot.data!=null&&snapshot.data!.exists){
                   var data = snapshot.data!.data()! as Map;
 
                 return CustomSwitchTile(

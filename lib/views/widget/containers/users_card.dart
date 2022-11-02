@@ -42,7 +42,7 @@ class UserCard extends StatelessWidget {
       trailing: PlatButton(
         title: isFollower?"Remove":"Follow",
         padding: 0,
-        color: isFollower?AppColor.g700:null,
+        color: isFollower?AppColor.g700:AppColor.p200,
         textSize: 14,
         onTap: (){
           if(isFollower){
