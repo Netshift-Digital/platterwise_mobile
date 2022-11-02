@@ -22,7 +22,16 @@ class _ViewLikesPageState extends State<ViewLikesPage> {
       builder: (context, snapshot) {
         if(snapshot.hasData){
           //var post = Post.fromJson(snapshot.data.)
-          return Padding(
+          return snapshot.data!.docs.isEmpty?
+         const Center(
+            child: Padding(
+              padding:  EdgeInsets.only(left: 20,right: 20),
+              child: EmptyContentContainer(
+                errorText: "Like your first post by going to homepage "
+                    "and follow the accounts you are intrested in",
+              ),
+            ),
+          ) :Padding(
             padding: const EdgeInsets.only(left: 20,right: 20),
             child: ListView.builder(
                 padding: EdgeInsets.zero,

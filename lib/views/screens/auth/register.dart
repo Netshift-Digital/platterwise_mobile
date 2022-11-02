@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:platterwave/model/request_model/register_model.dart';
 import 'package:platterwave/res/color.dart';
@@ -5,6 +6,7 @@ import 'package:platterwave/res/spacing.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/nav.dart';
+import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/screens/auth/login.dart';
 import 'package:platterwave/views/screens/auth/otp.dart';
@@ -177,11 +179,14 @@ class _RegisterState extends State<Register> {
              password: _password.text,
              phone: _phoneNumber.text,
              username: _username.text,
-             imageUrl:"https://firebasestorage.googleapis.com/v0/b/platterwise.appspot.com/o/profile%2Fplaterwise?alt=media&token=b2ad90b0-0ec1-4011-9a49-8e1e1bfef60e",
+             imageUrl:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
              authId: ""
         ),"").then((value){
               if(value==true){
-               // nav(context,BottomNav());
+                RandomFunction.toast("Account created successfully, a verification mail has been sent to you");
+                FirebaseAuth.instance.currentUser!.sendEmailVerification();
+               nav(context,Login());
+
               }
     });
   }

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/main.dart';
@@ -6,6 +7,7 @@ import 'package:platterwave/res/spacing.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/nav.dart';
+import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/screens/auth/forgot_password.dart';
 import 'package:platterwave/views/screens/auth/otp.dart';
@@ -162,13 +164,22 @@ final _formKey = GlobalKey<FormState>();
 
   void login(BuildContext context) {
     //nav(context, const BottomNav());
-    context.read<UserViewModel>().login(
-        _email.text,
-        _password.text
-    ).then((value){
-      if(value!=null){
-        nav(context, const BottomNav(),remove: true);
-      }
-    });
+    if(_formKey.currentState!.validate()){
+      context.read<UserViewModel>().login(
+          _email.text,
+          _password.text
+      ).then((value){
+        if(value!=null){
+          if(value.emailVerified){
+            nav(context, const BottomNav(),remove: true);
+          }else{
+            //FirebaseAuth.instance.currentUser!.sendEmailVerification();
+            RandomFunction.toast("Account has not been verified, a verification link has been sent to your email");
+          }
+
+        }
+      });
+    }
+
   }
 }

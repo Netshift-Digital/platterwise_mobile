@@ -17,6 +17,7 @@ class ViewPostsPage extends StatefulWidget {
 class _ViewPostsPageState extends State<ViewPostsPage> {
   @override
   Widget build(BuildContext context) {
+    //print(widget.post);
     return Padding(
       padding: const EdgeInsets.only(left: 20,right: 20),
       child:widget.post.isEmpty?

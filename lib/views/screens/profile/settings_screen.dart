@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
@@ -41,12 +43,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             SizedBox(height: 37.h,),
-            CustomSwitchTile(
-                text: "Allow people follow you",
-              value: false,
+            StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance.collection('followButton')
+                  .doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
+              builder: (context, snapshot) {
+                if(snapshot.data!=null){
+                  var data = snapshot.data!.data()! as Map;
+
+                return CustomSwitchTile(
+                    text: "Allow people follow you",
+                  value: data['disable']??false,
+                  onChangeMethod: (e){
+                      FirebaseFirestore.instance.collection('followButton')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .set({"disable":e});
+                  },
+                );
+                }
+                return CustomSwitchTile(
+                  text: "Allow people follow you",
+                  value: false,
+                  onChangeMethod: (e){
+                    FirebaseFirestore.instance.collection('followButton')
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .set({"disable":e});
+                  },
+                );
+              }
             ),
             SizedBox(height: 14.h,),
-            Text("Your followers will be notified about post you"
+           const Text("Your followers will be notified about post you"
                 " make to your profile and see them in their home feed."),
             SizedBox(height: 32.h,),
             CustomSwitchTile(

@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class RandomFunction {
   static toast(String msg, {bool isError = false}) {
     showSimpleNotification(Text(msg),
-        background: isError ? Colors.red : AppColor.g70);
+        background: isError ? Colors.red : AppColor.p300);
   }
 
 
