@@ -116,7 +116,9 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
         },
         trailing: "assets/icon/option.svg",
       ),
-      body: userData==null?const Center(child: CircularProgressIndicator())
+      body: userData==null?const Center(child: CircularProgressIndicator(
+        color: AppColor.p300,
+      ))
           :Column(
         children: [
           Container(
