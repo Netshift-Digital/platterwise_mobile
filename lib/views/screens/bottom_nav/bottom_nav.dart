@@ -8,6 +8,7 @@ import 'package:platterwave/views/screens/home/home_screen.dart';
 import 'package:platterwave/views/screens/profile/profile_screen.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/save/save_screen.dart';
+import 'package:platterwave/views/screens/search/search_screen.dart';
 import 'package:platterwave/views/screens/vblog/timeline.dart';
 
 import 'package:provider/provider.dart';
@@ -31,7 +32,7 @@ class _BottomNavState extends State<BottomNav> {
     BottomNavigationModel(
         title: "Explore",
         icon: "assets/icon/search-normal.svg",
-        screen: const SizedBox()),
+        screen: const SearchScreen()),
     BottomNavigationModel(
         title: "Save",
         icon: "assets/icon/bookmark.svg",

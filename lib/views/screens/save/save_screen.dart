@@ -18,7 +18,8 @@ class SaveScreen extends StatelessWidget {
     SizeConfig.init(context);
     return Scaffold(
       appBar: appBar(context),
-      body: post.isEmpty?const Center(child: EmptyContentContainer(
+      body: post.isEmpty? const Center(
+          child: EmptyContentContainer(
 
       )):Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
