@@ -52,7 +52,7 @@ class VBlogViewModel extends BaseViewModel{
           myPosts.add(element);
         }
         notifyListeners();
-        return posts;
+        return myPosts;
       }
     }catch(e){
       setState(AppState.idle);

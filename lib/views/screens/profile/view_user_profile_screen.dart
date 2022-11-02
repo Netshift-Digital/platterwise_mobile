@@ -223,21 +223,40 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                           ),
                         ),
                       ),
-                      widget.id!=null?PlatButton(
-                        title: blogModel.getIsFollowed(userData!.userProfile.email)?"Unfollow":"Follow",
-                        padding: 0,
-                        textSize: 14,
-                        onTap: (){
-                          //blogModel.following.add(userData!.userProfile);
-                          if(blogModel.getIsFollowed(userData!.userProfile.email)){
-                            blogModel.unFollowUser(widget.id!, userData!.userProfile);
-                          }else{
-                           blogModel.followUser(widget.id!, userData!.userProfile);
+                      widget.id!=null?StreamBuilder<DocumentSnapshot>(
+                          stream: FirebaseFirestore.instance.collection('followButton')
+                              .doc(widget.id).snapshots(),
+                        builder: (context, snapshot) {
+                            bool disable = false;
+                          if(snapshot.data!=null){
+                            if(snapshot.data!.exists){
+                              var data = snapshot.data!.data()! as Map;
+                              disable =data['disable'];
+                            }
 
                           }
-                        },
-                        width: 95.w,
-                        height: 38.h,
+                          if(disable==false){
+                            return PlatButton(
+                              title: blogModel.getIsFollowed(userData!.userProfile.email)?"Unfollow":"Follow",
+                              padding: 0,
+                              textSize: 14,
+                              onTap: (){
+                                //blogModel.following.add(userData!.userProfile);
+                                if(blogModel.getIsFollowed(userData!.userProfile.email)){
+                                  blogModel.unFollowUser(widget.id!, userData!.userProfile);
+                                }else{
+                                  blogModel.followUser(widget.id!, userData!.userProfile);
+
+                                }
+                              },
+                              width: 95.w,
+                              height: 38.h,
+                            );
+                          }else{
+                           return SizedBox();
+                          }
+
+                        }
                       ) : PlatButton(
                         title: "Edit Profile",
                         padding: 0,
