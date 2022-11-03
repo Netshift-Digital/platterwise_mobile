@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/views/widget/containers/sub_categories_container.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
 import 'package:platterwave/views/widget/tiles/activity/comment_on_post.dart';
 
@@ -27,7 +28,7 @@ class SearchScreen extends StatelessWidget {
               hintText: "Search for a post or people",
                 prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
               suffixIcon: SvgPicture.asset("assets/icon/cancel.svg"),
-            )
+            ),
           ],
         ),
       ),
