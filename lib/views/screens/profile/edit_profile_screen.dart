@@ -88,7 +88,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   Align(
                     alignment: Alignment.center,
                     child: Text(
-                      "Eti Chisom",
+                      FirebaseAuth.instance.currentUser!.email!,
                       style: AppTextTheme.h1,
                     ),
                   ),
