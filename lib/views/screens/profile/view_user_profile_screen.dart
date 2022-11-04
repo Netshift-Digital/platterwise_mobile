@@ -333,7 +333,10 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
     var blogModel = context.read<VBlogViewModel>();
     if(widget.id==null){
       if(userModel.user!=null){
-        userData=userModel.user;
+        setState(() {
+          userData=userModel.user;
+        });
+
       }else{
         userModel.getMyProfile().then((value){
           setState(() {

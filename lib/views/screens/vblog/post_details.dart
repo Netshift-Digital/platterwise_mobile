@@ -29,6 +29,7 @@ class _PostDetailsState extends State<PostDetails> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    var user = context.read<UserViewModel>().user;
     return GestureDetector(
       onTap: (){
         FocusScope.of(context).unfocus();
@@ -171,7 +172,11 @@ class _PostDetailsState extends State<PostDetails> {
                     padding: const EdgeInsets.only(left: 20,right: 30),
                     child: Row(
                       children: [
-                        Image.asset('assets/images/Ellipse 11.png'),
+                        ImageCacheCircle(
+                          user==null?"":user.userProfile.profileUrl,
+                          height: 40,
+                          width: 40,
+                        ),
                         const SizedBox(width: 12,),
                         Expanded(child: TextField(
                           controller: commentController,
@@ -229,7 +234,7 @@ class _PostDetailsState extends State<PostDetails> {
     var model = context.read<VBlogViewModel>();
     var uid = context.read<UserViewModel>().user!.userProfile.userId;
     model.commentOnPost(int.parse(widget.post.postId),
-        uid, e).then((value){
+        uid, e, userData: context.read<UserViewModel>().user!.userProfile, id: widget.post.firebaseAuthId).then((value){
           getComment();
     });
   }

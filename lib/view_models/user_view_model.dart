@@ -30,7 +30,6 @@ class UserViewModel extends BaseViewModel{
      var reg =   registerModel.copyWith(
          authId: user.user!.uid
      );
-      print(reg.toJson());
       var data = await userService.signUp(reg);
 
       setState(AppState.idle);
@@ -152,4 +151,7 @@ class UserViewModel extends BaseViewModel{
     }
     return null;
   }
+
+
+
 }

@@ -8,6 +8,7 @@ import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
+import 'package:platterwave/views/screens/vblog/notification.dart';
 import 'package:platterwave/views/screens/vblog/popular_page.dart';
 import 'package:platterwave/views/screens/vblog/create_post/create_post.dart';
 import 'package:platterwave/views/screens/vblog/trending_page.dart';
@@ -51,7 +52,11 @@ class _TimelineState extends State<Timeline> {
                        backgroundColor: Colors.white,
                        pinned: false,
                        actions: [
-                         SvgPicture.asset("assets/icon/notification-bing.svg")
+                         GestureDetector(
+                           onTap: (){
+                             nav(context, const NotificationActivity());
+                           },
+                             child: SvgPicture.asset("assets/icon/notification-bing.svg"))
                        ],
                        title: ConstrainedBox(
                            constraints: const BoxConstraints(maxHeight: 28, maxWidth: 300),

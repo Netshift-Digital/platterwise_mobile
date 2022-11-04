@@ -12,6 +12,7 @@ import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/vblog/post_details.dart';
@@ -160,7 +161,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                     isLiked:blogModel.checkIsLiked(widget.post.postId),
                     onTap: (v)async{
                       if(blogModel.checkIsLiked(widget.post.postId)==false){
-                        blogModel.likePost(widget.post);
+                        blogModel.likePost(widget.post,context.read<UserViewModel>().user!.userProfile);
                         setState(() {
                           widget.post.likeCount=(int.parse(widget.post.likeCount)+1).toString();
                         });

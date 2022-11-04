@@ -9,6 +9,8 @@ import 'package:platterwave/model/profile/user_data.dart';
 import 'package:platterwave/model/request_model/post_data.dart';
 import 'package:platterwave/model/vblog/comment.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
+import 'package:platterwave/model/vblog/user_activity.dart';
+import 'package:platterwave/model/vblog/user_search.dart';
 import 'package:platterwave/utils/enum/app_state.dart';
 import 'package:platterwave/utils/locator.dart';
 
@@ -91,20 +93,29 @@ class VBlogViewModel extends BaseViewModel{
         return comments;
       }
     }catch(e){
-      print(e);
+     // print(e);
       setState(AppState.idle);
     }
     return comments;
   }
 
 
-  Future<dynamic> likePost(Post p)async{
+  Future<dynamic> likePost(Post p,UserProfile userData)async{
     try{
       myLikes.add(p);
-     await vBlogService.likePost(int.parse(p.postId), FirebaseAuth.instance.currentUser!.uid);
      FirebaseFirestore.instance.collection("likes").
      doc("users").collection(FirebaseAuth.instance.currentUser!.uid).doc(p.postId.toString())
          .set(p.toJson());
+    var data =  await vBlogService.likePost(int.parse(p.postId), FirebaseAuth.instance.currentUser!.uid);
+    if(data!=null){
+      addActivity(p.firebaseAuthId, UserActivity(
+          message: " liked your post",
+          firebaseAuthId: FirebaseAuth.instance.currentUser!.uid,
+          userName:userData.username ,
+          profilePic: userData.profileUrl
+      ));
+    }
+
     }catch(e){
       setState(AppState.idle);
     }
@@ -113,9 +124,18 @@ class VBlogViewModel extends BaseViewModel{
 
 
   // ignore: non_constant_identifier_names
-  Future<dynamic> commentOnPost(int postId, String uid,String comment)async{
+  Future<dynamic> commentOnPost(int postId, String uid,String comment,{required UserProfile userData,required String id})async{
     try{
-      await vBlogService.commentToPost(postId, uid, comment);
+     var data = await vBlogService.commentToPost(postId, uid, comment);
+     if(data!=null){
+       addActivity(id, UserActivity(
+           message: " commented on your post",
+           firebaseAuthId: FirebaseAuth.instance.currentUser!.uid,
+           userName:userData.username ,
+           profilePic: userData.profileUrl
+       ));
+     }
+
     }catch(e){
       setState(AppState.idle);
     }
@@ -226,7 +246,12 @@ Future<List<UserProfile>?>getFollowers()async{
       doc("users").collection(FirebaseAuth.instance.currentUser!.uid).doc(uid)
           .set(users.toJson());
 
-
+    addActivity(uid, UserActivity(
+        message: " started following you ",
+        firebaseAuthId: FirebaseAuth.instance.currentUser!.uid,
+        userName: users.username,
+        profilePic: users.profileUrl
+    ));
     }on FirebaseException catch (e){
       print(e);
     }
@@ -257,6 +282,36 @@ Future<List<UserProfile>?>getFollowers()async{
   bool checkIsLiked(String id){
     var d = myLikes.where((element) =>element.postId==id );
     return d.isNotEmpty;
+  }
+
+
+
+  Future<List<SearchResultElement>?> searchUser(String search)async{
+    try{
+      var data = await vBlogService.searchUser(search);
+      if(data!=null){
+        List<SearchResultElement> searchResult=[];
+        var result = SearchResult.fromJson(data);
+        for(var e in result.searchResult ){
+          if(searchResult.any((element) => element.firebaseAuthId==e.firebaseAuthId)==false){
+            searchResult.add(e);
+          }
+        }
+        return searchResult;
+      }
+      setState(AppState.idle);
+    }catch(e){
+     // RandomFunction.toast("something went wrong");
+      setState(AppState.idle);
+    }
+    return null;
+  }
+
+  addActivity(String id ,UserActivity userActivity){
+    FirebaseFirestore.instance.collection("activity").
+    doc("users").collection(id).add(userActivity.toJson());
+
+
   }
 
   }
