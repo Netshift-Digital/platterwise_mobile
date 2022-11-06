@@ -333,23 +333,32 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
     var blogModel = context.read<VBlogViewModel>();
     if(widget.id==null){
       if(userModel.user!=null){
-        setState(() {
-          userData=userModel.user;
-        });
+        if(mounted){
+          setState(() {
+            userData=userModel.user;
+          });
+        }
+
 
       }else{
         userModel.getMyProfile().then((value){
-          setState(() {
-            userData=value;
-          });
+          if(mounted){
+            setState(() {
+              userData=value;
+            });
+          }
+
         });
       }
     }else{
       userModel.getUserProfile(widget.id!).then((value){
         if(value!=null){
-          setState(() {
-            userData=value;
-          });
+          if(mounted){
+            setState(() {
+              userData=value;
+            });
+          }
+
         }
       });
     }

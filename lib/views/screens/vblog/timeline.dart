@@ -32,8 +32,8 @@ class _TimelineState extends State<Timeline> {
         backgroundColor: AppColor.p300,
           child: SvgPicture.asset('assets/icon/post.svg'),
         onPressed: (){
-         nav(context, const CreatePost());
-          //FirebaseAuth.instance.signOut();
+        nav(context, const CreatePost());
+         // FirebaseAuth.instance.signOut();
         },
       ),
       body: AnnotatedRegion(

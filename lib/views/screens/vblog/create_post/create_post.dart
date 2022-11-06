@@ -34,6 +34,7 @@ class _CreatePostState extends State<CreatePost> {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<VBlogViewModel>();
+    var user = context.watch<UserViewModel>().user!.userProfile;
     return WillPopScope(
       onWillPop: ()async{
         cancel(context);
@@ -111,14 +112,9 @@ class _CreatePostState extends State<CreatePost> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      height: forty,
-                      width: forty,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        shape: BoxShape.circle
-                      ),
-                    ),
+                    ImageCacheCircle(user.profileUrl,
+                    height: forty,
+                    width: forty,),
                    const SizedBox(width:twentyFour ,),
                     Expanded(
                             child: TextFormField(

@@ -11,6 +11,7 @@ import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
+import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
 import 'package:provider/provider.dart';
 import 'package:the_validator/the_validator.dart';
@@ -29,43 +30,45 @@ final  UserData userData;
 class _EditProfileScreenState extends State<EditProfileScreen> {
   Uint8List? _imageFile;
   bool isUploading = false;
+  String? photoUrl;
+  stop(){ setState(() {load=false;});}
+  startLoading(){ setState(() {load=true;});}
+
 
   Future<void> _pickImage() async {
+    var model = context.read<UserViewModel>();
     final ImagePicker picker = ImagePicker();
+
+
+
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    _imageFile = await image!.readAsBytes();
-    setState(() {
-      _imageFile;
-    });
+    if(image!=null){
+      _imageFile = await image.readAsBytes();
+      setState(() {
+        _imageFile;
+      });
+      startLoading();
+      model.uploadImage(image.path).then((value){
+        photoUrl=value;
+        stop();
+      }).catchError((e){
+        stop();
+      });
+    }
 
-    if (_imageFile == null) return;
-    if (!mounted) return;
 
-    // String photoUrl = '';
-    // String userType =
-    // await Provider.of<ScreenDecider>(context, listen: false).getUserType();
-    //
-    // setState(() => isUploading = true);
-    // try {
-    //   photoUrl = await FirebaseStorageService.uploadImageToStorage(
-    //       userType, _imageFile, FirebaseAuthService().uuid);
-    // } catch (e) {
-    //   //
-    // }
-    //
-    // FirebaseUserService(collection: userType).updateUserInfo(
-    //   uuid: FirebaseAuthService().uuid,
-    //   info: {"photoUrl": photoUrl},
-    // );
-    // setState(() => isUploading = false);
+
+
   }
   var user = FirebaseAuth.instance.currentUser!;
   final TextEditingController _bio = TextEditingController();
   final TextEditingController _address = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool load = false;
   @override
   Widget build(BuildContext context) {
     var model = context.watch<UserViewModel>();
+    var userData = model.user!.userProfile;
     SizeConfig.init(context);
     return GestureDetector(
       onTap: (){
@@ -82,13 +85,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: Column(
                 children: [
                   Center(
-                    child: profilePicture(),
+                    child: profilePicture(userData),
                   ),
                   SizedBox(height: 20.h,),
                   Align(
                     alignment: Alignment.center,
                     child: Text(
-                      FirebaseAuth.instance.currentUser!.email!,
+                      userData.fullName,
                       style: AppTextTheme.h1,
                     ),
                   ),
@@ -96,22 +99,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   Align(
                     alignment: Alignment.center,
                     child: Text(
-                      user.email??"",
+                      userData.email??"",
                       style: AppTextTheme.h4,
                     ),
                   ),
                   SizedBox(height: 30.h,),
-                  const Align(
-                    alignment: Alignment.topLeft,
-                      child: Text("Address")
-                  ),
-                  SizedBox(height: 8.h,),
-                  AppTextField(
-                    controller: _address,
-                    hintText: "My current location",
-                    validator: FieldValidator.minLength(5,message: "minimum length of bio is 5 letters "),
-                  ),
-                  SizedBox(height: 20.h,),
+                  // const Align(
+                  //   alignment: Alignment.topLeft,
+                  //     child: Text("Address")
+                  // ),
+                  // SizedBox(height: 8.h,),
+                  // AppTextField(
+                  //   controller: _address,
+                  //   hintText: "My current location",
+                  //   validator: FieldValidator.minLength(5,message: "minimum length of bio is 5 letters "),
+                  // ),
+                  //SizedBox(height: 20.h,),
                  const Align(
                       alignment: Alignment.topLeft,
                       child: Text("Add bio")
@@ -130,8 +133,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       onTap: (){
                         if(_formKey.currentState!.validate()){
                           var editData = EditData(
+                              profileURL:photoUrl??userData.profileUrl ,
                               firebaseAuthID: FirebaseAuth.instance.currentUser!.uid,
                               bio: _bio.text,
+
                               location: _address.text
                           );
                           model.editUser(editData).then((value){
@@ -149,7 +154,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget profilePicture() {
+  Widget profilePicture(UserProfile userProfile) {
     return Stack(
         children: <Widget>[
           //TODO: Switch Person Image and connect to backend
@@ -163,13 +168,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     image: DecorationImage(
                         image: MemoryImage(_imageFile!), fit: BoxFit.cover)),
               )
-                  : Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(36),
-                    image: const DecorationImage(
-                        image: NetworkImage("https://thumbs.dreamstime.com/b/lonely-elephant-against-sunset-beautiful-sun-clouds-savannah-serengeti-national-park-africa-tanzania-artistic-imag-image-106950644.jpg"),
-                        fit: BoxFit.cover)),
-              )),
+                  : ImageCacheCircle(userProfile.profileUrl,
+              height:72,
+                width:72,
+              )
+          ),
           Positioned(
             right: 0,
             bottom: 0,
@@ -184,7 +187,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 height: 28,
               ),
             ),
-          )
+          ),
+        load==false?const SizedBox():const  SizedBox(
+            height: 75,
+              width: 75,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(AppColor.p200),
+              )),
         ]);
   }
   @override
