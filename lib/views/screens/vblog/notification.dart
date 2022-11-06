@@ -5,9 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:platterwave/model/vblog/user_activity.dart';
 import 'package:platterwave/res/text-theme.dart';
+import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/containers/empty_content_container.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
@@ -55,7 +57,7 @@ class NotificationActivity extends StatelessWidget {
                               padding: const EdgeInsets.only(top: 10),
                               child: ListTile(
                                 onTap: (){
-
+                                  nav(context, ViewUserProfileScreen(id: data.firebaseAuthId,));
                                 },
                                subtitle:Column(
                                  crossAxisAlignment: CrossAxisAlignment.start,
