@@ -29,16 +29,18 @@ class ImageCacheR extends StatelessWidget {
       height: height,
       width: width,
       imageUrl: image,
-      imageBuilder: (context, imageProvider) => Container(
-        decoration: BoxDecoration(
-          borderRadius: radius,
-          image: DecorationImage(
-              image: imageProvider,
-              fit: fit?BoxFit.cover:BoxFit.scaleDown,
-              colorFilter: ColorFilter.mode(Colors.black.withOpacity(blend), BlendMode.darken)
+      imageBuilder: (context, imageProvider){
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: radius,
+            image: DecorationImage(
+                image: imageProvider,
+                fit: fit?BoxFit.cover:BoxFit.scaleDown,
+                colorFilter: ColorFilter.mode(Colors.black.withOpacity(blend), BlendMode.darken)
+            ),
           ),
-        ),
-      ),
+        );
+      },
       placeholder: (context, url) {
         return Shimmer.fromColors(
           baseColor: Colors.grey[200]!,

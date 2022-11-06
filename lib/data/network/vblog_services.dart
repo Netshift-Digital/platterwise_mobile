@@ -286,11 +286,11 @@ class VBlogService{
 
   Future<dynamic> searchUser(String search) async {
     var body = jsonEncode({
-      "search_post":search,
+      "search_user":search,
     });
     try {
       var response =
-      await client.post(Uri.parse("${baseurl}search_post.php"),
+      await client.post(Uri.parse("${baseurl}search_users.php"),
           body: body, headers: {
             "Content-type": "application/json",
           });

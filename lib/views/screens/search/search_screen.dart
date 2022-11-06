@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:platterwave/model/profile/user_data.dart';
 import 'package:platterwave/model/vblog/user_search.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
@@ -24,7 +25,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  List<SearchResultElement> searchResult =[];
+  List<UserProfile> searchResult =[];
   TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -75,7 +76,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: ListTile(
                         onTap: (){
-                          nav(context, ViewUserProfileScreen(id: data.firebaseAuthId,));
+
+                          nav(context, ViewUserProfileScreen(id: data.firebaseAuthID,));
                         },
                         contentPadding: EdgeInsets.zero,
                         title: Text(data.username),

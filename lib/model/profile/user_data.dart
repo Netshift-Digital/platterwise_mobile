@@ -47,6 +47,7 @@ class UserProfile {
     required  this.bio,
     required  this.profileUrl,
     required  this.location,
+    required this.firebaseAuthID
   });
 
   String userId;
@@ -56,6 +57,7 @@ class UserProfile {
   String phone;
   dynamic bio;
   String profileUrl;
+  String firebaseAuthID;
   dynamic location;
 
   UserProfile copyWith({
@@ -67,8 +69,10 @@ class UserProfile {
     dynamic bio,
     String? profileUrl,
     dynamic location,
+    String? firebaseAuthID,
   }) =>
       UserProfile(
+        firebaseAuthID: firebaseAuthID??this.firebaseAuthID,
         userId: userId ?? this.userId,
         fullName: fullName ?? this.fullName,
         username: username ?? this.username,
@@ -80,14 +84,15 @@ class UserProfile {
       );
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
-    userId: json["user_id"],
-    fullName: json["full_name"],
-    username: json["username"],
+    userId: json["user_id"]??"",
+    fullName: json["full_name"]??"",
+    username: json["username"]??"",
     email: json["email"],
     phone: json["phone"]??"",
     bio: json["bio"]??"",
     profileUrl: json["profileURL"]??"'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png'",
     location: json["location"]??"",
+    firebaseAuthID: json['firebaseAuthID']??""
   );
 
   Map<String, dynamic> toJson() => {

@@ -201,6 +201,7 @@ Future<List<UserProfile>?>getFollowers()async{
     }catch(e){
       //
     }
+    return null;
   }
 
   Future<List<Post>?> getMylikes(String id)async{
@@ -217,6 +218,7 @@ Future<List<UserProfile>?>getFollowers()async{
     }catch(e){
       //
     }
+    return null;
   }
 
   Future<List<Post>?> getMyUserlikes(String id)async{
@@ -286,21 +288,21 @@ Future<List<UserProfile>?>getFollowers()async{
 
 
 
-  Future<List<SearchResultElement>?> searchUser(String search)async{
+  Future<List<UserProfile>?> searchUser(String search)async{
     try{
       var data = await vBlogService.searchUser(search);
+      //print(data);
       if(data!=null){
-        List<SearchResultElement> searchResult=[];
-        var result = SearchResult.fromJson(data);
-        for(var e in result.searchResult ){
-          if(searchResult.any((element) => element.firebaseAuthId==e.firebaseAuthId)==false){
-            searchResult.add(e);
-          }
+        List<UserProfile> searchResult=[];
+        for(var e in data['search_result'] ){
+          var result = UserProfile.fromJson(e);
+          searchResult.add(result);
         }
         return searchResult;
       }
       setState(AppState.idle);
     }catch(e){
+      print(e);
      // RandomFunction.toast("something went wrong");
       setState(AppState.idle);
     }
