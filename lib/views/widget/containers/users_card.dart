@@ -46,11 +46,11 @@ class UserCard extends StatelessWidget {
         textSize: 14,
         onTap: (){
           if(isFollower){
-            print('haaaa');
-           blogModel.unFollowUser(id, data);
+            //print('haaaa');
+           blogModel.unFollowUser(data.firebaseAuthID, data);
           }else{
-            print('nahh');
-          //  blogModel.followUser(id, data);
+           // print('nahh');
+           blogModel.followUser(data.firebaseAuthID, data);
 
           }
         },
