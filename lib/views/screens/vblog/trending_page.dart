@@ -42,6 +42,9 @@ class _TrendingPageState extends State<TrendingPage> {
     super.initState();
     Future.delayed(const Duration(milliseconds: 50),(){
      var model = context.read<VBlogViewModel>();
+     if(model.baseOn!=widget.basedOn||model.trendingPost.isEmpty){
+       model.getTrending(base: widget.basedOn);
+     }
     });
   }
 }

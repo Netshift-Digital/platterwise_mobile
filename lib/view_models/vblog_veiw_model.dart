@@ -320,8 +320,9 @@ Future<List<UserProfile>?>getFollowers()async{
 
 
 
-  Future<List<Post>?> getTrending()async{
+  Future<List<Post>?> getTrending({String base = "baselike"})async{
     try{
+      baseOn =base;
       var data = await vBlogService.getTrending(baseOn);
       //print(data);
       if(data!=null){
