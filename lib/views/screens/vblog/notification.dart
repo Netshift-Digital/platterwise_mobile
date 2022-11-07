@@ -28,13 +28,13 @@ class NotificationActivity extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(),
-            const SizedBox(height: 30,),
+            const SizedBox(height: 20,),
            Text('All activity',style: AppTextTheme.h3.copyWith(
              fontWeight: FontWeight.w700,
              fontSize:16.sp,
              color: Colors.black
            ),),
-            const SizedBox(height: 30,),
+            const SizedBox(height: 20,),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                   stream:FirebaseFirestore.instance.collection("activity").

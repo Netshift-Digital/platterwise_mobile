@@ -54,14 +54,14 @@ class Post {
   dynamic likeCount;
 
   factory Post.fromJson(Map<dynamic, dynamic> json) => Post(
-    contentPost: json["content_post"],
-    postId: json["post_id"],
+    contentPost: json["content_post"]??"",
+    postId: json["post_id"]??"20",
     contentType: json["content_type"]??"image",
     profileUrl: json["profileURL"] ?? 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png',
     contentUrl: json["contentUrl"] ?? "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
     username: json["username"]??"user",
     firebaseAuthId: json["firebaseAuthID"] ?? "",
-    timestamp: DateTime.parse(json["timestamp"]),
+    timestamp:json["timestamp"]==null? DateTime.now():DateTime.parse(json["timestamp"]),
     commentCount: json["comment_count"] ?? "0",
     likeCount: json['like_count']??"0",
   );

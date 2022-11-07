@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
                        const Expanded(
                             child: TabBarView(
                               children: [
-                                TrendingPage(),
+                                //TrendingPage(),
                                 PopularPage(),
                               ],)
                         )

@@ -140,7 +140,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               location: _address.text
                           );
                           model.editUser(editData).then((value){
-                            Navigator.pop(context);
+                            Navigator.pop(context,true);
                           });
                         }
                       }

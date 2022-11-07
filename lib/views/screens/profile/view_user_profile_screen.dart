@@ -225,7 +225,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                           ),
                         ),
                       ),
-                      widget.id!=null?StreamBuilder<DocumentSnapshot>(
+                      showFollow()?StreamBuilder<DocumentSnapshot>(
                           stream: FirebaseFirestore.instance.collection('followButton')
                               .doc(widget.id).snapshots(),
                         builder: (context, snapshot) {
@@ -373,14 +373,25 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
       if(blogModel.myPosts.isEmpty){
         blogModel.getMyPost().then((value){
           if(value!=null){
-            myPost=value;
+            if(mounted){
+              setState(() {
+                myPost=value;
+              });
+            }
           }
         });
+      }else{
+        myPost=blogModel.myPosts;
       }
     }else{
       blogModel.getUserPost(widget.id!).then((value){
         if(value!=null){
-          myPost=value;
+          if(mounted){
+            setState(() {
+              myPost=value;
+            });
+          }
+
         }
       });
     }
@@ -389,16 +400,22 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
 
   void settings(BuildContext context) async{
     var userModel = context.read<UserViewModel>();
-   await Navigator.push(
+ var data =  await Navigator.push(
         context, MaterialPageRoute(builder: (context){
       return EditProfileScreen(userData: userData!,);
     })
     );
+ if(data!=null){
    userModel.getMyProfile().then((value){
-     setState(() {
-       userData=value;
-     });
+     if(mounted){
+       setState(() {
+         userData=value;
+       });
+     }
+
    });
+ }
+
 
   }
 
@@ -407,6 +424,14 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
     throw 'Could not launch $link';
     }
   }
+
+ bool showFollow() {
+    if(widget.id!=null&&widget.id!=user.uid){
+      return true;
+    }else{
+      return false;
+    }
+ }
 
 
 }

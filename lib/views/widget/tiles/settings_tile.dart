@@ -25,10 +25,10 @@ class SettingsTile extends StatelessWidget {
       title: Text(title,style: AppTextTheme.h3,),
       trailing: Visibility(
           visible: trailingVisible,
-          child: Icon(Icons.chevron_right)
+          child: const Icon(Icons.chevron_right)
       ),
       dense: true,
-      contentPadding: EdgeInsets.symmetric(horizontal: 0),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 0),
       horizontalTitleGap: 0,
     );
   }

@@ -18,9 +18,11 @@ class VBlogViewModel extends BaseViewModel{
   VBlogService vBlogService = locator<VBlogService>();
   List<Post> posts = [];
   List<Post> myPosts = [];
+  List<Post> trendingPost =[];
   List<UserProfile> myFellows = [];
   List<UserProfile> following = [];
   List<Post> myLikes = [];
+  String baseOn = "baselike";
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
@@ -316,4 +318,28 @@ Future<List<UserProfile>?>getFollowers()async{
 
   }
 
+
+
+  Future<List<Post>?> getTrending()async{
+    try{
+      var data = await vBlogService.getTrending(baseOn);
+      //print(data);
+      if(data!=null){
+        trendingPost=[];
+        for(var e in data['trending'] ){
+          var p = Post.fromJson(e as Map);
+         trendingPost.add(p);
+        }
+        return trendingPost;
+      }
+      setState(AppState.idle);
+    }catch(e){
+      print(e);
+      // RandomFunction.toast("something went wrong");
+      setState(AppState.idle);
+    }
+    return null;
   }
+
+
+}

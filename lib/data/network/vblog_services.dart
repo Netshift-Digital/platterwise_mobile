@@ -311,4 +311,36 @@ class VBlogService{
     }
     return null;
   }
+
+
+
+
+  Future<dynamic> getTrending(String basedOn) async {
+    var body = jsonEncode({
+      basedOn:basedOn,
+    });
+    try {
+      var response =
+      await client.post(Uri.parse("${baseurl}trending.php"),
+          body: body, headers: {
+            "Content-type": "application/json",
+          });
+      var data = jsonDecode(response.body);
+      print(data);
+      if(response.statusCode==200){
+        return data;
+      }else{
+        //RandomFunction.toast(data['status']??"");
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
 }

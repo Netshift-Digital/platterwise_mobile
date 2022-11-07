@@ -12,6 +12,9 @@ import 'package:platterwave/views/screens/vblog/notification.dart';
 import 'package:platterwave/views/screens/vblog/popular_page.dart';
 import 'package:platterwave/views/screens/vblog/create_post/create_post.dart';
 import 'package:platterwave/views/screens/vblog/trending_page.dart';
+import 'package:platterwave/views/widget/button/custom-button.dart';
+import 'package:platterwave/views/widget/containers/sub_categories_container.dart';
+import 'package:platterwave/views/widget/containers/timeline_post_container.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +29,7 @@ class _TimelineState extends State<Timeline> {
   final searchTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    var model = context.read<VBlogViewModel>();
     SizeConfig.init(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -66,61 +70,93 @@ class _TimelineState extends State<Timeline> {
                              width: 161.w,
                            )
                        ),
-                       // flexibleSpace:  Column(
-                       //   mainAxisAlignment: MainAxisAlignment.end,
-                       //   crossAxisAlignment: CrossAxisAlignment.start,
-                       //   children: [
-                       //     SizedBox(height: 10.h,),
-                       //     // AppTextField(
-                       //     //   fillColor: AppColor.g30,
-                       //     //   isSearch: true,
-                       //     //   hasBorder: false,
-                       //     //   controller: searchTextController,
-                       //     //   hintText: "Search for a post or people",
-                       //     //   prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
-                       //     // ),
-                       //   //  SizedBox(height: 10.h,),
-                       //   ],
-                       // ),
-                       //collapsedHeight:140 ,
-                     ),
-                     SliverAppBar(
-                       backgroundColor:AppColor.g0,
-                       elevation: 0.0,
-                       pinned: true,
-                       toolbarHeight: 60,
-                       //collapsedHeight: 0,
-                       expandedHeight: 0,
-                       primary: false,
-                       automaticallyImplyLeading: false,
-                       title: Column(
+                       flexibleSpace:  Column(
+                         mainAxisAlignment: MainAxisAlignment.end,
+                         crossAxisAlignment: CrossAxisAlignment.start,
                          children: [
-                           TabBar(
-                             tabs: const [
-                               Tab(text: "Trending",),
-                               Tab(text: "Popular",)
-                             ],
-                              padding: EdgeInsets.only(right: 100.w),
-                             labelStyle: AppTextTheme.h6.copyWith(fontSize: 18),
-                             unselectedLabelStyle: AppTextTheme.h6.copyWith(fontSize: 18),
-                             labelColor: AppColor.textColor,
-                             unselectedLabelColor: AppColor.g60,
-                             indicatorColor: AppColor.p300,
-                             indicatorSize: TabBarIndicatorSize.label,
-                             indicatorWeight: 1.w,
-                             indicatorPadding: EdgeInsets.symmetric(horizontal: 15.w),
+                           SizedBox(height: 10.h,),
+                           PlatButton(
+                               title: "Trending",
+                               height: 39,
+                               width: 84,
+                               textSize: 15,
+                               padding: 4,
+                               textColor: AppColor.g800,
+                               color:AppColor.g30 ,
+                               onTap: (){
 
+                               }
                            ),
+                           SizedBox(height: 20.h,),
+                           SingleChildScrollView(
+                             physics: const BouncingScrollPhysics(),
+                             scrollDirection: Axis.horizontal,
+                             child: Row(
+                               children: [
+                                 SubCategoriesContainer(
+                                   onTap: (){
+                                     nav(context, const TrendingPage(basedOn: 'baselike'));
+                                   },
+                                   title: 'Most Liked',
+                                 ),
+                                const  SizedBox(width:12 ,),
+                                 SubCategoriesContainer(
+                                   onTap: (){
+                                     nav(context, const TrendingPage(basedOn: 'basecomment'));
+                                   },
+                                   title: 'Most Commented ',
+                                 )
+                               ],
+                             ),
+                           ),
+                           SizedBox(height: 20.h,),
+
                          ],
                        ),
-                     )
+                       collapsedHeight:240 ,
+                     ),
+                     // SliverAppBar(
+                     //   backgroundColor:AppColor.g0,
+                     //   elevation: 0.0,
+                     //   pinned: true,
+                     //   toolbarHeight: 60,
+                     //   //collapsedHeight: 0,
+                     //   expandedHeight: 0,
+                     //   primary: false,
+                     //   automaticallyImplyLeading: false,
+                     //   title: Column(
+                     //     children: [
+                     //       TabBar(
+                     //         tabs: const [
+                     //           Tab(text: "Trending",),
+                     //           Tab(text: "Popular",)
+                     //         ],
+                     //          padding: EdgeInsets.only(right: 100.w),
+                     //         labelStyle: AppTextTheme.h6.copyWith(fontSize: 18),
+                     //         unselectedLabelStyle: AppTextTheme.h6.copyWith(fontSize: 18),
+                     //         labelColor: AppColor.textColor,
+                     //         unselectedLabelColor: AppColor.g60,
+                     //         indicatorColor: AppColor.p300,
+                     //         indicatorSize: TabBarIndicatorSize.label,
+                     //         indicatorWeight: 1.w,
+                     //         indicatorPadding: EdgeInsets.symmetric(horizontal: 15.w),
+                     //
+                     //       ),
+                     //     ],
+                     //   ),
+                     // )
                    ];
                 },
-                  body: const TabBarView(
-                    children: [
-                      TrendingPage(),
-                      PopularPage(),
-                    ],)
+                  body: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: context.watch<VBlogViewModel>().posts.length,
+                      itemBuilder: (context,index) {
+                        var data =  model.posts[index];
+                        return  TimelinePostContainer(data);
+                      }
+                  )
               ),
             ),
           ),
@@ -138,5 +174,6 @@ class _TimelineState extends State<Timeline> {
   void getPost() {
     var model = context.read<VBlogViewModel>();
     model.getPost();
+    model.getTrending();
   }
 }
