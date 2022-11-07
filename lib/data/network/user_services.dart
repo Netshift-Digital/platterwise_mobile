@@ -78,7 +78,6 @@ class UserService{
         "Content-type": "application/json",
       });
       var data = jsonDecode(response.body);
-      print(data);
       if(response.statusCode==200){
         return data;
       }

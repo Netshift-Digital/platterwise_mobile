@@ -11,6 +11,7 @@ import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/auth/login.dart';
@@ -100,7 +101,8 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                           title: "Logout",
                           leading: "assets/icon/logout.svg",
                           onTap: () {
-                            nav(context, Login());
+                            nav(context, Login(),remove: true);
+                            context.read<PageViewModel>().setIndex(0);
                             Future.delayed(const Duration(milliseconds: 500),(){
                               FirebaseAuth.instance.signOut();
                             });
