@@ -325,6 +325,13 @@ Future<List<UserProfile>?>getFollowers()async{
 
   }
 
+  deleteSavePost(String postId){
+    FirebaseFirestore.instance.collection("savedPost").
+    doc("users").collection(FirebaseAuth.instance.currentUser!.uid).doc(postId)
+        .delete();
+
+  }
+
 
 
   Future<List<Post>?> getTrending({String base = "baselike"})async{

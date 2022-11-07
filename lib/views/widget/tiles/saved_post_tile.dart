@@ -5,8 +5,10 @@ import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/widget/containers/timeline_post_container.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
+import 'package:provider/provider.dart';
 
 import '../../../res/color.dart';
 
@@ -85,13 +87,29 @@ class SavedPostTile extends StatelessWidget {
               ),
               SizedBox(width: 21.w,),
               Padding(
-                padding: EdgeInsets.only(top: 8.h,right: 8.h),
+                padding:const EdgeInsets.only(),
                 child: InkWell(
                   onTap: onOptionsTap,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SvgPicture.asset("assets/icon/options.svg")
+                      PopupMenuButton<int>(
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            value: 2,
+                            onTap: (){
+                              context.read<VBlogViewModel>()
+                                  .deleteSavePost(post.postId);
+                            },
+                            // row has two child icon and text
+                            child:  const Text("Delete"),
+                          )
+                        ],
+                        // offset:const Offset(0, 100),
+                        // color: Colors.grey,
+                        //elevation: 2,
+                      ),
+
                     ],
                   ),
                 ),
