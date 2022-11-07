@@ -54,8 +54,10 @@ class SavedPostTile extends StatelessWidget {
                 bottom: 20.h
             ),
             child: ImageCacheR(
+                topBottom: 4,
+                topRadius: 4,
                 height: 64.h,
-                width: 100.w,
+                width: 113.w,
                 post.contentUrl
             ),
           ): SizedBox(width: 12.w,),
