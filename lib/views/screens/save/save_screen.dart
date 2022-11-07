@@ -47,8 +47,10 @@ class SaveScreen extends StatelessWidget {
             );
 
           }else{
-            return const  EmptyContentContainer(
-              errorText: "No save post !",
+            return const Center(
+              child:   EmptyContentContainer(
+                errorText: "No save post !",
+              ),
             );
           }
         }
