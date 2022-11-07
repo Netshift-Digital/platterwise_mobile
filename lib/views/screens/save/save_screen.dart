@@ -26,7 +26,9 @@ class SaveScreen extends StatelessWidget {
         builder: (context, snapshot) {
           if(snapshot.hasData){
             return snapshot.data!.docs.isEmpty?
-         const  Center(child:  EmptyContentContainer()):
+         const  Center(child:  EmptyContentContainer(
+           errorText: "No save post !",
+         )):
             Padding(
               padding: const EdgeInsets.only(left: 16,right: 16),
               child: ListView.builder(
@@ -45,7 +47,9 @@ class SaveScreen extends StatelessWidget {
             );
 
           }else{
-            return const  EmptyContentContainer();
+            return const  EmptyContentContainer(
+              errorText: "No save post !",
+            );
           }
         }
       ),
