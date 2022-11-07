@@ -24,6 +24,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: Padding(
         padding: EdgeInsets.all(18.w),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 80.h,),
             InkWell(
@@ -51,7 +52,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   var data = snapshot.data!.data()! as Map;
 
                 return CustomSwitchTile(
-                    text: "Allow people follow you",
+                    text: "Disable follow button",
                   value: data['disable']??false,
                   onChangeMethod: (e){
                       FirebaseFirestore.instance.collection('followButton')
@@ -61,7 +62,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 );
                 }
                 return CustomSwitchTile(
-                  text: "Allow people follow you",
+                  text: "Disable follow button",
                   value: false,
                   onChangeMethod: (e){
                     FirebaseFirestore.instance.collection('followButton')
@@ -71,9 +72,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 );
               }
             ),
-            SizedBox(height: 14.h,),
-           const Text("Your followers will be notified about post you"
-                " make to your profile and see them in their home feed."),
+            SizedBox(height: 4.h,),
+           const Text(" User would not ba able to follow your account"),
             SizedBox(height: 32.h,),
             CustomSwitchTile(
               text: "Pause notification",
