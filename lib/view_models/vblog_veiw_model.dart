@@ -318,6 +318,13 @@ Future<List<UserProfile>?>getFollowers()async{
 
   }
 
+  savePost(Post post){
+    FirebaseFirestore.instance.collection("savedPost").
+    doc("users").collection(FirebaseAuth.instance.currentUser!.uid).doc(post.postId)
+        .set(post.toJson());
+
+  }
+
 
 
   Future<List<Post>?> getTrending({String base = "baselike"})async{

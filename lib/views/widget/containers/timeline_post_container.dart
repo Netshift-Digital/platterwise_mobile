@@ -102,7 +102,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                     PopupMenuItem(
                       value: 2,
                       onTap: (){
-                        LocalPost().savePost(widget.post.toJson());
+                        context.read<VBlogViewModel>().savePost(widget.post);
                       },
                       // row has two child icon and text
                       child: Row(
@@ -117,8 +117,8 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                       ),
                     ),
                   ],
-                  offset:const Offset(0, 100),
-                  color: Colors.grey,
+                 // offset:const Offset(0, 100),
+                 // color: Colors.grey,
                   elevation: 2,
                 ),
 

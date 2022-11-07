@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:platterwave/data/local/post.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
@@ -18,24 +20,34 @@ class SaveScreen extends StatelessWidget {
     SizeConfig.init(context);
     return Scaffold(
       appBar: appBar(context),
-      body: post.isEmpty? const Center(
-          child: EmptyContentContainer(
-
-      )):Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
-        child:ListView.builder(
-          itemCount: post.length ,
-          itemBuilder:(context,index){
-            var data = post[index] as Map;
-            var postData= Post.fromJson(data);
-            return SavedPostTile(
-              post: postData,
-              onTap: (){
-                nav(context, PostDetails(post: postData));
-              },
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection("savedPost").
+        doc("users").collection(FirebaseAuth.instance.currentUser!.uid).snapshots(),
+        builder: (context, snapshot) {
+          if(snapshot.hasData){
+            return snapshot.data!.docs.isEmpty?
+         const  Center(child:  EmptyContentContainer()):
+            Padding(
+              padding: const EdgeInsets.only(left: 16,right: 16),
+              child: ListView.builder(
+                itemCount:snapshot.data!.docs.length,
+                itemBuilder:(context,index){
+                  var data = snapshot.data!.docs[index].data() as Map;
+                  var postData= Post.fromJson(data);
+                  return SavedPostTile(
+                    post: postData,
+                    onTap: (){
+                      nav(context, PostDetails(post: postData));
+                    },
+                  );
+                },
+              ),
             );
-          },
-        ),
+
+          }else{
+            return const  EmptyContentContainer();
+          }
+        }
       ),
     );
   }
