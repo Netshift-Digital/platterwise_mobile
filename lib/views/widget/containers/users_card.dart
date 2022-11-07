@@ -23,7 +23,7 @@ class UserCard extends StatelessWidget {
     var isFollower = blogModel.getIsFollowed(data.email);
     return ListTile(
       onTap: (){
-        nav(context, ViewUserProfileScreen(id: id,));
+        nav(context, ViewUserProfileScreen(id: data.firebaseAuthID,));
       },
       leading:ImageCacheCircle(data.profileUrl,
         height: 42,

@@ -126,7 +126,11 @@ class UserViewModel extends BaseViewModel{
       var data = await userService.getUser(FirebaseAuth.instance.currentUser!.uid);
       if(data!=null){
         var userData = UserData.fromJson(data);
-        user = userData;
+        user = UserData(status: userData.status,
+            userProfile: userData.userProfile.copyWith(
+              firebaseAuthID:FirebaseAuth.instance.currentUser!.uid
+            )
+        );
         notifyListeners();
         return user;
       }
@@ -142,7 +146,11 @@ class UserViewModel extends BaseViewModel{
     try{
       var data = await userService.getUser(uid);
       if(data!=null){
-       return UserData.fromJson(data);
+        var user = UserData.fromJson(data);
+       return UserData(status: user.status,
+           userProfile: user.userProfile.copyWith(
+             firebaseAuthID: uid
+           ));
       }
       setState(AppState.idle);
     }catch(e){

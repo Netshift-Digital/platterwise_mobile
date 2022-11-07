@@ -104,5 +104,6 @@ class UserProfile {
     "bio": bio,
     "profileURL": profileUrl,
     "location": location,
+    "firebaseAuthID":firebaseAuthID
   };
 }
