@@ -68,7 +68,7 @@ class SavedPostTile extends StatelessWidget {
                   child: Padding(
                     padding:const EdgeInsets.symmetric(vertical: 20.0),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children:  [
                         Text(
