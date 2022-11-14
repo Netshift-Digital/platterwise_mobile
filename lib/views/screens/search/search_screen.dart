@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/model/profile/user_data.dart';
+import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/model/vblog/user_search.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
@@ -9,6 +10,7 @@ import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/widget/containers/empty_content_container.dart';
 import 'package:platterwave/views/widget/containers/sub_categories_container.dart';
+import 'package:platterwave/views/widget/containers/timeline_post_container.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
 import 'package:platterwave/views/widget/tiles/activity/comment_on_post.dart';
@@ -25,7 +27,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  List<UserProfile> searchResult =[];
+  List<Post> searchResult=[];
   TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 if(searchController.text.length>2){
                   context.read<VBlogViewModel>().searchUser(searchController.text)
                       .then((value){
-                        print(value);
                     if(value!=null){
                       setState(() {
                         searchResult=value;
@@ -82,28 +83,15 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               ):
               ListView.builder(
+                  padding: EdgeInsets.zero,
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
                   itemCount: searchResult.length,
-                  itemBuilder: (context,index){
-                    var data = searchResult[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: ListTile(
-                        onTap: (){
-
-                          nav(context, ViewUserProfileScreen(id: data.firebaseAuthID,));
-                        },
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(data.username),
-                        leading:  ImageCacheCircle(
-                         data.profileUrl,
-                          height: 70,
-                          width: 70,
-                        ),
-                        //leading: ,
-                      ),
-                    );
+                  itemBuilder: (context,index) {
+                    var data =  searchResult[index];
+                    return  TimelinePostContainer(data);
                   }
-              ),
+              )
             )
           ],
         ),

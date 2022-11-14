@@ -54,6 +54,11 @@ dependencies:
   video_player: ^2.4.7
   linkfy_text: ^1.1.5
   url_launcher: ^6.1.6
+  sign_in_with_apple: ^4.2.0
+  flutter_login_facebook: ^1.6.2
+  google_sign_in: ^5.4.2
+  firebase_dynamic_links: ^2.0.6
+  firebase_messaging:
   flutter:
     sdk: flutter
 

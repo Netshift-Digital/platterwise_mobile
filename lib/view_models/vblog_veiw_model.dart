@@ -64,6 +64,26 @@ class VBlogViewModel extends BaseViewModel{
     return null;
   }
 
+  Future<Post?> getMyPostById(String postId)async{
+    try{
+      setState(AppState.busy);
+      var data = await vBlogService.getPostById(postId);
+      setState(AppState.idle);
+      if(data!=null){
+        var p = PostModel.fromJson(data as Map);
+       List<Post> posts=[];
+        for (var element in p.allUsersPosts) {
+          posts.add(element);
+        }
+        notifyListeners();
+        return posts.first;
+      }
+    }catch(e){
+      setState(AppState.idle);
+    }
+    return null;
+  }
+
   Future<List<Post>?> getUserPost(String id)async{
     try{
       var data = await vBlogService.getUserPost(id);
@@ -290,14 +310,14 @@ Future<List<UserProfile>?>getFollowers()async{
 
 
 
-  Future<List<UserProfile>?> searchUser(String search)async{
+  Future<List<Post>?> searchUser(String search)async{
     try{
       var data = await vBlogService.searchUser(search);
       //print(data);
       if(data!=null){
-        List<UserProfile> searchResult=[];
+        List<Post> searchResult=[];
         for(var e in data['search_result'] ){
-          var result = UserProfile.fromJson(e);
+          var result = Post.fromJson(e);
           searchResult.add(result);
         }
         return searchResult;

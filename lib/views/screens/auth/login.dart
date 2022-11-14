@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:platterwave/main.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/spacing.dart';
@@ -102,13 +106,25 @@ final _formKey = GlobalKey<FormState>();
                      ),
                       SizedBox(height: size.height*0.02,),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        //mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const SizedBox(width: 1,),
-                          SvgPicture.asset("assets/icon/apple.svg"),
-                          SvgPicture.asset("assets/icon/facebook.svg"),
-                          Image.asset("assets/icon/google.png"),
-                          const SizedBox(width: 1,),
+                        const Spacer(),
+                         Platform.isAndroid?const SizedBox():GestureDetector(
+                            onTap: (){},
+                              child: SvgPicture.asset("assets/icon/apple.svg")),
+                          Platform.isAndroid?const SizedBox():const Spacer(),
+                          GestureDetector(
+                            onTap: (){
+                              facebook();
+                            },
+                              child: SvgPicture.asset("assets/icon/facebook.svg")),
+                          const Spacer(),
+                          InkWell(
+                            onTap: (){
+                              google(context);
+                            },
+                              child: Image.asset("assets/icon/google.png")),
+                          const Spacer(),
                         ],
                       ),
                       SizedBox(height: size.height*0.02,),
@@ -182,4 +198,69 @@ final _formKey = GlobalKey<FormState>();
     }
 
   }
+
+  Future<void>google(BuildContext context) async{
+    try{
+      context.read<UserViewModel>().google().then((value){
+        if(value!=null){
+          if(value.newUser){
+            nav(context,  Register(authMethod:value,));
+          }else{
+            nav(context, const BottomNav(),remove: true);
+          }
+        }
+      });
+      // final FirebaseAuth auth = FirebaseAuth.instance;
+      // final GoogleSignIn googleSignIn = GoogleSignIn();
+      // GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+      // if(googleSignInAccount!=null){
+      //   GoogleSignInAuthentication googleSignInAuthentication =
+      //   await googleSignInAccount.authentication;
+      //   AuthCredential credential = GoogleAuthProvider.credential(
+      //     accessToken: googleSignInAuthentication.accessToken,
+      //     idToken: googleSignInAuthentication.idToken,
+      //   );
+      //   final UserCredential userCredential =
+      //   await auth.signInWithCredential(credential);
+      //   print(userCredential.user!.email);
+      // }
+      //
+
+
+    }on FirebaseAuthException catch (e){
+      print(e.code);
+      if (e.code == 'account-exists-with-different-credential') {
+        // handle the error here
+      }
+      else if (e.code == 'invalid-credential') {
+        // handle the error here
+      }
+    }
+    catch(e){
+      //
+    }
+
+
+
+  }
+
+  void facebook() async{
+
+    final fb = FacebookLogin();
+
+// Log in
+    final res = await fb.logIn(permissions: [
+      FacebookPermission.publicProfile,
+      FacebookPermission.email,
+    ]).then((value){
+      print(value.status.name);
+     // print(value.status.name+"nbnbcjbcjbc");
+    }).catchError((e){
+      print(e.toString()+"  yaaa");
+    });
+
+
+
+  }
+
 }

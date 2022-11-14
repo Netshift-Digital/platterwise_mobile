@@ -16,6 +16,8 @@ class UserService{
 
 
   Future<dynamic> signUp(RegisterModel registerModel) async {
+    print('hahaha');
+    print(registerModel.toJson());
     var body = jsonEncode(registerModel.toJson());
     try {
       var response =
@@ -23,6 +25,7 @@ class UserService{
         "Content-type": "application/json",
       });
       var data = jsonDecode(response.body);
+      print(data);
       if(response.statusCode==200){
         return data;
       }else{

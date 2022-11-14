@@ -8,6 +8,7 @@ import 'package:platterwave/data/local/post.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
+import 'package:platterwave/utils/dynamic_link.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
@@ -155,7 +156,9 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
             Row(
               children: [
                 CustomAppIcon(
-                  onTap: (){},
+                  onTap: (){
+
+                  },
                   icon: "assets/icon/like.svg",
                   like:  LikeButton(
                     isLiked:blogModel.checkIsLiked(widget.post.postId),
@@ -186,7 +189,13 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                 const Spacer(flex: 1,),
                 CustomAppIcon(
                   onTap: (){
-                    Share.share(widget.post.contentPost);
+                    DynamicLink.createLink(widget.post.postId)
+                        .then((value){
+                      if(value!=null){
+                        Share.share(value);
+                      }
+                    });
+
                   },
                   icon: "assets/icon/share.svg",
                   count:"",

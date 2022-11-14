@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">platterwise</string>
+    <string name="fb_login_protocol_scheme">fb1153390212237536</string>
+    <string name="facebook_app_id">1153390212237536</string>
+    <string name="facebook_client_token">99f732cb2c8a23e1f1147c744ea47e68</string>
+</resources>

@@ -50,7 +50,8 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         onTap: (){
-          showBottomSheet(
+          if(widget.id==null) {
+            showBottomSheet(
               context: context,
               enableDrag: true,
               builder: (context){
@@ -115,6 +116,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                 );
           }
           );
+          }
         },
         trailing: "assets/icon/option.svg",
       ),
@@ -244,6 +246,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                               title: blogModel.getIsFollowed(userData!.userProfile.email)?"Unfollow":"Follow",
                               padding: 0,
                               textSize: 14,
+                              color:blogModel.getIsFollowed(userData!.userProfile.email)?AppColor.g700:AppColor.p200 ,
                               onTap: (){
                                 //blogModel.following.add(userData!.userProfile);
                                 if(blogModel.getIsFollowed(userData!.userProfile.email)){
@@ -257,7 +260,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                               height: 38.h,
                             );
                           }else{
-                           return SizedBox();
+                           return const SizedBox();
                           }
 
                         }

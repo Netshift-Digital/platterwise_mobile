@@ -286,11 +286,11 @@ class VBlogService{
 
   Future<dynamic> searchUser(String search) async {
     var body = jsonEncode({
-      "search_user":search,
+      "search_post":search,
     });
     try {
       var response =
-      await client.post(Uri.parse("${baseurl}search_users.php"),
+      await client.post(Uri.parse("${baseurl}search_post.php"),
           body: body, headers: {
             "Content-type": "application/json",
           });
@@ -327,6 +327,34 @@ class VBlogService{
           });
       var data = jsonDecode(response.body);
       ///print(data);
+      if(response.statusCode==200){
+        return data;
+      }else{
+        //RandomFunction.toast(data['status']??"");
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+  Future<dynamic> getPostById(String postId) async {
+    var body = jsonEncode({
+      "post_id":postId,
+    });
+    try {
+      var response =
+      await client.post(Uri.parse("${baseurl}get_post_byID.php"),
+          body: body, headers: {
+            "Content-type": "application/json",
+          });
+      var data = jsonDecode(response.body);
       if(response.statusCode==200){
         return data;
       }else{

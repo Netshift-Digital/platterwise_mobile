@@ -1,4 +1,4 @@
-package com.example.platterwave
+package com.platterwise.net
 
 import io.flutter.embedding.android.FlutterActivity
 
