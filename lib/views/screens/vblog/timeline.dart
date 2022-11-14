@@ -114,7 +114,7 @@ class _TimelineState extends State<Timeline> {
 
                          ],
                        ),
-                       collapsedHeight:240 ,
+                       collapsedHeight:260 ,
                      ),
                      // SliverAppBar(
                      //   backgroundColor:AppColor.g0,

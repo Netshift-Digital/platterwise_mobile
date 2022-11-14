@@ -118,7 +118,7 @@ final _formKey = GlobalKey<FormState>();
                               facebook();
                             },
                               child: SvgPicture.asset("assets/icon/facebook.svg")),
-                          const Spacer(),
+                          Platform.isAndroid?const SizedBox(width: 20,):const Spacer(),
                           InkWell(
                             onTap: (){
                               google(context);
