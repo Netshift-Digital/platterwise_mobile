@@ -102,6 +102,7 @@ class _TimelineState extends State<Timeline> {
                                      nav(context, const TrendingPage(basedOn: 'baselike'));
                                    },
                                    title: 'Most Liked',
+                                   image: "assets/images/frame128.png",
                                  ),
                                 const  SizedBox(width:12 ,),
                                  SubCategoriesContainer(
@@ -109,6 +110,7 @@ class _TimelineState extends State<Timeline> {
                                      nav(context, const TrendingPage(basedOn: 'basecomment'));
                                    },
                                    title: 'Most Commented ',
+                                   image: "assets/images/frame130.png",
                                  )
                                ],
                              ),
