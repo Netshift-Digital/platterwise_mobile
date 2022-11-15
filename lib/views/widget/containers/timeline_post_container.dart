@@ -16,6 +16,7 @@ import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
+import 'package:platterwave/views/screens/vblog/post_by_tag.dart';
 import 'package:platterwave/views/screens/vblog/post_details.dart';
 import 'package:platterwave/views/screens/vblog/video_player.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
@@ -139,6 +140,26 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
               lessStyle:const TextStyle(fontSize: 14, fontWeight: FontWeight.bold) ,
               moreStyle: const  TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
+            widget.post.tags.isEmpty?const SizedBox():
+                Wrap(
+                  children: widget.post.tags.map((e){
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      child: InkWell(
+                        onTap: (){
+                         nav(context, PostByTag(tag:e.toString()));
+                        },
+                        child: Text(
+                          showHashtag(e)+
+                          e.toString(),
+                        style: AppTextTheme.h1.copyWith(
+                          color: AppColor.p200,
+                          fontSize: 14
+                        ),),
+                      ),
+                    );
+                  }).toList(),
+                ),
             SizedBox(height: 11.h,),
             widget.post.contentType==PostType.video?
                 videoWid():widget.post.contentType==PostType.image?
@@ -241,4 +262,12 @@ Widget  videoWid() {
       like=num.parse(widget.post.likeCount).toInt();
     });
   }
+
+ String showHashtag(e) {
+    if(e.toString().startsWith("#")){
+      return "";
+    }else{
+      return "#";
+    }
+ }
 }

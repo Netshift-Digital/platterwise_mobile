@@ -39,7 +39,8 @@ class Post {
     required  this.firebaseAuthId,
     required  this.timestamp,
     required this.commentCount,
-    required this.likeCount
+    required this.likeCount,
+    required this.tags
   });
 
   String contentPost;
@@ -52,6 +53,7 @@ class Post {
   DateTime timestamp;
   dynamic commentCount;
   dynamic likeCount;
+  List tags;
 
   factory Post.fromJson(Map<dynamic, dynamic> json) => Post(
     contentPost: json["content_post"]??"",
@@ -64,16 +66,18 @@ class Post {
     timestamp:json["timestamp"]==null? DateTime.now():DateTime.parse(json["timestamp"]),
     commentCount: json["comment_count"] ?? "0",
     likeCount: json['like_count']??"0",
+    tags: json['taggs']??[]
   );
 
   Map<String, dynamic> toJson() => {
     "content_post": contentPost,
     "post_id": postId,
-    "content_type": contentType == null ? null : contentType,
-    "profileURL": profileUrl == null ? null : profileUrl,
-    "contentUrl": contentUrl == null ? null : contentUrl,
+    "content_type": contentType ,
+    "profileURL": profileUrl ,
+    "contentUrl": contentUrl ,
     "username": username,
-    "firebaseAuthID": firebaseAuthId == null ? null : firebaseAuthId,
+    "firebaseAuthID": firebaseAuthId ,
     "timestamp": timestamp.toIso8601String(),
+    "taggs":tags
   };
 }

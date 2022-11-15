@@ -8,6 +8,7 @@ import 'package:platterwave/data/network/vblog_services.dart';
 import 'package:platterwave/model/profile/user_data.dart';
 import 'package:platterwave/model/request_model/post_data.dart';
 import 'package:platterwave/model/vblog/comment.dart';
+import 'package:platterwave/model/vblog/comment_reply.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/model/vblog/user_activity.dart';
 import 'package:platterwave/model/vblog/user_search.dart';
@@ -163,6 +164,41 @@ class VBlogViewModel extends BaseViewModel{
     }
   }
 
+  Future<dynamic> replyToComment(int commentId,String comment,{required UserProfile userData,required String id})async{
+    try{
+      var data = await vBlogService.replyToComment(commentId, FirebaseAuth.instance.currentUser!.uid, comment);
+      if(data!=null){
+        addActivity(id, UserActivity(
+            message: " replied to a comment on your post",
+            firebaseAuthId: FirebaseAuth.instance.currentUser!.uid,
+            userName:userData.username ,
+            profilePic: userData.profileUrl
+        ));
+      }
+
+    }catch(e){
+      setState(AppState.idle);
+    }
+  }
+
+  Future<List<UsersReply>?> getCommentReply(int commentId)async{
+    List<UsersReply> comments = [];
+    try{
+      var data = await vBlogService.getToCommentReply(commentId);
+      if(data!=null){
+        for (var element in data['users_reply']) {
+          comments.add(UsersReply.fromJson(element as Map));
+
+        }
+        notifyListeners();
+        return comments;
+      }
+    }catch(e){
+       print(e);
+      setState(AppState.idle);
+    }
+    return comments;
+  }
 
   Future<String?> uploadImage(String filePath)async{
     try{
@@ -187,7 +223,10 @@ class VBlogViewModel extends BaseViewModel{
       var post = postData.copyWith(
         contentUrl: contentUrl
       );
-      await vBlogService.createPost(post);
+     var data = await vBlogService.createPost(post);
+     if(data!=null){
+       handelTags(postData.contentPost,data["post_id"].toString());
+     }
       setState(AppState.idle);
       return true;
     } catch(e){
@@ -331,6 +370,28 @@ Future<List<UserProfile>?>getFollowers()async{
     return null;
   }
 
+
+
+  Future<List<Post>> getPostByTag(String tag)async{
+    try{
+      var data = await vBlogService.getByTag(tag);
+      //print(data);
+      if(data!=null){
+        List<Post> searchResult=[];
+        for(var e in data['search_result'] ){
+          var result = Post.fromJson(e);
+          searchResult.add(result);
+        }
+        return searchResult;
+      }
+      setState(AppState.idle);
+    }catch(e){
+
+      // RandomFunction.toast("something went wrong");
+      setState(AppState.idle);
+    }
+    return [];
+  }
   addActivity(String id ,UserActivity userActivity){
     FirebaseFirestore.instance.collection("activity").
     doc("users").collection(id).add(userActivity.toJson());
@@ -374,6 +435,28 @@ Future<List<UserProfile>?>getFollowers()async{
       setState(AppState.idle);
     }
     return null;
+  }
+
+  void handelTags(String contentPost,String postId) {
+    List tag = [];
+    Map jsonTag = {};
+    if(contentPost.isNotEmpty){
+      var list = contentPost.split(" ");
+      for(var e in list){
+        if(e.startsWith("#")){
+          tag.add(e);
+          if(jsonTag.isEmpty){
+            jsonTag["tag_post"]=e;
+          }else{
+            jsonTag["tag_post${jsonTag.length+1}"]=e;
+          }
+
+        }
+      }
+      if(jsonTag.isNotEmpty){
+        vBlogService.createTags(jsonTag, postId,FirebaseAuth.instance.currentUser!.uid);
+      }
+    }
   }
 
 

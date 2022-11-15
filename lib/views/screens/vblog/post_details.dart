@@ -6,14 +6,19 @@ import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
+import 'package:platterwave/utils/dynamic_link.dart';
+import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
+import 'package:platterwave/views/screens/vblog/comment_replies.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/containers/empty_content_container.dart';
 import 'package:platterwave/views/widget/containers/timeline_post_container.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
+import 'package:platterwave/views/widget/icon/custom_app_icon.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PostDetails extends StatefulWidget {
   final Post post;
@@ -83,73 +88,107 @@ class _PostDetailsState extends State<PostDetails> {
                         shrinkWrap: true,
                         itemBuilder: (context, index){
                         UsersComment data = comments[index];
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                             const SizedBox(height: 10,),
-                              Row(
+                          return GestureDetector(
+                            onTap: (){
+                              nav(context,CommentReply(usersComment: data, post: widget.post) );
+                            },
+                            child: Container(
+                              color: Colors.transparent,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(34),
-                                    child: ImageCacheR(
-                                      data.profileUrl,
-                                      height: 35,
-                                      width: 35,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12,),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                 const SizedBox(height: 10,),
+                                  Row(
                                     children: [
-                                      Text(
-                                       data.username,
-                                        style: AppTextTheme.h3.copyWith(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w700),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(34),
+                                        child: ImageCacheR(
+                                          data.profileUrl,
+                                          height: 35,
+                                          width: 35,
+                                        ),
                                       ),
-                                      const SizedBox(height: 3,),
-                                      Text(RandomFunction.date(data.timestamp.toString()).yMMMdjm,
-                                      style: AppTextTheme.h4.copyWith(
-                                        fontSize:12
-                                      ),),
-                                      const SizedBox(height: 12,),
+                                      const SizedBox(width: 12,),
+                                      Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                           data.username,
+                                            style: AppTextTheme.h3.copyWith(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                          const SizedBox(height: 3,),
+                                          Text(RandomFunction.date(data.timestamp.toString()).yMMMdjm,
+                                          style: AppTextTheme.h4.copyWith(
+                                            fontSize:12
+                                          ),),
+                                          const SizedBox(height: 12,),
+                                        ],
+                                      ),
+                                      const Spacer(),
+                                      //SvgPicture.asset("assets/icon/option.svg")
                                     ],
                                   ),
-                                  const Spacer(),
-                                  SvgPicture.asset("assets/icon/option.svg")
+                                  Row(
+                                    children: [
+                                      Text("Replying to ",
+                                        style: AppTextTheme.h4.copyWith(
+                                            fontSize:14,
+                                            color: AppColor.g900,
+                                            fontWeight: FontWeight.w700
+                                        ),),
+                                      Text("@${widget.post.username}",
+                                        style: AppTextTheme.h4.copyWith(
+                                            fontSize:14,
+                                            color: AppColor.p200,
+                                            fontWeight: FontWeight.w700
+                                        ),),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 12,),
+                                  Text(data.comment,
+                                    style: AppTextTheme.h4.copyWith(
+                                        fontSize:16,
+                                        color: AppColor.g900,
+                                        fontWeight: FontWeight.w400
+                                    ),),
+                                  const SizedBox(height: 24,),
+                                  Row(
+                                    children: [
+                                      CustomAppIcon(
+                                        onTap: (){
+
+                                        },
+                                        icon: "assets/icon/comment.svg",
+                                        count: "1",
+                                      ),
+                                     const SizedBox(width: 20,),
+                                      CustomAppIcon(
+                                        onTap: (){
+                                          DynamicLink.createLink(widget.post.postId)
+                                              .then((value){
+                                            if(value!=null){
+                                              Share.share(value);
+                                            }
+                                          });
+
+                                        },
+                                        icon: "assets/icon/share.svg",
+                                        count:"",
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 12,),
+                                  const Divider(
+                                    color: AppColor.g50,
+                                    thickness: 0.5,
+                                  ),
+                                  const SizedBox(height: 12,),
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  Text("Replying to ",
-                                    style: AppTextTheme.h4.copyWith(
-                                        fontSize:14,
-                                        color: AppColor.g500,
-                                        fontWeight: FontWeight.w700
-                                    ),),
-                                  Text("@${widget.post.username}",
-                                    style: AppTextTheme.h4.copyWith(
-                                        fontSize:14,
-                                        color: AppColor.p200,
-                                        fontWeight: FontWeight.w700
-                                    ),),
-                                ],
-                              ),
-                              const SizedBox(height: 12,),
-                              Text(data.comment,
-                                style: AppTextTheme.h4.copyWith(
-                                    fontSize:16,
-                                    color: AppColor.g900,
-                                    fontWeight: FontWeight.w400
-                                ),),
-                              const SizedBox(height: 12,),
-                              const Divider(
-                                color: AppColor.g50,
-                                thickness: 1,
-                              ),
-                              const SizedBox(height: 12,),
-                            ],
+                            ),
                           );
                         },
 
