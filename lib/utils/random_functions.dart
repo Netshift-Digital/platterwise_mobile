@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_time_ago/get_time_ago.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:platterwave/res/color.dart';
@@ -55,5 +56,12 @@ class RandomFunction {
     );
   }
 
+
+
+  static String timeAgo(String date){
+    var d = DateTime.parse(date);
+    var result = GetTimeAgo.parse(d);
+    return result;
+  }
 
 }

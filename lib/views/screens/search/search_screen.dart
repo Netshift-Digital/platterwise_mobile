@@ -48,9 +48,12 @@ class _SearchScreenState extends State<SearchScreen> {
                   context.read<VBlogViewModel>().searchUser(searchController.text)
                       .then((value){
                     if(value!=null){
-                      setState(() {
-                        searchResult=value;
-                      });
+                      if(mounted){
+                        setState(() {
+                          searchResult=value;
+                        });
+                      }
+
                     }
                   });
                 }

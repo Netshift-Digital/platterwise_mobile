@@ -88,7 +88,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                       Text(RandomFunction.date(widget.post.timestamp.toString()).yMMMdjm,
+                       Text(RandomFunction.timeAgo(widget.post.timestamp.toString()),
                        style: AppTextTheme.h6.copyWith(
                          fontSize: 12,
                          color: AppColor.g600

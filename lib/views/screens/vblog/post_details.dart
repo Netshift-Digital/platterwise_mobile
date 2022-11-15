@@ -120,7 +120,7 @@ class _PostDetailsState extends State<PostDetails> {
                                                 fontWeight: FontWeight.w700),
                                           ),
                                           const SizedBox(height: 3,),
-                                          Text(RandomFunction.date(data.timestamp.toString()).yMMMdjm,
+                                          Text(RandomFunction.timeAgo(data.timestamp.toString()),
                                           style: AppTextTheme.h4.copyWith(
                                             fontSize:12
                                           ),),
@@ -162,7 +162,7 @@ class _PostDetailsState extends State<PostDetails> {
 
                                         },
                                         icon: "assets/icon/comment.svg",
-                                        count: "1",
+                                        count: "",
                                       ),
                                      const SizedBox(width: 20,),
                                       CustomAppIcon(
