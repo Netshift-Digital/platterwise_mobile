@@ -59,6 +59,7 @@ dependencies:
   google_sign_in: ^5.4.2
   firebase_dynamic_links: ^2.0.6
   firebase_messaging:
+  get_time_ago: ^1.1.7
   flutter:
     sdk: flutter
 

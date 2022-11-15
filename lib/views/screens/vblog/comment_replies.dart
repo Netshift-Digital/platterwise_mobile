@@ -88,7 +88,7 @@ class _CommentReplyState extends State<CommentReply> {
                                           fontWeight: FontWeight.w700),
                                     ),
                                     const SizedBox(height: 3,),
-                                    Text(RandomFunction.date(data.timestampo.toString()).yMMMdjm,
+                                    Text(RandomFunction.timeAgo(data.timestampo.toString()),
                                       style: AppTextTheme.h4.copyWith(
                                           fontSize:12
                                       ),),
@@ -235,7 +235,7 @@ class _CommentReplyState extends State<CommentReply> {
                       fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 3,),
-                Text(RandomFunction.date(data.timestamp.toString()).yMMMdjm,
+                Text(RandomFunction.timeAgo(data.timestamp.toString()),
                   style: AppTextTheme.h4.copyWith(
                       fontSize:12
                   ),),
