@@ -1,6 +1,9 @@
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:platterwave/model/bottom_nav_model.dart';
 import 'package:platterwave/res/color.dart';
+import 'package:platterwave/utils/nav.dart';
+import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
@@ -9,6 +12,7 @@ import 'package:platterwave/views/screens/profile/profile_screen.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/save/save_screen.dart';
 import 'package:platterwave/views/screens/search/search_screen.dart';
+import 'package:platterwave/views/screens/vblog/shared_post.dart';
 import 'package:platterwave/views/screens/vblog/timeline.dart';
 
 import 'package:provider/provider.dart';
@@ -79,6 +83,8 @@ class _BottomNavState extends State<BottomNav> {
     Future.delayed(const Duration(milliseconds: 50),(){
       getData();
     });
+
+    deepLink();
   }
 
   void getData() async{
@@ -88,6 +94,32 @@ class _BottomNavState extends State<BottomNav> {
   await  userModel.getMyProfile();
    await blogModel.getFollowers();
   await  blogModel.getFollowing();
+  }
+
+  void deepLink() {
+
+    FirebaseDynamicLinks.instance.onLink(
+        onError: (e)async{
+          RandomFunction.toast(e.code);
+        },
+        onSuccess: (e)async{
+          _handelLink(e);
+        }
+
+    );
+ FirebaseDynamicLinks.instance.getInitialLink().then((e) {
+   _handelLink(e);
+ });
+
+  }
+
+  _handelLink(PendingDynamicLinkData? e){
+    if(e!=null){
+      if(e.link.path.isNotEmpty){
+        var postId = e.link.path.replaceAll("/", "");
+        nav(context, SharedPost(id: postId));
+      }
+    }
   }
 }
 

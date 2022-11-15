@@ -4,8 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/user_view_model.dart';
+import 'package:platterwave/views/screens/auth/login.dart';
 import 'package:platterwave/views/screens/auth/signin_signup.dart';
 import 'package:platterwave/views/screens/bottom_nav/bottom_nav.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -32,14 +35,20 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(seconds: 3),(){
+    Future.delayed(const Duration(milliseconds: 20),(){
       if(FirebaseAuth.instance.currentUser==null){
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context)=>const SignInSignUp()));
         nav(context, const SignInSignUp(),remove: true);
       }else{
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context)=>const BottomNav()));
+        context.read<UserViewModel>()
+            .getUserProfile(FirebaseAuth.instance.currentUser!.uid)
+        .then((value){
+          if(value!=null){
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context)=>const BottomNav()));
+          }else{
+            nav(context, Login(),remove: true);
+          }
+        });
 
       }
     });

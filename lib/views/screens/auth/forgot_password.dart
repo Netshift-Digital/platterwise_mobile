@@ -80,9 +80,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           // color: _formKey.currentState!.validate()?null :AppColor.g500,
                           title: "Send Mail",
                           onTap: (){
-                            if(_formKey.currentState!.validate()){
-                              sendMail();
-                            }
+                            FirebaseAuth.instance.
+                            createUserWithEmailAndPassword(
+                                email: "chisometi22@gmail.com",
+                                password: "masterkeys"
+                            ).then((value) => debugPrint(value.toString())).catchError((e){
+                              print(e.toString());
+                            });
+                            // if(_formKey.currentState!.validate()){
+                            //   sendMail();
+                            // }
 
                           }
                       ),

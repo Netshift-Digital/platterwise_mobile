@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:platterwave/model/request_model/auth_medthod.dart';
 import 'package:platterwave/model/request_model/register_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/spacing.dart';
@@ -20,7 +21,8 @@ import 'package:provider/provider.dart';
 import 'package:the_validator/the_validator.dart';
 
 class Register extends StatefulWidget {
-   Register({Key? key}) : super(key: key);
+  final AuthMethod? authMethod;
+   const Register({Key? key,this.authMethod}) : super(key: key);
 
   @override
   State<Register> createState() => _RegisterState();
@@ -40,7 +42,9 @@ class _RegisterState extends State<Register> {
    final TextEditingController _phoneNumber =  TextEditingController();
 
    final _formKey = GlobalKey<FormState>();
-
+  String imageUrl = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+  String authId = '';
+  bool enableEmail = true;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -78,6 +82,7 @@ class _RegisterState extends State<Register> {
                       Text("Email",style: AppTextTheme.hint),
                       const SizedBox(height: hintSpacing,),
                       Field(
+                        enable: enableEmail,
                         controller: _email,
                         hint: "gsswuw@gmail.com",
                         validate: FieldValidator.email(),
@@ -91,6 +96,14 @@ class _RegisterState extends State<Register> {
                         validate: FieldValidator.minLength(3),
                       ),
                       const SizedBox(height: twenty,),
+                      Text("Phone number",style: AppTextTheme.hint),
+                      const SizedBox(height: hintSpacing,),
+                      CountryField(
+                        controller: _phoneNumber,
+                        hint: "55-0114-2346",
+                        validate: FieldValidator.minLength(3),
+                      ),
+                      const SizedBox(height: twenty,),
                       Text("Password",style: AppTextTheme.hint),
                       const SizedBox(height: hintSpacing,),
                       Field(
@@ -100,11 +113,12 @@ class _RegisterState extends State<Register> {
                         validate: FieldValidator.minLength(3),
                       ),
                       const SizedBox(height: twenty,),
-                      Text("Phone number",style: AppTextTheme.hint),
+                      Text("Confirm password",style: AppTextTheme.hint),
                       const SizedBox(height: hintSpacing,),
-                      CountryField(
-                        controller: _phoneNumber,
-                        hint: "55-0114-2346",
+                      Field(
+                        controller: _password,
+                        hint: "••••••••••••••",
+                        isPassword: true,
                         validate: FieldValidator.minLength(3),
                       ),
                       const SizedBox(height: forty,),
@@ -179,8 +193,8 @@ class _RegisterState extends State<Register> {
              password: _password.text,
              phone: _phoneNumber.text,
              username: _username.text,
-             imageUrl:"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-             authId: ""
+             imageUrl:imageUrl,
+             authId:authId
         ),"").then((value){
               if(value==true){
                 RandomFunction.toast("Account created successfully, a verification mail has been sent to you");
@@ -189,5 +203,25 @@ class _RegisterState extends State<Register> {
 
               }
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(widget.authMethod!=null){
+      if(widget.authMethod!.user!=null){
+        var user = widget.authMethod!.user!;
+        _email.text = user.email??"";
+        if(user.email!=null){
+          enableEmail=false;
+        }
+        _fullName.text= user.displayName??"";
+         authId= user.uid??"";
+         _phoneNumber.text = user.phoneNumber??"";
+         imageUrl= user.photoURL??"";
+      }
+
+    }
   }
 }

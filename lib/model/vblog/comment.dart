@@ -36,6 +36,7 @@ class UsersComment {
     required this.comment,
     required this.profileUrl,
     required  this.timestamp,
+    this.commentId,
   });
 
   dynamic contentPost;
@@ -43,6 +44,7 @@ class UsersComment {
   dynamic username;
   dynamic comment;
   dynamic profileUrl;
+  dynamic commentId;
   DateTime timestamp;
 
   factory UsersComment.fromJson(Map<String, dynamic> json) => UsersComment(
@@ -52,6 +54,7 @@ class UsersComment {
     comment: json["comment"]??"",
     profileUrl: json["profileURL"] ??"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
     timestamp:json["timestamp"]==null?DateTime.now():DateTime.parse(json["timestamp"]),
+    commentId: json['comment_id']??"0"
   );
 
   Map<String, dynamic> toJson() => {
@@ -61,5 +64,6 @@ class UsersComment {
     "comment": comment,
     "profileURL": profileUrl == null ? null : profileUrl,
     "timestamp": timestamp.toIso8601String(),
+    "comment_id":commentId
   };
 }

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
+import 'package:platterwave/utils/dynamic_link.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
@@ -36,8 +37,11 @@ class _TimelineState extends State<Timeline> {
         backgroundColor: AppColor.p300,
           child: SvgPicture.asset('assets/icon/post.svg'),
         onPressed: (){
-        nav(context, const CreatePost());
-         // FirebaseAuth.instance.signOut();
+          nav(context, const CreatePost());
+         //FirebaseAuth.instance.signOut();
+         //  var s = "chisom is a good boy ";
+         //  var d = s.split(" ");
+         //  print(d);
         },
       ),
       body: AnnotatedRegion(
@@ -113,7 +117,7 @@ class _TimelineState extends State<Timeline> {
 
                          ],
                        ),
-                       collapsedHeight:240 ,
+                       collapsedHeight:260 ,
                      ),
                      // SliverAppBar(
                      //   backgroundColor:AppColor.g0,
