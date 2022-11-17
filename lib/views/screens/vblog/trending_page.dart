@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:platterwave/model/vblog/post_model.dart';
+import 'package:platterwave/res/color.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/containers/empty_content_container.dart';
@@ -14,12 +16,19 @@ class TrendingPage extends StatefulWidget {
 }
 
 class _TrendingPageState extends State<TrendingPage> {
+  bool loading = false;
+  List<Post>? trendingPost ;
   @override
   Widget build(BuildContext context) {
     var model = context.watch<VBlogViewModel>();
     return Scaffold(
       appBar: appBar(context),
-      body:model.trendingPost.isEmpty?
+      body:trendingPost==null?const Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation(AppColor.p200),
+        ),
+      ):
+      trendingPost!.isEmpty?
          const  Center(child:  EmptyContentContainer())
           :Padding(
             padding: const EdgeInsets.only(left: 16,right: 16),
@@ -27,9 +36,9 @@ class _TrendingPageState extends State<TrendingPage> {
             padding: EdgeInsets.zero,
             physics: const BouncingScrollPhysics(),
             shrinkWrap: true,
-        itemCount: model.trendingPost.length,
+        itemCount: trendingPost!.length,
         itemBuilder: (context,index) {
-              var data =  model.trendingPost[index];
+              var data = trendingPost![index];
             return  TimelinePostContainer(data);
         }
       ),
@@ -41,10 +50,50 @@ class _TrendingPageState extends State<TrendingPage> {
     // TODO: implement initState
     super.initState();
     Future.delayed(const Duration(milliseconds: 50),(){
-     var model = context.read<VBlogViewModel>();
-     if(model.baseOn!=widget.basedOn||model.trendingPost.isEmpty){
-       model.getTrending(base: widget.basedOn);
+     if(widget.basedOn=="baselike"){
+       setBasedOnLikes();
+     }else{
+      setBasedOnComment();
      }
+    });
+  }
+
+  setBasedOnLikes(){
+    var model = context.read<VBlogViewModel>();
+    if(model.trendingPostBaseLike.isEmpty){
+      model.getTrendingLikes().then((value){
+        trendingPost=model.trendingPostBaseLike;
+        setState(() {});
+      });
+    }else{
+      trendingPost=model.trendingPostBaseLike;
+      setState(() {});
+    }
+
+  }
+  setBasedOnComment(){
+    var model = context.read<VBlogViewModel>();
+    if(model.trendingPostBaseComment.isEmpty){
+      model.getTrendingOnComment().then((value){
+        trendingPost=model.trendingPostBaseComment;
+        setState(() {});
+      });
+    }else{
+      trendingPost=model.trendingPostBaseComment;
+      setState(() {});
+    }
+
+  }
+
+
+  stop(){
+    setState(() {
+      loading = false;
+    });
+  }
+  start(){
+    setState(() {
+      loading = true;
     });
   }
 }

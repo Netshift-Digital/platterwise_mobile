@@ -19,7 +19,8 @@ class VBlogViewModel extends BaseViewModel{
   VBlogService vBlogService = locator<VBlogService>();
   List<Post> posts = [];
   List<Post> myPosts = [];
-  List<Post> trendingPost =[];
+  List<Post> trendingPostBaseLike =[];
+  List<Post> trendingPostBaseComment =[];
   List<UserProfile> myFellows = [];
   List<UserProfile> following = [];
   List<Post> myLikes = [];
@@ -296,6 +297,7 @@ Future<List<UserProfile>?>getFollowers()async{
     }catch(e){
       //
     }
+    return null;
   }
 
 
@@ -415,18 +417,18 @@ Future<List<UserProfile>?>getFollowers()async{
 
 
 
-  Future<List<Post>?> getTrending({String base = "baselike"})async{
+  Future<List<Post>?> getTrendingLikes({String base = "baselike"})async{
     try{
       baseOn =base;
       var data = await vBlogService.getTrending(baseOn);
       //print(data);
       if(data!=null){
-        trendingPost=[];
+        trendingPostBaseLike=[];
         for(var e in data['trending'] ){
           var p = Post.fromJson(e as Map);
-         trendingPost.add(p);
+          trendingPostBaseLike.add(p);
         }
-        return trendingPost;
+        return trendingPostBaseLike;
       }
       setState(AppState.idle);
     }catch(e){
@@ -436,7 +438,26 @@ Future<List<UserProfile>?>getFollowers()async{
     }
     return null;
   }
-
+  Future<List<Post>?> getTrendingOnComment({String base = "basecomment"})async{
+    try{
+      baseOn =base;
+      var data = await vBlogService.getTrending(baseOn);
+      //print(data);
+      if(data!=null){
+        trendingPostBaseComment=[];
+        for(var e in data['trending'] ){
+          var p = Post.fromJson(e as Map);
+          trendingPostBaseComment.add(p);
+        }
+        return trendingPostBaseComment;
+      }
+      setState(AppState.idle);
+    }catch(e){
+      // RandomFunction.toast("something went wrong");
+      setState(AppState.idle);
+    }
+    return null;
+  }
   void handelTags(String contentPost,String postId) {
     List tag = [];
     Map jsonTag = {};

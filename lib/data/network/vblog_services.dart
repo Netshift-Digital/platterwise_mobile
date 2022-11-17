@@ -77,7 +77,6 @@ class VBlogService{
       "firebaseAuthID":FirebaseAuth.instance.currentUser!.uid,
       "post_id":postId
     });
-    print(body);
     try {
       var response =
       await client.post(Uri.parse("${baseurl}get_comment.php"),
@@ -366,7 +365,6 @@ class VBlogService{
             "Content-type": "application/json",
           });
       var data = jsonDecode(response.body);
-      ///print(data);
       if(response.statusCode==200){
         return data;
       }else{

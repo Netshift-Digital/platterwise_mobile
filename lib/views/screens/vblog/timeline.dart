@@ -180,6 +180,6 @@ class _TimelineState extends State<Timeline> {
   void getPost() {
     var model = context.read<VBlogViewModel>();
     model.getPost();
-    model.getTrending();
+
   }
 }
