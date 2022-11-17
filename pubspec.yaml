@@ -60,6 +60,7 @@ dependencies:
   firebase_dynamic_links: ^2.0.6
   firebase_messaging:
   get_time_ago: ^1.1.7
+  flutter_local_notifications:
   flutter:
     sdk: flutter
 

@@ -11,6 +11,7 @@ import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
+import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/vblog/comment_replies.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/containers/empty_content_container.dart';
@@ -100,12 +101,22 @@ class _PostDetailsState extends State<PostDetails> {
                                  const SizedBox(height: 10,),
                                   Row(
                                     children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(34),
-                                        child: ImageCacheR(
-                                          data.profileUrl,
-                                          height: 35,
-                                          width: 35,
+                                      GestureDetector(
+                                        onTap: (){
+                                          if(data.firebaseAuthID.toString().isNotEmpty){
+                                            nav(context, ViewUserProfileScreen(
+                                              id: data.firebaseAuthID,
+                                            ));
+                                          }
+
+                                        },
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(34),
+                                          child: ImageCacheR(
+                                            data.profileUrl,
+                                            height: 35,
+                                            width: 35,
+                                          ),
                                         ),
                                       ),
                                       const SizedBox(width: 12,),
@@ -114,16 +125,27 @@ class _PostDetailsState extends State<PostDetails> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                           data.username,
+                                           data.fullName,
                                             style: AppTextTheme.h3.copyWith(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w700),
                                           ),
                                           const SizedBox(height: 3,),
-                                          Text(RandomFunction.timeAgo(data.timestamp.toString()),
-                                          style: AppTextTheme.h4.copyWith(
-                                            fontSize:12
-                                          ),),
+                                          Row(
+                                            children: [
+                                              Text("@${data.username}",
+                                                style: AppTextTheme.h6.copyWith(
+                                                    fontSize: 12,
+                                                    color: AppColor.g600
+                                                ),),
+                                              const SizedBox(width:5,),
+                                              Text(RandomFunction.timeAgo(data.timestamp.toString()),
+                                              style: AppTextTheme.h4.copyWith(
+                                                fontSize:11,
+                                                  fontWeight: FontWeight.w500
+                                              ),),
+                                            ],
+                                          ),
                                           const SizedBox(height: 12,),
                                         ],
                                       ),
@@ -162,7 +184,7 @@ class _PostDetailsState extends State<PostDetails> {
 
                                         },
                                         icon: "assets/icon/comment.svg",
-                                        count: "",
+                                        count: data.commentReply,
                                       ),
                                      const SizedBox(width: 20,),
                                       CustomAppIcon(

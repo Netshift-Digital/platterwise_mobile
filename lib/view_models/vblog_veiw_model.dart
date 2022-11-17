@@ -460,4 +460,10 @@ Future<List<UserProfile>?>getFollowers()async{
   }
 
 
+
+  sendNotification(String message,String topic,{String title = ""}){
+    vBlogService.sendNotification(message, topic,title: title);
+  }
+
+
 }

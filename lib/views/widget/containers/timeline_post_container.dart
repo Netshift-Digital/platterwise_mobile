@@ -69,8 +69,8 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                     ));
                   },
                   child: ImageCacheCircle(widget.post.profileUrl,
-                  height: 55,
-                  width: 55,),
+                  height: 68,
+                  width: 68,),
                 ),
                const SizedBox(width: 12,),
                 Column(
@@ -78,7 +78,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.post.username,
+                      widget.post.fullName,
                       style: AppTextTheme.h3.copyWith(
                           fontSize: 18,
                           fontWeight: FontWeight.w700),
@@ -88,9 +88,16 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        Text("@${widget.post.username}",
+                          style: AppTextTheme.h6.copyWith(
+                              fontSize: 12,
+                              color: AppColor.g600
+                          ),),
+                       const SizedBox(width:5,),
                        Text(RandomFunction.timeAgo(widget.post.timestamp.toString()),
                        style: AppTextTheme.h6.copyWith(
-                         fontSize: 12,
+                         fontSize: 11,
+                         fontWeight: FontWeight.w500,
                          color: AppColor.g600
                        ),),
                       ],

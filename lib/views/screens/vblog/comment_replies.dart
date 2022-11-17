@@ -6,9 +6,11 @@ import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/spacing.dart';
 import 'package:platterwave/res/text-theme.dart';
+import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
+import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/containers/empty_content_container.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
@@ -68,12 +70,22 @@ class _CommentReplyState extends State<CommentReply> {
                             const SizedBox(height: 10,),
                             Row(
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(34),
-                                  child: ImageCacheR(
-                                    data.profileURL??"",
-                                    height: 35,
-                                    width: 35,
+                                GestureDetector(
+                                  onTap: (){
+                                    if(data.firebaseAuthID.toString().isNotEmpty){
+                                      nav(context, ViewUserProfileScreen(
+                                        id: data.firebaseAuthID,
+                                      ));
+                                    }
+
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(34),
+                                    child: ImageCacheR(
+                                      data.profileURL??"",
+                                      height: 35,
+                                      width: 35,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 12,),
@@ -82,16 +94,27 @@ class _CommentReplyState extends State<CommentReply> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      data.username??"",
+                                      data.fullName??"",
                                       style: AppTextTheme.h3.copyWith(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w700),
                                     ),
                                     const SizedBox(height: 3,),
-                                    Text(RandomFunction.timeAgo(data.timestampo.toString()),
-                                      style: AppTextTheme.h4.copyWith(
-                                          fontSize:12
-                                      ),),
+                                    Row(
+                                      children: [
+                                        Text("@${data.username}",
+                                          style: AppTextTheme.h6.copyWith(
+                                              fontSize: 12,
+                                              color: AppColor.g600
+                                          ),),
+                                        const SizedBox(width:5,),
+                                        Text(RandomFunction.timeAgo(data.timestampo.toString()),
+                                          style: AppTextTheme.h4.copyWith(
+                                              fontSize:11,
+                                              fontWeight: FontWeight.w500
+                                          ),),
+                                      ],
+                                    ),
                                     const SizedBox(height: 12,),
                                   ],
                                 ),
@@ -215,12 +238,22 @@ class _CommentReplyState extends State<CommentReply> {
         const SizedBox(height: 10,),
         Row(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(34),
-              child: ImageCacheR(
-                data.profileUrl,
-                height: 35,
-                width: 35,
+            GestureDetector(
+              onTap: (){
+                if(data.firebaseAuthID.toString().isNotEmpty){
+                  nav(context, ViewUserProfileScreen(
+                    id: data.firebaseAuthID,
+                  ));
+                }
+
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(34),
+                child: ImageCacheR(
+                  data.profileUrl,
+                  height: 35,
+                  width: 35,
+                ),
               ),
             ),
             const SizedBox(width: 12,),
@@ -229,16 +262,27 @@ class _CommentReplyState extends State<CommentReply> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  data.username,
+                  data.fullName,
                   style: AppTextTheme.h3.copyWith(
                       fontSize: 18,
                       fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 3,),
-                Text(RandomFunction.timeAgo(data.timestamp.toString()),
-                  style: AppTextTheme.h4.copyWith(
-                      fontSize:12
-                  ),),
+                Row(
+                  children: [
+                    Text("@${data.username}",
+                      style: AppTextTheme.h6.copyWith(
+                          fontSize: 12,
+                          color: AppColor.g600
+                      ),),
+                    const SizedBox(width:5,),
+                    Text(RandomFunction.timeAgo(data.timestamp.toString()),
+                      style: AppTextTheme.h4.copyWith(
+                          fontSize:11,
+                        fontWeight: FontWeight.w500
+                      ),),
+                  ],
+                ),
                 const SizedBox(height: 12,),
               ],
             ),

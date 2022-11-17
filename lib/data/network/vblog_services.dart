@@ -77,6 +77,7 @@ class VBlogService{
       "firebaseAuthID":FirebaseAuth.instance.currentUser!.uid,
       "post_id":postId
     });
+    print(body);
     try {
       var response =
       await client.post(Uri.parse("${baseurl}get_comment.php"),
@@ -84,6 +85,7 @@ class VBlogService{
             "Content-type": "application/json",
           });
       var data = jsonDecode(response.body);
+     // print(data);
       if(response.statusCode==200){
         return data;
       }
@@ -454,6 +456,47 @@ class VBlogService{
           });
       var data = jsonDecode(response.body);
       print(data);
+      if(response.statusCode==200){
+        return data;
+      }else{
+        //RandomFunction.toast(data['status']??"");
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+
+
+  Future<dynamic> sendNotification(String message,String topic,{String title = ""}) async {
+   var map = {
+        "to":"/topics/$topic",
+        "priority": "high",
+        "notification": {
+          "title":title,
+          "body": message
+        },
+        "data" : {
+          "your_custom_data" : "data"
+        }
+    };
+
+    var body = jsonEncode(map);
+    try {
+      var response =
+      await client.post(Uri.parse("https://fcm.googleapis.com/fcm/send"),
+          body: body, headers: {
+            "Content-type": "application/json",
+            "Authorization":firebaseNotificationKey
+          });
+      var data = jsonDecode(response.body);
       if(response.statusCode==200){
         return data;
       }else{

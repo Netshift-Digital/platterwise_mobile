@@ -37,6 +37,9 @@ class UsersComment {
     required this.profileUrl,
     required  this.timestamp,
     this.commentId,
+    required this.firebaseAuthID,
+    required this.fullName,
+    required this.commentReply
   });
 
   dynamic contentPost;
@@ -46,6 +49,9 @@ class UsersComment {
   dynamic profileUrl;
   dynamic commentId;
   DateTime timestamp;
+  dynamic firebaseAuthID;
+  dynamic fullName;
+  dynamic commentReply;
 
   factory UsersComment.fromJson(Map<String, dynamic> json) => UsersComment(
     contentPost: json["content_post"]??"",
@@ -54,7 +60,10 @@ class UsersComment {
     comment: json["comment"]??"",
     profileUrl: json["profileURL"] ??"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
     timestamp:json["timestamp"]==null?DateTime.now():DateTime.parse(json["timestamp"]),
-    commentId: json['comment_id']??"0"
+    commentId: json['comment_id']??"0",
+      firebaseAuthID:  json['firebaseAuthID']??"",
+    fullName: json['full_name']??"",
+    commentReply:json['comment_reply']??""
   );
 
   Map<String, dynamic> toJson() => {

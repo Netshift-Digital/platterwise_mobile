@@ -26,7 +26,7 @@ class CommentReply {
 
 class UsersReply {
   String? userId;
-  Null? firebaseAuthID;
+  dynamic firebaseAuthID;
   String? fullName;
   String? username;
   String? commentId;
@@ -46,7 +46,7 @@ class UsersReply {
 
   UsersReply.fromJson(Map<dynamic, dynamic> json) {
     userId = json['user_id'];
-    firebaseAuthID = json['firebaseAuthID'];
+    firebaseAuthID = json['firebaseAuthID']??"";
     fullName = json['full_name'];
     username = json['username'];
     commentId = json['comment_id'];

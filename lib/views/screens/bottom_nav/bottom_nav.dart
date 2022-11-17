@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:platterwave/model/bottom_nav_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/utils/nav.dart';
@@ -85,6 +88,9 @@ class _BottomNavState extends State<BottomNav> {
     });
 
     deepLink();
+    setNotification();
+    checkNotification();
+
   }
 
   void getData() async{
@@ -121,5 +127,44 @@ class _BottomNavState extends State<BottomNav> {
       }
     }
   }
+
+  void setNotification(){
+  var user = FirebaseAuth.instance.currentUser;
+  if(user!=null){
+    FirebaseMessaging.instance.getToken().
+    then((value) {
+      FirebaseMessaging.instance.subscribeToTopic(user.uid);
+    }
+    );
+  }
+  }
+
+
+  void checkNotification() {
+    FirebaseMessaging.onMessage.listen((event) {
+      RemoteNotification? notification = event.notification;
+      AndroidNotification? android = event.notification?.android;
+      if (notification != null && android != null) {
+        FlutterLocalNotificationsPlugin().show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+           const NotificationDetails(
+              android: AndroidNotificationDetails(
+                '20',
+                'learnly',
+                importance: Importance.high,
+                playSound: true,
+                showProgress: true,
+                enableVibration: true,
+                priority: Priority.high,
+                ticker: 'test ticker',
+              ),
+            ));
+      }
+    });
+  }
+
+
 }
 
