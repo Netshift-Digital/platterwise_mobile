@@ -398,6 +398,8 @@ Future<List<UserProfile>?>getFollowers()async{
     FirebaseFirestore.instance.collection("activity").
     doc("users").collection(id).add(userActivity.toJson());
 
+    sendNotification(userActivity.userName+userActivity.message, id);
+
 
   }
 
