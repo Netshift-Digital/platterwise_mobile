@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:like_button/like_button.dart';
@@ -136,37 +137,56 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
             SizedBox(
               height: 12.h,
             ),
-           ReadMoreText(
-             widget.post.contentPost,
-              style:AppTextTheme.h3 ,
-              trimLines: 2,
-              colorClickableText: Colors.pink,
-              trimMode: TrimMode.Line,
-              trimCollapsedText: ' Show more',
-              trimExpandedText: ' Show less',
-              lessStyle:const TextStyle(fontSize: 14, fontWeight: FontWeight.bold) ,
-              moreStyle: const  TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-            widget.post.tags.isEmpty?const SizedBox():
-                Wrap(
-                  children: widget.post.tags.map((e){
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2),
-                      child: InkWell(
-                        onTap: (){
-                         nav(context, PostByTag(tag:e.toString()));
-                        },
-                        child: Text(
-                          showHashtag(e)+
-                          e.toString(),
-                        style: AppTextTheme.h1.copyWith(
-                          color: AppColor.p200,
-                          fontSize: 14
-                        ),),
-                      ),
-                    );
-                  }).toList(),
-                ),
+           RichText(
+               text: TextSpan(
+                 children: widget.post.contentPost.split(' ').map((e) {
+                   if(e.contains('#')){
+                     return  TextSpan(
+                       recognizer:  TapGestureRecognizer()..onTap = () => nav(context, PostByTag(tag:e.toString())),
+                       text: " $e",style:AppTextTheme.h3.copyWith(
+                       color: AppColor.p200,
+                       fontWeight:FontWeight.w500,
+                     ), );
+                   }
+                   return  TextSpan(
+                     text: " $e",
+                       style:AppTextTheme.h3,
+
+                   );
+                 }).toList()
+               )
+           ),
+           // ReadMoreText(
+           //   widget.post.contentPost,
+           //    style:AppTextTheme.h3 ,
+           //    trimLines: 2,
+           //    colorClickableText: Colors.pink,
+           //    trimMode: TrimMode.Line,
+           //    trimCollapsedText: ' Show more',
+           //    trimExpandedText: ' Show less',
+           //    lessStyle:const TextStyle(fontSize: 14, fontWeight: FontWeight.bold) ,
+           //    moreStyle: const  TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+           //  ),
+           //  widget.post.tags.isEmpty?const SizedBox():
+           //      Wrap(
+           //        children: widget.post.tags.map((e){
+           //          return Padding(
+           //            padding: const EdgeInsets.symmetric(horizontal: 2),
+           //            child: InkWell(
+           //              onTap: (){
+           //               nav(context, PostByTag(tag:e.toString()));
+           //              },
+           //              child: Text(
+           //                showHashtag(e)+
+           //                e.toString(),
+           //              style: AppTextTheme.h1.copyWith(
+           //                color: AppColor.p200,
+           //                fontSize: 14
+           //              ),),
+           //            ),
+           //          );
+           //        }).toList(),
+           //      ),
             SizedBox(height: 11.h,),
             widget.post.contentType==PostType.video?
                 videoWid():widget.post.contentType==PostType.image?

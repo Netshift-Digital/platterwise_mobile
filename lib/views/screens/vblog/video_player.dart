@@ -48,6 +48,7 @@ class _VideoPlayState extends State<VideoPlay> {
   @override
   void initState() {
     super.initState();
+    print(widget.url);
     _controller = VideoPlayerController.network(
       widget.url
         //"https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"
