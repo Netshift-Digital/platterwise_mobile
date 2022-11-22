@@ -22,6 +22,9 @@ class UserViewModel extends BaseViewModel{
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   UserData? user;
    String error ="";
+
+
+
   Future<bool> registerUser(RegisterModel registerModel,String imagePath)async{
     try{
       setState(AppState.busy);

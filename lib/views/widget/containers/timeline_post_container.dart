@@ -19,6 +19,7 @@ import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/vblog/post_by_tag.dart';
 import 'package:platterwave/views/screens/vblog/post_details.dart';
+import 'package:platterwave/views/screens/vblog/report_screen.dart';
 import 'package:platterwave/views/screens/vblog/video_player.dart';
 import 'package:platterwave/views/widget/containers/image_view.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
@@ -102,7 +103,12 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
               const Spacer(),
              // SvgPicture.asset("assets/icon/option.svg"),
               PopupMenuButton<int>(
-                itemBuilder: (context) => [
+                onSelected: (e){
+                  if(e==2){
+                    nav(context, ReportPost(postId: widget.post.postId));
+                  }
+                },
+                itemBuilder: (ctx) => [
                   PopupMenuItem(
                     value: 2,
                     onTap: (){
@@ -111,12 +117,31 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                     // row has two child icon and text
                     child: Row(
                       children:const [
-                        //Icon(Icons.),
+                        Icon(Icons.bookmark),
                         SizedBox(
                           // sized box with width 10
                           width: 10,
                         ),
                         Text("Save")
+                      ],
+                    ),
+                  ),
+
+
+                  PopupMenuItem(
+                    value: 2,
+                    onTap: (){
+
+                    },
+                    // row has two child icon and text
+                    child: Row(
+                      children:const [
+                        Icon(Icons.flag),
+                        SizedBox(
+                          // sized box with width 10
+                          width: 10,
+                        ),
+                        Text("Report Post")
                       ],
                     ),
                   ),

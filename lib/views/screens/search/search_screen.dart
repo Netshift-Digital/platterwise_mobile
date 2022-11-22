@@ -43,6 +43,7 @@ class _SearchScreenState extends State<SearchScreen> {
               controller: searchController,
               fillColor: AppColor.g30,
               isSearch: true,
+              hasBorder: false,
               onChanged: (e){
                 if(searchController.text.length>2){
                   context.read<VBlogViewModel>().searchUser(searchController.text)
@@ -58,18 +59,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   });
                 }
               },
-              // onFieldSubmitted: (e){
-              //   if(searchController.text.length>2){
-              //     context.read<VBlogViewModel>().searchUser(searchController.text)
-              //         .then((value){
-              //       if(value!=null){
-              //         setState(() {
-              //           searchResult=value;
-              //         });
-              //       }
-              //     });
-              //   }
-              // },
               hintText: "Search for a post or people",
                 prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
               suffixIcon: GestureDetector(

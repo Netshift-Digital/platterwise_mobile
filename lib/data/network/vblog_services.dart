@@ -444,7 +444,6 @@ class VBlogService{
       "firebaseAuthID":firebaseAuthID,
       "post_id":postId
     });
-     print(tag);
     var body = jsonEncode(tag);
     try {
       var response =
@@ -499,6 +498,66 @@ class VBlogService{
         return data;
       }else{
         //RandomFunction.toast(data['status']??"");
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+
+
+  Future<dynamic> getTopTags() async {
+    try {
+      var response =
+      await client.get(Uri.parse("${baseurl}trending_tags.php"),
+          headers: {
+            "Content-type": "application/json",
+          });
+      var data = jsonDecode(response.body);
+      if(response.statusCode==200){
+        return data;
+      }else{
+        //RandomFunction.toast(data['status']??"");
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+  Future<dynamic> reportPost(int postId, String uid,String comment) async {
+    var data = {
+      "reporter_firebaseAuthID":uid,
+      "post_id":postId,
+      "reason":comment
+
+    };
+    var body = jsonEncode(data);
+    try {
+      var response =
+      await client.post(Uri.parse("https://platterwise.com/jhome/report_post.php"),
+          body: body, headers: {
+            "Content-type": "application/json",
+          });
+      var data = jsonDecode(response.body);
+      if(response.statusCode==200){
+        RandomFunction.toast("Report has been submited");
+        return data;
+      }else{
+
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");

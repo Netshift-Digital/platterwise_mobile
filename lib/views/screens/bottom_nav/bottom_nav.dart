@@ -15,6 +15,7 @@ import 'package:platterwave/views/screens/profile/profile_screen.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/save/save_screen.dart';
 import 'package:platterwave/views/screens/search/search_screen.dart';
+import 'package:platterwave/views/screens/search/trending.dart';
 import 'package:platterwave/views/screens/vblog/shared_post.dart';
 import 'package:platterwave/views/screens/vblog/timeline.dart';
 
@@ -39,7 +40,7 @@ class _BottomNavState extends State<BottomNav> {
     BottomNavigationModel(
         title: "Explore",
         icon: "assets/icon/search-normal.svg",
-        screen: const SearchScreen()),
+        screen: const TopTags()),
     BottomNavigationModel(
         title: "Save",
         icon: "assets/icon/bookmark.svg",
@@ -100,6 +101,7 @@ class _BottomNavState extends State<BottomNav> {
   await  userModel.getMyProfile();
    await blogModel.getFollowers();
   await  blogModel.getFollowing();
+    await  blogModel.getTopTag();
   }
 
   void deepLink() {

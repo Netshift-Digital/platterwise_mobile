@@ -61,9 +61,11 @@ class _PostByTagState extends State<PostByTag> {
     Future.delayed(const Duration(milliseconds: 50),(){
       context.read<VBlogViewModel>().getPostByTag(widget.tag)
           .then((value){
-        setState(() {
-          searchResult=value;
-        });
+            if(mounted){
+              setState(() {
+                searchResult=value;
+              });
+            }
       });
     });
   }

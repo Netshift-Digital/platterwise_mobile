@@ -10,6 +10,7 @@ import 'package:platterwave/model/request_model/post_data.dart';
 import 'package:platterwave/model/vblog/comment.dart';
 import 'package:platterwave/model/vblog/comment_reply.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
+import 'package:platterwave/model/vblog/top_tags.dart';
 import 'package:platterwave/model/vblog/user_activity.dart';
 import 'package:platterwave/model/vblog/user_search.dart';
 import 'package:platterwave/utils/enum/app_state.dart';
@@ -27,7 +28,8 @@ class VBlogViewModel extends BaseViewModel{
   String baseOn = "baselike";
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-
+  List<AllTagRank> topTags = [];
+  AppState reportAppState = AppState.idle;
 
   Future<List<Post>?> getPost()async{
     try{
@@ -59,6 +61,22 @@ class VBlogViewModel extends BaseViewModel{
         }
         notifyListeners();
         return myPosts;
+      }
+    }catch(e){
+      setState(AppState.idle);
+    }
+    return null;
+  }
+
+  Future<List<AllTagRank>?> getTopTag()async{
+    try{
+      var data = await vBlogService.getTopTags();
+      if(data!=null){
+        var p = TopTag.fromJson(data as Map);
+        topTags=[];
+        topTags=p.allTagRank;
+        notifyListeners();
+        return topTags;
       }
     }catch(e){
       setState(AppState.idle);
@@ -440,6 +458,8 @@ Future<List<UserProfile>?>getFollowers()async{
     }
     return null;
   }
+
+
   Future<List<Post>?> getTrendingOnComment({String base = "basecomment"})async{
     try{
       baseOn =base;
@@ -488,5 +508,18 @@ Future<List<UserProfile>?>getFollowers()async{
     vBlogService.sendNotification(message, topic,title: title);
   }
 
-
+  Future<dynamic> reportPost(int postId, String uid,String comment)async{
+    try{
+      reportAppState= AppState.busy;
+      notifyListeners();
+      var data = await vBlogService.reportPost(postId, uid, comment);
+      reportAppState= AppState.idle;
+      notifyListeners();
+      return data;
+    }catch(e){
+      reportAppState= AppState.idle;
+      notifyListeners();
+      setState(AppState.idle);
+    }
+  }
 }
