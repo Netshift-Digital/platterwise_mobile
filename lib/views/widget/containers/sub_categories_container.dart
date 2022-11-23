@@ -21,9 +21,12 @@ class SubCategoriesContainer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(image!),
           SizedBox(
-            height: 8.h,
+            width: 178,
+              height: 100,
+              child: Image.asset(image!)),
+          SizedBox(
+            height: 2.h,
           ),
           Text(title, style: AppTextTheme.h4,),
         ],

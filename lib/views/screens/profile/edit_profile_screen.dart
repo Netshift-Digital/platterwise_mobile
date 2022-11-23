@@ -31,8 +31,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Uint8List? _imageFile;
   bool isUploading = false;
   String? photoUrl;
-  stop(){ setState(() {load=false;});}
-  startLoading(){ setState(() {load=true;});}
+  stop(){
+    if(mounted){
+      setState(() {load=false;});
+    }
+
+  }
+  startLoading(){
+    if(mounted){
+      setState(() {load=true;});
+    }
+
+  }
 
 
   Future<void> _pickImage() async {

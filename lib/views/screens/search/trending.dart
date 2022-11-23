@@ -11,6 +11,7 @@ import 'package:platterwave/views/screens/vblog/post_by_tag.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
 import 'package:provider/provider.dart';
+import 'package:svg_icon/svg_icon.dart';
 
 class TopTags extends StatelessWidget {
   const TopTags({Key? key}) : super(key: key);
@@ -26,16 +27,18 @@ class TopTags extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AppTextField(
-              enabled: false,
-              fillColor: AppColor.g30,
-              isSearch: true,
-              hasBorder: false,
+            GestureDetector(
               onTap: (){
                 nav(context, const SearchScreen());
               },
-              hintText: "Search for a post or people",
-              prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
+              child: AppTextField(
+                enabled: false,
+                fillColor: AppColor.g30,
+                isSearch: true,
+                hasBorder: false,
+                hintText: "Search for a post or people",
+                prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
+              ),
             ),
             SizedBox(height: 35.h,),
             Text("Trends for you",
@@ -58,10 +61,17 @@ class TopTags extends StatelessWidget {
                         },
                         child: SizedBox(
                           width: double.maxFinite,
-                          child: Text(data.tagRank,
-                          style: AppTextTheme.h3.copyWith(
-                            fontWeight: FontWeight.w600
-                          )),
+                          child: Row(
+                            children: [
+                             SvgIcon('assets/icon/search-normal.svg',color: AppColor.g500,),
+                              SizedBox(width: 10,),
+                              Text(data.tagRank.replaceAll("#", ""),
+                              style: AppTextTheme.h3.copyWith(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14
+                              )),
+                            ],
+                          ),
                         ),
                       ),
                     );
