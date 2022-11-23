@@ -1,4 +1,5 @@
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_time_ago/get_time_ago.dart';
@@ -9,8 +10,8 @@ import 'package:provider/provider.dart';
 
 class RandomFunction {
   static toast(String msg, {bool isError = false}) {
-    showSimpleNotification(Text(msg),
-        background: isError ? Colors.red : AppColor.p300);
+    var cancel = BotToast.showSimpleNotification(title: msg,);
+
   }
 
 

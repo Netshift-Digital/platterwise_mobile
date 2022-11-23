@@ -134,7 +134,7 @@ class VBlogService{
   Future<dynamic> likePost(int postId, String uid) async {
     var body = jsonEncode(
         {
-          "user_id":uid,
+          "firebaseAuthID":uid,
           "post_id":postId
 
         }

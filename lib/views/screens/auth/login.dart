@@ -115,7 +115,7 @@ final _formKey = GlobalKey<FormState>();
                           Platform.isAndroid?const SizedBox():const Spacer(),
                           GestureDetector(
                             onTap: (){
-                              facebook();
+
                             },
                               child: SvgPicture.asset("assets/icon/facebook.svg")),
                           Platform.isAndroid?const SizedBox(width: 20,):const Spacer(),
@@ -200,7 +200,7 @@ final _formKey = GlobalKey<FormState>();
   }
 
   Future<void>google(BuildContext context) async{
-    try{
+
       context.read<UserViewModel>().google().then((value){
         if(value!=null){
           if(value.newUser){
@@ -210,57 +210,21 @@ final _formKey = GlobalKey<FormState>();
           }
         }
       });
-      // final FirebaseAuth auth = FirebaseAuth.instance;
-      // final GoogleSignIn googleSignIn = GoogleSignIn();
-      // GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
-      // if(googleSignInAccount!=null){
-      //   GoogleSignInAuthentication googleSignInAuthentication =
-      //   await googleSignInAccount.authentication;
-      //   AuthCredential credential = GoogleAuthProvider.credential(
-      //     accessToken: googleSignInAuthentication.accessToken,
-      //     idToken: googleSignInAuthentication.idToken,
-      //   );
-      //   final UserCredential userCredential =
-      //   await auth.signInWithCredential(credential);
-      //   print(userCredential.user!.email);
-      // }
-      //
-
-
-    }on FirebaseAuthException catch (e){
-      print(e.code);
-      if (e.code == 'account-exists-with-different-credential') {
-        // handle the error here
-      }
-      else if (e.code == 'invalid-credential') {
-        // handle the error here
-      }
-    }
-    catch(e){
-      //
-    }
-
-
-
   }
 
-  void facebook() async{
+  Future<void>facebook (BuildContext context) async{
 
-    final fb = FacebookLogin();
-
-// Log in
-    final res = await fb.logIn(permissions: [
-      FacebookPermission.publicProfile,
-      FacebookPermission.email,
-    ]).then((value){
-      print(value.status.name);
-     // print(value.status.name+"nbnbcjbcjbc");
-    }).catchError((e){
-      print(e.toString()+"  yaaa");
+    context.read<UserViewModel>().signInWithFacebook().then((value){
+      if(value!=null){
+        if(value.newUser){
+          nav(context,  Register(authMethod:value,));
+        }else{
+          nav(context, const BottomNav(),remove: true);
+        }
+      }
     });
-
-
-
   }
+
+
 
 }

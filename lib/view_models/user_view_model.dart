@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:platterwave/common/base_view_model.dart';
 import 'package:platterwave/data/network/user_services.dart';
@@ -83,37 +84,58 @@ class UserViewModel extends BaseViewModel{
         await auth.signInWithCredential(credential);
         setState(AppState.idle);
         if(userCredential.user!=null){
-          setState(AppState.busy);
-          var data = await getUserProfile(userCredential.user!.uid);
-          setState(AppState.idle);
-          if(data==null){
-            return AuthMethod(
-                newUser:true ,
-              user: userCredential.user
-            );
-          }else{
-            return AuthMethod(
-                newUser:false ,
-                user: userCredential.user
-            );
-          }
+          return await checkUser(userCredential);
         }
       }
 
     }on FirebaseAuthException catch (e){
       setState(AppState.idle);
-      print(e.code);
-      if (e.code == 'account-exists-with-different-credential') {
-        // handle the error here
-      }
-      else if (e.code == 'invalid-credential') {
-        // handle the error here
-      }
-    }
-    catch(e){
+
+    } catch(e){
       //
     }
 
+
+  }
+
+  Future<AuthMethod?>checkUser(UserCredential userCredential) async{
+   try{
+     setState(AppState.busy);
+     var data = await getUserProfile(userCredential.user!.uid);
+     setState(AppState.idle);
+     if(data==null){
+       return AuthMethod(
+           newUser:true ,
+           user: userCredential.user
+       );
+     }else{
+       return AuthMethod(
+           newUser:false ,
+           user: userCredential.user
+       );
+     }
+   }catch(e){
+     setState(AppState.idle);
+     //
+   }
+   return null;
+  }
+
+  Future<AuthMethod?> signInWithFacebook() async {
+    final LoginResult loginResult = await FacebookAuth.instance.login();
+    if (loginResult.status == LoginStatus.success) {
+      final AccessToken accessToken = loginResult.accessToken!;
+      //final userData = await FacebookAuth.instance.getUserData();
+      final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(accessToken.token);
+      final UserCredential userCredential = await
+      FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+      if(userCredential.user!=null){
+        return checkUser(userCredential);
+      }
+    } else {
+      return null;
+    }
+    return null;
 
   }
 

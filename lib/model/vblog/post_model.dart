@@ -43,7 +43,8 @@ class Post {
     required this.tags,
     required this.firebaseAuthID,
     required this.fullName,
-    required this.commentReply
+    required this.commentReply,
+    required this.liked
   });
 
   String contentPost;
@@ -57,6 +58,7 @@ class Post {
   dynamic commentCount;
   dynamic likeCount;
   List tags;
+  List liked;
   dynamic firebaseAuthID;
   dynamic fullName;
   dynamic commentReply;
@@ -75,7 +77,8 @@ class Post {
     tags: json['taggs']??[],
       firebaseAuthID:  json['firebaseAuthID']??"",
       fullName: json['full_name']??"",
-      commentReply:json['comment_reply']??""
+      commentReply:json['comment_reply']??"",
+      liked:json['liked']??[]
 
   );
 

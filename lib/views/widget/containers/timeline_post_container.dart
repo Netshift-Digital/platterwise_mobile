@@ -104,13 +104,13 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
              // SvgPicture.asset("assets/icon/option.svg"),
               PopupMenuButton<int>(
                 onSelected: (e){
-                  if(e==2){
+                  if(e==1){
                     nav(context, ReportPost(postId: widget.post.postId));
                   }
                 },
                 itemBuilder: (ctx) => [
                   PopupMenuItem(
-                    value: 2,
+                    value: 0,
                     onTap: (){
                       context.read<VBlogViewModel>().savePost(widget.post);
                     },
@@ -128,7 +128,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                   ),
 
                   PopupMenuItem(
-                    value: 2,
+                    value: 1,
                     onTap: (){
 
                     },
@@ -232,17 +232,19 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                 },
                 icon: "assets/icon/like.svg",
                 like:  LikeButton(
-                  isLiked:blogModel.checkIsLiked(widget.post.postId),
+                  isLiked:widget.post.liked.isNotEmpty,
                   onTap: (v)async{
                     if(blogModel.checkIsLiked(widget.post.postId)==false){
                       blogModel.likePost(widget.post,context.read<UserViewModel>().user!.userProfile);
                       setState(() {
                         widget.post.likeCount=(int.parse(widget.post.likeCount)+1).toString();
+                        widget.post.liked=['yes'];
                       });
                     }else{
 
                     }
                     setState(() {});
+                    return null;
                   },
                 ) ,
                 count:widget.post.likeCount,

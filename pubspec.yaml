@@ -43,14 +43,13 @@ dependencies:
   overlay_support: ^2.0.1
   jiffy: ^5.0.0
   firebase_storage: ^10.3.9
-  advance_image_picker: ^0.1.7+1
   image_picker: ^0.8.5+3
   readmore: ^2.2.0
   shimmer: ^2.0.0
   like_button: ^2.0.5
   path_provider: ^2.0.11
   hive: ^2.2.3
-  share_plus: ^6.0.1
+  share_plus:
   video_player: ^2.4.7
   linkfy_text: ^1.1.5
   url_launcher: ^6.1.6
@@ -60,7 +59,9 @@ dependencies:
   firebase_dynamic_links: ^2.0.6
   firebase_messaging:
   get_time_ago: ^1.1.7
-  flutter_local_notifications:
+  flutter_local_notifications: ^12.0.4
+  flutter_facebook_auth: ^4.4.0+1
+  bot_toast: ^4.0.3
   flutter:
     sdk: flutter
 
