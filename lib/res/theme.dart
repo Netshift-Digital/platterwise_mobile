@@ -6,6 +6,7 @@ class AppTheme{
   static ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: Colors.white,
     brightness: Brightness.light,
+    fontFamily: "Satoshi"
   );
 
 }

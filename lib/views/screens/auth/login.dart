@@ -109,13 +109,14 @@ final _formKey = GlobalKey<FormState>();
                         //mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                         const Spacer(),
-                         Platform.isAndroid?const SizedBox():GestureDetector(
+                         Platform.isIOS?GestureDetector(
                             onTap: (){},
-                              child: SvgPicture.asset("assets/icon/apple.svg")),
-                          Platform.isAndroid?const SizedBox():const Spacer(),
+                              child: SvgPicture.asset("assets/icon/apple.svg"))
+                          :const SizedBox(),
+                          Platform.isIOS?const Spacer():const SizedBox(),
                           GestureDetector(
                             onTap: (){
-
+                               facebook(context);
                             },
                               child: SvgPicture.asset("assets/icon/facebook.svg")),
                           Platform.isAndroid?const SizedBox(width: 20,):const Spacer(),
