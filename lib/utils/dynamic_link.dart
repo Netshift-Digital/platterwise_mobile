@@ -13,10 +13,10 @@ class DynamicLink{
             packageName: "com.platterwise.net",
             minimumVersion: 0,
         ),
-        // iosParameters:  IOSParameters(
-        //     bundleId: "com.platterwise.net",
-        //   minimumVersion: '0',
-        // ),
+        iosParameters:  IosParameters(
+            bundleId: "com.platterwise.net",
+          minimumVersion: '0',
+        ),
         googleAnalyticsParameters:  GoogleAnalyticsParameters(
           source: "twitter",
           medium: "social",
