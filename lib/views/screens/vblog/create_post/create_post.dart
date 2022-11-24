@@ -158,7 +158,9 @@ Widget  vidImage({required String image, required String text, required  Functio
 }
 
   void pickImage({ImageSource imageSource =ImageSource.camera }) async{
-    final List<XFile>? selectedImages = await _picker.pickMultiImage();
+    final List<XFile>? selectedImages = await _picker.pickMultiImage(
+      imageQuality: 50
+    );
     if(selectedImages!=null){
       setState(() {
         type=PostType.image;
@@ -169,8 +171,11 @@ Widget  vidImage({required String image, required String text, required  Functio
 
   }
 
-  void pickVideo({ImageSource imageSource =ImageSource.camera })async{
-    final XFile? selectedVideo = await _picker.pickVideo(source: imageSource);
+  void pickVideo({ImageSource imageSource =ImageSource.gallery })async{
+    final XFile? selectedVideo = await _picker.pickVideo(
+        source: imageSource,
+      maxDuration: const Duration(seconds: 60)
+    );
     if(selectedVideo!=null){
       setState(() {
         path=selectedVideo;
