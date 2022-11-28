@@ -39,15 +39,8 @@ class SavedPostTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-          post.contentType==PostType.video?
-          Padding(
-            padding: EdgeInsets.only(
-                top: 20.h,
-                left: 20.w,
-                bottom: 20.h
-            ),
-            child: videoWid(),
-          ):post.contentType==PostType.image? Padding(
+          post.contentType==PostType.text?
+           const SizedBox():post.contentType==PostType.image? Padding(
             padding: EdgeInsets.only(
                 top: 20.h,
                 left: 20.w,
@@ -60,7 +53,14 @@ class SavedPostTile extends StatelessWidget {
                 width: 113.w,
                 post.contentUrl
             ),
-          ): SizedBox(width: 12.w,),
+          ): Padding(
+            padding: EdgeInsets.only(
+                top: 20.h,
+                left: 20.w,
+                bottom: 20.h
+            ),
+            child: videoWid(),
+          ),
               const SizedBox(width:12 ,),
               Expanded(
                 child: SizedBox(

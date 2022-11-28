@@ -7,6 +7,7 @@ import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/views/screens/vblog/post_details.dart';
+import 'package:platterwave/views/screens/vblog/shared_post.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/containers/empty_content_container.dart';
 import 'package:platterwave/views/widget/tiles/saved_post_tile.dart';
@@ -39,7 +40,7 @@ class SaveScreen extends StatelessWidget {
                   return SavedPostTile(
                     post: postData,
                     onTap: (){
-                      nav(context, PostDetails(post: postData));
+                      nav(context, SharedPost(id: postData.postId,));
                     },
                   );
                 },
