@@ -10,7 +10,7 @@
 	</array>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>https://platterwave.page.link</string>
+		<string>platterwave.page.link</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array/>

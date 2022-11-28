@@ -25,11 +25,14 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb1153390212237536</string>
+				<string>com.googleusercontent.apps.487663652425-gm13v6q6c6g2pjvjuqvjtfso5l3f3h3p</string>
 			</array>
 		</dict>
+		<dict/>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
@@ -39,6 +42,10 @@
 	<string>99f732cb2c8a23e1f1147c744ea47e68</string>
 	<key>FacebookDisplayName</key>
 	<string>platterwise</string>
+	<key>FirebaseDynamicLinksCustomDomains</key>
+	<array>
+		<string>https://platterwave.page.link/chisom</string>
+	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
