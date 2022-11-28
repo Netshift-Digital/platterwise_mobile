@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -219,28 +220,48 @@ class VBlogViewModel extends BaseViewModel{
     return comments;
   }
 
-  Future<String?> uploadImage(String filePath)async{
+  Future<String?> uploadImage({Uint8List? memory,String? filePath})async{
     try{
-      File file = File(filePath);
-      var data = await firebaseStorage.ref("vBlog").putData(file.readAsBytesSync());
-      var url = await data.ref.getDownloadURL();
-      return url;
+      var dat = "${DateTime.now().microsecondsSinceEpoch}.png";
+      if(memory!=null){
+        var data = await firebaseStorage.ref().child(dat).putData(memory);
+        var url = await data.ref.getDownloadURL();
+        return url;
+      }else{
+        File file = File(filePath!);
+        var data = await firebaseStorage.ref().child(file.path).putData(file.readAsBytesSync());
+        var url = await data.ref.getDownloadURL();
+        return url;
+      }
+
     }on FirebaseException catch (e){
       setState(AppState.idle);
     }
     return null;
   }
 
-  Future<bool?> createPost(PostData postData,{String? imagePath})async{
-    String? contentUrl = "";
+  Future<bool?> createPost(PostData postData,{String? imagePath,Uint8List? thumbnail})async{
+    String contentUrl = "";
+    String type = postData.contentType;
     try{
       setState(AppState.busy);
       if(imagePath!=null){
-        contentUrl = await  uploadImage(imagePath!);
+       var  uploadedImage = await  uploadImage(filePath: imagePath);
+       if(uploadedImage!=null){
+         contentUrl=uploadedImage!;
+       }
+      }
+      if(thumbnail!=null){
+        var uploadedThumbnail =  await uploadImage(memory: thumbnail);
+        if(uploadedThumbnail!=null){
+          type=uploadedThumbnail!;
+        }
       }
 
+
       var post = postData.copyWith(
-        contentUrl: contentUrl
+        contentUrl: contentUrl,
+        contentType: type
       );
      var data = await vBlogService.createPost(post);
      if(data!=null){

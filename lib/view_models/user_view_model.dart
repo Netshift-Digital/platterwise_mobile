@@ -144,7 +144,8 @@ class UserViewModel extends BaseViewModel{
   Future<String?> uploadImage(String filePath,{String username="platerwise"})async{
    try{
      File file = File(filePath);
-     var data = await firebaseStorage.ref("profile").child(username).putData(file.readAsBytesSync());
+     var d = "${DateTime.now().microsecondsSinceEpoch}.png";
+     var data = await firebaseStorage.ref().child(d).putData(file.readAsBytesSync());
      var url = await data.ref.getDownloadURL();
      return url;
    }on FirebaseException catch (e){

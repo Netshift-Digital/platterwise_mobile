@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:platterwave/views/widget/appbar/appbar.dart';
+import 'package:chewie/chewie.dart';
+import 'package:platterwave/res/color.dart';
 import 'package:video_player/video_player.dart';
-
 
 
 class VideoPlay extends StatefulWidget {
@@ -14,6 +14,7 @@ class VideoPlay extends StatefulWidget {
 
 class _VideoPlayState extends State<VideoPlay> {
   late VideoPlayerController _controller;
+  late  ChewieController chewieController;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,26 +22,14 @@ class _VideoPlayState extends State<VideoPlay> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _controller.value.isPlaying
-                ? _controller.pause()
-                : _controller.play();
-          });
-        },
-        child: Icon(
-          _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+        body: _controller.value.isInitialized
+            ? Chewie(
+              controller: chewieController,
+            ) : const Center(
+              child:  CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation(AppColor.p300),
         ),
-      ),
-        body: Center(
-          child: _controller.value.isInitialized
-              ? AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            child: VideoPlayer(_controller),
-          )
-              : Container(),
-        )
+            )
     );
   }
 
@@ -48,15 +37,19 @@ class _VideoPlayState extends State<VideoPlay> {
   @override
   void initState() {
     super.initState();
-    print(widget.url);
     _controller = VideoPlayerController.network(
       widget.url
-        //"https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"
       )
       ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        chewieController = ChewieController(
+          videoPlayerController: _controller,
+          autoPlay: true,
+          looping: true,
+        );
         setState(() {});
       });
+
+   // _controller.initialize();
   }
 
   @override

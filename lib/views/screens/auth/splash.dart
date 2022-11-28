@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context)=>const BottomNav()));
           }else{
-            nav(context, Login(),remove: true);
+            nav(context, const SignInSignUp(),remove: true);
           }
         });
 
@@ -82,3 +82,6 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 }
+
+//Masterkeys1$
+//chi30037838

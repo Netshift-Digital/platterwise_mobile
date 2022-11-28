@@ -1,8 +1,10 @@
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hashtager/widgets/hashtag_text_field.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:platterwave/constant/post_type.dart';
 import 'package:platterwave/model/request_model/post_data.dart';
@@ -18,6 +20,7 @@ import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/dialog/alert_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class CreatePost extends StatefulWidget {
   const CreatePost({Key? key}) : super(key: key);
@@ -30,6 +33,7 @@ class _CreatePostState extends State<CreatePost> {
   String type = PostType.text;
   final ImagePicker _picker = ImagePicker();
   XFile? path;
+  Uint8List? thumbnail;
   TextEditingController commentController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -117,20 +121,23 @@ class _CreatePostState extends State<CreatePost> {
                     width: forty,),
                    const SizedBox(width:twentyFour ,),
                     Expanded(
-                            child: TextFormField(
+                            child: HashTagTextField(
                               controller: commentController,
-                            maxLines: null,
-                            minLines: null,
-                            decoration: const InputDecoration(
-                            hintText: 'Share your ideas here!',
-                            border: InputBorder.none
-                          ),
-                        )
-                    )
+                              maxLines: null,
+                              minLines: null,
+                              decoration: const InputDecoration(
+                                  hintText: 'Share your ideas here!',
+                                  border: InputBorder.none
+                              ),
+                              decoratedStyle: const TextStyle(fontSize: 14, color: AppColor.p300),
+                              basicStyle: const TextStyle(fontSize: 14, color: Colors.black),
+                            ),
+                    ),
+
                   ],
                 ),
                const SizedBox(height: 50,),
-                path==null?const SizedBox():type==PostType.video?videoWid():imageList()
+                path==null?const SizedBox():type==PostType.image?imageList():videoWid()
               ],
             ),
           ),
@@ -174,13 +181,21 @@ Widget  vidImage({required String image, required String text, required  Functio
   void pickVideo({ImageSource imageSource =ImageSource.gallery })async{
     final XFile? selectedVideo = await _picker.pickVideo(
         source: imageSource,
-      maxDuration: const Duration(seconds: 60)
+      maxDuration: const Duration(seconds: 40)
     );
     if(selectedVideo!=null){
       setState(() {
         path=selectedVideo;
         type=PostType.video;
       });
+      final uint8list = await VideoThumbnail.thumbnailData(
+        video: selectedVideo.path,
+        imageFormat: ImageFormat.JPEG,
+        maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+        quality: 25,
+      );
+      thumbnail=uint8list;
+      setState(() {});
     }
   }
   Widget  videoWid() {
@@ -188,11 +203,16 @@ Widget  vidImage({required String image, required String text, required  Functio
       height:200 ,
       width: double.maxFinite,
       decoration: BoxDecoration(
-          color: AppColor.p300,
+          color: Colors.black,
           borderRadius: BorderRadius.circular(15),
-          shape: BoxShape.rectangle
+          shape: BoxShape.rectangle,
+        image: DecorationImage(
+           image: imageProvider()
+        )
       ),
-      child:const ImageCacheR("https://www.balmoraltanks.com/images/common/video-icon-image.jpg"),
+      child:const Center(
+        child: Icon(Icons.play_circle_outline_rounded,color: Colors.white,size: 70,),
+      )
     );
   }
 
@@ -255,6 +275,7 @@ Widget  imageList() {
           contentType: type,
           contentUrl: '');
       model.createPost(postData,
+          thumbnail: thumbnail,
           imagePath: path==null?null:path!.path).
       then((value){
         model.getPost();
@@ -264,4 +285,12 @@ Widget  imageList() {
       RandomFunction.toast("Enter a text");
     }
   }
+
+ImageProvider imageProvider() {
+    if(thumbnail!=null){
+      return MemoryImage(thumbnail!);
+    }else{
+    return const NetworkImage("https://www.balmoraltanks.com/images/common/video-icon-image.jpg");
+    }
+}
 }

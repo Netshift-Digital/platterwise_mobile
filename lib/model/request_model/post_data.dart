@@ -3,6 +3,7 @@
 //     final postData = postDataFromJson(jsonString);
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 PostData postDataFromJson(String str) => PostData.fromJson(json.decode(str));
 
@@ -20,6 +21,7 @@ class PostData {
   String contentPost;
   String contentType;
   String contentUrl;
+
 
   PostData copyWith({
     int? userId,

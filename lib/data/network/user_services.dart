@@ -76,7 +76,7 @@ class UserService{
       var response =
       await client.post(Uri.parse("${baseurl}get_profile.php"), body: body, headers: {
         "Content-type": "application/json",
-      });
+      }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
       if(response.statusCode==200){
         return data;

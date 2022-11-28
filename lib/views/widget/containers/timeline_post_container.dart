@@ -1,7 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gallery_image_viewer/gallery_image_viewer.dart';
+import 'package:hashtager/widgets/hashtag_text.dart';
 import 'package:like_button/like_button.dart';
 import 'package:platterwave/constant/post_type.dart';
 import 'package:platterwave/constant/screen_constants.dart';
@@ -14,6 +17,7 @@ import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/utils/text_validation.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
@@ -48,242 +52,208 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
   Widget build(BuildContext context) {
     var blogModel = context.watch<VBlogViewModel>();
     SizeConfig.init(context);
-    return Container(
-      color: Colors.transparent,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            height: 28.h,
-          ),
-          Row(
-            children: [
-              GestureDetector(
-                onTap: (){
-                  nav(context, ViewUserProfileScreen(
-                    id: widget.post.firebaseAuthId,
-                  ));
-                },
-                child: ImageCacheCircle(widget.post.profileUrl,
-                height: 68,
-                width: 68,),
-              ),
-             const SizedBox(width: 12,),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.post.fullName,
-                    style: AppTextTheme.h3.copyWith(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  const SizedBox(height: 8,),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text("@${widget.post.username}",
-                        style: AppTextTheme.h6.copyWith(
-                            fontSize: 12,
-                            color: AppColor.g600
-                        ),),
-                     const SizedBox(width:5,),
-                     Text(RandomFunction.timeAgo(widget.post.timestamp.toString()),
-                     style: AppTextTheme.h6.copyWith(
-                       fontSize: 11,
-                       fontWeight: FontWeight.w500,
-                       color: AppColor.g600
-                     ),),
-                    ],
-                  )
-                ],
-              ),
-              const Spacer(),
-             // SvgPicture.asset("assets/icon/option.svg"),
-              PopupMenuButton<int>(
-                onSelected: (e){
-                  if(e==1){
-                    nav(context, ReportPost(postId: widget.post.postId));
-                  }
-                },
-                itemBuilder: (ctx) => [
-                  PopupMenuItem(
-                    value: 0,
-                    onTap: (){
-                      context.read<VBlogViewModel>().savePost(widget.post);
-                    },
-                    // row has two child icon and text
-                    child: Row(
-                      children:const [
-                        Icon(Icons.bookmark),
-                        SizedBox(
-                          // sized box with width 10
-                          width: 10,
-                        ),
-                        Text("Save")
-                      ],
-                    ),
-                  ),
-
-                  PopupMenuItem(
-                    value: 1,
-                    onTap: (){
-
-                    },
-                    // row has two child icon and text
-                    child: Row(
-                      children:const [
-                        Icon(Icons.flag),
-                        SizedBox(
-                          // sized box with width 10
-                          width: 10,
-                        ),
-                        Text("Report Post")
-                      ],
-                    ),
-                  ),
-                ],
-               // offset:const Offset(0, 100),
-               // color: Colors.grey,
-                elevation: 2,
-              ),
-
-            ],
-          ),
-          SizedBox(
-            height: 12.h,
-          ),
-         RichText(
-             text: TextSpan(
-               children: widget.post.contentPost.split(' ').map((e) {
-                 if(e.contains('#')){
-                   return  TextSpan(
-                     recognizer:  TapGestureRecognizer()..onTap = () => nav(context, PostByTag(tag:e.toString())),
-                     text: " $e",style:AppTextTheme.h3.copyWith(
-                     color: AppColor.p200,
-                     fontWeight:FontWeight.w500,
-                   ), );
-                 }
-                 return  TextSpan(
-                   text: " $e",
-                     style:AppTextTheme.h3,
-
-                 );
-               }).toList()
-             )
-         ),
-         // ReadMoreText(
-         //   widget.post.contentPost,
-         //    style:AppTextTheme.h3 ,
-         //    trimLines: 2,
-         //    colorClickableText: Colors.pink,
-         //    trimMode: TrimMode.Line,
-         //    trimCollapsedText: ' Show more',
-         //    trimExpandedText: ' Show less',
-         //    lessStyle:const TextStyle(fontSize: 14, fontWeight: FontWeight.bold) ,
-         //    moreStyle: const  TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-         //  ),
-         //  widget.post.tags.isEmpty?const SizedBox():
-         //      Wrap(
-         //        children: widget.post.tags.map((e){
-         //          return Padding(
-         //            padding: const EdgeInsets.symmetric(horizontal: 2),
-         //            child: InkWell(
-         //              onTap: (){
-         //               nav(context, PostByTag(tag:e.toString()));
-         //              },
-         //              child: Text(
-         //                showHashtag(e)+
-         //                e.toString(),
-         //              style: AppTextTheme.h1.copyWith(
-         //                color: AppColor.p200,
-         //                fontSize: 14
-         //              ),),
-         //            ),
-         //          );
-         //        }).toList(),
-         //      ),
-          SizedBox(height: 11.h,),
-          widget.post.contentType==PostType.video?
-              videoWid():widget.post.contentType==PostType.image?
-          GestureDetector(
-            onTap: (){
-              nav(context, FullImage(imageUrl: widget.post.contentUrl));
-            },
-            child: Container(
-              height: 239.h,
-              width: 343.w,
-              decoration: BoxDecoration(
-                color: AppColor.p300,
-                borderRadius: BorderRadius.circular(15),
-                shape: BoxShape.rectangle
-              ),
-              child: ImageCacheR(widget.post.contentUrl),
+    return GestureDetector(
+      onTap: (){
+        if(widget.tap){
+          nav(context, PostDetails(post: widget.post));
+        }
+      },
+      child: Container(
+        color: Colors.transparent,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 28.h,
             ),
-          ):const SizedBox(),
-          SizedBox(height: 18.h,),
-          Row(
-            children: [
-              CustomAppIcon(
-                onTap: (){
-
-                },
-                icon: "assets/icon/like.svg",
-                like:  LikeButton(
-                  isLiked:widget.post.liked.isNotEmpty,
-                  onTap: (v)async{
-                    if(blogModel.checkIsLiked(widget.post.postId)==false){
-                      blogModel.likePost(widget.post,context.read<UserViewModel>().user!.userProfile);
-                      setState(() {
-                        widget.post.likeCount=(int.parse(widget.post.likeCount)+1).toString();
-                        widget.post.liked=['yes'];
-                      });
-                    }else{
-
-                    }
-                    setState(() {});
-                    return null;
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: (){
+                    nav(context, ViewUserProfileScreen(
+                      id: widget.post.firebaseAuthId,
+                    ));
                   },
-                ) ,
-                count:widget.post.likeCount,
-              ),
-             const Spacer(flex: 1,),
-              CustomAppIcon(
-                onTap: (){
-                  if(widget.tap){
-                    nav(context, PostDetails(post: widget.post));
-                  }
-                },
-                icon: "assets/icon/comment.svg",
-                count: widget.post.commentCount,
-              ),
-              const Spacer(flex: 1,),
-              CustomAppIcon(
-                onTap: (){
-                  DynamicLink.createLink(widget.post.postId)
-                      .then((value){
-                    if(value!=null){
-                      Share.share(value);
+                  child: ImageCacheCircle(widget.post.profileUrl,
+                  height: 68,
+                  width: 68,),
+                ),
+               const SizedBox(width: 12,),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.post.fullName,
+                      style: AppTextTheme.h3.copyWith(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(height: 8,),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text("@${widget.post.username}",
+                          style: AppTextTheme.h6.copyWith(
+                              fontSize: 12,
+                              color: AppColor.g600
+                          ),),
+                       const SizedBox(width:5,),
+                       Text(RandomFunction.timeAgo(widget.post.timestamp.toString()),
+                       style: AppTextTheme.h6.copyWith(
+                         fontSize: 11,
+                         fontWeight: FontWeight.w500,
+                         color: AppColor.g600
+                       ),),
+                      ],
+                    )
+                  ],
+                ),
+                const Spacer(),
+               // SvgPicture.asset("assets/icon/option.svg"),
+                PopupMenuButton<int>(
+                  onSelected: (e){
+                    if(e==1){
+                      nav(context, ReportPost(postId: widget.post.postId));
                     }
-                  });
+                  },
+                  itemBuilder: (ctx) => [
+                    PopupMenuItem(
+                      value: 0,
+                      onTap: (){
+                        context.read<VBlogViewModel>().savePost(widget.post);
+                      },
+                      // row has two child icon and text
+                      child: Row(
+                        children:const [
+                          Icon(Icons.bookmark),
+                          SizedBox(
+                            // sized box with width 10
+                            width: 10,
+                          ),
+                          Text("Save")
+                        ],
+                      ),
+                    ),
 
-                },
-                icon: "assets/icon/share.svg",
-                count:"",
+                    PopupMenuItem(
+                      value: 1,
+                      onTap: (){
+
+                      },
+                      // row has two child icon and text
+                      child: Row(
+                        children:const [
+                          Icon(Icons.flag),
+                          SizedBox(
+                            // sized box with width 10
+                            width: 10,
+                          ),
+                          Text("Report Post")
+                        ],
+                      ),
+                    ),
+                  ],
+                 // offset:const Offset(0, 100),
+                 // color: Colors.grey,
+                  elevation: 2,
+                ),
+
+              ],
+            ),
+            SizedBox(
+              height: 12.h,
+            ),
+            HashTagText(
+              text:widget.post.contentPost ,
+              decoratedStyle: AppTextTheme.h3.copyWith(
+                color: AppColor.p200,
+                fontWeight:FontWeight.w500,
               ),
-             const Spacer(
-                flex: 3,
-              )
-            ],
-          ),
-          SizedBox(height: 18.h,),
-          const Divider(
-            color: AppColor.g50,
-            thickness: 1,
-          )
-        ],
+              basicStyle: AppTextTheme.h3,
+              onTap: (text) {
+                nav(context, PostByTag(tag:text.toString()));
+              },
+            ),
+            SizedBox(height: 11.h,),
+            widget.post.contentType==PostType.text?const SizedBox():
+                widget.post.contentType==PostType.image?
+            GestureDetector(
+              onTap: (){
+                showImageViewer(context, CachedNetworkImageProvider(widget.post.contentUrl), onViewerDismissed: () {
+                });
+              },
+              child: Container(
+                height: 239.h,
+                width: 343.w,
+                decoration: BoxDecoration(
+                  color: AppColor.p300,
+                  borderRadius: BorderRadius.circular(15),
+                  shape: BoxShape.rectangle
+                ),
+                child: ImageCacheR(widget.post.contentUrl),
+              ),
+            ):videoWid(),
+            SizedBox(height: 18.h,),
+            Row(
+              children: [
+                CustomAppIcon(
+                  icon: "assets/icon/like.svg",
+                  like:  LikeButton(
+                    isLiked:widget.post.liked.isNotEmpty,
+                    onTap: (v)async{
+                      if(blogModel.checkIsLiked(widget.post.postId)==false){
+                        blogModel.likePost(widget.post,context.read<UserViewModel>().user!.userProfile);
+                        setState(() {
+                          widget.post.likeCount=(int.parse(widget.post.likeCount)+1).toString();
+                          widget.post.liked=['yes'];
+                        });
+                      }else{
+
+                      }
+                      setState(() {});
+                      return null;
+                    },
+                  ) ,
+                  count:widget.post.likeCount,
+                ),
+               const Spacer(flex: 1,),
+                CustomAppIcon(
+                  onTap: (){
+                    if(widget.tap){
+                      nav(context, PostDetails(post: widget.post));
+                    }
+                  },
+                  icon: "assets/icon/comment.svg",
+                  count: widget.post.commentCount,
+                ),
+                const Spacer(flex: 1,),
+                CustomAppIcon(
+                  onTap: (){
+                    DynamicLink.createLink(widget.post.postId)
+                        .then((value){
+                      if(value!=null){
+                        Share.share(value);
+                      }
+                    });
+
+                  },
+                  icon: "assets/icon/share.svg",
+                  count:"",
+                ),
+               const Spacer(
+                  flex: 3,
+                )
+              ],
+            ),
+            SizedBox(height: 18.h,),
+            const Divider(
+              color: AppColor.g50,
+              thickness: 1,
+            )
+          ],
+        ),
       ),
     );
   }
@@ -297,11 +267,21 @@ Widget  videoWid() {
         height: 239.h,
         width: 343.w,
         decoration: BoxDecoration(
-            color: AppColor.p300,
+            color: Colors.black,
             borderRadius: BorderRadius.circular(15),
             shape: BoxShape.rectangle
         ),
-        child:ImageCacheR(vidImage),
+        child:Stack(
+          children: [
+            TextValidator.isValidUrl(widget.post.contentType)?ImageCacheR(widget.post.contentType,fit: false,)
+            :const ImageCacheR("https://www.balmoraltanks.com/images/common/video-icon-image.jpg",),
+            TextValidator.isValidUrl(widget.post.contentType)?SizedBox(
+                height: 239.h,
+                width: 343.w,
+                child: const Center(child:  Icon(Icons.play_circle_outline_rounded,color: Colors.white,size: 90,)))
+                :const SizedBox()
+          ],
+        ),
       ),
     );
 }
