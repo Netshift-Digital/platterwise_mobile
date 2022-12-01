@@ -192,7 +192,7 @@ Widget  vidImage({required String image, required String text, required  Functio
         video: selectedVideo.path,
         imageFormat: ImageFormat.JPEG,
         maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
-        quality: 25,
+        quality: 50,
       );
       thumbnail=uint8list;
       setState(() {});

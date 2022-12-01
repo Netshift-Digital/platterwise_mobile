@@ -5,6 +5,7 @@ import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/utils/text_validation.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/widget/containers/timeline_post_container.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
@@ -133,7 +134,17 @@ class SavedPostTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
           shape: BoxShape.rectangle
       ),
-      child:ImageCacheR(vidImage),
+      child:Stack(
+        children: [
+          TextValidator.isValidUrl(post.contentType)?ImageCacheR(post.contentType,fit: true,)
+              :const ImageCacheR("https://www.balmoraltanks.com/images/common/video-icon-image.jpg",),
+          TextValidator.isValidUrl(post.contentType)?SizedBox(
+              height: 239.h,
+              width: 343.w,
+              child: const Center(child:  Icon(Icons.play_circle_outline_rounded,color: Colors.white,size: 50,)))
+              :const SizedBox()
+        ],
+      ),
     );
   }
 }

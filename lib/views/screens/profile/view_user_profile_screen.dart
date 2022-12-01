@@ -310,7 +310,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                         child: TabBarView(
                           children: [
                             ViewPostsPage(post: myPost,),
-                            ViewLikesPage(),
+                            ViewLikesPage(id: widget.id,),
                           ],)
                     )
                   ],

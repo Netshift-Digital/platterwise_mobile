@@ -116,10 +116,14 @@ class _RegisterState extends State<Register> {
                       Text("Confirm password",style: AppTextTheme.hint),
                       const SizedBox(height: hintSpacing,),
                       Field(
-                        controller: _password,
+                        controller: _confirmPassword,
                         hint: "••••••••••••••",
                         isPassword: true,
-                        validate: FieldValidator.minLength(3),
+                        validate: (e){
+                          if(_confirmPassword.text!=_password.text){
+                            return "password does not match";
+                          }
+                        },
                       ),
                       const SizedBox(height: forty,),
                       PlatButton(

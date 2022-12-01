@@ -27,6 +27,7 @@ import 'package:platterwave/views/screens/vblog/report_screen.dart';
 import 'package:platterwave/views/screens/vblog/video_player.dart';
 import 'package:platterwave/views/widget/containers/image_view.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
+import 'package:platterwave/views/widget/dialog/alert_dialog.dart';
 import 'package:platterwave/views/widget/icon/custom_app_icon.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
@@ -116,6 +117,15 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                   onSelected: (e){
                     if(e==1){
                       nav(context, ReportPost(postId: widget.post.postId));
+                    }else if(e==3){
+                      CustomAlert(
+                          context: context,
+                          title: "Delete post",
+                          body: "Are you sure you want to delete this post",
+                          onTap: (){
+                            blogModel.deletePost(widget.post);
+                          }
+                      ).show();
                     }
                   },
                   itemBuilder: (ctx) => [
@@ -137,7 +147,24 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                       ),
                     ),
 
-                    PopupMenuItem(
+                   FirebaseAuth.instance.currentUser!.uid==widget.post.firebaseAuthID?
+                   PopupMenuItem(
+                     value: 3,
+                     onTap: (){
+
+                     },
+                     // row has two child icon and text
+                     child: Row(
+                       children:const [
+                         Icon(Icons.delete),
+                         SizedBox(
+                           // sized box with width 10
+                           width: 10,
+                         ),
+                         Text("Delete post")
+                       ],
+                     ),
+                   ) :PopupMenuItem(
                       value: 1,
                       onTap: (){
 
@@ -154,6 +181,8 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                         ],
                       ),
                     ),
+
+
                   ],
                  // offset:const Offset(0, 100),
                  // color: Colors.grey,
@@ -181,8 +210,14 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                 widget.post.contentType==PostType.image?
             GestureDetector(
               onTap: (){
-                showImageViewer(context, CachedNetworkImageProvider(widget.post.contentUrl), onViewerDismissed: () {
-                });
+                showImageViewer(
+                    context,
+                    CachedNetworkImageProvider(widget.post.contentUrl),
+                    onViewerDismissed: () {
+                },
+                  useSafeArea: true,
+                  swipeDismissible: true
+                );
               },
               child: Container(
                 height: 239.h,
@@ -231,7 +266,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                 const Spacer(flex: 1,),
                 CustomAppIcon(
                   onTap: (){
-                    DynamicLink.createLink(widget.post.postId)
+                    DynamicLink.createLink(widget.post)
                         .then((value){
                       if(value!=null){
                         Share.share(value);
@@ -273,7 +308,7 @@ Widget  videoWid() {
         ),
         child:Stack(
           children: [
-            TextValidator.isValidUrl(widget.post.contentType)?ImageCacheR(widget.post.contentType,fit: false,)
+            TextValidator.isValidUrl(widget.post.contentType)?ImageCacheR(widget.post.contentType,fit: true,)
             :const ImageCacheR("https://www.balmoraltanks.com/images/common/video-icon-image.jpg",),
             TextValidator.isValidUrl(widget.post.contentType)?SizedBox(
                 height: 239.h,

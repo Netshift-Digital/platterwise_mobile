@@ -50,6 +50,19 @@ class VBlogViewModel extends BaseViewModel{
     return null;
   }
 
+  Future<List<Post>?> getLikedPost(String id)async{
+    try{
+      var data = await vBlogService.getLikedPost(id);
+      if(data!=null){
+        var post = PostModel.fromJson(data as Map);
+        return post.allUsersPosts;
+      }
+    }catch(e){
+      setState(AppState.idle);
+    }
+    return null;
+  }
+
 
   Future<List<Post>?> getMyPost()async{
     try{
@@ -178,6 +191,23 @@ class VBlogViewModel extends BaseViewModel{
            profilePic: userData.profileUrl
        ));
      }
+     return data;
+
+    }catch(e){
+      setState(AppState.idle);
+    }
+  }
+
+  Future<dynamic> deletePost(Post post)async{
+    try{
+      var data = await vBlogService.deletePost(int.parse(post.postId));
+      if(data!=null){
+        posts.remove(post);
+        myPosts.remove(post);
+        myLikes.remove(post);
+        notifyListeners();
+      }
+      return data;
 
     }catch(e){
       setState(AppState.idle);

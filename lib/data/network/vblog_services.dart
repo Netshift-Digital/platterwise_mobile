@@ -43,6 +43,35 @@ class VBlogService{
     return null;
   }
 
+
+  Future<dynamic> getLikedPost(String id) async {
+    var body = jsonEncode({
+      "firebaseAuthID":id
+    });
+    try {
+      var response =
+      await client.post(Uri.parse("${baseurl}posts_likedbyUser.php"),
+          body: body, headers: {
+            "Content-type": "application/json",
+          });
+      var data = jsonDecode(response.body);
+      if(response.statusCode==200){
+        return data;
+      }else{
+        RandomFunction.toast(data['status']??"");
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
   Future<dynamic> getUserPost(String id) async {
     var body = jsonEncode({
       "firebaseAuthID":id
@@ -555,6 +584,37 @@ class VBlogService{
       var data = jsonDecode(response.body);
       if(response.statusCode==200){
         RandomFunction.toast("Report has been submited");
+        return data;
+      }else{
+
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+  Future<dynamic> deletePost(int postId) async {
+    var data = {
+      "firebaseAuthID":FirebaseAuth.instance.currentUser!.uid,
+      "post_id":postId,
+    };
+    var body = jsonEncode(data);
+    try {
+      var response =
+      await client.post(Uri.parse("https://platterwise.com/jhome/delete_post.php"),
+          body: body, headers: {
+            "Content-type": "application/json",
+          });
+      var data = jsonDecode(response.body);
+      if(response.statusCode==200){
+        RandomFunction.toast("Post deleted");
         return data;
       }else{
 

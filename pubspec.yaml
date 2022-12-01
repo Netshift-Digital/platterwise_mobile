@@ -77,11 +77,13 @@ dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icon/Icon.png"
+  image_path: "assets/images/appicon2.png"
+  remove_alpha_ios: true
   min_sdk_android: 21
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.10.0
+  flutter_native_splash:
+  flutter_launcher_icons: ^0.11.0
   flutter_test:
     sdk: flutter
 

@@ -28,7 +28,7 @@ class _ReportState extends State<ReportPost> {
       body:Column(
         children: [
           Expanded(child:ListView(
-            children: reason.map((e){
+            children: reason().map((e){
               return ListTile(
                 title: Text(e),
                 trailing: Radio<String>(

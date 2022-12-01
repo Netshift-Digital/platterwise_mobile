@@ -73,7 +73,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               }
             ),
             SizedBox(height: 4.h,),
-           const Text(" User would not ba able to follow your account"),
+           const Text(" User would not be able to follow your account"),
             SizedBox(height: 32.h,),
             CustomSwitchTile(
               text: "Pause notification",

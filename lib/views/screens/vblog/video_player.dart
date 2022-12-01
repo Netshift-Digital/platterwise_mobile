@@ -22,14 +22,19 @@ class _VideoPlayState extends State<VideoPlay> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
       ),
-        body: _controller.value.isInitialized
-            ? Chewie(
-              controller: chewieController,
-            ) : const Center(
-              child:  CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(AppColor.p300),
-        ),
-            )
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 20,top: 10),
+            child: _controller.value.isInitialized
+                ? Chewie(
+                  controller: chewieController,
+                ) : const Center(
+                  child:  CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(AppColor.p300),
+            ),
+                ),
+          ),
+        )
     );
   }
 
