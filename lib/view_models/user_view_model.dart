@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:platterwave/common/base_view_model.dart';
+import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/data/network/user_services.dart';
 import 'package:platterwave/model/profile/user_data.dart';
 import 'package:platterwave/model/request_model/auth_medthod.dart';
@@ -86,6 +87,8 @@ class UserViewModel extends BaseViewModel{
         if(userCredential.user!=null){
           return await checkUser(userCredential);
         }
+      }else{
+        setState(AppState.idle);
       }
 
     }on FirebaseAuthException catch (e){
@@ -133,6 +136,7 @@ class UserViewModel extends BaseViewModel{
         return checkUser(userCredential);
       }
     } else {
+      setState(AppState.idle);
       return null;
     }
     return null;
@@ -214,16 +218,31 @@ class UserViewModel extends BaseViewModel{
     return null;
   }
 
+  Future<UserData?> getUserCacheData()async{
+    try{
+      user = LocalStorage.getUser();
+      if(user!=null){
+        getMyProfile();
+      }
+      return user;
+    }catch(e){
+      //
+    }
+    return null;
+  }
+
   Future<UserData?> getMyProfile()async{
     try{
       var data = await userService.getUser(FirebaseAuth.instance.currentUser!.uid);
       if(data!=null){
         var userData = UserData.fromJson(data);
-        user = UserData(status: userData.status,
+        var userInfo = UserData(status: userData.status,
             userProfile: userData.userProfile.copyWith(
-              firebaseAuthID:FirebaseAuth.instance.currentUser!.uid
+                firebaseAuthID:FirebaseAuth.instance.currentUser!.uid
             )
         );
+        LocalStorage.saveUser(userInfo.toJson());
+        user = userInfo;
         notifyListeners();
         return user;
       }

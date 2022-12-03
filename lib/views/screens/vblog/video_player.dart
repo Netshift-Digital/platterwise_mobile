@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:chewie/chewie.dart';
 import 'package:platterwave/res/color.dart';
@@ -6,7 +8,8 @@ import 'package:video_player/video_player.dart';
 
 class VideoPlay extends StatefulWidget {
   final String url;
-  const VideoPlay({Key? key, required this.url}) : super(key: key);
+  final bool isLocal;
+  const VideoPlay({Key? key, required this.url,  this.isLocal=false}) : super(key: key);
 
   @override
   State<VideoPlay> createState() => _VideoPlayState();
@@ -42,17 +45,31 @@ class _VideoPlayState extends State<VideoPlay> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(
-      widget.url
+    if(widget.isLocal){
+      _controller = VideoPlayerController.file(
+          File(widget.url)
+      )..initialize().then((_) {
+          chewieController = ChewieController(
+            videoPlayerController: _controller,
+            autoPlay: true,
+            looping: true,
+          );
+          setState(() {});
+        });
+    }else{
+      _controller = VideoPlayerController.network(
+          widget.url
       )
-      ..initialize().then((_) {
-        chewieController = ChewieController(
-          videoPlayerController: _controller,
-          autoPlay: true,
-          looping: true,
-        );
-        setState(() {});
-      });
+        ..initialize().then((_) {
+          chewieController = ChewieController(
+            videoPlayerController: _controller,
+            autoPlay: true,
+            looping: true,
+          );
+          setState(() {});
+        });
+    }
+
 
    // _controller.initialize();
   }

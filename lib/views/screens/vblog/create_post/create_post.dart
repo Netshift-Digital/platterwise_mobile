@@ -13,9 +13,11 @@ import 'package:platterwave/res/spacing.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/enum/app_state.dart';
+import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
+import 'package:platterwave/views/screens/vblog/video_player.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/dialog/alert_dialog.dart';
@@ -179,6 +181,7 @@ Widget  vidImage({required String image, required String text, required  Functio
   }
 
   void pickVideo({ImageSource imageSource =ImageSource.gallery })async{
+    var size = MediaQuery.of(context).size;
     final XFile? selectedVideo = await _picker.pickVideo(
         source: imageSource,
       maxDuration: const Duration(seconds: 40)
@@ -190,29 +193,37 @@ Widget  vidImage({required String image, required String text, required  Functio
       });
       final uint8list = await VideoThumbnail.thumbnailData(
         video: selectedVideo.path,
-        imageFormat: ImageFormat.JPEG,
-        maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
-        quality: 50,
+        imageFormat: ImageFormat.PNG,
+       // maxWidth:size.width.toInt(), // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+        quality: 100,
+        //maxHeight: 239,
+
       );
       thumbnail=uint8list;
       setState(() {});
     }
   }
   Widget  videoWid() {
-    return Container(
-      height:200 ,
-      width: double.maxFinite,
-      decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(15),
-          shape: BoxShape.rectangle,
-        image: DecorationImage(
-           image: imageProvider()
+    return GestureDetector(
+      onTap: (){
+        nav(context, VideoPlay(url: path!.path,isLocal: true,));
+      },
+      child: Container(
+        height:200 ,
+        width: double.maxFinite,
+        decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(15),
+            shape: BoxShape.rectangle,
+          image: DecorationImage(
+             image: imageProvider(),
+            fit: BoxFit.cover
+          )
+        ),
+        child:const Center(
+          child: Icon(Icons.play_circle_outline_rounded,color: Colors.white,size: 70,),
         )
       ),
-      child:const Center(
-        child: Icon(Icons.play_circle_outline_rounded,color: Colors.white,size: 70,),
-      )
     );
   }
 

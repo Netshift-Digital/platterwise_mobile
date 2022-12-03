@@ -2,9 +2,11 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:linkfy_text/linkfy_text.dart';
+import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/model/profile/user_data.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/res/color.dart';
@@ -49,8 +51,8 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
     SizeConfig.init(context);
     return Scaffold(
       appBar: CustomAppBar(
+        showMenuB: (widget.id==null||widget.id==FirebaseAuth.instance.currentUser!.uid),
         onTap: (){
-          if(widget.id==null) {
             showBottomSheet(
               context: context,
               enableDrag: true,
@@ -104,8 +106,10 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                           onTap: () {
                             nav(context, Login(),remove: true);
                             context.read<PageViewModel>().setIndex(0);
+                            FirebaseMessaging.instance.unsubscribeFromTopic(FirebaseAuth.instance.currentUser!.uid);
                             Future.delayed(const Duration(milliseconds: 500),(){
                               FirebaseAuth.instance.signOut();
+                              LocalStorage.clear();
                             });
 
                           },
@@ -116,7 +120,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                 );
           }
           );
-          }
+
         },
         trailing: "assets/icon/option.svg",
       ),

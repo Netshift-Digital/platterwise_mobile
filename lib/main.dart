@@ -8,6 +8,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:platterwave/constant/index.dart';
+import 'package:platterwave/constant/keys.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/locator.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
@@ -27,6 +28,7 @@ void main()async {
   Directory tempDir = await getApplicationDocumentsDirectory();
   Hive.init(tempDir.path);
   await Hive.openBox("post");
+  await Hive.openBox(authKey);
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,

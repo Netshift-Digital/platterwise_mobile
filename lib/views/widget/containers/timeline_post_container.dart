@@ -8,7 +8,7 @@ import 'package:hashtager/widgets/hashtag_text.dart';
 import 'package:like_button/like_button.dart';
 import 'package:platterwave/constant/post_type.dart';
 import 'package:platterwave/constant/screen_constants.dart';
-import 'package:platterwave/data/local/post.dart';
+import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
@@ -300,7 +300,7 @@ Widget  videoWid() {
       },
       child: Container(
         height: 239.h,
-        width: 343.w,
+        width:double.maxFinite,
         decoration: BoxDecoration(
             color: Colors.black,
             borderRadius: BorderRadius.circular(15),
@@ -308,12 +308,12 @@ Widget  videoWid() {
         ),
         child:Stack(
           children: [
-            TextValidator.isValidUrl(widget.post.contentType)?ImageCacheR(widget.post.contentType,fit: true,)
+            TextValidator.isValidUrl(widget.post.contentType)?ImageCacheR(widget.post.contentType,fit: true,blend: 0.5,)
             :const ImageCacheR("https://www.balmoraltanks.com/images/common/video-icon-image.jpg",),
             TextValidator.isValidUrl(widget.post.contentType)?SizedBox(
                 height: 239.h,
                 width: 343.w,
-                child: const Center(child:  Icon(Icons.play_circle_outline_rounded,color: Colors.white,size: 90,)))
+                child:  Center(child: SvgPicture.asset("assets/images/play-circle.svg")))
                 :const SizedBox()
           ],
         ),

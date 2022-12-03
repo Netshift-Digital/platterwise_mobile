@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:platterwave/data/local/post.dart';
+import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
@@ -17,7 +17,7 @@ class SaveScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var post = LocalPost().getPost();
+    var post = LocalStorage().getPost();
     SizeConfig.init(context);
     return Scaffold(
       appBar: appBar(context),

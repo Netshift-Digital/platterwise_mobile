@@ -9,6 +9,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double? padding;
   final String trailing;
   final void Function()? onTap;
+  final bool showMenuB;
   PreferredSizeWidget? bottom;
 
   CustomAppBar({
@@ -17,7 +18,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.automaticallyImplyLeading = true,
     required this.trailing,
     this.padding,
-    this.onTap
+
+    this.onTap,  this.showMenuB=true
   }) : super(key: key);
 
   @override
@@ -33,13 +35,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: automaticallyImplyLeading,
       centerTitle:false,
       actions: [
-        Padding(
+        showMenuB?Padding(
           padding: EdgeInsets.only(right: padding ?? 30),
           child: InkWell(
             onTap: onTap,
               child: SvgPicture.asset(trailing)
           ),
-        )
+        ):const SizedBox()
       ],
     );
   }
