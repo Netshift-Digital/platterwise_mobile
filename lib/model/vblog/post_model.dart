@@ -78,7 +78,7 @@ class Post {
       firebaseAuthID:  json['firebaseAuthID']??"",
       fullName: json['full_name']??"",
       commentReply:json['comment_reply']??"",
-      liked:json['liked']??[]
+      liked:json['liked'].runtimeType==String?['yes']:json['liked']??[]
 
   );
 

@@ -355,6 +355,7 @@ class VBlogService{
   Future<dynamic> searchUser(String search) async {
     var body = jsonEncode({
       "search_post":search,
+      "firebaseAuthID":FirebaseAuth.instance.currentUser!.uid
     });
     try {
       var response =
@@ -386,6 +387,7 @@ class VBlogService{
   Future<dynamic> getTrending(String basedOn) async {
     var body = jsonEncode({
       basedOn:basedOn,
+      "firebaseAuthID":FirebaseAuth.instance.currentUser!.uid
     });
     try {
       var response =
@@ -414,6 +416,7 @@ class VBlogService{
   Future<dynamic> getByTag(String tag) async {
     var body = jsonEncode({
       "search_tag":tag,
+      "firebaseAuthID":FirebaseAuth.instance.currentUser!.uid
     });
     try {
       var response =
@@ -442,6 +445,7 @@ class VBlogService{
   Future<dynamic> getPostById(String postId) async {
     var body = jsonEncode({
       "post_id":postId,
+      "firebaseAuthID":FirebaseAuth.instance.currentUser!.uid
     });
     try {
       var response =
