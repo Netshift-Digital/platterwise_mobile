@@ -6,6 +6,7 @@ import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/dynamic_link.dart';
+import 'package:platterwave/utils/enum/app_state.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
@@ -44,130 +45,101 @@ class _TimelineState extends State<Timeline> {
           nav(context, const CreatePost());
           },
       ),
-      body: AnnotatedRegion(
-        value: kOverlay,
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 16,right: 15),
-            child: DefaultTabController(
-              length: 2,
-              child: NestedScrollView(
-                  headerSliverBuilder:(context,scroll){
-                   return[
-                     SliverAppBar(
-                       elevation: 0,
-                       centerTitle: false,
-                       backgroundColor: Colors.white,
-                       pinned: false,
-                       actions: [
-                         GestureDetector(
-                           onTap: (){
-                             nav(context, const NotificationActivity());
-                           },
-                             child: SvgPicture.asset("assets/icon/notification-bing.svg"))
-                       ],
-                       title: ConstrainedBox(
-                           constraints: const BoxConstraints(maxHeight: 28, maxWidth: 300),
-                           child: SvgPicture.asset(
-                             "assets/icon/platterwise_logo.svg",
-                             height: 15.h,
-                             width: 161.w,
-                           )
-                       ),
-                       flexibleSpace:  Column(
-                         mainAxisAlignment: MainAxisAlignment.end,
-                         crossAxisAlignment: CrossAxisAlignment.start,
-                         children: [
-                           SizedBox(height: 10.h,),
-                           PlatButton(
-                               title: "Trending",
-                               height: 39,
-                               width: 84,
-                               textSize: 15,
-                               padding: 4,
-                               textColor: AppColor.g800,
-                               color:AppColor.g30 ,
-                               onTap: (){
+      appBar:AppBar(
+        elevation: 0,
+        systemOverlayStyle: kOverlay,
+        centerTitle: false,
+        backgroundColor: Colors.white,
+        title: ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 28, maxWidth: 300),
+            child: SvgPicture.asset(
+              "assets/icon/platterwise_logo.svg",
+              height: 15.h,
+              width: 161.w,
+            )
+        ),
+        actions: [
+          GestureDetector(
+              onTap: (){
+                nav(context, const NotificationActivity());
+              },
+              child: SvgPicture.asset("assets/icon/notification-bing.svg"))
+        ],
+      ) ,
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        controller: scrollController,
+        child: Column(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 10.h,),
+                PlatButton(
+                    title: "Trending",
+                    height: 39,
+                    width: 84,
+                    textSize: 15,
+                    padding: 4,
+                    textColor: AppColor.g800,
+                    color:AppColor.g30 ,
+                    onTap: (){
 
-                               }
-                           ),
-                           SizedBox(height: 20.h,),
-                           SingleChildScrollView(
-                             physics: const BouncingScrollPhysics(),
-                             scrollDirection: Axis.horizontal,
-                             child: Row(
-                               children: [
-                                 SubCategoriesContainer(
-                                   onTap: (){
-                                     nav(context, const TrendingPage(basedOn: 'baselike'));
-                                   },
-                                   title: 'Most Liked',
-                                   image: "assets/images/likes.png",
-                                 ),
-                                const  SizedBox(width:12 ,),
-                                 SubCategoriesContainer(
-                                   onTap: (){
-                                     nav(context, const TrendingPage(basedOn: 'basecomment'));
-                                   },
-                                   title: 'Most Commented ',
-                                   image: "assets/images/comments.png",
-                                 )
-                               ],
-                             ),
-                           ),
-                           SizedBox(height: 20.h,),
+                    }
+                ),
+                SizedBox(height: 20.h,),
+                SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      SubCategoriesContainer(
+                        onTap: (){
+                          nav(context, const TrendingPage(basedOn: 'baselike'));
+                        },
+                        title: 'Most Liked',
+                        image: "assets/images/likes.png",
+                      ),
+                      const  SizedBox(width:12 ,),
+                      SubCategoriesContainer(
+                        onTap: (){
+                          nav(context, const TrendingPage(basedOn: 'basecomment'));
+                        },
+                        title: 'Most Commented ',
+                        image: "assets/images/comments.png",
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20.h,),
 
-                         ],
-                       ),
-                       collapsedHeight:260 ,
-                     ),
-                     // SliverAppBar(
-                     //   backgroundColor:AppColor.g0,
-                     //   elevation: 0.0,
-                     //   pinned: true,
-                     //   toolbarHeight: 60,
-                     //   //collapsedHeight: 0,
-                     //   expandedHeight: 0,
-                     //   primary: false,
-                     //   automaticallyImplyLeading: false,
-                     //   title: Column(
-                     //     children: [
-                     //       TabBar(
-                     //         tabs: const [
-                     //           Tab(text: "Trending",),
-                     //           Tab(text: "Popular",)
-                     //         ],
-                     //          padding: EdgeInsets.only(right: 100.w),
-                     //         labelStyle: AppTextTheme.h6.copyWith(fontSize: 18),
-                     //         unselectedLabelStyle: AppTextTheme.h6.copyWith(fontSize: 18),
-                     //         labelColor: AppColor.textColor,
-                     //         unselectedLabelColor: AppColor.g60,
-                     //         indicatorColor: AppColor.p300,
-                     //         indicatorSize: TabBarIndicatorSize.label,
-                     //         indicatorWeight: 1.w,
-                     //         indicatorPadding: EdgeInsets.symmetric(horizontal: 15.w),
-                     //
-                     //       ),
-                     //     ],
-                     //   ),
-                     // )
-                   ];
-                },
-                  body: ListView.builder(
-                      padding: EdgeInsets.zero,
-                       primary: false,
-                      controller: scrollController,
-                      physics:const BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: context.watch<VBlogViewModel>().posts.length,
-                      itemBuilder: (context,index) {
-                        var data =  model.posts[index];
-                        return  TimelinePostContainer(data);
-                      }
-                  )
-              ),
+              ],
             ),
-          ),
+
+            ListView.builder(
+                padding: EdgeInsets.zero,
+                primary: false,
+                shrinkWrap: true,
+                itemCount: context.watch<VBlogViewModel>().posts.length,
+                itemBuilder: (context,index) {
+                  var data =  model.posts[index];
+                  return  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: TimelinePostContainer(data),
+                  );
+                }
+            ),
+            model.postAppState==AppState.busy? Padding(
+              padding: const EdgeInsets.only(bottom: 100),
+              child:  LinearProgressIndicator(
+                backgroundColor: Colors.grey[200]!,
+                valueColor: const AlwaysStoppedAnimation(AppColor.p200),
+              ),
+            )
+                :const SizedBox()
+
+          ],
         ),
       ),
     );
@@ -176,7 +148,9 @@ class _TimelineState extends State<Timeline> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getPost(restart:  true);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      getPost(restart:  true);
+    });
     scrollController.addListener(() {
       var model = context.read<PageViewModel>();
       if(scrollController.position.userScrollDirection==ScrollDirection.forward){
@@ -184,7 +158,7 @@ class _TimelineState extends State<Timeline> {
       }else{
         model.showBottomNavigator();
       }
-      if(scrollController.position.atEdge){
+      if(scrollController.position.pixels == scrollController.position.maxScrollExtent){
         getPost(restart:  false);
       }
     });

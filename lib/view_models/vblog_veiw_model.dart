@@ -43,7 +43,11 @@ class VBlogViewModel extends BaseViewModel{
       }
       if(!postEnd){
         _postIndex=_postIndex+1;
+        postAppState = AppState.busy;
+        notifyListeners();
         var data = await vBlogService.getPost(_postIndex);
+        postAppState = AppState.idle;
+        notifyListeners();
         if(data!=null){
           var post = PostModel.fromJson(data as Map);
           //posts=[];
@@ -61,6 +65,8 @@ class VBlogViewModel extends BaseViewModel{
         }
       }
     }catch(e){
+      postAppState = AppState.idle;
+      notifyListeners();
       setState(AppState.idle);
     }
     return null;
@@ -481,10 +487,13 @@ Future<List<UserProfile>?>getFollowers()async{
     return [];
   }
   addActivity(String id ,UserActivity userActivity){
-    FirebaseFirestore.instance.collection("activity").
-    doc("users").collection(id).add(userActivity.toJson());
+    if(id!=FirebaseAuth.instance.currentUser!.uid){
+      FirebaseFirestore.instance.collection("activity").
+      doc("users").collection(id).add(userActivity.toJson());
 
-    sendNotification(userActivity.userName+userActivity.message, id);
+      sendNotification(userActivity.userName+userActivity.message, id);
+    }
+
 
 
   }
