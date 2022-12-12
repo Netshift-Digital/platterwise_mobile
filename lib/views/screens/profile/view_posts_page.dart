@@ -23,8 +23,9 @@ class _ViewPostsPageState extends State<ViewPostsPage> {
       child:widget.post.isEmpty?
       const EmptyContentContainer():ListView.builder(
           padding: EdgeInsets.zero,
-          physics: const BouncingScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
+          primary: false,
           itemCount: widget.post.length,
           itemBuilder: (context,index) {
             var data =  widget.post[index];

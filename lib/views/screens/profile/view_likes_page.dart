@@ -34,8 +34,9 @@ class _ViewLikesPageState extends State<ViewLikesPage> {
   ) :Padding(
       padding:  const EdgeInsets.only(left: 20,right: 20),
     child: ListView.builder(
+          primary: false,
           padding: EdgeInsets.zero,
-          physics: const BouncingScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: postList.length,
           itemBuilder: (context,index) {

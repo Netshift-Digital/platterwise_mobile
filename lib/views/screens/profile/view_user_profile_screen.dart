@@ -1,10 +1,12 @@
 
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 import 'package:linkfy_text/linkfy_text.dart';
 import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/model/profile/user_data.dart';
@@ -53,25 +55,25 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
       appBar: CustomAppBar(
         showMenuB: (widget.id==null||widget.id==FirebaseAuth.instance.currentUser!.uid),
         onTap: (){
-            showBottomSheet(
+          showBottomSheet(
               context: context,
               enableDrag: true,
               builder: (context){
                 return Container(
                   height: 350.h,
                   decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16),
 
-                    )
+                      )
                   ),
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: Column(
                       children: [
                         SizedBox(height: 18.h,),
-                       const Divider(
+                        const Divider(
                           thickness: 2,
                           indent: 150,
                           endIndent: 150,
@@ -118,7 +120,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                     ),
                   ),
                 );
-          }
+              }
           );
 
         },
@@ -127,201 +129,223 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
       body: userData==null?const Center(child: CircularProgressIndicator(
         color: AppColor.p300,
       ))
-          :Column(
-        children: [
-          Container(
-            color: Colors.transparent,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      ImageCacheCircle(
-                        userData!.userProfile.profileUrl,
-                        height: 80,
-                        width: 80,
-                      ),
-                      SizedBox(
-                        width: 12.w,
-                      ),
-                      Column(
+          :DefaultTabController(
+        length: 2,
+        child: NestedScrollView(
+          physics:const BouncingScrollPhysics(),
+            headerSliverBuilder: (context,scroll){
+              return [
+                SliverToBoxAdapter(
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(userData!.userProfile.username,style: AppTextTheme.h1,),
-                          SizedBox(height: 4.h,),
-                          Text(userData!.userProfile.fullName, style: AppTextTheme.h4,)
-                        ],
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 30.h,),
-                  LinkifyText(
-                    userData!.userProfile.bio,
-                     textStyle: AppTextTheme.h3,
-                      linkStyle:AppTextTheme.h3.copyWith(
-                        color: Colors.blue[900],
-                        decoration: TextDecoration.underline
-                      ) ,
-                      linkTypes: [LinkType.url],
-                     onTap: (link){
-                      launchLink(link.value!);
-                  },),
-                  SizedBox(height: 30.h,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                          nav(context,  FollowersList(
-                            index: 0,
-                            id: widget.id??FirebaseAuth.instance.currentUser!.uid,
-
-                          ));
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                          Row(
                             children: [
-                              StreamBuilder<QuerySnapshot>(
-                                stream:FirebaseFirestore.instance.collection("following").
-                                doc("users").collection(widget.id??FirebaseAuth.instance.currentUser!.uid).snapshots(),
-                                builder: (context, snapshot) {
-
-                                  return Text(snapshot.hasData?snapshot.data!.docs.length.toString():
-                                  "0", style: AppTextTheme.h3,);
-                                }
+                              GestureDetector(
+                                onTap: (){
+                                  showImageViewer(
+                                      context,
+                                      CachedNetworkImageProvider(userData!.userProfile.profileUrl),
+                                      onViewerDismissed: () {
+                                      },
+                                      useSafeArea: true,
+                                      swipeDismissible: true
+                                  );
+                                },
+                                child: ImageCacheCircle(
+                                  userData!.userProfile.profileUrl,
+                                  height: 80,
+                                  width: 80,
+                                ),
                               ),
-                              Text(
-                                "Following",
-                                style: AppTextTheme.h4.copyWith(
-                                    color: AppColor.g300),
+                              SizedBox(
+                                width: 12.w,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(userData!.userProfile.username,style: AppTextTheme.h1,),
+                                  SizedBox(height: 4.h,),
+                                  Text(userData!.userProfile.fullName, style: AppTextTheme.h4,)
+                                ],
                               )
                             ],
                           ),
-                        ),
-
-                      ),
-                      GestureDetector(
-                        onTap: (){
-                          nav(context,  FollowersList(
-                            index: 1,
-                            id: widget.id??FirebaseAuth.instance.currentUser!.uid,
-                          ));
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                          SizedBox(height: 30.h,),
+                          LinkifyText(
+                            userData!.userProfile.bio,
+                            textStyle: AppTextTheme.h3,
+                            linkStyle:AppTextTheme.h3.copyWith(
+                                color: Colors.blue[900],
+                                decoration: TextDecoration.underline
+                            ) ,
+                            linkTypes: [LinkType.url],
+                            onTap: (link){
+                              launchLink(link.value!);
+                            },),
+                          SizedBox(height: 30.h,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              StreamBuilder<QuerySnapshot>(
-                                  stream:FirebaseFirestore.instance.collection("followers").
-                                  doc("users").collection(widget.id??FirebaseAuth.instance.currentUser!.uid).snapshots(),
-                                  builder: (context, snapshot) {
+                              GestureDetector(
+                                onTap: (){
+                                  nav(context,  FollowersList(
+                                    index: 0,
+                                    id: widget.id??FirebaseAuth.instance.currentUser!.uid,
 
-                                    return Text(snapshot.hasData?snapshot.data!.docs.length.toString():
-                                    "0", style: AppTextTheme.h3,);
-                                  }
+                                  ));
+                                },
+                                child: Container(
+                                  color: Colors.transparent,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      StreamBuilder<QuerySnapshot>(
+                                          stream:FirebaseFirestore.instance.collection("following").
+                                          doc("users").collection(widget.id??FirebaseAuth.instance.currentUser!.uid).snapshots(),
+                                          builder: (context, snapshot) {
+
+                                            return Text(snapshot.hasData?snapshot.data!.docs.length.toString():
+                                            "0", style: AppTextTheme.h3,);
+                                          }
+                                      ),
+                                      Text(
+                                        "Following",
+                                        style: AppTextTheme.h4.copyWith(
+                                            color: AppColor.g300),
+                                      )
+                                    ],
+                                  ),
+                                ),
+
                               ),
-                              Text(
-                                "Followers",
-                                style: AppTextTheme.h4.copyWith(
-                                  color: AppColor.g300),)
+                              GestureDetector(
+                                onTap: (){
+                                  nav(context,  FollowersList(
+                                    index: 1,
+                                    id: widget.id??FirebaseAuth.instance.currentUser!.uid,
+                                  ));
+                                },
+                                child: Container(
+                                  color: Colors.transparent,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      StreamBuilder<QuerySnapshot>(
+                                          stream:FirebaseFirestore.instance.collection("followers").
+                                          doc("users").collection(widget.id??FirebaseAuth.instance.currentUser!.uid).snapshots(),
+                                          builder: (context, snapshot) {
+
+                                            return Text(snapshot.hasData?snapshot.data!.docs.length.toString():
+                                            "0", style: AppTextTheme.h3,);
+                                          }
+                                      ),
+                                      Text(
+                                        "Followers",
+                                        style: AppTextTheme.h4.copyWith(
+                                            color: AppColor.g300),)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              showFollow()?StreamBuilder<DocumentSnapshot>(
+                                  stream: FirebaseFirestore.instance.collection('followButton')
+                                      .doc(widget.id).snapshots(),
+                                  builder: (context, snapshot) {
+                                    bool disable = false;
+                                    if(snapshot.data!=null){
+                                      if(snapshot.data!.exists){
+                                        var data = snapshot.data!.data()! as Map;
+                                        disable =data['disable'];
+                                      }
+
+                                    }
+                                    if(disable==false){
+                                      return PlatButton(
+                                        title: blogModel.getIsFollowed(userData!.userProfile.email)?"Unfollow":"Follow",
+                                        padding: 0,
+                                        textSize: 14,
+                                        color:blogModel.getIsFollowed(userData!.userProfile.email)?AppColor.g700:AppColor.p200 ,
+                                        onTap: (){
+                                          //blogModel.following.add(userData!.userProfile);
+                                          if(blogModel.getIsFollowed(userData!.userProfile.email)){
+                                            blogModel.unFollowUser(widget.id!, userData!.userProfile);
+                                          }else{
+                                            blogModel.followUser(widget.id!, userData!.userProfile);
+
+                                          }
+                                        },
+                                        width: 95.w,
+                                        height: 38.h,
+                                      );
+                                    }else{
+                                      return const SizedBox();
+                                    }
+
+                                  }
+                              ) : PlatButton(
+                                title: "Edit Profile",
+                                padding: 0,
+                                textSize: 14,
+                                onTap: (){
+                                  settings(context);
+                                },
+                                width: 95.w,
+                                height: 38.h,
+                              )
                             ],
                           ),
-                        ),
+                          SizedBox(height: 30.h,),
+                        ],
                       ),
-                      showFollow()?StreamBuilder<DocumentSnapshot>(
-                          stream: FirebaseFirestore.instance.collection('followButton')
-                              .doc(widget.id).snapshots(),
-                        builder: (context, snapshot) {
-                            bool disable = false;
-                          if(snapshot.data!=null){
-                            if(snapshot.data!.exists){
-                              var data = snapshot.data!.data()! as Map;
-                              disable =data['disable'];
-                            }
+                    ),
+                  ),
+                ),
+                SliverAppBar(
+                  backgroundColor:AppColor.g0,
+                  elevation: 0.0,
+                  pinned: true,
+                  toolbarHeight: 60,
+                  //collapsedHeight: 0,
+                  expandedHeight: 0,
+                  primary: false,
+                  automaticallyImplyLeading: false,
+                  title: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: 20.w),
+                        child: TabBar(
+                          tabs: const [
+                            Tab(text: "Posts",),
+                            Tab(text: "Likes",)
+                          ],
+                          // padding: EdgeInsets.only(right: 100.w),
+                          labelStyle: AppTextTheme.h6.copyWith(fontSize: 18),
+                          unselectedLabelStyle: AppTextTheme.h6.copyWith(fontSize: 18),
+                          labelColor: AppColor.textColor,
+                          unselectedLabelColor: AppColor.g60,
+                          indicatorColor: AppColor.p300,
+                          indicatorSize: TabBarIndicatorSize.label,
+                          indicatorWeight: 1.w,
+                          indicatorPadding: EdgeInsets.symmetric(horizontal: 7.w),
 
-                          }
-                          if(disable==false){
-                            return PlatButton(
-                              title: blogModel.getIsFollowed(userData!.userProfile.email)?"Unfollow":"Follow",
-                              padding: 0,
-                              textSize: 14,
-                              color:blogModel.getIsFollowed(userData!.userProfile.email)?AppColor.g700:AppColor.p200 ,
-                              onTap: (){
-                                //blogModel.following.add(userData!.userProfile);
-                                if(blogModel.getIsFollowed(userData!.userProfile.email)){
-                                  blogModel.unFollowUser(widget.id!, userData!.userProfile);
-                                }else{
-                                  blogModel.followUser(widget.id!, userData!.userProfile);
-
-                                }
-                              },
-                              width: 95.w,
-                              height: 38.h,
-                            );
-                          }else{
-                           return const SizedBox();
-                          }
-
-                        }
-                      ) : PlatButton(
-                        title: "Edit Profile",
-                        padding: 0,
-                        textSize: 14,
-                        onTap: (){
-                          settings(context);
-                        },
-                        width: 95.w,
-                        height: 38.h,
+                        ),
                       )
                     ],
                   ),
-                  SizedBox(height: 30.h,),
-                ],
-              ),
-            ),
-          ),
-          DefaultTabController(
-              initialIndex: 0,
-              length: 2,
-              child: Expanded(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 20.w),
-                      child: TabBar(
-                        tabs: const [
-                          Tab(text: "Posts",),
-                          Tab(text: "Likes",)
-                        ],
-                        // padding: EdgeInsets.only(right: 100.w),
-                        labelStyle: AppTextTheme.h6.copyWith(fontSize: 18),
-                        unselectedLabelStyle: AppTextTheme.h6.copyWith(fontSize: 18),
-                        labelColor: AppColor.textColor,
-                        unselectedLabelColor: AppColor.g60,
-                        indicatorColor: AppColor.p300,
-                        indicatorSize: TabBarIndicatorSize.label,
-                        indicatorWeight: 1.w,
-                        indicatorPadding: EdgeInsets.symmetric(horizontal: 7.w),
-
-                      ),
-                    ),
-                    Expanded(
-                        child: TabBarView(
-                          children: [
-                            ViewPostsPage(post: myPost,),
-                            ViewLikesPage(id: widget.id,),
-                          ],)
-                    )
-                  ],
-                ),
-              )
-          )
-        ],
+                )
+              ];
+            },
+            body: TabBarView(
+              children: [
+                ViewPostsPage(post: myPost,),
+                ViewLikesPage(id: widget.id,),
+              ],)
+        ),
       ),
 
     );
@@ -409,38 +433,39 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
 
   void settings(BuildContext context) async{
     var userModel = context.read<UserViewModel>();
- var data =  await Navigator.push(
+    var data =  await Navigator.push(
         context, MaterialPageRoute(builder: (context){
       return EditProfileScreen(userData: userData!,);
     })
     );
- if(data!=null){
-   userModel.getMyProfile().then((value){
-     if(mounted){
-       setState(() {
-         userData=value;
-       });
-     }
+    if(data!=null){
+      userModel.getMyProfile().then((value){
+        if(mounted){
+          setState(() {
+            userData=value;
+          });
+        }
 
-   });
- }
+      });
+    }
 
 
   }
 
   void launchLink(String link) async{
     if (!await launchUrl(Uri.parse(link))) {
-    throw 'Could not launch $link';
+      throw 'Could not launch $link';
     }
   }
 
- bool showFollow() {
+  bool showFollow() {
     if(widget.id!=null&&widget.id!=user.uid){
       return true;
     }else{
       return false;
     }
- }
+  }
 
 
 }
+
