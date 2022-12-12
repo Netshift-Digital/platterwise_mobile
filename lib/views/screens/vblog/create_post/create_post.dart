@@ -82,7 +82,7 @@ class _CreatePostState extends State<CreatePost> {
           actions: [
             Row(
               children: [
-                model.appState==AppState.busy?
+                model.postAppState==AppState.busy?
                    const SizedBox(
                       height: 30,
                         width: 30,
@@ -289,7 +289,7 @@ Widget  imageList() {
           thumbnail: thumbnail,
           imagePath: path==null?null:path!.path).
       then((value){
-        model.getPost();
+        model.getPost(restart: true);
        Navigator.pop(context);
       });
     }else{

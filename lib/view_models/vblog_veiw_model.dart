@@ -31,18 +31,34 @@ class VBlogViewModel extends BaseViewModel{
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   List<AllTagRank> topTags = [];
   AppState reportAppState = AppState.idle;
+  AppState postAppState = AppState.idle;
+  int _postIndex = 0;
+  bool postEnd = false;
 
-  Future<List<Post>?> getPost()async{
+  Future<List<Post>?> getPost({bool restart = false})async{
     try{
-      var data = await vBlogService.getPost();
-      if(data!=null){
-        var post = PostModel.fromJson(data as Map);
-        posts=[];
-        for (var element in post.allUsersPosts) {
-          posts.add(element);
+      if(restart){
+        _postIndex=0;
+        postEnd=false;
+      }
+      if(!postEnd){
+        _postIndex=_postIndex+1;
+        var data = await vBlogService.getPost(_postIndex);
+        if(data!=null){
+          var post = PostModel.fromJson(data as Map);
+          //posts=[];
+          if(restart){
+            posts=[];
+          }
+          for (var element in post.allUsersPosts) {
+            posts.add(element);
+          }
+          if(post.allUsersPosts.length<10){
+            postEnd=true;
+          }
+          notifyListeners();
+          return posts;
         }
-        notifyListeners();
-        return posts;
       }
     }catch(e){
       setState(AppState.idle);
@@ -274,7 +290,8 @@ class VBlogViewModel extends BaseViewModel{
     String contentUrl = "";
     String type = postData.contentType;
     try{
-      setState(AppState.busy);
+      postAppState = AppState.busy;
+      notifyListeners();
       if(imagePath!=null){
        var  uploadedImage = await  uploadImage(filePath: imagePath);
        if(uploadedImage!=null){
@@ -287,8 +304,6 @@ class VBlogViewModel extends BaseViewModel{
           type=uploadedThumbnail!;
         }
       }
-
-
       var post = postData.copyWith(
         contentUrl: contentUrl,
         contentType: type
@@ -297,10 +312,12 @@ class VBlogViewModel extends BaseViewModel{
      if(data!=null){
        handelTags(postData.contentPost,data["post_id"].toString());
      }
-      setState(AppState.idle);
+      postAppState = AppState.idle;
+      notifyListeners();
       return true;
     } catch(e){
-      setState(AppState.idle);
+      postAppState = AppState.idle;
+      notifyListeners();
     }
     return null;
   }

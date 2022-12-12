@@ -15,9 +15,10 @@ class VBlogService{
 
 
 
-  Future<dynamic> getPost() async {
+  Future<dynamic> getPost(int pageIndex) async {
     var body = jsonEncode({
-      "firebaseAuthID":FirebaseAuth.instance.currentUser!.uid
+      "firebaseAuthID":FirebaseAuth.instance.currentUser!.uid,
+      "pageindex":pageIndex
     });
     try {
       var response =

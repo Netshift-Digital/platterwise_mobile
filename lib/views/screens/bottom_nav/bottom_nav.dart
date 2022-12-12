@@ -10,7 +10,6 @@ import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
-import 'package:platterwave/views/screens/home/home_screen.dart';
 import 'package:platterwave/views/screens/profile/profile_screen.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/save/save_screen.dart';
@@ -58,24 +57,27 @@ class _BottomNavState extends State<BottomNav> {
     var pageViewModel = context.watch<PageViewModel>();
     return Scaffold(
       body: bottomNav[pageViewModel.appIndex].screen,
-      bottomNavigationBar: BottomNavigationBar(
-        iconSize: 18,
-        selectedLabelStyle: AppTextTheme.h5.copyWith(
-            fontSize: 9
+      bottomNavigationBar: Visibility(
+        visible: pageViewModel.hideBottomNav,
+        child: BottomNavigationBar(
+          iconSize: 18,
+          selectedLabelStyle: AppTextTheme.h5.copyWith(
+              fontSize: 9
+          ),
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: AppColor.p300,
+          unselectedItemColor: AppColor.g700,
+          currentIndex: pageViewModel.appIndex,
+          onTap: (index) {
+            pageViewModel.setIndex(index);
+          },
+          items: bottomNav.map((e) {
+            return BottomNavigationBarItem(
+              label:"\n${e.title}",
+              icon:e.icon.isEmpty?const Icon(Icons.add_circle):SvgIcon(e.icon),
+            );
+          }).toList(),
         ),
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppColor.p300,
-        unselectedItemColor: AppColor.g700,
-        currentIndex: pageViewModel.appIndex,
-        onTap: (index) {
-          pageViewModel.setIndex(index);
-        },
-        items: bottomNav.map((e) {
-          return BottomNavigationBarItem(
-            label:"\n${e.title}",
-            icon:e.icon.isEmpty?const Icon(Icons.add_circle):SvgIcon(e.icon),
-          );
-        }).toList(),
       ),
 
     );

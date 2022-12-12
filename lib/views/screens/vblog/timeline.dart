@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
@@ -8,6 +9,7 @@ import 'package:platterwave/utils/dynamic_link.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/vblog/notification.dart';
 import 'package:platterwave/views/screens/vblog/popular_page.dart';
@@ -28,6 +30,8 @@ class Timeline extends StatefulWidget {
 
 class _TimelineState extends State<Timeline> {
   final searchTextController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
+  bool hideFab = false;
   @override
   Widget build(BuildContext context) {
     var model = context.read<VBlogViewModel>();
@@ -38,11 +42,7 @@ class _TimelineState extends State<Timeline> {
           child: SvgPicture.asset('assets/icon/post.svg'),
         onPressed: (){
           nav(context, const CreatePost());
-         //FirebaseAuth.instance.signOut();
-         //  var s = "chisom is a good boy ";
-         //  var d = s.split(" ");
-         //  print(d);
-        },
+          },
       ),
       body: AnnotatedRegion(
         value: kOverlay,
@@ -155,7 +155,9 @@ class _TimelineState extends State<Timeline> {
                 },
                   body: ListView.builder(
                       padding: EdgeInsets.zero,
-                      physics: const BouncingScrollPhysics(),
+                       primary: false,
+                      controller: scrollController,
+                      physics:const BouncingScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: context.watch<VBlogViewModel>().posts.length,
                       itemBuilder: (context,index) {
@@ -174,12 +176,23 @@ class _TimelineState extends State<Timeline> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getPost();
+    getPost(restart:  true);
+    scrollController.addListener(() {
+      var model = context.read<PageViewModel>();
+      if(scrollController.position.userScrollDirection==ScrollDirection.forward){
+        model.hideBottomNavigator();
+      }else{
+        model.showBottomNavigator();
+      }
+      if(scrollController.position.atEdge){
+        getPost(restart:  false);
+      }
+    });
   }
 
-  void getPost() {
+  void getPost({bool restart = false}) {
     var model = context.read<VBlogViewModel>();
-    model.getPost();
+    model.getPost(restart:  false);
 
   }
 }
