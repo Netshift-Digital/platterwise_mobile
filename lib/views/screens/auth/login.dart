@@ -109,11 +109,11 @@ final _formKey = GlobalKey<FormState>();
                          //      child: SvgPicture.asset("assets/icon/apple.svg"))
                          //  :const SizedBox(),
                          //  Platform.isIOS?const Spacer():const SizedBox(),
-                          GestureDetector(
+                          Platform.isAndroid?GestureDetector(
                             onTap: (){
                                facebook(context);
                             },
-                              child: SvgPicture.asset("assets/icon/facebook.svg")),
+                              child: SvgPicture.asset("assets/icon/facebook.svg")):const SizedBox(),
                           Platform.isAndroid?const SizedBox(width: 20,):const Spacer(),
                           InkWell(
                             onTap: (){
