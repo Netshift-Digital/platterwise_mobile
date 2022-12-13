@@ -68,6 +68,7 @@ class _RegisterState extends State<Register> {
                      const SizedBox(height: twenty,),
                        Text("Create your account",style: AppTextTheme.h4.copyWith(
                          fontSize: twentyFour,
+                           color: Colors.black,
                          fontWeight: FontWeight.w700
                        ),),
                       const SizedBox(height: fiftyFour,),
@@ -108,7 +109,7 @@ class _RegisterState extends State<Register> {
                       const SizedBox(height: hintSpacing,),
                       Field(
                         controller: _password,
-                        hint: "••••••••••••••",
+                        hint: "",
                         isPassword: true,
                         validate: FieldValidator.minLength(3),
                       ),
@@ -117,7 +118,7 @@ class _RegisterState extends State<Register> {
                       const SizedBox(height: hintSpacing,),
                       Field(
                         controller: _confirmPassword,
-                        hint: "••••••••••••••",
+                        hint: "",
                         isPassword: true,
                         validate: (e){
                           if(_confirmPassword.text!=_password.text){

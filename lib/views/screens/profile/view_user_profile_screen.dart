@@ -112,6 +112,8 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                             Future.delayed(const Duration(milliseconds: 500),(){
                               FirebaseAuth.instance.signOut();
                               LocalStorage.clear();
+                              blogModel.myPosts.clear();
+                              blogModel.myLikes.clear();
                             });
 
                           },
