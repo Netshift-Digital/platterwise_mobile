@@ -63,7 +63,8 @@ class _TimelineState extends State<Timeline> {
               onTap: (){
                 nav(context, const NotificationActivity());
               },
-              child: SvgPicture.asset("assets/icon/notification-bing.svg"))
+              child: SvgPicture.asset("assets/icon/notification-bing.svg")),
+          const SizedBox(width: 16,),
         ],
       ) ,
       body: SingleChildScrollView(
