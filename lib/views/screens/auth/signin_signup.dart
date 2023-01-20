@@ -22,10 +22,10 @@ class _SignInSignUpState extends State<SignInSignUp> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(),
-            Text('Welcome to Platterwise',style: GoogleFonts.roboto(
+            Text('Welcome\nto Platterwise',style: GoogleFonts.roboto(
               fontWeight: FontWeight.w900,
               fontSize: 40
             ),),

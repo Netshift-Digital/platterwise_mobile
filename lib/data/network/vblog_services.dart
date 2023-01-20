@@ -353,7 +353,7 @@ class VBlogService{
 
 
 
-  Future<dynamic> searchUser(String search) async {
+  Future<dynamic> searchPost(String search) async {
     var body = jsonEncode({
       "search_post":search,
       "firebaseAuthID":FirebaseAuth.instance.currentUser!.uid
@@ -631,6 +631,33 @@ class VBlogService{
     } on TimeoutException catch (_) {
       throw Failure("Poor internet connection");
     } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+
+  Future<Map<String, dynamic>?> searchUser(String query) async {
+    var body = jsonEncode({
+      "search_user" :query
+    });
+    try {
+      var response =
+      await client.post(Uri.parse("https://platterwise.com/jhome/search_users.php"), body: body, headers: {
+        "Content-type": "application/json",
+      }).timeout(const Duration(seconds: 10));
+      var data = jsonDecode(response.body);
+      if(response.statusCode==200){
+        return data;
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      print(e);
       throw Failure("Something went wrong. Try again");
     }
     return null;

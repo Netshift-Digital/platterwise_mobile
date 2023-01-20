@@ -85,6 +85,7 @@ class _RegisterState extends State<Register> {
                       Field(
                         enable: enableEmail,
                         controller: _email,
+                        textInputType: TextInputType.emailAddress,
                         hint: "gsswuw@gmail.com",
                         validate: FieldValidator.email(),
                       ),
@@ -102,6 +103,7 @@ class _RegisterState extends State<Register> {
                       CountryField(
                         controller: _phoneNumber,
                         hint: "55-0114-2346",
+                        textInputType: TextInputType.phone,
                         validate: FieldValidator.minLength(3),
                       ),
                       const SizedBox(height: twenty,),

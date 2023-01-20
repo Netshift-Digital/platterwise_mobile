@@ -5,6 +5,7 @@ import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
@@ -46,11 +47,10 @@ class UserCard extends StatelessWidget {
         textSize: 14,
         onTap: (){
           if(isFollower){
-            //print('haaaa');
            blogModel.unFollowUser(data.firebaseAuthID, data);
           }else{
-           // print('nahh');
-           blogModel.followUser(data.firebaseAuthID, data);
+            var user = context.read<UserViewModel>().user;
+           blogModel.followUser(data.firebaseAuthID,user!.userProfile, data);
 
           }
         },

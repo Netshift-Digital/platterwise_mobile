@@ -57,6 +57,7 @@ final _formKey = GlobalKey<FormState>();
                       Field(
                         controller: _email,
                         hint: "gsswuw@gmail.com",
+                        textInputType: TextInputType.emailAddress,
                         validate: FieldValidator.email(),
                       ),
                       const SizedBox(height: twenty,),
@@ -114,7 +115,7 @@ final _formKey = GlobalKey<FormState>();
                                facebook(context);
                             },
                               child: SvgPicture.asset("assets/icon/facebook.svg")):const SizedBox(),
-                          Platform.isAndroid?const SizedBox(width: 20,):const Spacer(),
+                          Platform.isAndroid?const SizedBox(width: 20,):const SizedBox(),
                           InkWell(
                             onTap: (){
                               google(context);

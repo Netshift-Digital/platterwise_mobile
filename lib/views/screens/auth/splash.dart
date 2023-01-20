@@ -7,6 +7,7 @@ import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/screens/auth/login.dart';
+import 'package:platterwave/views/screens/auth/onboarding_screen.dart';
 import 'package:platterwave/views/screens/auth/signin_signup.dart';
 import 'package:platterwave/views/screens/bottom_nav/bottom_nav.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
     permission();
     Future.delayed(const Duration(milliseconds: 20),(){
       if(FirebaseAuth.instance.currentUser==null){
-        nav(context, const SignInSignUp(),remove: true);
+        nav(context, const Onboarding(),remove: true);
       }else{
         context.read<UserViewModel>()
             .getUserProfile(FirebaseAuth.instance.currentUser!.uid)

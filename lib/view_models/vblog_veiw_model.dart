@@ -15,6 +15,7 @@ import 'package:platterwave/model/vblog/top_tags.dart';
 import 'package:platterwave/model/vblog/user_activity.dart';
 import 'package:platterwave/model/vblog/user_search.dart';
 import 'package:platterwave/utils/enum/app_state.dart';
+import 'package:platterwave/utils/enum/saerch_type.dart';
 import 'package:platterwave/utils/locator.dart';
 
 class VBlogViewModel extends BaseViewModel{
@@ -34,7 +35,14 @@ class VBlogViewModel extends BaseViewModel{
   AppState postAppState = AppState.idle;
   int _postIndex = 0;
   bool postEnd = false;
+  List<SearchResultElement> searchUserResult =[];
+  SearchType searchType = SearchType.user;
 
+
+  setSearchType(SearchType s){
+    searchType=s;
+    notifyListeners();
+  }
   Future<List<Post>?> getPost({bool restart = false})async{
     try{
       if(restart){
@@ -358,7 +366,7 @@ Future<List<UserProfile>?>getFollowers()async{
     return null;
   }
 
-  Future<List<Post>?> getMylikes(String id)async{
+  Future<List<Post>?> getMyLikes(String id)async{
     try{
       var data = await FirebaseFirestore.instance.collection("likes").
       doc("users").collection(FirebaseAuth.instance.currentUser!.uid).
@@ -393,19 +401,21 @@ Future<List<UserProfile>?>getFollowers()async{
   }
 
 
-  Future<dynamic> followUser(String uid,UserProfile users )async{
+  Future<dynamic> followUser(String uid,UserProfile users, UserProfile userToBeFollowed )async{
     try{
       following.add(users);
       notifyListeners();
       await vBlogService.fellowUser(uid);
-      FirebaseFirestore.instance.collection("followers").doc('users').collection(uid).doc(FirebaseAuth.instance.currentUser!.uid).set(users.toJson());
+      FirebaseFirestore.instance.collection("followers").doc('users').collection(uid)
+          .doc(FirebaseAuth.instance.currentUser!.uid).set(users.toJson());
+
       FirebaseFirestore.instance.collection("following").
       doc("users").collection(FirebaseAuth.instance.currentUser!.uid).doc(uid)
-          .set(users.toJson());
+          .set(userToBeFollowed.toJson());
 
     addActivity(uid, UserActivity(
         message: " started following you ",
-        firebaseAuthId: FirebaseAuth.instance.currentUser!.uid,
+        firebaseAuthId: uid,
         userName: users.username,
         profilePic: users.profileUrl
     ));
@@ -443,9 +453,9 @@ Future<List<UserProfile>?>getFollowers()async{
 
 
 
-  Future<List<Post>?> searchUser(String search)async{
+  Future<List<Post>?> searchPost(String search)async{
     try{
-      var data = await vBlogService.searchUser(search);
+      var data = await vBlogService.searchPost(search);
       //print(data);
       if(data!=null){
         List<Post> searchResult=[];
@@ -459,6 +469,25 @@ Future<List<UserProfile>?>getFollowers()async{
     }catch(e){
       print(e);
      // RandomFunction.toast("something went wrong");
+      setState(AppState.idle);
+    }
+    return null;
+  }
+
+  Future<List<SearchResultElement>?> searchUser(String search)async{
+    try{
+      var data = await vBlogService.searchUser(search);
+      //print(data);
+      if(data!=null){
+        var search = SearchResult.fromJson(data);
+        searchUserResult = search.searchResult;
+        notifyListeners();
+        return searchUserResult;
+      }
+      setState(AppState.idle);
+    }catch(e){
+      print(e);
+      // RandomFunction.toast("something went wrong");
       setState(AppState.idle);
     }
     return null;

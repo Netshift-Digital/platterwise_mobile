@@ -169,9 +169,8 @@ class UserViewModel extends BaseViewModel{
     }on FirebaseAuthException catch(e){
       RandomFunction.toast(e.code);
       setState(AppState.idle);
-      if (kDebugMode) {
-        print(e);
-      }
+    }catch(e){
+      setState(AppState.idle);
     }
     return null;
 

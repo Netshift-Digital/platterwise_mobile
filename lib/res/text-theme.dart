@@ -13,6 +13,11 @@ class AppTextTheme{
       fontSize: 20,
        color: AppColor.g900
   );
+  static  TextStyle light =  const TextStyle(
+      fontWeight:FontWeight.w400,
+      fontSize: 16,
+      color: AppColor.g800
+  );
   static  TextStyle h1 = const TextStyle(
     fontWeight:FontWeight.w600,
     fontSize: 20,

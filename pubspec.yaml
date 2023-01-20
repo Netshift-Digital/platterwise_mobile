@@ -68,6 +68,7 @@ dependencies:
   chewie: ^1.3.6
   hashtager: ^1.0.4
   im_animations: ^0.1.2
+  smooth_page_indicator: ^1.0.0+2
   flutter:
     sdk: flutter
 

@@ -185,7 +185,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                 color: Colors.blue[900],
                                 decoration: TextDecoration.underline
                             ) ,
-                            linkTypes: [LinkType.url],
+                            linkTypes: const [LinkType.url,LinkType.hashTag],
                             onTap: (link){
                               launchLink(link.value!);
                             },),
@@ -273,11 +273,12 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                         textSize: 14,
                                         color:blogModel.getIsFollowed(userData!.userProfile.email)?AppColor.g700:AppColor.p200 ,
                                         onTap: (){
+                                          var user = context.read<UserViewModel>().user;
                                           //blogModel.following.add(userData!.userProfile);
                                           if(blogModel.getIsFollowed(userData!.userProfile.email)){
                                             blogModel.unFollowUser(widget.id!, userData!.userProfile);
                                           }else{
-                                            blogModel.followUser(widget.id!, userData!.userProfile);
+                                            blogModel.followUser(widget.id!, user!.userProfile, userData!.userProfile);
 
                                           }
                                         },

@@ -38,7 +38,7 @@ class NotificationActivity extends StatelessWidget {
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                   stream:FirebaseFirestore.instance.collection("activity").
-                  doc("users").collection(FirebaseAuth.instance.currentUser!.uid).snapshots(),
+                  doc("users").collection(FirebaseAuth.instance.currentUser!.uid).limit(15).snapshots(),
                   builder: (context, snapshot) {
 
                     if(snapshot.hasData){
