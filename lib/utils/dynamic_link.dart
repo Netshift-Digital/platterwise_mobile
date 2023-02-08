@@ -11,15 +11,15 @@ class DynamicLink{
       final dynamicLinkParams = DynamicLinkParameters(
         link: Uri.parse('$url/${post.postId}'),
         uriPrefix: url,
-        androidParameters:  AndroidParameters(
+        androidParameters:  const AndroidParameters(
             packageName: "com.platterwise.net",
             minimumVersion: 0,
         ),
-        iosParameters:  IosParameters(
+        iosParameters:  const IOSParameters(
             bundleId: "com.platterwise.net",
           minimumVersion: '0',
         ),
-        googleAnalyticsParameters:  GoogleAnalyticsParameters(
+        googleAnalyticsParameters:  const GoogleAnalyticsParameters(
           source: "twitter",
           medium: "social",
           campaign: "example-promo",
@@ -34,11 +34,12 @@ class DynamicLink{
         ),
       );
 
-      final dynamicLink = await dynamicLinkParams.buildShortLink();
+      final dynamicLink =
+      await FirebaseDynamicLinks.instance.buildShortLink(dynamicLinkParams);
       //print(dynamicLink.shortUrl);
       return dynamicLink.shortUrl.toString();
     }catch(e){
-      print(e);
+    //  print(e);
      //
     }
     return null;

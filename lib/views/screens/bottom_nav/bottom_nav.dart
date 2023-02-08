@@ -12,6 +12,7 @@ import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/profile_screen.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
+import 'package:platterwave/views/screens/restaurant/screen/restaurant_home_screen.dart';
 import 'package:platterwave/views/screens/save/save_screen.dart';
 import 'package:platterwave/views/screens/search/search_screen.dart';
 import 'package:platterwave/views/screens/search/trending.dart';
@@ -34,21 +35,23 @@ class _BottomNavState extends State<BottomNav> {
     BottomNavigationModel(
         title: "Home",
         icon: "assets/icon/home-2.svg",
-        screen: const Timeline()
+        //screen: const Timeline()
+      screen: const RestaurantHomeScreen()
     ),
     BottomNavigationModel(
         title: "Explore",
         icon: "assets/icon/search-normal.svg",
         screen: const TopTags()),
     BottomNavigationModel(
-        title: "Save",
-        icon: "assets/icon/bookmark.svg",
+        title: "Reservations",
+        icon: "assets/icon/reserve.svg",
         screen: const SaveScreen()
     ),
     BottomNavigationModel(
-        title: "Profile",
-        icon: "assets/icon/user.svg",
-        screen: const ViewUserProfileScreen()
+        title: "Explore",
+        icon: "assets/icon/explore.svg",
+        screen: const Timeline()
+        //screen: const ViewUserProfileScreen()
     ),
 
   ];
@@ -104,16 +107,10 @@ class _BottomNavState extends State<BottomNav> {
   }
 
   void deepLink() {
+    FirebaseDynamicLinks.instance.onLink.listen((event) {
+      _handelLink(event);
+    });
 
-    FirebaseDynamicLinks.instance.onLink(
-        onError: (e)async{
-          RandomFunction.toast(e.code);
-        },
-        onSuccess: (e)async{
-          _handelLink(e);
-        }
-
-    );
  FirebaseDynamicLinks.instance.getInitialLink().then((e) {
    _handelLink(e);
  });

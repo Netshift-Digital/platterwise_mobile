@@ -37,12 +37,12 @@ dependencies:
   intl_phone_field: ^3.1.0
   google_fonts: ^3.0.1
   pinput: ^2.2.12
-  firebase_core: ^1.22.0
-  firebase_auth: ^3.9.0
-  cloud_firestore: ^3.4.8
+  firebase_core: ^2.4.1
+  firebase_auth: ^4.2.5
+  cloud_firestore: ^4.3.1
   overlay_support: ^2.0.1
   jiffy: ^5.0.0
-  firebase_storage: ^10.3.9
+  firebase_storage: ^11.0.10
   image_picker: ^0.8.5+3
   readmore: ^2.2.0
   shimmer: ^2.0.0
@@ -56,7 +56,7 @@ dependencies:
   sign_in_with_apple: ^4.2.0
   flutter_login_facebook: ^1.6.2
   google_sign_in: ^5.4.2
-  firebase_dynamic_links: ^2.0.6
+  firebase_dynamic_links: ^5.0.11
   firebase_messaging:
   get_time_ago: ^1.1.7
   flutter_local_notifications: ^12.0.4
@@ -69,6 +69,7 @@ dependencies:
   hashtager: ^1.0.4
   im_animations: ^0.1.2
   smooth_page_indicator: ^1.0.0+2
+  sliding_up_panel: ^2.0.0+1
   flutter:
     sdk: flutter
 
