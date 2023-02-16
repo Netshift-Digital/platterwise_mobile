@@ -70,6 +70,7 @@ dependencies:
   im_animations: ^0.1.2
   smooth_page_indicator: ^1.0.0+2
   sliding_up_panel: ^2.0.0+1
+  flutter_rating_bar: ^4.0.1
   flutter:
     sdk: flutter
 

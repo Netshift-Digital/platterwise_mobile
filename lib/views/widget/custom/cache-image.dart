@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 
-
+const kPlaceHolder ='https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt67a59125151d76ef/625e7dffceb10b47dfaba4dc/GettyImages-1348618431.jpg';
 class ImageCacheR extends StatelessWidget {
   final double height,width,topRadius,topBottom,blend;
   final String image;
@@ -127,10 +127,10 @@ class ImageCacheCircle extends StatelessWidget {
         return  Container(
           width: width,
           height: height,
-          decoration:BoxDecoration(
+          decoration:const BoxDecoration(
             shape: BoxShape.circle,
             image: DecorationImage(
-                image:const NetworkImage('https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt67a59125151d76ef/625e7dffceb10b47dfaba4dc/GettyImages-1348618431.jpg'),
+                image:NetworkImage('https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt67a59125151d76ef/625e7dffceb10b47dfaba4dc/GettyImages-1348618431.jpg'),
                 fit:BoxFit.cover
             ),
 
