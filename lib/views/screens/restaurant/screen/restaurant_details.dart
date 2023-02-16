@@ -90,6 +90,9 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                   children: [
                     GestureDetector(
                       onTap: () {
+                        // setState(() {
+                        //   index=0;
+                        // });
                         pageController.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                       },
                       child: Column(
@@ -119,6 +122,9 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                     ),
                     GestureDetector(
                       onTap: () {
+                        // setState(() {
+                        //   index=1;
+                        // });
                         pageController.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                       },
                       child: Column(
@@ -150,10 +156,13 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                 ),
                 Expanded(
                     child: PageView(
+                      controller: pageController,
                       onPageChanged: (e){
-                        setState(() {
-                          index=e;
-                        });
+                        if(index!=e){
+                          setState(() {
+                            index=e;
+                          });
+                        }
                       },
                       physics:const BouncingScrollPhysics(),
                    children: [
@@ -219,17 +228,5 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
       ),
     );
   }
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    pageController.addListener(() {
-      if(mounted){
-        setState(() {
-         var p =pageController.page??0;
-         index=p.toInt();
-        });
-      }
-    });
-  }
+
 }
