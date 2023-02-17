@@ -17,6 +17,9 @@
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
 
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC44N6yERgjg8AM_UOznKlflcEZWYE8tro"/>
+
        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
 
