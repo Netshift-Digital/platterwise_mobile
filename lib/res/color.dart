@@ -32,6 +32,8 @@ class AppColor{
   static const Color g800 = Color(0xff646464);
   static const Color g900 = Color(0xff5C5C5C);
 
+  static const Color kAmber = Color(0xFFFFC107);
+
 
 
 }
