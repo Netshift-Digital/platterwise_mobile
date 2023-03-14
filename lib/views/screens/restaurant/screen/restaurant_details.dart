@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
+import 'package:platterwave/utils/nav.dart';
+import 'package:platterwave/views/screens/restaurant/screen/make_reservation_screen.dart';
 import 'package:platterwave/views/screens/restaurant/screen/reviews.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
@@ -210,7 +212,9 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                         const SizedBox(
                           height: 93,
                         ),
-                        PlatButton(title: 'Make Reservation', onTap: () {})
+                        PlatButton(title: 'Make Reservation', onTap: () {
+                          nav(context, MakeReservationScreen());
+                        })
                       ],
                     ),
                     const RestaurantsReviews(),

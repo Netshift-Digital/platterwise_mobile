@@ -109,11 +109,11 @@ class _RateExperienceScreenState extends State<RateExperienceScreen> {
                 ],
               ),
               SizedBox(height: 32.h,),
-              Divider(
+              const Divider(
                 thickness: 2,
               ),
               SizedBox(height: 32.h,),
-              AppTextField(
+              const AppTextField(
                 hintText: "Add a brief introduction about you.",
                 maxLines: 8,
               ),

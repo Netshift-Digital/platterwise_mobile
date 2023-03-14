@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
+import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
 
-import '../../../../res/color.dart';
-import '../../../../utils/size_config/size_config.dart';
 class MakeReservationScreen extends StatefulWidget {
   const MakeReservationScreen({Key? key}) : super(key: key);
 
@@ -21,16 +21,16 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             children: [
-            SizedBox(height: 48,),
+            const SizedBox(height: 48,),
             AppTextField(
                 prefixIcon: Container(
                   width: 31,
                   height: 31,
-                  padding: EdgeInsets.all(6),
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.all(6),
+                  decoration: const BoxDecoration(
                     color: AppColor.g20,
                     shape: BoxShape.circle
                   ),
@@ -40,15 +40,15 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                     height: 12,),
                 ),
                 hintText: "Date",
-                suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+                suffixIcon: const Icon(Icons.arrow_drop_down_sharp),
               ),
               SizedBox(height: 24.h,),
               AppTextField(
                 prefixIcon: Container(
                   width: 31,
                   height: 31,
-                  padding: EdgeInsets.all(6),
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.all(6),
+                  decoration: const BoxDecoration(
                       color: AppColor.g20,
                       shape: BoxShape.circle
                   ),
@@ -58,7 +58,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                     height: 12,),
                 ),
                 hintText: "Time",
-                suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+                suffixIcon: const Icon(Icons.arrow_drop_down_sharp),
               ),
               SizedBox(height: 24.h,),
               AppTextField(
@@ -66,7 +66,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                   width: 31,
                   height: 31,
                   padding: EdgeInsets.all(6),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: AppColor.g20,
                       shape: BoxShape.circle
                   ),
@@ -76,15 +76,15 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                     height: 12,),
                 ),
                 hintText: "Seats",
-                suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+                suffixIcon: const Icon(Icons.arrow_drop_down_sharp),
               ),
               SizedBox(height: 24.h,),
               AppTextField(
                 prefixIcon: Container(
                   width: 31,
                   height: 31,
-                  padding: EdgeInsets.all(6),
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.all(6),
+                  decoration: const BoxDecoration(
                       color: AppColor.g20,
                       shape: BoxShape.circle
                   ),
@@ -95,7 +95,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                 ),
                 hintText: "Guests",
                 suffixIcon: Padding(
-                  padding: EdgeInsets.only(right: 8.0),
+                  padding: const EdgeInsets.only(right: 8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -111,12 +111,12 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                               ),
                               shape: BoxShape.circle
                           ),
-                          child: Center(child: Icon(Icons.remove)),
+                          child: const Center(child: Icon(Icons.remove)),
                         ),
                       ),
-                      SizedBox(width: 5,),
-                      Text("2"),
-                      SizedBox(width: 5,),
+                      const SizedBox(width: 5,),
+                      const Text("2"),
+                      const SizedBox(width: 5,),
                       Container(
                         width: 20,
                         height: 20,
@@ -127,7 +127,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                             ),
                             shape: BoxShape.circle
                         ),
-                        child: Center(child: Icon(Icons.add)),
+                        child: const Center(child: Icon(Icons.add)),
                       ),
                     ],
                   ),
@@ -142,12 +142,12 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                       color: AppColor.p200),
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               PlatButton(
                   title: "Book Now",
                   onTap: (){},
               ),
-              SizedBox(height: 24,)
+              const SizedBox(height: 24,)
             ],
           ),
         ),
