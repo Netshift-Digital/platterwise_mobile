@@ -149,7 +149,7 @@ class _SearchScreenState extends State<SearchScreen> {
         builder: (context){
           return Container(
             height: 150,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white
             ),
             child: Padding(

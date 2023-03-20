@@ -48,10 +48,12 @@ class Guest {
   Guest({
     required this.guestName,
     required this.guestEmail,
+    this.profilePic = 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png'
   });
 
   String guestName;
   String guestEmail;
+  String profilePic;
 
   factory Guest.fromJson(Map<String, dynamic> json) => Guest(
     guestName: json["guest_name"],
