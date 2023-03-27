@@ -1,24 +1,28 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:platterwave/model/restaurant/restaurant_review.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
+import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 
+var placeText =
+    "I recently dined at De Place Restaurant and was blown away by the quality of the food and the service. The menu had a great selection of dishes, and I was impressed by the use of fresh ingredients in every dish.";
 
-var placeText = "I recently dined at De Place Restaurant and was blown away by the quality of the food and the service. The menu had a great selection of dishes, and I was impressed by the use of fresh ingredients in every dish.";
 class RestaurantsReviews extends StatelessWidget {
-  const RestaurantsReviews({Key? key}) : super(key: key);
+  final List<AllRestReview> review;
+  const RestaurantsReviews({Key? key, required this.review}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: 5,
+        itemCount: review.length,
         primary: false,
         physics: const BouncingScrollPhysics(),
         shrinkWrap: true,
-        itemBuilder: (context,index){
+        itemBuilder: (context, index) {
+          var data = review[index];
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Container(
@@ -33,19 +37,28 @@ class RestaurantsReviews extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const ImageCacheCircle(kPlaceHolder,height:32,width: 32,),
-                       const SizedBox(width: 8,),
-                        Text('Leslie Alexander',style: AppTextTheme.h3.copyWith(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14.sp
-                        ),),
+                        ImageCacheCircle(
+                          data.profileUrl,
+                          height: 32,
+                          width: 32,
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          data.fullName,
+                          style: AppTextTheme.h3.copyWith(
+                              fontWeight: FontWeight.w500, fontSize: 14.sp),
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 8,),
+                    const SizedBox(
+                      height: 8,
+                    ),
                     Row(
                       children: [
                         RatingBarIndicator(
-                          rating: 2.75,
+                          rating: (num.tryParse(data.rating)??0).toDouble(),
                           itemBuilder: (context, index) => const Icon(
                             Icons.star,
                             color: Colors.amber,
@@ -54,21 +67,26 @@ class RestaurantsReviews extends StatelessWidget {
                           itemSize: 18.0,
                           direction: Axis.horizontal,
                         ),
-                        const Text('. 5 days ago',
-                        style: TextStyle(
-                          fontSize: 10,
-                        ),),
-
+                        const SizedBox(
+                          width: 3,
+                        ),
+                         Text(
+                         RandomFunction.timeAgo(data.timestamp),
+                          style: const TextStyle(
+                            fontSize: 10,
+                          ),
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 8,),
-                    Text(placeText),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Text(data.review),
                   ],
                 ),
               ),
             ),
           );
-        }
-    );
+        });
   }
 }

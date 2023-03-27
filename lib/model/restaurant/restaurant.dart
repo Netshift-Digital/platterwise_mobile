@@ -1,6 +1,9 @@
+
+
+
 // To parse this JSON data, do
 //
-//     final resuarant = resuarantFromJson(jsonString);
+//     final restaurant = restaurantFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -46,7 +49,7 @@ class RestaurantData {
     required this.phone,
     required this.website,
     required this.socialHandle,
-    required this.menuPic,
+    required this.menuPix,
   });
 
   String restId;
@@ -65,9 +68,9 @@ class RestaurantData {
   String phone;
   String website;
   String socialHandle;
-  List<String> menuPic;
+  List<MenuPix> menuPix;
 
-  factory RestaurantData.fromJson(Map<dynamic, dynamic> json) => RestaurantData(
+  factory RestaurantData.fromJson(Map<String, dynamic> json) => RestaurantData(
     restId: json["rest_id"],
     restuarantName: json["restuarant_name"],
     address: json["address"],
@@ -84,7 +87,7 @@ class RestaurantData {
     phone: json["phone"],
     website: json["website"],
     socialHandle: json["social_handle"],
-    menuPic: List<String>.from(json["menu_pic"].map((x) => x)),
+    menuPix: List<MenuPix>.from(json["menu_pix"].map((x) => MenuPix.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -104,6 +107,23 @@ class RestaurantData {
     "phone": phone,
     "website": website,
     "social_handle": socialHandle,
-    "menu_pic": List<dynamic>.from(menuPic.map((x) => x)),
+    "menu_pix": List<dynamic>.from(menuPix.map((x) => x.toJson())),
   };
 }
+
+class MenuPix {
+  MenuPix({
+    required this.menuPic,
+  });
+
+  String menuPic;
+
+  factory MenuPix.fromJson(Map<String, dynamic> json) => MenuPix(
+    menuPic: json["menu_pic"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "menu_pic": menuPic,
+  };
+}
+

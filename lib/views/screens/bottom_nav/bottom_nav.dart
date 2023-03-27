@@ -8,6 +8,7 @@ import 'package:platterwave/res/color.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
+import 'package:platterwave/view_models/restaurant_view_mpdel.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/profile_screen.dart';
@@ -99,8 +100,10 @@ class _BottomNavState extends State<BottomNav> {
   void getData() async{
     var userModel = context.read<UserViewModel>();
     var blogModel = context.read<VBlogViewModel>();
+    var resModel = context.read<RestaurantViewModel>();
 
   await  userModel.getMyProfile();
+  await resModel.getRestaurant();
    await blogModel.getFollowers();
   await  blogModel.getFollowing();
     await  blogModel.getTopTag();

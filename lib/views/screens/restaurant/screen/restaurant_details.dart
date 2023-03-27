@@ -1,27 +1,36 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gallery_image_viewer/gallery_image_viewer.dart';
+import 'package:maps_launcher/maps_launcher.dart';
+import 'package:platterwave/model/restaurant/restaurant.dart';
+import 'package:platterwave/model/restaurant/restaurant_review.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
+import 'package:platterwave/view_models/restaurant_view_mpdel.dart';
 import 'package:platterwave/views/screens/restaurant/screen/make_reservation_screen.dart';
 import 'package:platterwave/views/screens/restaurant/screen/reviews.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
+import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RestaurantDetails extends StatefulWidget {
-  const RestaurantDetails({Key? key}) : super(key: key);
+  final RestaurantData restaurantData;
+  const RestaurantDetails({Key? key, required this.restaurantData})
+      : super(key: key);
 
   @override
   State<RestaurantDetails> createState() => _RestaurantDetailsState();
 }
 
 class _RestaurantDetailsState extends State<RestaurantDetails> {
-  String bunch =
-      'De Place Restaurant is a dining establishment that serves a variety of cuisine to its customers.The restaurant may offer an extensive menu,with options for breakfast, lunch, and dinner... ';
   int index = 0;
   PageController pageController = PageController();
+  List<AllRestReview> review = [];
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -40,16 +49,27 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                 Row(
                   children: [
                     Text(
-                      'De Place Restaurant',
+                      widget.restaurantData.restuarantName,
                       style: AppTextTheme.h3
                           .copyWith(fontWeight: FontWeight.w700, fontSize: 18),
                     ),
                     const Spacer(),
-                    SvgPicture.asset('assets/icon/route-square.svg'),
+                    GestureDetector(
+                      onTap: () {
+                        launchUrl(
+                            Uri.parse("tel:${widget.restaurantData.phone}"));
+                      },
+                      child: SvgPicture.asset('assets/icon/route-square.svg'),
+                    ),
                     const SizedBox(
                       width: 12,
                     ),
-                    SvgPicture.asset('assets/icon/route2.svg'),
+                    GestureDetector(
+                        onTap: () {
+                          MapsLauncher.launchQuery(
+                              widget.restaurantData.address);
+                        },
+                        child: SvgPicture.asset('assets/icon/route2.svg')),
                   ],
                 ),
                 const SizedBox(
@@ -80,9 +100,11 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                     const SizedBox(
                       width: 6,
                     ),
-                    const Expanded(
-                        child: Text(
-                            '2118 Thornridge Cir. Syracuse, Connecticut 35624'))
+                    Expanded(
+                      child: Text(
+                        widget.restaurantData.address,
+                      ),
+                    )
                   ],
                 ),
                 const SizedBox(
@@ -95,7 +117,9 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                         // setState(() {
                         //   index=0;
                         // });
-                        pageController.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                        pageController.animateToPage(0,
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.ease);
                       },
                       child: Column(
                         children: [
@@ -127,7 +151,9 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                         // setState(() {
                         //   index=1;
                         // });
-                        pageController.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                        pageController.animateToPage(1,
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.ease);
                       },
                       child: Column(
                         children: [
@@ -158,21 +184,21 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                 ),
                 Expanded(
                     child: PageView(
-                      controller: pageController,
-                      onPageChanged: (e){
-                        if(index!=e){
-                          setState(() {
-                            index=e;
-                          });
-                        }
-                      },
-                      physics:const BouncingScrollPhysics(),
-                   children: [
+                  controller: pageController,
+                  onPageChanged: (e) {
+                    if (index != e) {
+                      setState(() {
+                        index = e;
+                      });
+                    }
+                  },
+                  physics: const BouncingScrollPhysics(),
+                  children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ReadMoreText(
-                          bunch,
+                          widget.restaurantData.descriptions,
                           style: AppTextTheme.h3.copyWith(fontSize: 16),
                           moreStyle: AppTextTheme.h3
                               .copyWith(fontSize: 14, color: AppColor.p200),
@@ -194,16 +220,27 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                           height: 80,
                           child: ListView.builder(
                             physics: const BouncingScrollPhysics(),
-                            itemCount: 4,
+                            itemCount:widget.restaurantData.menuPix.length,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
-                              return const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
+                              return  Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
                                 child: SizedBox(
                                   height: 80,
                                   width: 111,
-                                  child: ImageCacheR(
-                                      'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png'),
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      showImageViewer(
+                                          context,
+                                          CachedNetworkImageProvider(widget.restaurantData.menuPix[index].menuPic),
+                                          onViewerDismissed: () {
+                                          },
+                                          useSafeArea: true,
+                                          swipeDismissible: true
+                                      );
+                                    },
+                                      child: ImageCacheR(widget.restaurantData.menuPix[index].menuPic),
+                                  ),
                                 ),
                               );
                             },
@@ -212,12 +249,20 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                         const SizedBox(
                           height: 93,
                         ),
-                        PlatButton(title: 'Make Reservation', onTap: () {
-                          nav(context, MakeReservationScreen());
-                        })
+                        PlatButton(
+                            title: 'Make Reservation',
+                            onTap: () {
+                              nav(
+                                  context,
+                                  MakeReservationScreen(
+                                    restaurantData: widget.restaurantData,
+                                  ));
+                            })
                       ],
                     ),
-                    const RestaurantsReviews(),
+                    RestaurantsReviews(
+                      review: review,
+                    ),
                   ],
                 )),
                 // index==1?const RestaurantsReviews():
@@ -225,12 +270,27 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
             ),
           ),
         ),
-        body: Image.asset(
-          'assets/images/1.png',
+        body: Image.network(
+          widget.restaurantData.coverPic,
           fit: BoxFit.cover,
         ),
       ),
     );
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context
+          .read<RestaurantViewModel>()
+          .getReview(widget.restaurantData.restId)
+          .then((value) {
+        setState(() {
+          review = value;
+        });
+      });
+    });
+  }
 }

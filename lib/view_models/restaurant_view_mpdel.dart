@@ -4,6 +4,7 @@ import 'package:platterwave/model/restaurant/banner_model.dart';
 import 'package:platterwave/model/restaurant/reservation_param.dart';
 import 'package:platterwave/model/restaurant/restaurant.dart';
 import 'package:platterwave/model/restaurant/restaurant_review.dart';
+import 'package:platterwave/utils/enum/app_state.dart';
 import 'package:platterwave/utils/locator.dart';
 import 'package:platterwave/utils/random_functions.dart';
 
@@ -71,11 +72,14 @@ class RestaurantViewModel extends BaseViewModel{
 
   Future<bool> makeReservation(ReservationData reservationData) async{
     try{
+      setState(AppState.busy);
       var data = await restaurantService.makeReservation(reservationData);
+      setState(AppState.idle);
       if(data!=null){
        return true;
       }
     }catch(e){
+      setState(AppState.idle);
       RandomFunction.toast('Something went wrong');
     }
     return false;

@@ -20,7 +20,7 @@ class ReservationData {
 
   String firebaseAuthId;
   String reservationDate;
-  int restId;
+  String restId;
   String sitType;
   String guestNo;
   List<Guest> guest;

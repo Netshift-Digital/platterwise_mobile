@@ -1,14 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 import 'package:hashtager/widgets/hashtag_text.dart';
 import 'package:like_button/like_button.dart';
 import 'package:platterwave/constant/post_type.dart';
-import 'package:platterwave/constant/screen_constants.dart';
-import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';

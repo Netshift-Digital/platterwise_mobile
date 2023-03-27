@@ -72,7 +72,7 @@ class AppTextField extends StatelessWidget {
         focusNode: focusNode,
         keyboardType: keyboardType,
         autovalidateMode:
-        autovalidateMode ?? AutovalidateMode.onUserInteraction,
+            autovalidateMode ?? AutovalidateMode.onUserInteraction,
         validator: validator,
         obscureText: obscureText,
         onFieldSubmitted: onFieldSubmitted,
@@ -86,14 +86,13 @@ class AppTextField extends StatelessWidget {
           ),
           isDense: true,
           fillColor: fillColor,
-
           filled: true,
           contentPadding: EdgeInsets.all(
             hasBorder
                 ? 16
                 : isSearch
-                ? 16
-                : contentPadding,
+                    ? 16
+                    : contentPadding,
           ),
           hintText: hintText,
           hintStyle: const TextStyle(
@@ -102,45 +101,49 @@ class AppTextField extends StatelessWidget {
           ),
           suffixIcon: suffixIcon != null
               ? UnconstrainedBox(
-            alignment: hasBorder ? Alignment.center : Alignment.center,
-            child: suffixIcon,
-          )
+                  alignment: hasBorder ? Alignment.center : Alignment.center,
+                  child: suffixIcon,
+                )
               : null,
           prefixIcon: prefixIcon != null
               ? UnconstrainedBox(
-            alignment: hasBorder
-                ? Alignment.center
-                : isSearch
-                ? Alignment.center
-                : Alignment.topCenter,
-            child: prefixIcon,
-          )
+                  alignment: hasBorder
+                      ? Alignment.center
+                      : isSearch
+                          ? Alignment.center
+                          : Alignment.topCenter,
+                  child: prefixIcon,
+                )
               : null,
+          disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+            borderSide: const BorderSide(width: 0.6),
+          ),
           border: hasBorder
               ? OutlineInputBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-            borderSide: const BorderSide(),
-          )
+                  borderRadius: BorderRadius.circular(borderRadius),
+                  borderSide: const BorderSide(),
+                )
               : isSearch
-              ? OutlineInputBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-            borderSide: BorderSide.none,
-          )
-              : OutlineInputBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-            borderSide: BorderSide.none,
-          ),
+                  ? OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      borderSide: BorderSide.none,
+                    )
+                  : OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      borderSide: BorderSide.none,
+                    ),
           errorBorder: hasBorder
               ? OutlineInputBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-            //borderSide: const BorderSide(color: kSecondary),
-          )
+                  borderRadius: BorderRadius.circular(borderRadius),
+                  //borderSide: const BorderSide(color: kSecondary),
+                )
               : isSearch
-              ? OutlineInputBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-            borderSide: BorderSide.none,
-          )
-              : InputBorder.none,
+                  ? OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(borderRadius),
+                      borderSide: BorderSide.none,
+                    )
+                  : InputBorder.none,
         ),
         onChanged: onChanged,
       ),
