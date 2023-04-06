@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/location_view_model.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
+import 'package:platterwave/view_models/user_view_model.dart';
+import 'package:platterwave/views/screens/restaurant/screen/loaction.dart';
 import 'package:platterwave/views/screens/restaurant/screen/more_resturant.dart';
 import 'package:platterwave/views/screens/restaurant/widget/banner_wid.dart';
 import 'package:platterwave/views/widget/containers/large_restaurant_container.dart';
 import 'package:platterwave/views/widget/containers/small_restaurant_container.dart';
+import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +24,7 @@ class RestaurantHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig.init(context);
     var resModel = context.watch<RestaurantViewModel>();
+    var locationProvider = context.watch<LocationProvider>();
     return Scaffold(
         appBar: PreferredSize(
             preferredSize: const Size(double.maxFinite, 80),
@@ -29,33 +35,41 @@ class RestaurantHomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Your location",
-                            style: AppTextTheme.h3
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          Row(
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: (){
+
+                          nav(context, const LocationSelect());
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("2972 Westheimer Rd. Santa... "),
-                              GestureDetector(
-                                  onTap: () {},
-                                  child: const Icon(
-                                      Icons.arrow_drop_down_outlined))
+                              Text(
+                                "Your location",
+                                style: AppTextTheme.h3
+                                    .copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              Row(
+                                children: [
+                                  Text(locationProvider.address),
+                                  GestureDetector(
+                                      onTap: () {},
+                                      child: const Icon(
+                                          Icons.arrow_drop_down_outlined))
+                                ],
+                              )
                             ],
-                          )
-                        ],
+                          ),
+                        ),
                       ),
                     ),
-                    Container(
+                    context.watch<UserViewModel>().user==null?const SizedBox():ImageCacheCircle(
+                      context.watch<UserViewModel>().user!.userProfile.profileUrl,
                       height: 42.h,
                       width: 42.h,
-                      decoration: const BoxDecoration(
-                          shape: BoxShape.circle, color: AppColor.p300),
-                    )
+                    ),
                   ],
                 ),
               ),

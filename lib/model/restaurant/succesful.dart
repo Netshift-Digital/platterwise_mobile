@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
+import 'package:provider/provider.dart';
 
 class Successful extends StatelessWidget {
   const Successful({Key? key}) : super(key: key);
@@ -31,7 +33,7 @@ class Successful extends StatelessWidget {
                 ],
               ),
               const Spacer(flex: 2,),
-              SvgPicture.asset('assets/images/check.svg'),
+              Image.asset('assets/images/Check gif.gif'),
               const SizedBox(
                 height: 16,
               ),
@@ -54,6 +56,7 @@ class Successful extends StatelessWidget {
               PlatButton(
                   title: "Home",
                   onTap: (){
+                    context.read<PageViewModel>().setIndex(2);
                     Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
                   }
               ),

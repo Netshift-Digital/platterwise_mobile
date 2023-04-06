@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:platterwave/model/bottom_nav_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/utils/nav.dart';
+import 'package:platterwave/view_models/location_view_model.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
@@ -103,6 +104,13 @@ class _BottomNavState extends State<BottomNav> {
     await blogModel.getFollowers();
     await blogModel.getFollowing();
     await blogModel.getTopTag();
+    setLocation();
+
+  }
+
+  setLocation(){
+    var locationProvider = context.read<LocationProvider>();
+    locationProvider.getStoredLocation();
   }
 
   void deepLink() {

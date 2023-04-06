@@ -105,7 +105,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                           borderRadius: BorderRadius.circular(8),
                         )),
                     value: sitType,
-                    hint: const Text("Select sit typ"),
+                    hint: const Text("Select sit type"),
                     items: ['vip', 'regular'].map((e) {
                       return DropdownMenuItem<String>(
                           value: e,

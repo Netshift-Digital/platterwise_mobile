@@ -227,7 +227,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                   ),
                 ),
                 const SizedBox(height: 60,),
-                !widget.userReservation.reservationStatus.toLowerCase().contains("inpr")?
+                widget.userReservation.reservationStatus.toLowerCase().contains("inpr")?
                 PlatButton(
                     appState: context.watch<RestaurantViewModel>().appState,
                     color: Colors.red,

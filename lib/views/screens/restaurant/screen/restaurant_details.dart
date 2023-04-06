@@ -85,9 +85,9 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                     const SizedBox(
                       width: 8,
                     ),
-                    const Text(
-                      '(20 reviews)',
-                      style: TextStyle(color: AppColor.g100),
+                     Text(
+                      '(${review.length} reviews)',
+                      style: const TextStyle(color: AppColor.g100),
                     ),
                   ],
                 ),
@@ -257,11 +257,13 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                   MakeReservationScreen(
                                     restaurantData: widget.restaurantData,
                                   ));
-                            })
+                            },
+                        )
                       ],
                     ),
                     RestaurantsReviews(
                       review: review,
+                      restaurantData: widget.restaurantData,
                     ),
                   ],
                 )),
@@ -270,10 +272,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
             ),
           ),
         ),
-        body: Image.network(
-          widget.restaurantData.coverPic,
-          fit: BoxFit.cover,
-        ),
+        body: ImageCacheR(widget.restaurantData.coverPic),
       ),
     );
   }

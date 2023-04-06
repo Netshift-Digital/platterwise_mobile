@@ -11,16 +11,15 @@ import 'package:platterwave/constant/index.dart';
 import 'package:platterwave/constant/keys.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/locator.dart';
+import 'package:platterwave/view_models/location_view_model.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
-import 'package:platterwave/views/screens/auth/register.dart';
 import 'package:platterwave/views/screens/auth/splash.dart';
 import 'package:provider/provider.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:platterwave/views/screens/bottom_nav/bottom_nav.dart';
+
 
 
 void main()async {
@@ -44,6 +43,7 @@ void main()async {
       ChangeNotifierProvider(create: (_)=>UserViewModel()),
       ChangeNotifierProvider(create: (_)=>VBlogViewModel()),
       ChangeNotifierProvider(create: (_)=>RestaurantViewModel()),
+      ChangeNotifierProvider(create: (_)=>LocationProvider()),
     ],
       child: const MyApp()));
 }

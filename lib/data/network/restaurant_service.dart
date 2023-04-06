@@ -94,6 +94,10 @@ class RestaurantService{
           headers: {
             "Content-type": "application/json",
           }).timeout(const Duration(seconds: 10));
+      FirebaseFirestore.instance.collection('reviews')
+      .doc(resId).set({
+        'date':DateTime.now().millisecondsSinceEpoch.toString()
+      });
       var data = jsonDecode(response.body);
       if(response.statusCode==200){
         return data;
