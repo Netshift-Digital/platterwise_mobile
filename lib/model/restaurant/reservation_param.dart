@@ -48,7 +48,7 @@ class Guest {
   Guest({
     required this.guestName,
     required this.guestEmail,
-    this.profilePic = 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png'
+    this.profilePic = 'https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg'
   });
 
   String guestName;

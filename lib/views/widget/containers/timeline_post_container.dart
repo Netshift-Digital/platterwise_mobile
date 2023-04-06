@@ -83,8 +83,11 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                   children: [
                     Text(
                       widget.post.fullName,
+                      maxLines: 1,
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
                       style: AppTextTheme.h3.copyWith(
-                          fontSize: 18,
+                          fontSize:widget.post.fullName.toString().length>23?15:18,
                           fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(height: 8,),

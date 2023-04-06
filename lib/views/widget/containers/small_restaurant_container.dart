@@ -8,6 +8,7 @@ import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/views/screens/restaurant/screen/restaurant_details.dart';
+import 'package:platterwave/views/widget/custom/cache-image.dart';
 
 class SmallRestaurantContainer extends StatelessWidget {
   final RestaurantData restaurantData;
@@ -26,7 +27,8 @@ class SmallRestaurantContainer extends StatelessWidget {
         );
       },
       child: Card(
-        elevation: 3,
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         child: Container(
           height: 178.h,
           width: 161.w,
@@ -35,22 +37,11 @@ class SmallRestaurantContainer extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
+              ImageCacheR(
+                restaurantData.coverPic,
                 height: 97.h,
-                width: 161.w,
-                decoration: const BoxDecoration(
-                  color: AppColor.p300,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(6),
-                    topRight: Radius.circular(6),
-                  ),
-                ),
-                child: ClipRRect(
-                  child: Image.network(
-                    restaurantData.coverPic,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                topRadius: 6,
+                topBottom: 0,
               ),
               SizedBox(
                 height: 12.h,
@@ -59,19 +50,22 @@ class SmallRestaurantContainer extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: Text(
                   restaurantData.restuarantName,
-                  style: AppTextTheme.h5.copyWith(fontWeight: FontWeight.bold),
+                  style: AppTextTheme.h5.copyWith(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 12,
+                  ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
               SizedBox(
-                height: 8.h,
+                height: 5.h,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SvgPicture.asset("assets/icon/location.svg"),
+                    SvgPicture.asset("assets/images/locations.svg"),
                     SizedBox(
                       width: 6.w,
                     ),
@@ -80,7 +74,11 @@ class SmallRestaurantContainer extends StatelessWidget {
                         restaurantData.address,
                         softWrap: true,
                         maxLines: 2,
-                        style: AppTextTheme.h5,
+                        style: AppTextTheme.h5.copyWith(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                          color: AppColor.g600
+                        ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     )

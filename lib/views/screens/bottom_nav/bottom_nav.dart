@@ -6,20 +6,16 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:platterwave/model/bottom_nav_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/utils/nav.dart';
-import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
-import 'package:platterwave/view_models/restaurant_view_mpdel.dart';
+import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
-import 'package:platterwave/views/screens/profile/profile_screen.dart';
-import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/restaurant/screen/restaurant_home_screen.dart';
+import 'package:platterwave/views/screens/restaurant/screen/user_reservation.dart';
 import 'package:platterwave/views/screens/save/save_screen.dart';
-import 'package:platterwave/views/screens/search/search_screen.dart';
 import 'package:platterwave/views/screens/search/trending.dart';
 import 'package:platterwave/views/screens/vblog/shared_post.dart';
 import 'package:platterwave/views/screens/vblog/timeline.dart';
-
 import 'package:provider/provider.dart';
 import 'package:svg_icon/svg_icon.dart';
 import '../../../res/text-theme.dart';
@@ -37,24 +33,25 @@ class _BottomNavState extends State<BottomNav> {
         title: "Home",
         icon: "assets/icon/home-2.svg",
         //screen: const Timeline()
-      screen: const RestaurantHomeScreen()
+        screen: const RestaurantHomeScreen(),
     ),
     BottomNavigationModel(
-        title: "Explore",
-        icon: "assets/icon/search-normal.svg",
-        screen: const TopTags()),
+      title: "Explore",
+      icon: "assets/icon/search-normal.svg",
+      screen: const TopTags(),
+    ),
     BottomNavigationModel(
-        title: "Reservations",
-        icon: "assets/icon/reserve.svg",
-        screen: const SaveScreen()
+      title: "Reservations",
+      icon: "assets/icon/reserve.svg",
+      screen: const UserReservations(),
+      // screen: const SaveScreen()
     ),
     BottomNavigationModel(
         title: "Explore",
         icon: "assets/icon/explore.svg",
-        screen: const Timeline()
+        screen: const Timeline(),
         //screen: const ViewUserProfileScreen()
-    ),
-
+        ),
   ];
   @override
   Widget build(BuildContext context) {
@@ -63,9 +60,7 @@ class _BottomNavState extends State<BottomNav> {
       body: bottomNav[pageViewModel.appIndex].screen,
       bottomNavigationBar: BottomNavigationBar(
         iconSize: 18,
-        selectedLabelStyle: AppTextTheme.h5.copyWith(
-            fontSize: 9
-        ),
+        selectedLabelStyle: AppTextTheme.h5.copyWith(fontSize: 9),
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppColor.p300,
         unselectedItemColor: AppColor.g700,
@@ -75,38 +70,39 @@ class _BottomNavState extends State<BottomNav> {
         },
         items: bottomNav.map((e) {
           return BottomNavigationBarItem(
-            label:"\n${e.title}",
-            icon:e.icon.isEmpty?const Icon(Icons.add_circle):SvgIcon(e.icon),
+            label: "\n${e.title}",
+            icon:
+                e.icon.isEmpty ? const Icon(Icons.add_circle) : SvgIcon(e.icon),
           );
         }).toList(),
       ),
-
     );
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(milliseconds: 50),(){
+    Future.delayed(const Duration(milliseconds: 50), () {
       getData();
     });
 
     deepLink();
     setNotification();
     checkNotification();
-
   }
 
-  void getData() async{
+  void getData() async {
     var userModel = context.read<UserViewModel>();
     var blogModel = context.read<VBlogViewModel>();
     var resModel = context.read<RestaurantViewModel>();
 
-  await  userModel.getMyProfile();
-  await resModel.getRestaurant();
-   await blogModel.getFollowers();
-  await  blogModel.getFollowing();
-    await  blogModel.getTopTag();
+    await userModel.getMyProfile();
+    await resModel.getRestaurant();
+    await resModel.getReservations();
+    await blogModel.getFollowers();
+    await blogModel.getFollowing();
+    await blogModel.getTopTag();
   }
 
   void deepLink() {
@@ -114,32 +110,28 @@ class _BottomNavState extends State<BottomNav> {
       _handelLink(event);
     });
 
- FirebaseDynamicLinks.instance.getInitialLink().then((e) {
-   _handelLink(e);
- });
-
+    FirebaseDynamicLinks.instance.getInitialLink().then((e) {
+      _handelLink(e);
+    });
   }
 
-  _handelLink(PendingDynamicLinkData? e){
-    if(e!=null){
-      if(e.link.path.isNotEmpty){
+  _handelLink(PendingDynamicLinkData? e) {
+    if (e != null) {
+      if (e.link.path.isNotEmpty) {
         var postId = e.link.path.replaceAll("/", "");
         nav(context, SharedPost(id: postId));
       }
     }
   }
 
-  void setNotification(){
-  var user = FirebaseAuth.instance.currentUser;
-  if(user!=null){
-    FirebaseMessaging.instance.getToken().
-    then((value) {
-      FirebaseMessaging.instance.subscribeToTopic(user.uid);
+  void setNotification() {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      FirebaseMessaging.instance.getToken().then((value) {
+        FirebaseMessaging.instance.subscribeToTopic(user.uid);
+      });
     }
-    );
   }
-  }
-
 
   void checkNotification() {
     FirebaseMessaging.onMessage.listen((event) {
@@ -150,7 +142,7 @@ class _BottomNavState extends State<BottomNav> {
             notification.hashCode,
             notification.title,
             notification.body,
-           const NotificationDetails(
+            const NotificationDetails(
               android: AndroidNotificationDetails(
                 '20',
                 'learnly',
@@ -165,7 +157,4 @@ class _BottomNavState extends State<BottomNav> {
       }
     });
   }
-
-
 }
-

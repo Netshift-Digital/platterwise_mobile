@@ -7,9 +7,6 @@ import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 
-var placeText =
-    "I recently dined at De Place Restaurant and was blown away by the quality of the food and the service. The menu had a great selection of dishes, and I was impressed by the use of fresh ingredients in every dish.";
-
 class RestaurantsReviews extends StatelessWidget {
   final List<AllRestReview> review;
   const RestaurantsReviews({Key? key, required this.review}) : super(key: key);

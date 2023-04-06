@@ -37,7 +37,7 @@ class _RateExperienceScreenState extends State<RateExperienceScreen> {
               SizedBox(height: 48.h,),
               Text("Rate Your Experience", style: AppTextTheme.h1,),
               SizedBox(height: 8.h,),
-              Text("Are you satisfied with your experience"),
+              const Text("Are you satisfied with your experience"),
               SizedBox(height: 24.h,),
               RatingBar.builder(
                   initialRating: 0,
@@ -45,19 +45,19 @@ class _RateExperienceScreenState extends State<RateExperienceScreen> {
                   direction: Axis.horizontal,
                   allowHalfRating: false,
                   itemCount: 5,
-                  itemBuilder: (context, _) => Icon(
+                  itemBuilder: (context, _) => const Icon(
                       Icons.star,
                       color: AppColor.kAmber),
-                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
                   onRatingUpdate: (rating) {
                     print(rating);
                   }),
               SizedBox(height: 24.h,),
-              Divider(
+              const Divider(
                 thickness: 2,
               ),
               SizedBox(height: 32.h,),
-              Text("Tell us what we can improve?"),
+              const Text("Tell us what we can improve?"),
               SizedBox(height: 24.h,),
               Wrap(
                 spacing: 12,
@@ -68,20 +68,20 @@ class _RateExperienceScreenState extends State<RateExperienceScreen> {
                       backgroundColor: values[0]
                           ? AppColor.p300
                           : AppColor.g300,
-                      label: Text("Hospitality"),
+                      label: const Text("Hospitality"),
                     ),
                   ),
                   GestureDetector(
                     onTap: ()=>toggleChip(values[1], 1),
                     child: Chip(
                       backgroundColor: values[1] ? AppColor.p300 : AppColor.g80,
-                      label: Text("Customer Service"),
+                      label: const Text("Customer Service"),
                     ),
                   ),
                   GestureDetector(
                     onTap: ()=>toggleChip(values[2], 2),
                     child: Chip(
-                      label: Text("Food Quality"),
+                      label: const Text("Food Quality"),
                       backgroundColor: values[2] ? AppColor.p300 : AppColor.g80,
                     ),
                   ),
@@ -89,21 +89,21 @@ class _RateExperienceScreenState extends State<RateExperienceScreen> {
                     onTap: ()=>toggleChip(values[3], 3),
                     child: Chip(
                       backgroundColor: values[3] ? AppColor.p300 : AppColor.g80,
-                      label: Text("Menu Varities"),
+                      label: const Text("Menu Varities"),
                     ),
                   ),
                   GestureDetector(
                     onTap: ()=>toggleChip(values[4], 4),
                     child: Chip(
                       backgroundColor: values[4] ? AppColor.p300 : AppColor.g80,
-                      label: Text("Environment"),
+                      label: const Text("Environment"),
                     ),
                   ),
                   GestureDetector(
                     onTap: ()=>toggleChip(values[5], 5),
                     child: Chip(
                       backgroundColor: values[5] ? AppColor.p300 : AppColor.g80,
-                      label: Text("Dishes"),
+                      label: const Text("Dishes"),
                     ),
                   ),
                 ],
@@ -117,7 +117,7 @@ class _RateExperienceScreenState extends State<RateExperienceScreen> {
                 hintText: "Add a brief introduction about you.",
                 maxLines: 8,
               ),
-              Spacer(),
+              const Spacer(),
               PlatButton(title: "Submit", onTap: (){}),
               SizedBox(
                 height: 12.h,

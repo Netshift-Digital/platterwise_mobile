@@ -1,6 +1,8 @@
 import 'package:platterwave/common/base_view_model.dart';
 import 'package:platterwave/data/network/restaurant_service.dart';
 import 'package:platterwave/model/restaurant/banner_model.dart';
+import 'package:platterwave/model/restaurant/reservation_bill.dart';
+import 'package:platterwave/model/restaurant/reservation_model.dart';
 import 'package:platterwave/model/restaurant/reservation_param.dart';
 import 'package:platterwave/model/restaurant/restaurant.dart';
 import 'package:platterwave/model/restaurant/restaurant_review.dart';
@@ -12,6 +14,7 @@ class RestaurantViewModel extends BaseViewModel{
   RestaurantService restaurantService = locator<RestaurantService>();
   List<RestaurantData> allRestDetail = [];
   List<AllBannersList> allBannersList = [];
+  List<UserReservation> userReservation = [];
 
   Future<List<RestaurantData>> getRestaurant() async{
     try{
@@ -21,11 +24,24 @@ class RestaurantViewModel extends BaseViewModel{
         notifyListeners();
       }
     }catch(e){
+      print(e);
       //
     }
     return allRestDetail;
   }
 
+  Future<List<UserReservation>> getReservations() async{
+    try{
+      var data = await restaurantService.getReservation();
+      if(data!=null){
+        userReservation = ReservationList.fromJson(data).userReservation;
+        notifyListeners();
+      }
+    }catch(e){
+      //
+    }
+    return userReservation;
+  }
 
   Future<List<AllRestReview>> getReview(String resId) async{
     try{
@@ -75,6 +91,7 @@ class RestaurantViewModel extends BaseViewModel{
       setState(AppState.busy);
       var data = await restaurantService.makeReservation(reservationData);
       setState(AppState.idle);
+      getReservations();
       if(data!=null){
        return true;
       }
@@ -83,6 +100,51 @@ class RestaurantViewModel extends BaseViewModel{
       RandomFunction.toast('Something went wrong');
     }
     return false;
+  }
+
+  Future<bool> cancelReservation(String id) async{
+    try{
+      setState(AppState.busy);
+      var data = await restaurantService.cancelReservation(id);
+      setState(AppState.idle);
+      getReservations();
+      if(data!=null){
+        return true;
+      }
+    }catch(e){
+      setState(AppState.idle);
+      RandomFunction.toast('Something went wrong');
+    }
+    return false;
+  }
+
+  Future<ReservationBillElement?> getReservationBill(String id) async{
+    try{
+      setState(AppState.busy);
+      var data = await restaurantService.getBill(id);
+      setState(AppState.idle);
+      if(data!=null){
+        return ReservationBill.fromJson(testData).reservationBill.first;
+      }
+    }catch(e){
+      setState(AppState.idle);
+     // RandomFunction.toast('Something went wrong');
+    }
+    return null;
+  }
+
+  Future<UserReservation?> getSingleReservation(String id) async{
+    try{
+      var data = await restaurantService.singleReservation(id);
+      setState(AppState.idle);
+      if(data!=null){
+        return ReservationList.fromJson(data).userReservation.first;
+      }
+    }catch(e){
+      setState(AppState.idle);
+      //RandomFunction.toast('Something went wrong');
+    }
+    return null;
   }
 
 }

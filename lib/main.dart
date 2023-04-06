@@ -11,7 +11,7 @@ import 'package:platterwave/constant/index.dart';
 import 'package:platterwave/constant/keys.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/locator.dart';
-import 'package:platterwave/view_models/restaurant_view_mpdel.dart';
+import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';

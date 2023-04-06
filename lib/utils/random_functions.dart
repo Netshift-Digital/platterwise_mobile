@@ -69,4 +69,18 @@ class RandomFunction {
     return result;
   }
 
+  static Color reserveColor(String e){
+    if(e.contains('pend')){
+      return Colors.orange;
+    }else if(e.contains('accep')){
+      return Colors.blue;
+    }else if(e.contains('can')){
+      return Colors.red;
+    }else if(e.contains('suc')){
+      return Colors.green;
+    }else{
+      return Colors.orange;
+    }
+  }
+
 }

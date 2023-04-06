@@ -4,12 +4,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:platterwave/model/restaurant/reservation_param.dart';
 import 'package:platterwave/model/restaurant/restaurant.dart';
+import 'package:platterwave/model/restaurant/succesful.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
+import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
-import 'package:platterwave/view_models/restaurant_view_mpdel.dart';
+import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/add_guest.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
@@ -333,7 +335,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
     var model = context.read<RestaurantViewModel>();
     model.makeReservation(bookData).then((value){
       if(value){
-        Navigator.pop(context);
+        nav(context, const Successful());
       }
     });
   }

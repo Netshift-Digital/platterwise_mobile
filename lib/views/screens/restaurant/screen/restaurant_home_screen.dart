@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
+import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
-import 'package:platterwave/view_models/restaurant_view_mpdel.dart';
+import 'package:platterwave/view_models/restaurant_view_model.dart';
+import 'package:platterwave/views/screens/restaurant/screen/more_resturant.dart';
+import 'package:platterwave/views/screens/restaurant/widget/banner_wid.dart';
 import 'package:platterwave/views/widget/containers/large_restaurant_container.dart';
 import 'package:platterwave/views/widget/containers/small_restaurant_container.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
@@ -87,17 +90,31 @@ class RestaurantHomeScreen extends StatelessWidget {
                       Text(
                         "Nearby Restaurants",
                         style: AppTextTheme.h3
-                            .copyWith(fontWeight: FontWeight.bold),
+                            .copyWith(fontWeight: FontWeight.w500,fontSize:
+                        16.sp),
                       ),
-                      const Text("See More")
+                      GestureDetector(
+                        onTap: () {
+                          nav(context, const MoreRestaurant());
+                        },
+                        child: const Text(
+                          "See More",
+                          style: TextStyle(color: AppColor.p200),
+                        ),
+                      )
                     ],
                   ),
                   SizedBox(
-                    height: 8.h,
+                    height: 2.h,
                   ),
-                  const Align(
+                   Align(
                       alignment: Alignment.centerLeft,
-                      child: Text("Selected Restaurants close to you")),
+                      child: Text("Selected Restaurants close to you",
+                      style: AppTextTheme.h1.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: AppColor.g600
+                      ),),),
                   SizedBox(
                     height: 32.h,
                   ),
@@ -126,15 +143,28 @@ class RestaurantHomeScreen extends StatelessWidget {
                         style: AppTextTheme.h3
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
-                      const Text("See More")
+                      GestureDetector(
+                        onTap: () {
+                          nav(context, const MoreRestaurant());
+                        },
+                        child: const Text(
+                          "See More",
+                          style: TextStyle(color: AppColor.p200),
+                        ),
+                      )
                     ],
                   ),
                   SizedBox(
-                    height: 8.h,
+                    height: 2.h,
                   ),
-                  const Align(
+                 Align(
                       alignment: Alignment.centerLeft,
-                      child: Text("Highly recommended places for you")),
+                      child: Text("Highly recommended places for you",
+                      style: AppTextTheme.h1.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: AppColor.g600
+                      ),)),
                   SizedBox(
                     height: 32.h,
                   ),
@@ -151,7 +181,7 @@ class RestaurantHomeScreen extends StatelessWidget {
                           );
                         }),
                   ),
-                  //TODO: Implement Carousel Slider for Discount and Promos
+                  const BannerWidget(),
                   SizedBox(
                     height: 42.h,
                   ),
@@ -163,7 +193,15 @@ class RestaurantHomeScreen extends StatelessWidget {
                         style: AppTextTheme.h3
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
-                      const Text("See More")
+                      GestureDetector(
+                        onTap: () {
+                          nav(context, const MoreRestaurant());
+                        },
+                        child: const Text(
+                          "See More",
+                          style: TextStyle(color: AppColor.p200),
+                        ),
+                      )
                     ],
                   ),
                   SizedBox(
@@ -175,7 +213,9 @@ class RestaurantHomeScreen extends StatelessWidget {
                     primary: false,
                     itemBuilder: (BuildContext context, int index) {
                       var data = resModel.allRestDetail[index];
-                      return  LargeRestaurantContainer(restaurantData: data,);
+                      return LargeRestaurantContainer(
+                        restaurantData: data,
+                      );
                     },
                     separatorBuilder: (BuildContext context, int index) {
                       return SizedBox(

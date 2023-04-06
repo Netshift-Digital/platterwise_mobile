@@ -4,7 +4,9 @@ import 'package:platterwave/model/restaurant/reservation_param.dart';
 import 'package:platterwave/model/vblog/user_search.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
+import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
+import 'package:platterwave/views/screens/restaurant/screen/add_guest_form.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
@@ -13,54 +15,65 @@ import 'package:provider/provider.dart';
 class AddGuest extends StatefulWidget {
   final int guestNumber;
   final Function(List<Guest> guest) onGuestSelected;
-  const AddGuest({Key? key, required this.onGuestSelected, required this.guestNumber}) : super(key: key);
+  const AddGuest(
+      {Key? key, required this.onGuestSelected, required this.guestNumber})
+      : super(key: key);
 
   @override
   State<AddGuest> createState() => _AddGuestState();
 }
 
 class _AddGuestState extends State<AddGuest> {
-  List<SearchResultElement> searchUserResult =[];
+  List<SearchResultElement> searchUserResult = [];
   List<Guest> guest = [];
   TextEditingController searchController = TextEditingController();
+  bool addManuel = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Padding(
-            padding: const EdgeInsets.only(left: 16,right: 16),
+            padding: const EdgeInsets.only(left: 16, right: 16),
             child: Column(
               children: [
                 Row(
                   children: [
                     const Spacer(),
-                    IconButton(onPressed: (){
-                      Navigator.pop(context);
-                    }, icon: const Icon(Icons.clear,size: 30,))
+                    IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(
+                          Icons.clear,
+                          size: 30,
+                        ))
                   ],
                 ),
-                const SizedBox(height: 40,),
+                const SizedBox(
+                  height: 40,
+                ),
                 AppTextField(
                   controller: searchController,
                   fillColor: AppColor.g30,
                   isSearch: true,
                   hasBorder: false,
-                  onChanged: (e){
-                    if(searchController.text.length>2){
-                      context.read<VBlogViewModel>().searchUser(searchController.text)
-                          .then((value){
-                        if(value!=null){
-                          if(mounted){
+                  onChanged: (e) {
+                    if (searchController.text.length > 2) {
+                      context
+                          .read<VBlogViewModel>()
+                          .searchUser(searchController.text)
+                          .then((value) {
+                        if (value != null) {
+                          if (mounted) {
                             setState(() {
-                              searchUserResult=value;
+                              searchUserResult = value;
                             });
                           }
-
                         }
                       });
                     }
@@ -68,107 +81,143 @@ class _AddGuestState extends State<AddGuest> {
                   hintText: "Search for a post or people",
                   prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
                 ),
-                const SizedBox(height: 10,),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: InkWell(
-                    onTap: (){
-                      //RandomFunction.sheet(context, const AddGuest());
-                    },
-                    child: Text(
-                      "Add Other Guests",
-                      style: AppTextTheme.h3.copyWith(
-                        fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                          color: AppColor.p200),
-                    ),
-                  ),
+                const SizedBox(
+                  height: 10,
                 ),
-                guest.isEmpty?const SizedBox():Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: SizedBox(
-                    width: double.maxFinite,
-                    height:65 ,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: guest.map((e){
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Column(
-                            children: [
-                              Stack(
-                                children: [
-                                  const SizedBox(
-                                    height: 36,
-                                    width: 36,
-                                  ),
-                                  ImageCacheCircle(e.profilePic,height: 36,width: 36,),
-                                  Positioned(
-                                    right: 0,
-                                    child: InkWell(
-                                      onTap: (){
-                                       guest.remove(e);
-                                       setState(() {});
-                                      },
-                                      child: Container(
-                                        decoration:  BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.grey[500]
-                                        ),
-                                          child: const Padding(
-                                            padding: EdgeInsets.all(2.0),
-                                            child: Icon(Icons.clear,color: Colors.white,size: 10,),
-                                          )),
-                                    ),
-                                  )
-                                ],
+                (widget.guestNumber == guest.length)
+                    ? const SizedBox()
+                    : Align(
+                        alignment: Alignment.bottomLeft,
+                        child: InkWell(
+                          onTap: () {
+                            RandomFunction.sheet(
+                              context,
+                              AddGuestForm(
+                                guestNumber: widget.guestNumber - guest.length,
+                                onDone: (List<Guest> g) {
+                                  guest.addAll(g);
+                                  setState(() {});
+                                },
                               ),
-                              const SizedBox(height: 3,),
-                              Text(e.guestName.split(' ').first,
-                              style: const TextStyle(
-                                fontSize: 12
-                              ),),
-                            ],
+                            );
+                          },
+                          child: Text(
+                            "Add Other Guests",
+                            style: AppTextTheme.h3.copyWith(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12,
+                                color: AppColor.p200),
                           ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
+                        ),
+                      ),
+                guest.isEmpty
+                    ? const SizedBox()
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: SizedBox(
+                          width: double.maxFinite,
+                          height: 65,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: guest.map((e) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: Column(
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        const SizedBox(
+                                          height: 36,
+                                          width: 36,
+                                        ),
+                                        ImageCacheCircle(
+                                          e.profilePic,
+                                          height: 36,
+                                          width: 36,
+                                        ),
+                                        Positioned(
+                                          right: 0,
+                                          child: InkWell(
+                                            onTap: () {
+                                              guest.remove(e);
+                                              setState(() {});
+                                            },
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Colors.grey[500]),
+                                                child: const Padding(
+                                                  padding: EdgeInsets.all(2.0),
+                                                  child: Icon(
+                                                    Icons.clear,
+                                                    color: Colors.white,
+                                                    size: 10,
+                                                  ),
+                                                )),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text(
+                                      e.guestName.split(' ').first,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                Expanded(
+                    child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: searchUserResult.length,
+                        itemBuilder: (context, index) {
+                          var data = searchUserResult[index];
+                          return ListTile(
+                            onTap: () {
+                              if (guest.any((element) =>
+                                          element.guestEmail == data.email) ==
+                                      false &&
+                                  guest.length < widget.guestNumber) {
+                                guest.add(Guest(
+                                    guestName: data.fullName,
+                                    guestEmail: data.email,
+                                    profilePic: data.profileUrl));
+                                setState(() {});
+                              }
+                            },
+                            contentPadding: EdgeInsets.zero,
+                            leading: ImageCacheCircle(
+                              data.profileUrl,
+                              height: 40,
+                              width: 40,
+                            ),
+                            title: Text(data.fullName),
+                            subtitle: Text(data.username),
+                          );
+                        })),
+                const SizedBox(
+                  height: 20,
                 ),
-                Expanded(child:ListView.builder(
-                    padding: EdgeInsets.zero,
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: searchUserResult.length,
-                    itemBuilder: (context,index) {
-                      var data =  searchUserResult[index];
-                      return  ListTile(
-                        onTap: (){
-                          if(guest.any((element) => element.guestEmail==data.email)==false&&guest.length<widget.guestNumber){
-                            guest.add(Guest(
-                                guestName: data.fullName,
-                                guestEmail: data.email,
-                              profilePic: data.profileUrl
-                            ));
-                            setState(() {});
-                          }
-                        },
-                        contentPadding:EdgeInsets.zero ,
-                        leading:ImageCacheCircle(data.profileUrl,height: 40,width: 40,) ,
-                        title: Text(data.fullName),
-                        subtitle: Text(data.username),
-                      );
-                    }
-                )),
-                const SizedBox(height: 20,),
                 PlatButton(
                     title: 'Done',
-                    onTap:widget.guestNumber!=guest.length?null:(){
-                       widget.onGuestSelected(guest);
-                       Navigator.pop(context);
-                    }
+                    onTap: widget.guestNumber != guest.length
+                        ? null
+                        : () {
+                            widget.onGuestSelected(guest);
+                            Navigator.pop(context);
+                          }),
+                const SizedBox(
+                  height: 23,
                 ),
-                const SizedBox(height: 23,),
               ],
             ),
           ),
@@ -176,20 +225,19 @@ class _AddGuestState extends State<AddGuest> {
       ),
     );
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<VBlogViewModel>().searchUser('chi')
-          .then((value){
-        if(value!=null){
-          if(mounted){
+      context.read<VBlogViewModel>().searchUser('chi').then((value) {
+        if (value != null) {
+          if (mounted) {
             setState(() {
-              searchUserResult=value;
+              searchUserResult = value;
             });
           }
-
         }
       });
     });

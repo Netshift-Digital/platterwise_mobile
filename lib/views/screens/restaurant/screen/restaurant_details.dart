@@ -8,7 +8,7 @@ import 'package:platterwave/model/restaurant/restaurant_review.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
-import 'package:platterwave/view_models/restaurant_view_mpdel.dart';
+import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/make_reservation_screen.dart';
 import 'package:platterwave/views/screens/restaurant/screen/reviews.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
@@ -287,9 +287,11 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
           .read<RestaurantViewModel>()
           .getReview(widget.restaurantData.restId)
           .then((value) {
-        setState(() {
-          review = value;
-        });
+            if(mounted){
+              setState(() {
+                review = value;
+              });
+            }
       });
     });
   }

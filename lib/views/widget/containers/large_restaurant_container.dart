@@ -5,6 +5,7 @@ import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/views/screens/restaurant/screen/restaurant_details.dart';
+import 'package:platterwave/views/widget/custom/cache-image.dart';
 
 import '../../../res/color.dart';
 
@@ -27,54 +28,58 @@ class LargeRestaurantContainer extends StatelessWidget {
         elevation: 3,
         child: Container(
           width: 343.w,
-          height: 92.h,
+          height: 106.h,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
               color: AppColor.g0
           ),
           child: Row(
             children: [
-              Container(
+              SizedBox(
                 width: 99.w,
-                height: 92.h,
-                decoration: const BoxDecoration(
-                  color: AppColor.p300,
-                  borderRadius: BorderRadius.only(
+                height: 106.h,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(6),
                     bottomLeft: Radius.circular(6),
                   ),
-                ),
-                child: ClipRRect(
-                   child: Image.network(restaurantData.coverPic, fit: BoxFit.cover,),
+                   child: ImageCacheR(restaurantData.coverPic,
+                   topBottom: 0,
+                   topRadius: 0,
+                   ),
                 ),
               ),
               SizedBox(width: 12.w,),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(height: 18.h,),
                     Text(
                      restaurantData.restuarantName,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       style: AppTextTheme.h3.copyWith(
-                        fontWeight: FontWeight.bold
+                        fontWeight: FontWeight.w500
                       ),
                     ),
-                    SizedBox(width: 6.h,),
+                    SizedBox(height: 4.h,),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Flexible(
-                            child: SvgPicture.asset("assets/icon/location.svg")
+                            child: SvgPicture.asset("assets/images/locations.svg")
                         ),
                         SizedBox(width: 6.w,),
                         Flexible(
                           flex: 2,
                           child: Text(
                             restaurantData.address,
-                             style: AppTextTheme.h5,
+                             style: AppTextTheme.h5.copyWith(
+                               fontSize: 12,
+                               color: AppColor.g600,
+                               fontWeight: FontWeight.w500
+                             ),
                             softWrap: true,
                             maxLines: 3,
                           ),
