@@ -267,7 +267,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                       RandomFunction.sheet(
                           context,
                           AddGuest(
-                            guestNumber: guestNumber - 1,
+                            guestNumber: guestNumber,
                             onGuestSelected: (e) {
                               guest = e;
                               setState(() {});
@@ -307,8 +307,8 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
   bool validate() {
     if (sitType != null &&
         dateTime != null &&
-        guestNumber > 1 &&
-        guest.length == guestNumber-1) {
+        guestNumber > 0 &&
+        guest.length == guestNumber) {
       return false;
     } else {
       return true;
@@ -319,12 +319,12 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
     var user = context.read<UserViewModel>().user!.userProfile;
     List<Guest> g = [];
     g.addAll(guest);
-    g.add(
-      Guest(
-        guestName: user.fullName,
-        guestEmail: user.email,
-      ),
-    );
+    // g.add(
+    //   Guest(
+    //     guestName: user.fullName,
+    //     guestEmail: user.email,
+    //   ),
+    // );
     var bookData = ReservationData(
         firebaseAuthId: FirebaseAuth.instance.currentUser?.uid ?? "",
         reservationDate: dateTime.toString(),

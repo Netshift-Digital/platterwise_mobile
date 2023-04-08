@@ -24,7 +24,6 @@ class RestaurantViewModel extends BaseViewModel{
         notifyListeners();
       }
     }catch(e){
-      print(e);
       //
     }
     return allRestDetail;

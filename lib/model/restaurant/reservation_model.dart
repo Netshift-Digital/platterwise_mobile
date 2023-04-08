@@ -98,8 +98,8 @@ class GuestInfo {
   String guestEmail;
 
   factory GuestInfo.fromJson(Map<String, dynamic> json) => GuestInfo(
-    guestName: json["guest_name"],
-    guestEmail: json["guest_email"],
+    guestName: json["guest_name"]??"",
+    guestEmail: json["guest_email"]??"",
   );
 
   Map<String, dynamic> toJson() => {
