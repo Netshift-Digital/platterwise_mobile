@@ -123,6 +123,7 @@ class RestaurantViewModel extends BaseViewModel{
       var data = await restaurantService.getBill(id);
       setState(AppState.idle);
       if(data!=null){
+        //testData
         return ReservationBill.fromJson(testData).reservationBill.first;
       }
     }catch(e){

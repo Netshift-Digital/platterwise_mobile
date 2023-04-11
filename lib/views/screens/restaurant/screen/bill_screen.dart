@@ -4,6 +4,7 @@ import 'package:platterwave/model/restaurant/reservation_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/utils/extension.dart';
 import 'package:platterwave/utils/random_functions.dart';
+import 'package:platterwave/views/screens/restaurant/screen/split_bill/select_split.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
@@ -215,7 +216,13 @@ class BillScreen extends StatelessWidget {
                     child: PlatButton(
                         title: "Split Bill",
                         color: AppColor.g100,
-                        onTap: () {}),
+                        onTap: () {
+                          RandomFunction.sheet(context, SelectSplit(
+                            userReservation: userReservation,
+                            reservationBillElement: reservationBillElement,
+                          ));
+                        },
+                    ),
                   )
                 ],
               ),

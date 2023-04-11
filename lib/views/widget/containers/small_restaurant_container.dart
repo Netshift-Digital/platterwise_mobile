@@ -37,14 +37,15 @@ class SmallRestaurantContainer extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ImageCacheR(
-                restaurantData.coverPic,
-                height: 97.h,
-                topRadius: 6,
-                topBottom: 0,
+              Expanded(
+                child: ImageCacheR(
+                  restaurantData.coverPic,
+                  topRadius: 6,
+                  topBottom: 0,
+                ),
               ),
               SizedBox(
-                height: 12.h,
+                height: 8.h,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -84,7 +85,10 @@ class SmallRestaurantContainer extends StatelessWidget {
                     )
                   ],
                 ),
-              )
+              ),
+              SizedBox(
+                height: 5.h,
+              ),
             ],
           ),
         ),
