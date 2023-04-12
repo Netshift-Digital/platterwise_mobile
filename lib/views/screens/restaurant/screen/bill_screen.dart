@@ -177,7 +177,7 @@ class BillScreen extends StatelessWidget {
                             ),
                             const Spacer(),
                             Text(
-                              reservationBillElement.grandPrice.first.sumPrice.toCurrency(),
+                              reservationBillElement.grandPrice.toCurrency(),
                               style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w500),
                             ),

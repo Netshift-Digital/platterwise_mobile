@@ -124,7 +124,7 @@ class RestaurantViewModel extends BaseViewModel{
       setState(AppState.idle);
       if(data!=null){
         //testData
-        return ReservationBill.fromJson(testData).reservationBill.first;
+        return ReservationBill.fromJson(data).reservationBill.first;
       }
     }catch(e){
       setState(AppState.idle);

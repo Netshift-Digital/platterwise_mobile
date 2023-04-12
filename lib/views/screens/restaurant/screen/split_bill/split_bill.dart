@@ -42,7 +42,7 @@ class _SplitBillState extends State<SplitBill> {
                          color: Colors.white
                      ),),
                      const SizedBox(height: 8,),
-                     Text(widget.reservationBillElement.grandPrice.first.sumPrice.toCurrency(),style: const TextStyle(
+                     Text(widget.reservationBillElement.grandPrice.toCurrency(),style: const TextStyle(
                          fontSize: 22,
                          fontWeight: FontWeight.w700,
                          color: Colors.white

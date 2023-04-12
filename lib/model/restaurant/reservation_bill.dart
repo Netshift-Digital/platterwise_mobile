@@ -1,3 +1,6 @@
+// To parse this JSON data, do
+//
+//     final reservationBill = reservationBillFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -14,7 +17,7 @@ class ReservationBill {
   String status;
   List<ReservationBillElement> reservationBill;
 
-  factory ReservationBill.fromJson(Map<dynamic, dynamic> json) => ReservationBill(
+  factory ReservationBill.fromJson(Map<String, dynamic> json) => ReservationBill(
     status: json["status"],
     reservationBill: List<ReservationBillElement>.from(json["reservation_bill"].map((x) => ReservationBillElement.fromJson(x))),
   );
@@ -38,6 +41,7 @@ class ReservationBillElement {
     required this.reservationDate,
     required this.itemOrdered,
     required this.grandPrice,
+    this.transactionId,
   });
 
   String fullName;
@@ -50,7 +54,8 @@ class ReservationBillElement {
   String noOfGuest;
   String reservationDate;
   List<ItemOrdered> itemOrdered;
-  List<GrandPrice> grandPrice;
+  String grandPrice;
+  dynamic transactionId;
 
   factory ReservationBillElement.fromJson(Map<String, dynamic> json) => ReservationBillElement(
     fullName: json["full_name"],
@@ -63,7 +68,8 @@ class ReservationBillElement {
     noOfGuest: json["no_of_guest"],
     reservationDate: json["reservation_date"],
     itemOrdered: List<ItemOrdered>.from(json["item_ordered"].map((x) => ItemOrdered.fromJson(x))),
-    grandPrice: List<GrandPrice>.from(json["grand_price"].map((x) => GrandPrice.fromJson(x))),
+    grandPrice: json["grand_price"],
+    transactionId: json["transactionId"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -77,23 +83,8 @@ class ReservationBillElement {
     "no_of_guest": noOfGuest,
     "reservation_date": reservationDate,
     "item_ordered": List<dynamic>.from(itemOrdered.map((x) => x.toJson())),
-    "grand_price": List<dynamic>.from(grandPrice.map((x) => x.toJson())),
-  };
-}
-
-class GrandPrice {
-  GrandPrice({
-    required this.sumPrice,
-  });
-
-  String sumPrice;
-
-  factory GrandPrice.fromJson(Map<String, dynamic> json) => GrandPrice(
-    sumPrice: json["sum_price"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "sum_price": sumPrice,
+    "grand_price": grandPrice,
+    "transactionId": transactionId,
   };
 }
 
@@ -128,49 +119,3 @@ class ItemOrdered {
     "total_price": totalPrice,
   };
 }
-
-
-var testData = {
-  "status": " SUCCESS",
-  "reservation_bill": [
-    {
-      "full_name": "Oluwasayo Oyewale",
-      "username": null,
-      "firebaseAuthID": "wkUtpw5WUzTp6muI1ydyLu8WhFo1",
-      "profile_banned": "false",
-      "profileUrl": "https://firebasestorage.googleapis.com/v0/b/platterwise.appspot.com/o/1671093893544922.png?alt=media&token=fe2a1c03-3f7c-4321-8ec4-b6707565981d",
-      "rest_id": "13",
-      "seat_type": "vip",
-      "no_of_guest": "2",
-      "reservation_date": "today",
-      "item_ordered": [
-        {
-          "order_id": "3",
-          "item": "Yam",
-          "unit_price": "2000",
-          "qty": "2",
-          "total_price": "4000"
-        },
-        {
-          "order_id": "3",
-          "item": "Egg",
-          "unit_price": "600",
-          "qty": "1",
-          "total_price": "600"
-        },
-        {
-          "order_id": "3",
-          "item": "Bottle water",
-          "unit_price": "200",
-          "qty": "1",
-          "total_price": "200"
-        }
-      ],
-      "grand_price": [
-        {
-          "sum_price": "4800"
-        }
-      ]
-    }
-  ]
-};
