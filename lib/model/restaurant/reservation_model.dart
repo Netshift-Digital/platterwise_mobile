@@ -92,10 +92,12 @@ class GuestInfo {
   GuestInfo({
     required this.guestName,
     required this.guestEmail,
+    this.amount ='0'
   });
 
   String guestName;
   String guestEmail;
+  String amount;
 
   factory GuestInfo.fromJson(Map<String, dynamic> json) => GuestInfo(
     guestName: json["guest_name"]??"",

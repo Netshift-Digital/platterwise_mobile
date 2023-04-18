@@ -83,6 +83,9 @@ class _CustomAmountState extends State<CustomAmount> {
                 const SizedBox(height: 24,),
                TextField(
                  controller: textEditingController,
+                 onChanged: (e){
+                   setState(() {});
+                 },
                  keyboardType: TextInputType.number,
                  decoration: const InputDecoration(
                    border: InputBorder.none,
@@ -108,5 +111,11 @@ class _CustomAmountState extends State<CustomAmount> {
         ),
       ),
     );
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    textEditingController.text = widget.guestInfo.amount;
   }
 }

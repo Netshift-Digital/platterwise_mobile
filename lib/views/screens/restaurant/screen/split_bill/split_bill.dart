@@ -10,13 +10,15 @@ import 'package:platterwave/views/screens/restaurant/screen/split_bill/custom_am
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/percentage_split.dart';
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/split_option.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
+import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 
+// ignore: must_be_immutable
 class SplitBill extends StatefulWidget {
-  final UserReservation userReservation;
+  UserReservation userReservation;
   final ReservationBillElement reservationBillElement;
   final List<GuestInfo> guestInfo;
-  const SplitBill(
+  SplitBill(
       {Key? key,
       required this.userReservation,
       required this.reservationBillElement,
@@ -29,7 +31,8 @@ class SplitBill extends StatefulWidget {
 
 class _SplitBillState extends State<SplitBill> {
   SplitType splitType = SplitType.equally;
-  num balance = 0;
+  num amountShared = 0;
+  num grandPrice = 0;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size.height;
@@ -100,6 +103,9 @@ class _SplitBillState extends State<SplitBill> {
                                 splitType = e;
                               });
                               Navigator.pop(context);
+                              if (e == SplitType.equally) {
+                                shareEqually();
+                              }
                             },
                           ),
                           height: MediaQuery.of(context).size.height / 1.5);
@@ -138,25 +144,30 @@ class _SplitBillState extends State<SplitBill> {
                       onTap: () {
                         if (splitType == SplitType.custom) {
                           RandomFunction.sheet(
-                            context,
-                            CustomAmount(
-                              guestInfo: data,
-                              onDone: (e) {},
-                              balance: balance,
-                            ),
-                            height: size/1.3
-                          );
-                        }else if(splitType == SplitType.percentage){
+                              context,
+                              CustomAmount(
+                                guestInfo: data,
+                                onDone: (e) {
+                                  cal(e, index);
+                                  Navigator.pop(context);
+                                },
+                                balance: grandPrice - amountShared,
+                              ),
+                              height: size / 1.3);
+                        } else if (splitType == SplitType.percentage) {
                           RandomFunction.sheet(
                               context,
                               PercentageSplit(
-                                gradPrice: num.parse(widget.reservationBillElement.grandPrice),
+                                gradPrice: num.parse(
+                                    widget.reservationBillElement.grandPrice),
                                 guestInfo: data,
-                                onDone: (e) {},
-                                balance: balance,
+                                onDone: (e) {
+                                  cal(e, index);
+                                  Navigator.pop(context);
+                                },
+                                balance: grandPrice - amountShared,
                               ),
-                              height: size/1.3
-                          );
+                              height: size / 1.3);
                         }
                       },
                       child: Container(
@@ -168,6 +179,15 @@ class _SplitBillState extends State<SplitBill> {
                           padding: const EdgeInsets.only(
                               left: 12, right: 12, top: 8, bottom: 8),
                           child: ListTile(
+                            trailing: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(6.0),
+                                  child: Text(data.amount.toCurrency()),
+                                )),
                             contentPadding: EdgeInsets.zero,
                             leading: const ImageCacheCircle(
                               'https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg',
@@ -181,6 +201,54 @@ class _SplitBillState extends State<SplitBill> {
                     ),
                   );
                 },
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              const Divider(
+                thickness: 2,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Container(
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                  color: AppColor.g20,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${amountShared.toString().toCurrency()} of ${grandPrice.toString().toCurrency()}",
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 6,
+                      ),
+                      Text(
+                        "${(grandPrice - amountShared).toString().toCurrency()} left",
+                        style: const TextStyle(
+                            fontSize: 16,
+                            color: AppColor.g500,
+                            fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 41,),
+              PlatButton(
+                  title: "Split",
+                  onTap: grandPrice==amountShared?(){
+
+                  }:null
               )
             ],
           ),
@@ -188,12 +256,34 @@ class _SplitBillState extends State<SplitBill> {
       ),
     );
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      balance = num.parse(widget.reservationBillElement.grandPrice);
+      grandPrice = num.parse(widget.reservationBillElement.grandPrice);
     });
+  }
+
+  void cal(num e, int index) {
+    num money = 0;
+    widget.userReservation.guestInfo[index].amount = e.toString();
+    for (var data in widget.userReservation.guestInfo) {
+      money = money + num.parse(data.amount);
+    }
+    amountShared = money;
+    setState(() {});
+  }
+
+  void shareEqually() {
+    num money = 0;
+    for (int x = 0; x < widget.userReservation.guestInfo.length; x++) {
+      widget.userReservation.guestInfo[x].amount =
+          (grandPrice / widget.guestInfo.length).toStringAsFixed(2);
+      money = money + grandPrice / widget.guestInfo.length;
+    }
+    amountShared = money;
+    setState(() {});
   }
 }
