@@ -82,33 +82,36 @@ class _SelectSplitState extends State<SelectSplit> {
                 itemBuilder: (context, index) {
                   var data = widget.userReservation.guestInfo[index];
                   var value = guest
-                      .any((element) => element.guestEmail == data.guestEmail);
-                  return GestureDetector(
-                    onTap: () {
-                      if (value) {
-                        guest.remove(data);
-                      } else {
-                        guest.add(data);
-                      }
-                      setState(() {});
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: value?AppColor.g20:Colors.transparent,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 3,right: 3),
-                        child: ListTile(
-                          trailing: value?SvgPicture.asset('assets/images/mark.svg'):const SizedBox(),
-                          contentPadding: EdgeInsets.zero,
-                          leading: const ImageCacheCircle(
-                            'https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg',
-                            height: 40,
-                            width: 40,
+                      .any((element) => element.guestName == data.guestName);
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: GestureDetector(
+                      onTap: () {
+                        if (value) {
+                          guest.remove(data);
+                        } else {
+                          guest.add(data);
+                        }
+                        setState(() {});
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: value?AppColor.g20:Colors.transparent,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 3,right: 3),
+                          child: ListTile(
+                            trailing: value?SvgPicture.asset('assets/images/mark.svg'):const SizedBox(),
+                            contentPadding: EdgeInsets.zero,
+                            leading: const ImageCacheCircle(
+                              'https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg',
+                              height: 40,
+                              width: 40,
+                            ),
+                            title: Text(data.guestName),
+                            subtitle: Text(data.guestEmail),
                           ),
-                          title: Text(data.guestName),
-                          subtitle: Text(data.guestEmail),
                         ),
                       ),
                     ),
