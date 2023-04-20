@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:pinput/pinput.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/spacing.dart';
 import 'package:platterwave/res/text-theme.dart';
@@ -59,9 +57,9 @@ final TextEditingController _otp = TextEditingController();
                 ),
               ),
               const SizedBox(height: sixteen,),
-             PinField(
-                 controller: _otp
-             ),
+             // PinField(
+             //     controller: _otp
+             // ),
               const SizedBox(height: thirtyTwo,),
               GestureDetector(
                 onTap: (){

@@ -11,6 +11,7 @@ import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
+import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/restaurant/screen/restaurant_home_screen.dart';
 import 'package:platterwave/views/screens/restaurant/screen/user_reservation.dart';
 import 'package:platterwave/views/screens/save/save_screen.dart';
@@ -31,13 +32,13 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   final List<BottomNavigationModel> bottomNav = [
     BottomNavigationModel(
-        title: "Home",
-        icon: "assets/icon/home-2.svg",
-        //screen: const Timeline()
-        screen: const RestaurantHomeScreen(),
+      title: "Home",
+      icon: "assets/icon/home-2.svg",
+      //screen: const Timeline()
+      screen: const RestaurantHomeScreen(),
     ),
     BottomNavigationModel(
-      title: "Explore",
+      title: "Search",
       icon: "assets/icon/search-normal.svg",
       screen: const TopTags(),
     ),
@@ -48,11 +49,15 @@ class _BottomNavState extends State<BottomNav> {
       // screen: const SaveScreen()
     ),
     BottomNavigationModel(
-        title: "Explore",
-        icon: "assets/icon/explore.svg",
-        screen: const Timeline(),
-        //screen: const ViewUserProfileScreen()
-        ),
+      title: "Explore",
+      icon: "assets/icon/explore.svg",
+      screen: const Timeline(),
+    ),
+    BottomNavigationModel(
+        title: "Profile",
+        icon: "assets/icon/user_profile.svg",
+        screen: const ViewUserProfileScreen(),
+    )
   ];
   @override
   Widget build(BuildContext context) {
@@ -105,10 +110,9 @@ class _BottomNavState extends State<BottomNav> {
     await blogModel.getFollowing();
     await blogModel.getTopTag();
     setLocation();
-
   }
 
-  setLocation(){
+  setLocation() {
     var locationProvider = context.read<LocationProvider>();
     locationProvider.getStoredLocation();
   }

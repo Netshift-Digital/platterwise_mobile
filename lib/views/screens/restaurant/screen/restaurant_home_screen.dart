@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
+import 'package:platterwave/constant/endpoint.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
@@ -8,7 +8,6 @@ import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/location_view_model.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
-import 'package:platterwave/views/screens/restaurant/screen/loaction.dart';
 import 'package:platterwave/views/screens/restaurant/screen/more_resturant.dart';
 import 'package:platterwave/views/screens/restaurant/widget/banner_wid.dart';
 import 'package:platterwave/views/widget/containers/large_restaurant_container.dart';
@@ -16,6 +15,7 @@ import 'package:platterwave/views/widget/containers/small_restaurant_container.d
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
 import 'package:provider/provider.dart';
+import 'package:awesome_place_search/awesome_place_search.dart';
 
 class RestaurantHomeScreen extends StatelessWidget {
   const RestaurantHomeScreen({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class RestaurantHomeScreen extends StatelessWidget {
             preferredSize: const Size(double.maxFinite, 80),
             child: SafeArea(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                padding: EdgeInsets.symmetric(horizontal: 16.w,vertical: 15.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,8 +38,13 @@ class RestaurantHomeScreen extends StatelessWidget {
                     Expanded(
                       child: GestureDetector(
                         onTap: (){
-
-                          nav(context, const LocationSelect());
+                          AwesomePlaceSearch(
+                            context: context,
+                            key: "AIzaSyC44N6yERgjg8AM_UOznKlflcEZWYE8tro",
+                            onTap: (value) async {
+                              PredictionModel? prediction = await value;
+                            },
+                          ).show();
                         },
                         child: Container(
                           color: Colors.transparent,

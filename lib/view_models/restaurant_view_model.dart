@@ -30,6 +30,19 @@ class RestaurantViewModel extends BaseViewModel{
     return allRestDetail;
   }
 
+  Future<List<RestaurantData>> searchRestaurant(String text) async{
+    try{
+      var data = await restaurantService.searchRestaurant(text);
+      if(data!=null){
+        var list = Restaurant.fromJson(data).allRestDetail;
+        return list;
+      }
+    }catch(e){
+      //
+    }
+    return [];
+  }
+
   Future<List<UserReservation>> getReservations() async{
     try{
       var data = await restaurantService.getReservation();

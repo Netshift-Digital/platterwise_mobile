@@ -1,36 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:platterwave/model/restaurant/restaurant.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/model/vblog/user_search.dart';
+import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/enum/saerch_type.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
+import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/containers/empty_content_container.dart';
+import 'package:platterwave/views/widget/containers/large_restaurant_container.dart';
 import 'package:platterwave/views/widget/containers/timeline_post_container.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
 import 'package:provider/provider.dart';
-import '../../../res/color.dart';
-import '../../widget/appbar/appbar.dart';
 
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+
+class RestaurantSearchScreen extends StatefulWidget {
+  const RestaurantSearchScreen({Key? key}) : super(key: key);
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<RestaurantSearchScreen> createState() => _RestaurantSearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
-  List<Post> searchResult=[];
-  List<SearchResultElement> searchUserResult =[];
+class _RestaurantSearchScreenState extends State<RestaurantSearchScreen> {
+  List<RestaurantData> allRestDetail = [];
   TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<VBlogViewModel>();
+    var model = context.watch<RestaurantViewModel>();
     SizeConfig.init(context);
     return Scaffold(
       appBar: appBar(context),
@@ -45,88 +48,49 @@ class _SearchScreenState extends State<SearchScreen> {
               isSearch: true,
               hasBorder: false,
               onChanged: (e){
-                if(searchController.text.length>2){
-                  if(model.searchType==SearchType.user){
-                    context.read<VBlogViewModel>().searchUser(searchController.text)
-                        .then((value){
-                      if(value!=null){
-                        if(mounted){
-                          setState(() {
-                            searchUserResult=value;
-                          });
-                        }
-
-                      }
-                    });
-                  }else{
-                    context.read<VBlogViewModel>().searchPost(searchController.text)
-                        .then((value){
-                      if(value!=null){
-                        if(mounted){
-                          setState(() {
-                            searchResult=value;
-                          });
-                        }
-
-                      }
-                    });
-                  }
-
+                if(e.length>2){
+                  model.searchRestaurant(e).then((value){
+                    if(mounted){
+                      setState(() {
+                        allRestDetail=value;
+                      });
+                    }
+                  });
                 }
               },
               hintText: "Search for a post or people",
-                prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
+              prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
               suffixIcon: GestureDetector(
-                onTap: (){
-                  filterSheet(model);
-                },
-                  child:const  Icon(Icons.sort,color: Colors.grey,)
+                  onTap: (){
+                    searchController.clear();
+                  },
+                  child:const  Icon(Icons.clear,color: Colors.grey,)
               ),
             ),
             SizedBox(height: 33.h,),
-            model.searchType==SearchType.user?
             Expanded(
-                child: searchUserResult.isEmpty?const Center(
-                  child: EmptyContentContainer(
-
-                  ),
-                ): ListView.builder(
-                    padding: EdgeInsets.zero,
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: searchUserResult.length,
-                    itemBuilder: (context,index) {
-                      var data =  searchUserResult[index];
-                      return  ListTile(
-                        onTap: (){
-                          nav(context, const ViewUserProfileScreen());
-                        },
-                        contentPadding:EdgeInsets.zero ,
-                        leading:ImageCacheCircle(data.profileUrl,height: 40,width: 40,) ,
-                        title: Text(data.fullName),
-                        subtitle: Text(data.username),
-                      );
-                    }
-                )
-            ) :Expanded(
-              child: searchResult.isEmpty?const Center(
-                child: EmptyContentContainer(
-
-                ),
-              ): ListView.builder(
-                  padding: EdgeInsets.zero,
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: searchResult.length,
-                  itemBuilder: (context,index) {
-                    var data =  searchResult[index];
-                    return  TimelinePostContainer(data);
-                  }
-              )
+              child: ListView.separated(
+                shrinkWrap: true,
+                itemCount: allRestDetail.length,
+                physics: const BouncingScrollPhysics(),
+                primary: false,
+                itemBuilder: (BuildContext context, int index) {
+                  var data = allRestDetail[index];
+                  return LargeRestaurantContainer(
+                    restaurantData: data,
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(
+                    height: 20.h,
+                  );
+                },
+              ),
             )
+
           ],
         ),
-      ),
+    ),
     );
   }
   @override
@@ -146,7 +110,7 @@ class _SearchScreenState extends State<SearchScreen> {
           return Container(
             height: 150,
             decoration: const BoxDecoration(
-              color: Colors.white
+                color: Colors.white
             ),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -156,17 +120,17 @@ class _SearchScreenState extends State<SearchScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("By post",
-                      style: AppTextTheme.large.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16
-                      ),),
+                        style: AppTextTheme.large.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16
+                        ),),
                       Checkbox(
                           value: vBlogViewModel.searchType==SearchType.post?true:false,
                           onChanged:(e){
-                           if(e==true){
-                             vBlogViewModel.setSearchType(SearchType.post);
-                             Navigator.pop(context);
-                           }
+                            if(e==true){
+                              vBlogViewModel.setSearchType(SearchType.post);
+                              Navigator.pop(context);
+                            }
                           }
                       )
                     ],
