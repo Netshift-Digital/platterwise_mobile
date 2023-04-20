@@ -13,9 +13,8 @@ import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/restaurant/screen/restaurant_home_screen.dart';
+import 'package:platterwave/views/screens/restaurant/screen/search_resturant.dart';
 import 'package:platterwave/views/screens/restaurant/screen/user_reservation.dart';
-import 'package:platterwave/views/screens/save/save_screen.dart';
-import 'package:platterwave/views/screens/search/trending.dart';
 import 'package:platterwave/views/screens/vblog/shared_post.dart';
 import 'package:platterwave/views/screens/vblog/timeline.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +39,7 @@ class _BottomNavState extends State<BottomNav> {
     BottomNavigationModel(
       title: "Search",
       icon: "assets/icon/search-normal.svg",
-      screen: const TopTags(),
+      screen: const RestaurantSearchScreen(),
     ),
     BottomNavigationModel(
       title: "Reservations",

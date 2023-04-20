@@ -7,6 +7,7 @@ import 'package:platterwave/model/restaurant/reservation_model.dart';
 import 'package:platterwave/model/restaurant/reservation_param.dart';
 import 'package:platterwave/model/restaurant/restaurant.dart';
 import 'package:platterwave/model/restaurant/restaurant_review.dart';
+import 'package:platterwave/model/restaurant/search_restaurant_model.dart';
 import 'package:platterwave/utils/enum/app_state.dart';
 import 'package:platterwave/utils/locator.dart';
 import 'package:platterwave/utils/random_functions.dart';
@@ -34,10 +35,11 @@ class RestaurantViewModel extends BaseViewModel{
     try{
       var data = await restaurantService.searchRestaurant(text);
       if(data!=null){
-        var list = Restaurant.fromJson(data).allRestDetail;
+        var list = SearchRestaurantModel.fromJson(data).searchResult;
         return list;
       }
     }catch(e){
+      print(e);
       //
     }
     return [];

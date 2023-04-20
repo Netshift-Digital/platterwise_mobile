@@ -311,7 +311,6 @@ class RestaurantService{
             "Content-type": "application/json",
           }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
-      RandomFunction.toast(data['status']);
       if(response.statusCode==200){
         return data;
       }

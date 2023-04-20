@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/model/restaurant/restaurant.dart';
-import 'package:platterwave/model/vblog/post_model.dart';
-import 'package:platterwave/model/vblog/user_search.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/enum/saerch_type.dart';
-import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
-import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
-import 'package:platterwave/views/widget/containers/empty_content_container.dart';
 import 'package:platterwave/views/widget/containers/large_restaurant_container.dart';
-import 'package:platterwave/views/widget/containers/timeline_post_container.dart';
-import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
 import 'package:provider/provider.dart';
 
