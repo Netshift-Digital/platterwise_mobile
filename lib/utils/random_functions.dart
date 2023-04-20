@@ -27,7 +27,7 @@ class RandomFunction {
   }
 
   static Jiffy date(String date){
-    var d = DateTime.parse(date);
+    var d = DateTime.tryParse(date)??DateTime.now();
     return Jiffy({
       "year": d.year,
       "month": d.month,

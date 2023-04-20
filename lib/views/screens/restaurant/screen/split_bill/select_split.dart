@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/model/restaurant/reservation_bill.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
-import 'package:platterwave/model/restaurant/reservation_param.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';

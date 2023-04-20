@@ -1,5 +1,6 @@
 import 'package:platterwave/common/base_view_model.dart';
 import 'package:platterwave/data/network/restaurant_service.dart';
+import 'package:platterwave/model/request_model/split_bill_model.dart';
 import 'package:platterwave/model/restaurant/banner_model.dart';
 import 'package:platterwave/model/restaurant/reservation_bill.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
@@ -145,6 +146,22 @@ class RestaurantViewModel extends BaseViewModel{
       //RandomFunction.toast('Something went wrong');
     }
     return null;
+  }
+
+
+  Future<bool> splitBill(SplitBillModel splitBillModel) async{
+    try{
+      setState(AppState.busy);
+      var data = await restaurantService.splitBill(splitBillModel);
+      setState(AppState.idle);
+      if(data!=null){
+        return true;
+      }
+    }catch(e){
+      setState(AppState.idle);
+      RandomFunction.toast('Something went wrong');
+    }
+    return false;
   }
 
 }

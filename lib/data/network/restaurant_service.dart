@@ -7,8 +7,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:platterwave/constant/endpoint.dart';
 import 'package:platterwave/model/failure.dart';
+import 'package:platterwave/model/request_model/split_bill_model.dart';
 import 'package:platterwave/model/restaurant/reservation_param.dart';
 import 'package:platterwave/utils/random_functions.dart';
+import 'package:platterwave/views/screens/restaurant/screen/split_bill/split_bill.dart';
 
 class RestaurantService{
   var client = http.Client();
@@ -325,5 +327,31 @@ class RestaurantService{
     return null;
   }
 
+
+  Future<Map<String, dynamic>?> splitBill(SplitBillModel splitBillModel) async {
+    var body = jsonEncode(splitBillModel.toJson());
+    try {
+      var response =
+      await client.post(Uri.parse("${baseurl2}split_bill.php"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+          }).timeout(const Duration(seconds: 10));
+      var data = jsonDecode(response.body);
+      RandomFunction.toast(data['status']);
+      if(response.statusCode==200){
+        return data;
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
 
 }

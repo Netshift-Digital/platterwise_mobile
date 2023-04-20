@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:platterwave/model/request_model/split_bill_model.dart';
 import 'package:platterwave/model/restaurant/reservation_bill.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
 import 'package:platterwave/res/color.dart';
@@ -6,18 +8,20 @@ import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/enum/split_type.dart';
 import 'package:platterwave/utils/extension.dart';
 import 'package:platterwave/utils/random_functions.dart';
+import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/custom_amount.dart';
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/percentage_split.dart';
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/split_option.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class SplitBill extends StatefulWidget {
   UserReservation userReservation;
   final ReservationBillElement reservationBillElement;
-  final List<GuestInfo> guestInfo;
+   List<GuestInfo> guestInfo;
   SplitBill(
       {Key? key,
       required this.userReservation,
@@ -33,6 +37,7 @@ class _SplitBillState extends State<SplitBill> {
   SplitType splitType = SplitType.equally;
   num amountShared = 0;
   num grandPrice = 0;
+  String host = 'Host';
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size.height;
@@ -48,7 +53,8 @@ class _SplitBillState extends State<SplitBill> {
                 width: double.maxFinite,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
-                    color: AppColor.p200),
+                    color: AppColor.p200,
+                ),
                 child: Column(
                   children: [
                     const SizedBox(
@@ -245,9 +251,10 @@ class _SplitBillState extends State<SplitBill> {
               ),
               const SizedBox(height: 41,),
               PlatButton(
+                appState: context.watch<RestaurantViewModel>().appState,
                   title: "Split",
                   onTap: grandPrice==amountShared?(){
-
+                   splitBill(context);
                   }:null
               )
             ],
@@ -263,6 +270,7 @@ class _SplitBillState extends State<SplitBill> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       grandPrice = num.parse(widget.reservationBillElement.grandPrice);
+      shareEqually();
     });
   }
 
@@ -285,5 +293,32 @@ class _SplitBillState extends State<SplitBill> {
     }
     amountShared = money;
     setState(() {});
+  }
+
+  void splitBill(BuildContext context) {
+    List<BillSplit> billSplit = [];
+    String ownerBill = "0";
+    for(var e in widget.guestInfo){
+      // if(e.guestName.toLowerCase().contains(host.toLowerCase())){
+      //   ownerBill = e.amount;
+      // }else{
+      //   billSplit.add(BillSplit(
+      //       guestEmail: e.guestEmail,
+      //       insertBill: num.parse(e.amount),
+      //   ));
+      // }
+      billSplit.add(BillSplit(
+        guestEmail: e.guestEmail,
+        insertBill: num.parse(e.amount),
+      ));
+    }
+    var split = SplitBillModel(
+        firebaseAuthId: FirebaseAuth.instance.currentUser!.uid,
+        reservId: int.parse(widget.userReservation.reservId),
+        ownerBill:num.parse(ownerBill) ,
+        billSplit: billSplit
+    );
+    var model = context.read<RestaurantViewModel>();
+    model.splitBill(split);
   }
 }
