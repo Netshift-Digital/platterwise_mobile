@@ -3,6 +3,7 @@ import 'package:platterwave/model/restaurant/reservation_bill.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/utils/extension.dart';
+import 'package:platterwave/utils/paystack.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/select_split.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
@@ -207,7 +208,11 @@ class BillScreen extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: PlatButton(title: "Pay Entire Bill", onTap: () {}),
+                    child: PlatButton(title: "Pay Entire Bill", onTap: () {
+                      PayStackPayment.investmentPlanPayment(
+                      num.parse(reservationBillElement.grandPrice).toInt(),
+                      reservationBillElement.restId??"", context);
+                    }),
                   ),
                   const SizedBox(
                     width: 20,

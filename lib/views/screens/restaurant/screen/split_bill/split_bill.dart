@@ -141,9 +141,9 @@ class _SplitBillState extends State<SplitBill> {
                 padding: EdgeInsets.zero,
                 physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: widget.userReservation.guestInfo.length,
+                itemCount: widget.guestInfo.length,
                 itemBuilder: (context, index) {
-                  var data = widget.userReservation.guestInfo[index];
+                  var data = widget.guestInfo[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: GestureDetector(
@@ -276,8 +276,8 @@ class _SplitBillState extends State<SplitBill> {
 
   void cal(num e, int index) {
     num money = 0;
-    widget.userReservation.guestInfo[index].amount = e.toString();
-    for (var data in widget.userReservation.guestInfo) {
+    widget.guestInfo[index].amount = e.toString();
+    for (var data in widget.guestInfo) {
       money = money + num.parse(data.amount);
     }
     amountShared = money;
@@ -286,8 +286,8 @@ class _SplitBillState extends State<SplitBill> {
 
   void shareEqually() {
     num money = 0;
-    for (int x = 0; x < widget.userReservation.guestInfo.length; x++) {
-      widget.userReservation.guestInfo[x].amount =
+    for (int x = 0; x < widget.guestInfo.length; x++) {
+      widget.guestInfo[x].amount =
           (grandPrice / widget.guestInfo.length).toStringAsFixed(2);
       money = money + grandPrice / widget.guestInfo.length;
     }

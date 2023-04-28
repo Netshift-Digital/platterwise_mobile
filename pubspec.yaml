@@ -81,6 +81,7 @@ dependencies:
   geolocator: ^9.0.2
   geocoding: ^2.0.5
   awesome_place_search: ^1.0.6
+  flutter_paystack_payment_plus:
   flutter:
     sdk: flutter
 

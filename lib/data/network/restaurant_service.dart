@@ -336,11 +336,12 @@ class RestaurantService{
           headers: {
             "Content-type": "application/json",
           }).timeout(const Duration(seconds: 10));
-      var data = jsonDecode(response.body);
-      RandomFunction.toast(data['status']);
-      if(response.statusCode==200){
-        return data;
-      }
+    //  var data = jsonDecode(response.body);
+      print(response.body+"jjdjdjjd");
+      //RandomFunction.toast(data['status']);
+      // if(response.statusCode==200){
+      //   return data;
+      // }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
     } on HttpException catch (_) {
@@ -348,6 +349,8 @@ class RestaurantService{
     } on TimeoutException catch (_) {
       throw Failure("Poor internet connection");
     } catch (e) {
+      print(e);
+      print('jsjsjs');
       throw Failure("Something went wrong. Try again");
     }
     return null;
