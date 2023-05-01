@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/model/request_model/split_bill_model.dart';
 import 'package:platterwave/model/restaurant/reservation_bill.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
@@ -195,11 +196,7 @@ class _SplitBillState extends State<SplitBill> {
                                   child: Text(data.amount.toCurrency()),
                                 )),
                             contentPadding: EdgeInsets.zero,
-                            leading: const ImageCacheCircle(
-                              'https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg',
-                              height: 42,
-                              width: 42,
-                            ),
+                            leading: SvgPicture.asset('assets/images/avater.svg'),
                             title: Text(data.guestName.capitalizeFirstChar()),
                           ),
                         ),

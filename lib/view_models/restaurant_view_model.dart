@@ -2,6 +2,7 @@ import 'package:platterwave/common/base_view_model.dart';
 import 'package:platterwave/data/network/restaurant_service.dart';
 import 'package:platterwave/model/request_model/split_bill_model.dart';
 import 'package:platterwave/model/restaurant/banner_model.dart';
+import 'package:platterwave/model/restaurant/paid_guest.dart';
 import 'package:platterwave/model/restaurant/reservation_bill.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
 import 'package:platterwave/model/restaurant/reservation_param.dart';
@@ -179,4 +180,17 @@ class RestaurantViewModel extends BaseViewModel{
     return false;
   }
 
+  Future<List<AllPaidList>> getPaidGuest(String id) async{
+    try{
+      var data = await restaurantService.getPaidGuest(id);
+      setState(AppState.idle);
+      if(data!=null){
+        return PaidGuest.fromJson(data).allPaidList;
+      }
+    }catch(e){
+      setState(AppState.idle);
+      //RandomFunction.toast('Something went wrong');
+    }
+    return [];
+  }
 }

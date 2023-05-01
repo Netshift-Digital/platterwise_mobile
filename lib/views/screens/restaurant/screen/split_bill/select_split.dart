@@ -33,45 +33,57 @@ class _SelectSplitState extends State<SelectSplit> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 18,),
+            const SizedBox(
+              height: 18,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  height:4,
+                  height: 4,
                   width: 69,
                   decoration: BoxDecoration(
-                    color:const Color(0xffD9D9D9),
+                    color: const Color(0xffD9D9D9),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 )
               ],
             ),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             Row(
               children: [
                 const Spacer(),
                 IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.clear,
-                      size: 30,
-                    ))
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(
+                    Icons.clear,
+                    size: 30,
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 10,),
-            Text('Select Guest to split with',style: AppTextTheme.h3.copyWith(
-              fontSize: 18,
-              fontWeight: FontWeight.w500
-            ),),
-            Text('Tap to select who to split with',style: AppTextTheme.h3.copyWith(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: AppColor.g800
-            ),),
-            const SizedBox(height: 45,),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              'Select Guest to split with',
+              style: AppTextTheme.h3
+                  .copyWith(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
+            Text(
+              'Tap to select who to split with',
+              style: AppTextTheme.h3.copyWith(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: AppColor.g800),
+            ),
+            const SizedBox(
+              height: 45,
+            ),
             Expanded(
               child: ListView.builder(
                 padding: EdgeInsets.zero,
@@ -95,19 +107,17 @@ class _SelectSplitState extends State<SelectSplit> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: value?AppColor.g20:Colors.transparent,
+                          color: value ? AppColor.g20 : Colors.transparent,
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 3,right: 3),
+                          padding: const EdgeInsets.only(left: 3, right: 3),
                           child: ListTile(
-                            trailing: value?SvgPicture.asset('assets/images/mark.svg'):const SizedBox(),
+                            trailing: value
+                                ? SvgPicture.asset('assets/images/mark.svg')
+                                : const SizedBox(),
                             contentPadding: EdgeInsets.zero,
-                            leading: const ImageCacheCircle(
-                              'https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg',
-                              height: 40,
-                              width: 40,
-                            ),
+                            leading: SvgPicture.asset('assets/images/avater.svg'),
                             title: Text(data.guestName),
                             subtitle: Text(data.guestEmail),
                           ),
@@ -118,14 +128,19 @@ class _SelectSplitState extends State<SelectSplit> {
                 },
               ),
             ),
-
             PlatButton(
-                title: 'Next',
-                onTap: guest.isEmpty
-                    ? null
-                    : () {
-                  nav(context, SplitBill(userReservation: widget.userReservation, reservationBillElement: widget.reservationBillElement, guestInfo: guest));
-                },
+              title: 'Next',
+              onTap: guest.isEmpty
+                  ? null
+                  : () {
+                      nav(
+                          context,
+                          SplitBill(
+                              userReservation: widget.userReservation,
+                              reservationBillElement:
+                                  widget.reservationBillElement,
+                              guestInfo: guest));
+                    },
             ),
             const SizedBox(
               height: 30,
