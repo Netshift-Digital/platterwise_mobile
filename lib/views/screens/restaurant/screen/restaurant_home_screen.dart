@@ -148,6 +148,7 @@ class RestaurantHomeScreen extends StatelessWidget {
                     height: 178.h,
                     child: ListView.builder(
                       shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       itemCount: resModel.allRestDetail.length,
                       itemBuilder: (context, index) {
@@ -198,6 +199,7 @@ class RestaurantHomeScreen extends StatelessWidget {
                     height: 178.h,
                     child: ListView.builder(
                         shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         itemCount: resModel.allRestDetail.length,
                         itemBuilder: (context, index) {

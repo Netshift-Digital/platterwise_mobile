@@ -26,9 +26,10 @@ class AppTextField extends StatelessWidget {
   final double contentPadding;
   final String? initialValue;
   final TextStyle style;
-
+  final bool isCard;
   const AppTextField({
     Key? key,
+    this.isCard=false,
     this.autofocus,
     this.readOnly,
     this.autovalidateMode,
@@ -57,95 +58,112 @@ class AppTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
-    return Padding(
-      padding: const EdgeInsets.only(top: 0.0),
-      child: TextFormField(
-        autofocus: autofocus ?? false,
-        readOnly: readOnly ?? false,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
+    return Container(
+      height: isCard?71:null,
+      decoration: isCard?BoxDecoration(
+        color: Colors.white,
+        border: Border.all(
+          color: Colors.grey.shade300,
+          width: 0.7,
         ),
-        //obscuringCharacter: '●',
-        initialValue: initialValue,
-        controller: controller,
-        focusNode: focusNode,
-        keyboardType: keyboardType,
-        autovalidateMode:
-            autovalidateMode ?? AutovalidateMode.onUserInteraction,
-        validator: validator,
-        obscureText: obscureText,
-        onFieldSubmitted: onFieldSubmitted,
-        onTap: onTap,
-        maxLines: maxLines,
-        enabled: enabled,
-        decoration: InputDecoration(
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: const BorderSide(width: 0, color: AppColor.p200),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade200,
+            offset: const Offset(0, 3),
+            blurRadius: 4,
           ),
-          isDense: true,
-          fillColor: fillColor,
-          filled: true,
-          contentPadding: EdgeInsets.all(
-            hasBorder
-                ? 16
-                : isSearch
-                    ? 16
-                    : contentPadding,
-          ),
-          hintText: hintText,
-          hintStyle: const TextStyle(
+        ],
+        borderRadius: BorderRadius.circular(6),
+      ):null,
+      child: Center(
+        child: TextFormField(
+          autofocus: autofocus ?? false,
+          readOnly: readOnly ?? false,
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w400,
           ),
-          suffixIcon: suffixIcon != null
-              ? UnconstrainedBox(
-                  alignment: hasBorder ? Alignment.center : Alignment.center,
-                  child: suffixIcon,
-                )
-              : null,
-          prefixIcon: prefixIcon != null
-              ? UnconstrainedBox(
-                  alignment: hasBorder
-                      ? Alignment.center
-                      : isSearch
-                          ? Alignment.center
-                          : Alignment.topCenter,
-                  child: prefixIcon,
-                )
-              : null,
-          disabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-            borderSide:isSearch? BorderSide.none:const BorderSide(width: 0.6),
+          //obscuringCharacter: '●',
+          initialValue: initialValue,
+          controller: controller,
+          focusNode: focusNode,
+          keyboardType: keyboardType,
+          autovalidateMode:
+              autovalidateMode ?? AutovalidateMode.onUserInteraction,
+          validator: validator,
+          obscureText: obscureText,
+          onFieldSubmitted: onFieldSubmitted,
+          onTap: onTap,
+          maxLines: maxLines,
+          enabled: enabled,
+          decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.0),
+              borderSide: const BorderSide(width: 0, color: AppColor.p200),
+            ),
+            isDense: true,
+            fillColor: fillColor,
+            filled: true,
+            contentPadding: EdgeInsets.all(
+              hasBorder
+                  ? 16
+                  : isSearch
+                      ? 16
+                      : contentPadding,
+            ),
+            hintText: hintText,
+            hintStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+            suffixIcon: suffixIcon != null
+                ? UnconstrainedBox(
+                    alignment: hasBorder ? Alignment.center : Alignment.center,
+                    child: suffixIcon,
+                  )
+                : null,
+            prefixIcon: prefixIcon != null
+                ? UnconstrainedBox(
+                    alignment: hasBorder
+                        ? Alignment.center
+                        : isSearch
+                            ? Alignment.center
+                            : Alignment.topCenter,
+                    child: prefixIcon,
+                  )
+                : null,
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(borderRadius),
+              borderSide:(isSearch||isCard)? BorderSide.none:const BorderSide(width: 0.6),
+            ),
+            border: hasBorder
+                ? OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: const BorderSide(),
+                  )
+                : isSearch
+                    ? OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(borderRadius),
+                        borderSide: BorderSide.none,
+                      )
+                    : OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(borderRadius),
+                        borderSide: BorderSide.none,
+                      ),
+            errorBorder: hasBorder
+                ? OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    //borderSide: const BorderSide(color: kSecondary),
+                  )
+                : isSearch
+                    ? OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(borderRadius),
+                        borderSide: BorderSide.none,
+                      )
+                    : InputBorder.none,
           ),
-          border: hasBorder
-              ? OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(borderRadius),
-                  borderSide: const BorderSide(),
-                )
-              : isSearch
-                  ? OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(borderRadius),
-                      borderSide: BorderSide.none,
-                    )
-                  : OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(borderRadius),
-                      borderSide: BorderSide.none,
-                    ),
-          errorBorder: hasBorder
-              ? OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(borderRadius),
-                  //borderSide: const BorderSide(color: kSecondary),
-                )
-              : isSearch
-                  ? OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(borderRadius),
-                      borderSide: BorderSide.none,
-                    )
-                  : InputBorder.none,
+          onChanged: onChanged,
         ),
-        onChanged: onChanged,
       ),
     );
   }

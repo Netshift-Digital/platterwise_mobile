@@ -24,73 +24,82 @@ class LargeRestaurantContainer extends StatelessWidget {
           ),
         );
       },
-      child: Card(
-        elevation: 3,
-        child: Container(
-          width: 343.w,
-          height: 106.h,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: AppColor.g0
+      child: Container(
+        width: 343.w,
+        height: 106.h,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            color: Colors.grey.shade300,
+            width: 0.7,
           ),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 99.w,
-                height: 106.h,
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(6),
-                    bottomLeft: Radius.circular(6),
-                  ),
-                   child: ImageCacheR(restaurantData.coverPic,
-                   topBottom: 0,
-                   topRadius: 0,
-                   ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade200,
+              offset: const Offset(0, 2),
+              blurRadius: 4,
+              spreadRadius: 0.25,
+            ),
+          ],
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 99.w,
+              height: 106.h,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(6),
+                  bottomLeft: Radius.circular(6),
                 ),
+                 child: ImageCacheR(restaurantData.coverPic,
+                 topBottom: 0,
+                 topRadius: 0,
+                 ),
               ),
-              SizedBox(width: 12.w,),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                     restaurantData.restuarantName,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: AppTextTheme.h3.copyWith(
-                        fontWeight: FontWeight.w500
-                      ),
+            ),
+            SizedBox(width: 12.w,),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                   restaurantData.restuarantName,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: AppTextTheme.h3.copyWith(
+                      fontWeight: FontWeight.w500
                     ),
-                    SizedBox(height: 4.h,),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Flexible(
-                            child: SvgPicture.asset("assets/images/locations.svg")
+                  ),
+                  SizedBox(height: 4.h,),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                          child: SvgPicture.asset("assets/images/locations.svg")
+                      ),
+                      SizedBox(width: 6.w,),
+                      Flexible(
+                        flex: 2,
+                        child: Text(
+                          restaurantData.address,
+                           style: AppTextTheme.h5.copyWith(
+                             fontSize: 12,
+                             color: AppColor.g600,
+                             fontWeight: FontWeight.w500
+                           ),
+                          softWrap: true,
+                          maxLines: 3,
                         ),
-                        SizedBox(width: 6.w,),
-                        Flexible(
-                          flex: 2,
-                          child: Text(
-                            restaurantData.address,
-                             style: AppTextTheme.h5.copyWith(
-                               fontSize: 12,
-                               color: AppColor.g600,
-                               fontWeight: FontWeight.w500
-                             ),
-                            softWrap: true,
-                            maxLines: 3,
-                          ),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

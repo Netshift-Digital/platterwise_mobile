@@ -15,9 +15,11 @@ import 'package:provider/provider.dart';
 class AddGuest extends StatefulWidget {
   final int guestNumber;
   final Function(List<Guest> guest) onGuestSelected;
-  const AddGuest(
-      {Key? key, required this.onGuestSelected, required this.guestNumber})
-      : super(key: key);
+  const AddGuest({
+    Key? key,
+    required this.onGuestSelected,
+    required this.guestNumber,
+  }) : super(key: key);
 
   @override
   State<AddGuest> createState() => _AddGuestState();
@@ -36,11 +38,35 @@ class _AddGuestState extends State<AddGuest> {
       },
       child: SafeArea(
         child: Scaffold(
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(left: 30,bottom: 24),
+            child: PlatButton(
+                title: 'Done',
+                onTap: widget.guestNumber != guest.length
+                    ? null
+                    : () {
+                  widget.onGuestSelected(guest);
+                  Navigator.pop(context);
+                }),
+          ),
           backgroundColor: Colors.transparent,
           body: Padding(
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: Column(
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height:4,
+                      width: 69,
+                      decoration: BoxDecoration(
+                        color:const Color(0xffD9D9D9),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    )
+                  ],
+                ),
                 Row(
                   children: [
                     const Spacer(),
@@ -55,7 +81,7 @@ class _AddGuestState extends State<AddGuest> {
                   ],
                 ),
                 const SizedBox(
-                  height: 40,
+                  height: 30,
                 ),
                 AppTextField(
                   controller: searchController,
@@ -63,7 +89,7 @@ class _AddGuestState extends State<AddGuest> {
                   isSearch: true,
                   hasBorder: false,
                   onChanged: (e) {
-                    if (searchController.text.length > 2) {
+                    if (searchController.text.length > 1) {
                       context
                           .read<VBlogViewModel>()
                           .searchUser(searchController.text)
@@ -82,7 +108,7 @@ class _AddGuestState extends State<AddGuest> {
                   prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
                 ),
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
                 (widget.guestNumber == guest.length)
                     ? const SizedBox()
@@ -175,7 +201,7 @@ class _AddGuestState extends State<AddGuest> {
                       ),
                 Expanded(
                     child: ListView.builder(
-                        padding: EdgeInsets.zero,
+                        //padding: EdgeInsets.zero,
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: searchUserResult.length,
@@ -183,6 +209,7 @@ class _AddGuestState extends State<AddGuest> {
                           var data = searchUserResult[index];
                           return ListTile(
                             onTap: () {
+                              FocusScope.of(context).unfocus();
                               if (guest.any((element) =>
                                           element.guestEmail == data.email) ==
                                       false &&
@@ -201,22 +228,11 @@ class _AddGuestState extends State<AddGuest> {
                               width: 40,
                             ),
                             title: Text(data.fullName),
-                            subtitle: Text(data.username),
+                            subtitle: Text("@${data.username}"),
                           );
                         })),
                 const SizedBox(
                   height: 20,
-                ),
-                PlatButton(
-                    title: 'Done',
-                    onTap: widget.guestNumber != guest.length
-                        ? null
-                        : () {
-                            widget.onGuestSelected(guest);
-                            Navigator.pop(context);
-                          }),
-                const SizedBox(
-                  height: 23,
                 ),
               ],
             ),

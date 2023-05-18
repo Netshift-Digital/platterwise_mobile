@@ -290,11 +290,12 @@ class _ReservationDetailsState extends State<ReservationDetails> {
               .then((value) {
             if (value != null && value!.grandPrice == null) {
               nav(
-                  context,
-                  BillScreen(
-                    userReservation: widget.userReservation,
-                    reservationBill: value,
-                  ));
+                context,
+                BillScreen(
+                  userReservation: widget.userReservation,
+                  reservationBill: value,
+                ),
+              );
             } else {
               RandomFunction.toast("Bill not ready");
             }

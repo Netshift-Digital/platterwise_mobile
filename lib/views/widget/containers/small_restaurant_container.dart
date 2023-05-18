@@ -26,14 +26,27 @@ class SmallRestaurantContainer extends StatelessWidget {
           ),
         );
       },
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+      child: Padding(
+        padding: const EdgeInsets.only(right: 21),
         child: Container(
           height: 178.h,
           width: 161.w,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6), color: AppColor.g0),
+            color: Colors.white,
+            border: Border.all(
+              color: Colors.grey.shade300,
+              width: 0.7,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.shade200,
+                offset: const Offset(0, 2),
+                blurRadius: 4,
+                spreadRadius: 1,
+              ),
+            ],
+            borderRadius: BorderRadius.circular(6),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -87,7 +100,7 @@ class SmallRestaurantContainer extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 5.h,
+                height: 10.h,
               ),
             ],
           ),

@@ -36,7 +36,7 @@ class PlatButton extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: onTap==null?Colors.grey:color,
+          color: onTap==null?const Color(0xffEAEAEA):color,
           borderRadius: BorderRadius.circular(radius),
         ),
         child: Padding(
@@ -59,7 +59,8 @@ class PlatButton extends StatelessWidget {
                         style: AppTextTheme.h3.copyWith(
                             fontSize: textSize,
                             fontWeight: FontWeight.w500,
-                            color: textColor ?? AppColor.g0),
+                            color: textColor ?? (onTap==null?const Color(0xff797979):AppColor.g0)
+                        ),
                       ),
                     ],
                   ),

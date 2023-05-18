@@ -12,7 +12,6 @@ import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
-import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/add_guest.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
@@ -35,7 +34,6 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
   DateTime? dateTime;
   String? sitType;
   final TextEditingController _date = TextEditingController();
-  final TextEditingController _seat = TextEditingController();
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
@@ -45,6 +43,18 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
       },
       child: Scaffold(
         appBar: appBar(context),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(left: 30,bottom: 24),
+          child: PlatButton(
+            appState: context.watch<RestaurantViewModel>().appState,
+            title: "Book Now",
+            onTap: validate()
+                ? null
+                : () {
+              book(context);
+            },
+          ),
+        ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: SingleChildScrollView(
@@ -64,6 +74,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                   },
                   child: AppTextField(
                     controller: _date,
+                    isCard: true,
                     enabled: false,
                     prefixIcon: Container(
                       width: 31,
@@ -78,59 +89,87 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                       ),
                     ),
                     hintText: "Date",
-                    suffixIcon: const Icon(Icons.arrow_drop_down_sharp),
+                    suffixIcon: const Icon(Icons.keyboard_arrow_down_outlined,size: 20,),
                   ),
                 ),
                 SizedBox(
                   height: 24.h,
                 ),
-                DropdownButtonFormField<String>(
-                    validator: (e) {
-                      if (e!.isEmpty) {
-                        return "select seat type";
-                      }
-                    },
-                    decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(16),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(width: 0.6),
+                Container(
+                  height:71,
+                  decoration:BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey.shade300,
+                      width: 0.7,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade200,
+                        offset: const Offset(0, 3),
+                        blurRadius: 4,
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Center(
+                    child: DropdownButtonFormField<String>(
+                        validator: (e) {
+                          if (e!.isEmpty) {
+                            return "select seat type";
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.all(16),
+                            enabledBorder:InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            border:InputBorder.none,
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.grey),
-                          borderRadius: BorderRadius.circular(8),
-                        )),
-                    value: sitType,
-                    hint: const Text("Select sit type"),
-                    items: ['vip', 'regular'].map((e) {
-                      return DropdownMenuItem<String>(
-                          value: e,
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(
-                                "assets/icon/chair.svg",
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(e),
-                            ],
-                          ));
-                    }).toList(),
-                    onChanged: (e) {
-                      sitType = e;
-                    }),
+                        value: sitType,
+                        icon: const Icon(Icons.keyboard_arrow_down_outlined,size: 20,),
+                        hint: const Text("Select sit type"),
+                        items: ['vip', 'regular'].map((e) {
+                          return DropdownMenuItem<String>(
+                              value: e,
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    "assets/icon/chair.svg",
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(e),
+                                ],
+                              ));
+                        }).toList(),
+                        onChanged: (e) {
+                          sitType = e;
+                          setState(() {});
+                        }),
+                  ),
+                ),
                 SizedBox(
                   height: 24.h,
                 ),
                 Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(width: 0.7, color: Colors.grey)),
+                    height:71,
+                    decoration:BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        color: Colors.grey.shade300,
+                        width: 0.7,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.shade200,
+                          offset: const Offset(0, 3),
+                          blurRadius: 4,
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(6),
+                    ),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Row(
@@ -272,30 +311,21 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                               guest = e;
                               setState(() {});
                             },
-                          ));
+                          ),
+                        height: MediaQuery.of(context).size.height-50
+                      );
                     },
                     child: Text(
                       "Add Guest Details",
-                      style: AppTextTheme.h3.copyWith(color: AppColor.p200),
+                      style: AppTextTheme.h3.copyWith(
+                          color:const Color(0xffE16C52),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12
+                      ),
                     ),
                   ),
                 ),
                 //const Spacer(),
-                const SizedBox(
-                  height: 20,
-                ),
-                PlatButton(
-                  appState: context.watch<RestaurantViewModel>().appState,
-                  title: "Book Now",
-                  onTap: validate()
-                      ? null
-                      : () {
-                          book(context);
-                        },
-                ),
-                const SizedBox(
-                  height: 24,
-                )
               ],
             ),
           ),
@@ -316,9 +346,9 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
   }
 
   book(BuildContext context) {
-    var user = context.read<UserViewModel>().user!.userProfile;
     List<Guest> g = [];
     g.addAll(guest);
+    //var user = context.read<UserViewModel>().user!.userProfile;
     // g.add(
     //   Guest(
     //     guestName: user.fullName,
