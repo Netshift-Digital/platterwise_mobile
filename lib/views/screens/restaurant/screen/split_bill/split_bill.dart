@@ -15,18 +15,17 @@ import 'package:platterwave/views/screens/restaurant/screen/split_bill/percentag
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/split_option.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
-import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class SplitBill extends StatefulWidget {
   UserReservation userReservation;
-  final ReservationBillElement reservationBillElement;
+  final ReservationBill reservationBill;
    List<GuestInfo> guestInfo;
   SplitBill(
       {Key? key,
       required this.userReservation,
-      required this.reservationBillElement,
+      required this.reservationBill,
       required this.guestInfo})
       : super(key: key);
 
@@ -72,7 +71,7 @@ class _SplitBillState extends State<SplitBill> {
                       height: 8,
                     ),
                     Text(
-                      widget.reservationBillElement.grandPrice.toCurrency(),
+                      (widget.reservationBill.grandPrice??'0').toCurrency(),
                       style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
@@ -166,7 +165,7 @@ class _SplitBillState extends State<SplitBill> {
                               context,
                               PercentageSplit(
                                 gradPrice: num.parse(
-                                    widget.reservationBillElement.grandPrice),
+                                    widget.reservationBill.grandPrice??"0"),
                                 guestInfo: data,
                                 onDone: (e) {
                                   cal(e, index);
@@ -266,7 +265,7 @@ class _SplitBillState extends State<SplitBill> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      grandPrice = num.parse(widget.reservationBillElement.grandPrice);
+      grandPrice = num.parse(widget.reservationBill.grandPrice??'0');
       shareEqually();
     });
   }

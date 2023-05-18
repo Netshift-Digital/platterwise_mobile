@@ -28,62 +28,67 @@ class _RestaurantSearchScreenState extends State<RestaurantSearchScreen> {
   Widget build(BuildContext context) {
     var model = context.watch<RestaurantViewModel>();
     SizeConfig.init(context);
-    return Scaffold(
-      appBar: appBar(context),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          children: [
-            SizedBox(height: 10.h,),
-            AppTextField(
-              controller: searchController,
-              fillColor: AppColor.g30,
-              isSearch: true,
-              hasBorder: false,
-              onChanged: (e){
-                if(e.length>2){
-                  model.searchRestaurant(e).then((value){
-                    if(mounted){
-                      setState(() {
-                        allRestDetail=value;
-                      });
-                    }
-                  });
-                }
-              },
-              hintText: "Search for a post or people",
-              prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
-              suffixIcon: GestureDetector(
-                  onTap: (){
-                    searchController.clear();
+    return GestureDetector(
+      onTap: (){
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: appBar(context),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            children: [
+              SizedBox(height: 10.h,),
+              AppTextField(
+                controller: searchController,
+                fillColor: AppColor.g30,
+                isSearch: true,
+                hasBorder: false,
+                onChanged: (e){
+                  if(e.length>2){
+                    model.searchRestaurant(e).then((value){
+                      if(mounted){
+                        setState(() {
+                          allRestDetail=value;
+                        });
+                      }
+                    });
+                  }
+                },
+                hintText: "Search for a post or people",
+                prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
+                suffixIcon: GestureDetector(
+                    onTap: (){
+                      searchController.clear();
+                    },
+                    child:const  Icon(Icons.clear,color: Colors.grey,)
+                ),
+              ),
+              SizedBox(height: 33.h,),
+              Expanded(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: allRestDetail.length,
+                  physics: const BouncingScrollPhysics(),
+                  primary: false,
+                  itemBuilder: (BuildContext context, int index) {
+                    var data = allRestDetail[index];
+                    return LargeRestaurantContainer(
+                      restaurantData: data,
+                    );
                   },
-                  child:const  Icon(Icons.clear,color: Colors.grey,)
-              ),
-            ),
-            SizedBox(height: 33.h,),
-            Expanded(
-              child: ListView.separated(
-                shrinkWrap: true,
-                itemCount: allRestDetail.length,
-                physics: const BouncingScrollPhysics(),
-                primary: false,
-                itemBuilder: (BuildContext context, int index) {
-                  var data = allRestDetail[index];
-                  return LargeRestaurantContainer(
-                    restaurantData: data,
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(
-                    height: 20.h,
-                  );
-                },
-              ),
-            )
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(
+                      height: 20.h,
+                    );
+                  },
+                ),
+              )
 
-          ],
-        ),
-    ),
+            ],
+          ),
+      ),
+      ),
     );
   }
   @override

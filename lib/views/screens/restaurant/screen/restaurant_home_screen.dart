@@ -6,6 +6,7 @@ import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/location_view_model.dart';
+import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/more_resturant.dart';
@@ -90,14 +91,20 @@ class RestaurantHomeScreen extends StatelessWidget {
                   SizedBox(
                     height: 10.h,
                   ),
-                  const AppTextField(
-                    isSearch: true,
-                    hasBorder: false,
-                    fillColor: AppColor.g20,
-                    hintText: "Search",
-                    prefixIcon: Icon(
-                      Icons.search,
-                      size: 20,
+                  GestureDetector(
+                    onTap: (){
+                      context.read<PageViewModel>().setIndex(1);
+                    },
+                    child: const AppTextField(
+                      isSearch: true,
+                      hasBorder: false,
+                      fillColor: AppColor.g20,
+                      hintText: "Search",
+                      enabled: false,
+                      prefixIcon: Icon(
+                        Icons.search,
+                        size: 20,
+                      ),
                     ),
                   ),
                   SizedBox(

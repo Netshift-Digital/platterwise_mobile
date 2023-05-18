@@ -8,6 +8,7 @@ import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
+import 'package:platterwave/views/screens/restaurant/screen/rate_experience_screen.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +31,7 @@ class _RestaurantsReviewsState extends State<RestaurantsReviews> {
     var size = MediaQuery.of(context).size;
     return Column(
       children: [
-        Flexible(
+        Expanded(
           child: ListView.builder(
               itemCount: widget.review.length,
               primary: false,
@@ -105,47 +106,59 @@ class _RestaurantsReviewsState extends State<RestaurantsReviews> {
               },
           ),
         ),
-        PhysicalModel(
-          color: Colors.black,
-          elevation: 3,
-          child: Container(
-            height: 125,
-            width: size.width,
-            color: Colors.white,
-            child: SafeArea(
-              child: Row(
-                children: [
-                  ImageCacheCircle(
-                    user==null?"":user.userProfile.profileUrl,
-                    height: 40,
-                    width: 40,
-                  ),
-                  const SizedBox(width: 12,),
-                  Expanded(child: TextField(
-                    controller: commentController,
-                    onSubmitted: (e){
-                      if(e.isNotEmpty){
-                       resViewModel.addReview(
-                           resId: widget.restaurantData.restId,
-                           review: e.trim(),
-                           rate: '5'
-                       ).then((value){
-                        widget.review = value;
-                        if(mounted){
-                          setState(() {});
-                        }
-                       });
-                       commentController.clear();
-                      }
-                    },
-                    decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Add a comment ",
-                        filled: true,
-                        fillColor: AppColor.g30
+        GestureDetector(
+          onTap: ()async{
+           var data = await Navigator.push(context, MaterialPageRoute(builder: (context)=>RateExperienceScreen(restaurantData: widget.restaurantData)));
+           if(data!=null){
+             setState(() {
+               widget.review = data;
+             });
+           }
+          },
+          child: PhysicalModel(
+            color: Colors.black,
+            elevation: 3,
+            child: Container(
+              height: 125,
+              width: size.width,
+              color: Colors.white,
+              child: SafeArea(
+                child: Row(
+                  children: [
+                    ImageCacheCircle(
+                      user==null?"":user.userProfile.profileUrl,
+                      height: 40,
+                      width: 40,
                     ),
-                  )),
-                ],
+                    const SizedBox(width: 12,),
+                    Expanded(
+                        child: TextField(
+                      controller: commentController,
+                      enabled: false,
+                      onSubmitted: (e){
+                        if(e.isNotEmpty){
+                         resViewModel.addReview(
+                             resId: widget.restaurantData.restId,
+                             review: e.trim(),
+                             rate: '5'
+                         ).then((value){
+                          widget.review = value;
+                          if(mounted){
+                            setState(() {});
+                          }
+                         });
+                         commentController.clear();
+                        }
+                      },
+                      decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Add a comment ",
+                          filled: true,
+                          fillColor: AppColor.g30
+                      ),
+                    )),
+                  ],
+                ),
               ),
             ),
           ),

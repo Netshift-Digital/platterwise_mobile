@@ -117,7 +117,7 @@ class AppTextField extends StatelessWidget {
               : null,
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(borderRadius),
-            borderSide: const BorderSide(width: 0.6),
+            borderSide:isSearch? BorderSide.none:const BorderSide(width: 0.6),
           ),
           border: hasBorder
               ? OutlineInputBorder(

@@ -8,7 +8,6 @@ import 'package:platterwave/utils/extension.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
-import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:provider/provider.dart';
 
 class PaidGuestScreen extends StatefulWidget {
@@ -51,9 +50,10 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
                   Text(
                     'Your Bill',
                     style: AppTextTheme.h3.copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(
                     height: 8,
@@ -61,9 +61,10 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
                   Text(
                     amount,
                     style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white),
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(
                     height: 17,
@@ -75,55 +76,70 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
               height: 24,
             ),
             Expanded(
-                child: paidGuest == null
-                    ? const Center(
-                        child: CircularProgressIndicator(
+              child: paidGuest == null
+                  ? const Center(
+                      child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation(AppColor.p200),
-                      ))
-                    : ListView.builder(
-                        itemCount: paidGuest?.length,
-                        itemBuilder: (context, index) {
-                          var data = paidGuest![index];
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColor.g20,
-                                borderRadius: BorderRadius.circular(6),
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: paidGuest?.length,
+                      itemBuilder: (context, index) {
+                        var data = paidGuest![index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColor.g20,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                left: 12,
+                                right: 12,
+                                top: 8,
+                                bottom: 8,
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 12, right: 12, top: 8, bottom: 8),
-                                child: ListTile(
-                                  trailing: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(6.0),
-                                        child:
-                                            Text(data.totalBill.toCurrency()),
-                                      )),
-                                  contentPadding: EdgeInsets.zero,
-                                  leading: SvgPicture.asset(
-                                      'assets/images/avater.svg'),
-                                  title: Text(
-                                      data.guestName.capitalizeFirstChar()),
+                              child: ListTile(
+                                trailing: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(6.0),
+                                    child: Text(
+                                      data.totalBill.toCurrency(),
+                                    ),
+                                  ),
+                                ),
+                                contentPadding: EdgeInsets.zero,
+                                leading: SvgPicture.asset(
+                                  'assets/images/avater.svg',
+                                ),
+                                title: Text(
+                                  data.guestName.capitalizeFirstChar(),
                                 ),
                               ),
                             ),
-                          );
-                        })),
+                          ),
+                        );
+                      },
+                    ),
+            ),
             const SizedBox(
               height: 10,
             ),
             PlatButton(
-                title: "Done",
-                onTap: () {
-                  //Todo
-                  Navigator.pop(context);
-                })
+              title: "Done",
+              onTap: () {
+                //Todo
+                Navigator.pop(context);
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
           ],
         ),
       ),
@@ -148,11 +164,11 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
         if (value != null) {
           if (mounted) {
             setState(() {
-              amount = value.grandPrice.toCurrency();
+              amount = (value.grandPrice??"0").toCurrency();
             });
           }
         }
       });
-    });
+    },);
   }
 }

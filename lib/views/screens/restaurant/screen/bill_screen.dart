@@ -12,11 +12,11 @@ import 'package:platterwave/views/widget/custom/cache-image.dart';
 
 class BillScreen extends StatelessWidget {
   final UserReservation userReservation;
-  final ReservationBillElement reservationBillElement;
+  final ReservationBill reservationBill;
   const BillScreen(
       {Key? key,
       required this.userReservation,
-      required this.reservationBillElement})
+      required this.reservationBill})
       : super(key: key);
 
   @override
@@ -100,55 +100,7 @@ class BillScreen extends StatelessWidget {
                           height: 10,
                         ),
                         Expanded(
-                          child: ListView.builder(
-                            itemCount:
-                                reservationBillElement.itemOrdered.length,
-                            itemBuilder: (context, index) {
-                              var data =
-                                  reservationBillElement.itemOrdered[index];
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 7),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        data.item,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.clip,
-                                        style: const TextStyle(
-                                            fontSize: 12, color: AppColor.g600),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        "x${data.qty}",
-                                        maxLines: 2,
-                                        overflow: TextOverflow.clip,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          color: AppColor.g600,
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        data.totalPrice.toCurrency(),
-                                        maxLines: 2,
-                                        textAlign: TextAlign.end,
-                                        overflow: TextOverflow.clip,
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          color: AppColor.g600,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
+                          child: Container(color: Colors.red,),
                         ),
                         const Divider(),
                         Row(
@@ -178,7 +130,7 @@ class BillScreen extends StatelessWidget {
                             ),
                             const Spacer(),
                             Text(
-                              reservationBillElement.grandPrice.toCurrency(),
+                              (reservationBill.grandPrice??'0').toCurrency(),
                               style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w500),
                             ),
@@ -210,8 +162,8 @@ class BillScreen extends StatelessWidget {
                   Expanded(
                     child: PlatButton(title: "Pay Entire Bill", onTap: () {
                       PayStackPayment.investmentPlanPayment(
-                      num.parse(reservationBillElement.grandPrice).toInt(),
-                      reservationBillElement.restId??"", context);
+                      num.parse(reservationBill.grandPrice??'0').toInt(),
+                      reservationBill.restId??"", context);
                     }),
                   ),
                   const SizedBox(
@@ -224,7 +176,7 @@ class BillScreen extends StatelessWidget {
                         onTap: () {
                           RandomFunction.sheet(context, SelectSplit(
                             userReservation: userReservation,
-                            reservationBillElement: reservationBillElement,
+                            reservationBill: reservationBill,
                           ));
                         },
                     ),

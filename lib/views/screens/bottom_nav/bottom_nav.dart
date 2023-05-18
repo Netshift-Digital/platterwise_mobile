@@ -140,6 +140,10 @@ class _BottomNavState extends State<BottomNav> {
     if (user != null) {
       FirebaseMessaging.instance.getToken().then((value) {
         FirebaseMessaging.instance.subscribeToTopic(user.uid);
+        if(user.email!=null){
+          var topic = (user.email??"").replaceAll("@", "");
+          FirebaseMessaging.instance.subscribeToTopic(topic);
+        }
       });
     }
   }

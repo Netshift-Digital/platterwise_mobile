@@ -119,7 +119,7 @@ class MenuPix {
   String menuPic;
 
   factory MenuPix.fromJson(Map<String, dynamic> json) => MenuPix(
-    menuPic: json["menu_pic"],
+    menuPic: json["menu_pic"]??json['menu_pix'],
   );
 
   Map<String, dynamic> toJson() => {

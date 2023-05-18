@@ -18,7 +18,11 @@ class RestaurantViewModel extends BaseViewModel{
   List<RestaurantData> allRestDetail = [];
   List<AllBannersList> allBannersList = [];
   List<UserReservation> userReservation = [];
-
+  AppState reviewState = AppState.idle;
+  setReviewState(AppState state){
+    reviewState =state;
+    notifyListeners();
+  }
   Future<List<RestaurantData>> getRestaurant() async{
     try{
       var data = await restaurantService.getRestaurantList();
@@ -62,6 +66,7 @@ class RestaurantViewModel extends BaseViewModel{
   Future<List<AllRestReview>> getReview(String resId) async{
     try{
       var data = await restaurantService.getRestaurantReviews(resId);
+      setReviewState(AppState.idle);
       if(data!=null){
         return RestaurantReview.fromJson(data).allRestReview;
       }
@@ -77,11 +82,13 @@ class RestaurantViewModel extends BaseViewModel{
     required String review,
     required String rate}) async{
     try{
+      setReviewState(AppState.busy);
       var data = await restaurantService.addReview(resId: resId, review: review, rate: rate);
       if(data!=null){
         return getReview(resId);
       }
     }catch(e){
+      setReviewState(AppState.idle);
       //
     }
     return [];
@@ -134,14 +141,14 @@ class RestaurantViewModel extends BaseViewModel{
     return false;
   }
 
-  Future<ReservationBillElement?> getReservationBill(String id) async{
+  Future<ReservationBill?> getReservationBill(String id) async{
     try{
       setState(AppState.busy);
       var data = await restaurantService.getBill(id);
       setState(AppState.idle);
       if(data!=null){
         //testData
-        return ReservationBill.fromJson(data).reservationBill.first;
+        return ReservationBillElement.fromJson(data).reservationBill?.first;
       }
     }catch(e){
       setState(AppState.idle);

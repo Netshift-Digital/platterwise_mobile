@@ -7,15 +7,15 @@ import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/split_bill.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
-import 'package:platterwave/views/widget/custom/cache-image.dart';
+
 
 class SelectSplit extends StatefulWidget {
   final UserReservation userReservation;
-  final ReservationBillElement reservationBillElement;
+  final ReservationBill reservationBill;
   const SelectSplit(
       {Key? key,
       required this.userReservation,
-      required this.reservationBillElement})
+      required this.reservationBill})
       : super(key: key);
 
   @override
@@ -137,8 +137,8 @@ class _SelectSplitState extends State<SelectSplit> {
                           context,
                           SplitBill(
                               userReservation: widget.userReservation,
-                              reservationBillElement:
-                                  widget.reservationBillElement,
+                              reservationBill:
+                                  widget.reservationBill,
                               guestInfo: guest));
                     },
             ),

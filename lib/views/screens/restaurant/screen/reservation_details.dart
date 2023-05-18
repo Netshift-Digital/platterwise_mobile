@@ -252,7 +252,8 @@ class _ReservationDetailsState extends State<ReservationDetails> {
       return PlatButton(
         title: "View payment Status",
         onTap: () {
-         nav(context, PaidGuestScreen(userReservation: widget.userReservation));
+          nav(context,
+              PaidGuestScreen(userReservation: widget.userReservation));
         },
       );
     } else if (!widget.userReservation.reservationStatus
@@ -287,12 +288,12 @@ class _ReservationDetailsState extends State<ReservationDetails> {
               .read<RestaurantViewModel>()
               .getReservationBill(widget.userReservation.reservId)
               .then((value) {
-            if (value != null) {
+            if (value != null && value!.grandPrice == null) {
               nav(
                   context,
                   BillScreen(
                     userReservation: widget.userReservation,
-                    reservationBillElement: value,
+                    reservationBill: value,
                   ));
             } else {
               RandomFunction.toast("Bill not ready");
