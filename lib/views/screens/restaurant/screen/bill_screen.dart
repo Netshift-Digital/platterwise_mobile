@@ -14,9 +14,7 @@ class BillScreen extends StatelessWidget {
   final UserReservation userReservation;
   final ReservationBill reservationBill;
   const BillScreen(
-      {Key? key,
-      required this.userReservation,
-      required this.reservationBill})
+      {Key? key, required this.userReservation, required this.reservationBill})
       : super(key: key);
 
   @override
@@ -75,32 +73,12 @@ class BillScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: const [
-                            Text(
-                              "Descriptions",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Spacer(),
-                            Text(
-                              "Prices",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
+                          height: 20,
                         ),
                         Expanded(
-                          child: Container(color: Colors.red,),
+                          child: reservationBill.billPix == null
+                              ? const SizedBox()
+                              : ImageCacheR(reservationBill.billPix ?? ''),
                         ),
                         const Divider(),
                         Row(
@@ -130,7 +108,7 @@ class BillScreen extends StatelessWidget {
                             ),
                             const Spacer(),
                             Text(
-                              (reservationBill.grandPrice??'0').toCurrency(),
+                              (reservationBill.grandPrice ?? '0').toCurrency(),
                               style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w500),
                             ),
@@ -160,25 +138,31 @@ class BillScreen extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: PlatButton(title: "Pay Entire Bill", onTap: () {
-                      PayStackPayment.investmentPlanPayment(
-                      num.parse(reservationBill.grandPrice??'0').toInt(),
-                      reservationBill.restId??"", context);
-                    }),
+                    child: PlatButton(
+                        title: "Pay Entire Bill",
+                        onTap: () {
+                          PayStackPayment.investmentPlanPayment(
+                              num.parse(reservationBill.grandPrice ?? '0')
+                                  .toInt(),
+                              reservationBill.restId ?? "",
+                              context);
+                        }),
                   ),
                   const SizedBox(
                     width: 20,
                   ),
                   Expanded(
                     child: PlatButton(
-                        title: "Split Bill",
-                        color: AppColor.g100,
-                        onTap: () {
-                          RandomFunction.sheet(context, SelectSplit(
-                            userReservation: userReservation,
-                            reservationBill: reservationBill,
-                          ));
-                        },
+                      title: "Split Bill",
+                      color: AppColor.g100,
+                      onTap: () {
+                        RandomFunction.sheet(
+                            context,
+                            SelectSplit(
+                              userReservation: userReservation,
+                              reservationBill: reservationBill,
+                            ));
+                      },
                     ),
                   )
                 ],

@@ -15,7 +15,7 @@ class PayStackPayment{
       await plugin.initialize(publicKey: 'pk_test_9e168c86fa8b3746028248105ed116fd8b373404');
       Charge charge = Charge()
         ..amount = amount*100
-        ..putMetaData('transactionId', FirebaseAuth.instance.currentUser!.uid)
+        ..putMetaData('transactionId', txnId)
         ..putMetaData("mode_of_payment", "card")
         ..putCustomField(FirebaseAuth.instance.currentUser!.email??"",(amount*100).toString())
         ..reference = "PF${DateTime.now().microsecondsSinceEpoch.toString()}"
@@ -23,6 +23,7 @@ class PayStackPayment{
         ..email = FirebaseAuth.instance.currentUser!.email;
       CheckoutResponse response = await plugin.checkout(
         context,
+        fullscreen: true,
         method: CheckoutMethod.card, // Defaults to CheckoutMethod.selectable
         charge: charge,
       );
