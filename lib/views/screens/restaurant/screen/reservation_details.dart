@@ -287,19 +287,21 @@ class _ReservationDetailsState extends State<ReservationDetails> {
           context
               .read<RestaurantViewModel>()
               .getReservationBill(widget.userReservation.reservId)
-              .then((value) {
-            if (value != null) {
-              nav(
-                context,
-                BillScreen(
-                  userReservation: widget.userReservation,
-                  reservationBill: value,
-                ),
-              );
-            } else {
-              RandomFunction.toast("Bill not ready");
-            }
-          });
+              .then(
+            (value) {
+              if (value != null) {
+                nav(
+                  context,
+                  BillScreen(
+                    userReservation: widget.userReservation,
+                    reservationBill: value,
+                  ),
+                );
+              } else {
+                RandomFunction.toast("Bill not ready");
+              }
+            },
+          );
         },
       );
     }
