@@ -25,6 +25,10 @@ extension StringExtension on String {
     return formatted.replaceAll(' ', '');
   }
 
+  String replaceMoney() {
+    return replaceAll(",", "").replaceAll("N", "").replaceAll("\$", "");
+  }
+
 }
 
 

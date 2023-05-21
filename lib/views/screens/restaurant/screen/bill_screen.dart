@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 import 'package:platterwave/model/restaurant/reservation_bill.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
 import 'package:platterwave/res/color.dart';
@@ -13,9 +15,11 @@ import 'package:platterwave/views/widget/custom/cache-image.dart';
 class BillScreen extends StatelessWidget {
   final UserReservation userReservation;
   final ReservationBill reservationBill;
-  const BillScreen(
-      {Key? key, required this.userReservation, required this.reservationBill})
-      : super(key: key);
+  const BillScreen({
+    Key? key,
+    required this.userReservation,
+    required this.reservationBill,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,24 +82,24 @@ class BillScreen extends StatelessWidget {
                         Expanded(
                           child: reservationBill.billPix == null
                               ? const SizedBox()
-                              : ImageCacheR(reservationBill.billPix ?? ''),
+                              : GestureDetector(
+                                  onTap: () {
+                                    showImageViewer(
+                                      context,
+                                      CachedNetworkImageProvider(
+                                        reservationBill.billPix ?? "",
+                                      ),
+                                      onViewerDismissed: () {},
+                                      useSafeArea: true,
+                                      swipeDismissible: true,
+                                      immersive: true
+                                    );
+                                  },
+                                  child: ImageCacheR(
+                                      reservationBill.billPix ?? ''),
+                                ),
                         ),
                         const Divider(),
-                        Row(
-                          children: const [
-                            Text(
-                              "VAT",
-                              style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w500),
-                            ),
-                            Spacer(),
-                            Text(
-                              "N30",
-                              style: TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
                         const SizedBox(
                           height: 20,
                         ),

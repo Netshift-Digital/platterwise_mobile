@@ -82,6 +82,8 @@ dependencies:
   geocoding: ^2.0.5
   awesome_place_search: ^1.0.6
   flutter_paystack_payment_plus:
+  fast_cached_network_image: ^1.2.0
+  number_inc_dec: ^0.8.0
   flutter:
     sdk: flutter
 

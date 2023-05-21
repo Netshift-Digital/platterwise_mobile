@@ -12,7 +12,7 @@ class PayStackPayment{
   static Future<bool?> investmentPlanPayment(int amount ,String txnId,BuildContext context)async{
     try{
       final plugin = PaystackPayment();
-      await plugin.initialize(publicKey: 'pk_test_9e168c86fa8b3746028248105ed116fd8b373404');
+      await plugin.initialize(publicKey: 'pk_test_8cdde2c25bcc9cc2287ca0417841bd73fca256c1');
       Charge charge = Charge()
         ..amount = amount*100
         ..putMetaData('transactionId', txnId)

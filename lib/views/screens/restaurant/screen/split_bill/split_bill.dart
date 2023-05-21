@@ -192,7 +192,9 @@ class _SplitBillState extends State<SplitBill> {
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(6.0),
-                                  child: Text(data.amount.toCurrency()),
+                                  child: (splitType == SplitType.percentage)?
+                                      Text("%${RandomFunction.getPercentage(num.parse(data.amount), grandPrice)}")
+                                      :Text(data.amount.toCurrency()),
                                 )),
                             contentPadding: EdgeInsets.zero,
                             leading: SvgPicture.asset('assets/images/avater.svg'),
@@ -234,7 +236,13 @@ class _SplitBillState extends State<SplitBill> {
                       const SizedBox(
                         height: 6,
                       ),
-                      Text(
+                      (splitType==SplitType.percentage)?
+                          Text("%${RandomFunction.getPercentage((grandPrice - amountShared), grandPrice).toStringAsFixed(2)}",
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  color: AppColor.g500,
+                                  fontWeight: FontWeight.w500)
+                          ):Text(
                         "${(grandPrice - amountShared).toString().toCurrency()} left",
                         style: const TextStyle(
                             fontSize: 16,

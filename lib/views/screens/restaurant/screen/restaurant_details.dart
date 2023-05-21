@@ -256,7 +256,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                                   context,
                                   MakeReservationScreen(
                                     restaurantData: widget.restaurantData,
-                                  ));
+                                  ),);
                             },
                         )
                       ],

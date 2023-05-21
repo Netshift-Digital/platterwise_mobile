@@ -83,4 +83,13 @@ class RandomFunction {
     }
   }
 
+
+ static num getPercentage(num part, num whole){
+    return (part/whole)*100;
+  }
+
+
+ static num getValueOfPercentage(num whole , num percent){
+    return (whole*percent)/100;
+  }
 }

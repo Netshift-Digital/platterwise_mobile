@@ -1,3 +1,6 @@
+
+
+
 class ReservationBillElement {
   String? status;
   List<ReservationBill>? reservationBill;
@@ -38,7 +41,7 @@ class ReservationBill {
   dynamic itemOrdered;
   String? grandPrice;
   String? billPix;
-  String? transactionId;
+  dynamic transactionId;
 
   ReservationBill(
       {this.fullName,
@@ -89,3 +92,4 @@ class ReservationBill {
     return data;
   }
 }
+

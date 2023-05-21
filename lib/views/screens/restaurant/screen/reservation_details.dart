@@ -288,7 +288,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
               .read<RestaurantViewModel>()
               .getReservationBill(widget.userReservation.reservId)
               .then((value) {
-            if (value != null && value!.grandPrice == null) {
+            if (value != null) {
               nav(
                 context,
                 BillScreen(

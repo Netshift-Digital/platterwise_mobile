@@ -5,12 +5,16 @@ import 'package:platterwave/utils/extension.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 
-
 class CustomAmount extends StatefulWidget {
   final GuestInfo guestInfo;
   final num balance;
   final Function(num amount) onDone;
-   const CustomAmount({Key? key, required this.guestInfo, required this.onDone, required this.balance}) : super(key: key);
+  const CustomAmount(
+      {Key? key,
+      required this.guestInfo,
+      required this.onDone,
+      required this.balance})
+      : super(key: key);
 
   @override
   State<CustomAmount> createState() => _CustomAmountState();
@@ -21,7 +25,7 @@ class _CustomAmountState extends State<CustomAmount> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
@@ -29,25 +33,29 @@ class _CustomAmountState extends State<CustomAmount> {
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(
-            padding: const EdgeInsets.only(left: 18,right: 18),
+            padding: const EdgeInsets.only(left: 18, right: 18),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 18,),
+                const SizedBox(
+                  height: 18,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      height:4,
+                      height: 4,
                       width: 69,
                       decoration: BoxDecoration(
-                        color:const Color(0xffD9D9D9),
+                        color: const Color(0xffD9D9D9),
                         borderRadius: BorderRadius.circular(4),
                       ),
                     )
                   ],
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 Row(
                   children: [
                     const Spacer(),
@@ -63,48 +71,75 @@ class _CustomAmountState extends State<CustomAmount> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children:  [
+                  children: [
                     const ImageCacheCircle(
                       'https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg',
                       height: 42,
                       width: 42,
                     ),
-                    const SizedBox(width: 12,),
+                    const SizedBox(
+                      width: 12,
+                    ),
                     Text(widget.guestInfo.guestName),
                   ],
                 ),
-                const SizedBox(height: 10,),
-                const Divider(thickness: 1.5,),
-                const SizedBox(height: 32,),
-                Text('Input split amount',style: AppTextTheme.h3.copyWith(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500
-                ),),
-                const SizedBox(height: 24,),
-               TextField(
-                 controller: textEditingController,
-                 onChanged: (e){
-                   setState(() {});
-                 },
-                 keyboardType: TextInputType.number,
-                 decoration: const InputDecoration(
-                   border: InputBorder.none,
-                   filled: true,
-                   hintText: 'Enter amount',
-                   fillColor: Color(0xffF2F2F2)
-                 ),
-               ),
-                const SizedBox(height: 12,),
-                 Text('Balance: ${widget.balance.toString().toCurrency()}'),
-                const SizedBox(height: 42,),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Divider(
+                  thickness: 1.5,
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                Text(
+                  'Input split amount',
+                  style: AppTextTheme.h3
+                      .copyWith(fontSize: 18, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                TextField(
+                  controller: textEditingController,
+                  onChanged: (string) {
+                    if (string.isNotEmpty) {
+                      var numMoney = string.replaceMoney();
+                      if (num.tryParse(numMoney) != null) {
+                        var money = numMoney.toCurrency();
+                        textEditingController.value = TextEditingValue(
+                          text: money,
+                          selection:
+                              TextSelection.collapsed(offset: money.length),
+                        );
+                      }
+                    }
+                    setState(() {});
+                  },
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      filled: true,
+                      hintText: 'Enter amount',
+                      fillColor: Color(0xffF2F2F2)),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Text('Balance: ${widget.balance.toString().toCurrency()}'),
+                const SizedBox(
+                  height: 42,
+                ),
                 PlatButton(
-                    title: 'Done',
-                    onTap: textEditingController.text.isEmpty?null:(){
-                      var amount = num.parse(textEditingController.text.trim());
-                      widget.onDone(amount);
-                    },
+                  title: 'Done',
+                  onTap: textEditingController.text.isEmpty
+                      ? null
+                      : () {
+                          var amount = num.parse(
+                              textEditingController.text.replaceMoney().trim());
+                          widget.onDone(amount);
+                        },
                 )
-
               ],
             ),
           ),
@@ -112,10 +147,11 @@ class _CustomAmountState extends State<CustomAmount> {
       ),
     );
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    textEditingController.text = widget.guestInfo.amount;
+    textEditingController.text = widget.guestInfo.amount.toCurrency();
   }
 }
