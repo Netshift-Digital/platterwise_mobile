@@ -237,7 +237,7 @@ class _SplitBillState extends State<SplitBill> {
                         height: 6,
                       ),
                       (splitType==SplitType.percentage)?
-                          Text("%${RandomFunction.getPercentage((grandPrice - amountShared), grandPrice).toStringAsFixed(2)}",
+                          Text("%${RandomFunction.getPercentage((grandPrice - amountShared), grandPrice).toStringAsFixed(2)} left",
                               style: const TextStyle(
                                   fontSize: 16,
                                   color: AppColor.g500,
