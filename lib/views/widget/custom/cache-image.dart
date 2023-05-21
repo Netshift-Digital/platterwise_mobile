@@ -29,6 +29,8 @@ class ImageCacheR extends StatelessWidget {
       height: height,
       width: width,
       imageUrl: image,
+      placeholderFadeInDuration: Duration.zero,
+      fadeInDuration:Duration.zero ,
       imageBuilder: (context, imageProvider){
         return Container(
           decoration: BoxDecoration(
@@ -102,6 +104,8 @@ class ImageCacheCircle extends StatelessWidget {
     return CachedNetworkImage(
       height: height,
       width: width,
+      placeholderFadeInDuration: Duration.zero,
+      fadeInDuration:Duration.zero ,
       imageUrl: image,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
