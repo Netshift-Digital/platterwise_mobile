@@ -12,6 +12,7 @@ class EmptyContentContainer extends StatelessWidget {
     return SizedBox(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(height: 58.h,),
           SvgPicture.asset("assets/icon/no-content-saved.svg"),

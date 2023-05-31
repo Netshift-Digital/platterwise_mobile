@@ -28,7 +28,7 @@ class RestaurantHomeScreen extends StatelessWidget {
     var locationProvider = context.watch<LocationProvider>();
     return Scaffold(
         appBar: PreferredSize(
-            preferredSize: const Size(double.maxFinite, 80),
+            preferredSize: const Size(double.maxFinite, 100),
             child: SafeArea(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w,vertical: 15.h),

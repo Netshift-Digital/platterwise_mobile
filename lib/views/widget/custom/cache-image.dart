@@ -9,11 +9,14 @@ class ImageCacheR extends StatelessWidget {
   final double height,width,topRadius,topBottom,blend;
   final String image;
   final bool fit;
+  final String? errorPlaceHolder;
+
 
   const ImageCacheR(this.image,{this.height=double.maxFinite,
     this.topRadius=10,
     this.fit=true,
     this.blend=0,
+    this.errorPlaceHolder,
     this.topBottom=10,
     this.width=double.maxFinite,Key?  key}) : super(key: key);
 
@@ -28,9 +31,7 @@ class ImageCacheR extends StatelessWidget {
     return CachedNetworkImage(
       height: height,
       width: width,
-      imageUrl: image,
-      placeholderFadeInDuration: Duration.zero,
-      fadeInDuration:Duration.zero ,
+      imageUrl: image.toString(),
       imageBuilder: (context, imageProvider){
         return Container(
           decoration: BoxDecoration(
@@ -44,6 +45,14 @@ class ImageCacheR extends StatelessWidget {
         );
       },
       placeholder: (context, url) {
+        // return Container(
+        //   height: height,
+        //   width: width,
+        //   decoration: BoxDecoration(
+        //       color: Colors.white,
+        //       borderRadius: radius
+        //   ),
+        // );
         return Shimmer.fromColors(
           baseColor: Colors.grey[200]!,
           highlightColor: Colors.grey,
@@ -64,7 +73,7 @@ class ImageCacheR extends StatelessWidget {
           height: height,
           decoration:BoxDecoration(
             image: DecorationImage(
-                image:const NetworkImage('https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt67a59125151d76ef/625e7dffceb10b47dfaba4dc/GettyImages-1348618431.jpg'),
+                image: NetworkImage(errorPlaceHolder??'https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt67a59125151d76ef/625e7dffceb10b47dfaba4dc/GettyImages-1348618431.jpg'),
                 fit:fit?BoxFit.cover:BoxFit.scaleDown
             ),
             borderRadius:radius,

@@ -60,7 +60,6 @@ dependencies:
   firebase_messaging:
   get_time_ago: ^1.1.7
   flutter_local_notifications: ^12.0.4
-  flutter_facebook_auth: ^4.4.0+1
   bot_toast: ^4.0.3
   sticky_headers: ^0.3.0+2
   video_thumbnail: ^0.5.3
@@ -82,8 +81,9 @@ dependencies:
   geocoding: ^2.0.5
   awesome_place_search: ^1.0.6
   flutter_paystack_payment_plus:
-  fast_cached_network_image: ^1.2.0
+
   number_inc_dec: ^0.8.0
+
   flutter:
     sdk: flutter
 

@@ -101,29 +101,29 @@ final _formKey = GlobalKey<FormState>();
                        ],
                      ),
                       SizedBox(height: size.height*0.02,),
-                      Row(
-                        //mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                        const Spacer(),
-                         // Platform.isIOS?GestureDetector(
-                         //    onTap: (){},
-                         //      child: SvgPicture.asset("assets/icon/apple.svg"))
-                         //  :const SizedBox(),
-                         //  Platform.isIOS?const Spacer():const SizedBox(),
-                          Platform.isAndroid?GestureDetector(
-                            onTap: (){
-                               facebook(context);
-                            },
-                              child: SvgPicture.asset("assets/icon/facebook.svg")):const SizedBox(),
-                          Platform.isAndroid?const SizedBox(width: 20,):const SizedBox(),
-                          InkWell(
-                            onTap: (){
-                              google(context);
-                            },
-                              child: Image.asset("assets/icon/google.png")),
-                          const Spacer(),
-                        ],
-                      ),
+                      // Row(
+                      //   //mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      //   children: [
+                      //   const Spacer(),
+                      //    // Platform.isIOS?GestureDetector(
+                      //    //    onTap: (){},
+                      //    //      child: SvgPicture.asset("assets/icon/apple.svg"))
+                      //    //  :const SizedBox(),
+                      //    //  Platform.isIOS?const Spacer():const SizedBox(),
+                      //     Platform.isAndroid?GestureDetector(
+                      //       onTap: (){
+                      //          facebook(context);
+                      //       },
+                      //         child: SvgPicture.asset("assets/icon/facebook.svg")):const SizedBox(),
+                      //     Platform.isAndroid?const SizedBox(width: 20,):const SizedBox(),
+                      //     InkWell(
+                      //       onTap: (){
+                      //         google(context);
+                      //       },
+                      //         child: Image.asset("assets/icon/google.png")),
+                      //     const Spacer(),
+                      //   ],
+                      // ),
                       SizedBox(height: size.height*0.02,),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,

@@ -131,6 +131,7 @@ class _TimelineState extends State<Timeline> {
                     var data =  model.posts[index];
                     return  Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
+                      //child: Text('chisom'),
                       child: TimelinePostContainer(data),
                     );
                   }
