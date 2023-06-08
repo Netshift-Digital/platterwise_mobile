@@ -4,7 +4,9 @@ import 'package:platterwave/res/color.dart';
 
 class FormWidget extends StatefulWidget {
   final Function(String name, String email) onChange;
-  const FormWidget({Key? key, required this.onChange}) : super(key: key);
+  final Guest? guest;
+  const FormWidget({Key? key, required this.onChange, required this.guest})
+      : super(key: key);
 
   @override
   State<FormWidget> createState() => _FormWidgetState();
@@ -24,11 +26,11 @@ class _FormWidgetState extends State<FormWidget> {
         child: Column(
           children: [
             TextFormField(
-              controller: _name,
+              controller: _email,
               onChanged: (e) {
                 widget.onChange(
                   _name.text.trim(),
-                  _email.text.trim()
+                  _email.text.trim(),
                 );
               },
               decoration: const InputDecoration(hintText: 'Full Name'),
@@ -37,11 +39,11 @@ class _FormWidgetState extends State<FormWidget> {
               height: 20,
             ),
             TextFormField(
-              controller: _email,
+             controller: _name,
               onChanged: (e) {
                 widget.onChange(
-                    _name.text.trim(),
-                    _email.text.trim()
+                  _name.text.trim(),
+                  _email.text.trim(),
                 );
               },
               decoration: const InputDecoration(
@@ -52,5 +54,14 @@ class _FormWidgetState extends State<FormWidget> {
         ),
       ),
     );
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(widget.guest!=null){
+      _name.text = widget.guest?.guestName ?? "";
+      _email.text = widget.guest?.guestEmail ?? "";
+    }
   }
 }

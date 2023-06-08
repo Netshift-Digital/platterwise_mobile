@@ -16,7 +16,7 @@ class AddGuestForm extends StatefulWidget {
   State<AddGuestForm> createState() => _AddGuestFormState();
 }
 
-class _AddGuestFormState extends State<AddGuestForm> {
+class _AddGuestFormState extends State<AddGuestForm> with AutomaticKeepAliveClientMixin<AddGuestForm> {
   List<Guest> guest = [];
   @override
   Widget build(BuildContext context) {
@@ -28,17 +28,35 @@ class _AddGuestFormState extends State<AddGuestForm> {
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(bottom: 16,left: 16,right: 16),
             child: Column(
               children: [
+                Row(
+                  children: [
+                    const Spacer(),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(
+                          Icons.clear,
+                          size: 30,
+                        ))
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Expanded(
                   child: ListView(
+                    addAutomaticKeepAlives: true,
                     physics: const BouncingScrollPhysics(),
                     children: List.generate(widget.guestNumber, (index) => index)
                     .map((index){
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: FormWidget(
+                          guest:guest.length>index?guest[index]:null ,
                           onChange: (String name, String email) {
                             if (guest.length >= index + 1) {
                               guest[index] = Guest(
@@ -96,4 +114,8 @@ class _AddGuestFormState extends State<AddGuestForm> {
     }
     return valid;
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
