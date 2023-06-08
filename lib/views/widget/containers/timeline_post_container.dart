@@ -1,15 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:custom_text/custom_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gallery_image_viewer/gallery_image_viewer.dart';
-import 'package:hashtager/widgets/hashtag_text.dart';
 import 'package:like_button/like_button.dart';
 import 'package:platterwave/constant/post_type.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/dynamic_link.dart';
+import 'package:platterwave/utils/matcher.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
@@ -148,8 +149,8 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                         context.read<VBlogViewModel>().savePost(widget.post);
                       },
                       // row has two child icon and text
-                      child: Row(
-                        children: const [
+                      child: const Row(
+                        children: [
                           Icon(Icons.bookmark),
                           SizedBox(
                             // sized box with width 10
@@ -165,8 +166,8 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                             value: 3,
                             onTap: () {},
                             // row has two child icon and text
-                            child: Row(
-                              children: const [
+                            child: const Row(
+                              children: [
                                 Icon(Icons.delete),
                                 SizedBox(
                                   // sized box with width 10
@@ -180,8 +181,8 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                             value: 1,
                             onTap: () {},
                             // row has two child icon and text
-                            child: Row(
-                              children: const [
+                            child: const Row(
+                              children: [
                                 Icon(Icons.flag),
                                 SizedBox(
                                   // sized box with width 10
@@ -201,16 +202,21 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
             SizedBox(
               height: 12.h,
             ),
-            HashTagText(
-              text: widget.post.contentPost,
-              decoratedStyle: AppTextTheme.h3.copyWith(
+            CustomText(
+               widget.post.contentPost,
+              matchStyle: AppTextTheme.h3.copyWith(
                 color: AppColor.p200,
                 fontWeight: FontWeight.w500,
               ),
-              basicStyle: AppTextTheme.h3,
+             style: AppTextTheme.h3,
               onTap: (text) {
                 nav(context, PostByTag(tag: text.toString()));
               },
+              definitions: const [
+                TextDefinition(matcher: UrlMatcher()),
+                TextDefinition(matcher: EmailMatcher()),
+                TextDefinition(matcher:HashTagMatcher()),
+              ],
             ),
             SizedBox(
               height: 11.h,

@@ -149,6 +149,9 @@ class _BottomNavState extends State<BottomNav> {
   }
 
   void checkNotification() {
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      print(event.data);
+    });
     FirebaseMessaging.onMessage.listen((event) {
       RemoteNotification? notification = event.notification;
       AndroidNotification? android = event.notification?.android;

@@ -38,7 +38,7 @@ class Successful extends StatelessWidget {
                 height: 16,
               ),
               const Text(
-                'Congratulation',
+                'Congratulations',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
               ),
               const SizedBox(

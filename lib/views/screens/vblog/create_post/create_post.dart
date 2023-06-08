@@ -3,8 +3,8 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_parsed_text_field/flutter_parsed_text_field.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hashtager/widgets/hashtag_text_field.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:platterwave/constant/post_type.dart';
 import 'package:platterwave/model/request_model/post_data.dart';
@@ -21,7 +21,6 @@ import 'package:platterwave/views/screens/vblog/video_player.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/dialog/alert_dialog.dart';
-import 'package:provider/provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class CreatePost extends StatefulWidget {
@@ -36,7 +35,7 @@ class _CreatePostState extends State<CreatePost> {
   final ImagePicker _picker = ImagePicker();
   XFile? path;
   Uint8List? thumbnail;
-  TextEditingController commentController = TextEditingController();
+  FlutterParsedTextFieldController commentController = FlutterParsedTextFieldController();
   @override
   Widget build(BuildContext context) {
     var model = context.watch<VBlogViewModel>();
@@ -123,7 +122,7 @@ class _CreatePostState extends State<CreatePost> {
                     width: forty,),
                    const SizedBox(width:twentyFour ,),
                     Expanded(
-                            child: HashTagTextField(
+                            child: FlutterParsedTextField(
                               controller: commentController,
                               maxLines: null,
                               minLines: null,
@@ -131,8 +130,9 @@ class _CreatePostState extends State<CreatePost> {
                                   hintText: 'Share your ideas here!',
                                   border: InputBorder.none
                               ),
-                              decoratedStyle: const TextStyle(fontSize: 14, color: AppColor.p300),
-                              basicStyle: const TextStyle(fontSize: 14, color: Colors.black),
+                              // decoratedStyle: const TextStyle(fontSize: 14, color: AppColor.p300),
+                              // basicStyle: const TextStyle(fontSize: 14, color: Colors.black),
+                              matchers: [],
                             ),
                     ),
 

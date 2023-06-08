@@ -1,7 +1,7 @@
-
-
+import 'package:geocoding/geocoding.dart';
 import 'package:hive/hive.dart';
 import 'package:platterwave/common/base_view_model.dart';
+import 'package:platterwave/utils/constant.dart';
 import 'package:platterwave/utils/location_service.dart';
 import 'package:platterwave/utils/locator.dart';
 
@@ -28,44 +28,50 @@ class LocationProvider extends BaseViewModel {
     notifyListeners();
   }
 
+  Future<String?> getPlaceDetails(String place) async {
+    List<Location> locations =
+        await locationFromAddress(place);
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      locations.first.latitude,
+      locations.first.longitude,
+    );
+    print(placemarks.first.toJson());
+    return placemarks.first.administrativeArea?? "";
+  }
+
   set long(String value) {
     _long = value;
     notifyListeners();
   }
 
-  getLocation(){
-    locationService.determinePosition().then((value){
-      locationService.getAddressFromPosition(value).then((place){
-       _address='${place.locality} ${place.administrativeArea}';
-       _lat=value.latitude.toString();
-       _long =value.longitude.toString();
-       _state = place.locality??"";
-       save();
-       notifyListeners();
+  getLocation() {
+    locationService.determinePosition().then((value) {
+      locationService.getAddressFromPosition(value).then((place) {
+        _address = '${place.locality} ${place.administrativeArea}';
+        _lat = value.latitude.toString();
+        _long = value.longitude.toString();
+        _state = place.locality ?? "";
+        save();
+        notifyListeners();
       });
     });
   }
 
-  save(){
-    box.put('location', {
-      'lat':_lat,
-      "long":_long,
-      "address":_address,
-      "state":_state
-    });
+  save() {
+    box.put('location',
+        {'lat': _lat, "long": _long, "address": _address, "state": _state});
   }
-  
-  getStoredLocation(){
+
+  getStoredLocation() {
     var data = box.get('location');
-    if(data==null){
+    if (data == null) {
       getLocation();
-    }else{
-      _lat=data['lat'];
-      _long=data['long'];
+    } else {
+      _lat = data['lat'];
+      _long = data['long'];
       _address = data['address'];
       _state = data['state'];
       notifyListeners();
     }
   }
-
 }

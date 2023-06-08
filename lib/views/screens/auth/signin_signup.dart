@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:platterwave/res/color.dart';
-import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/views/screens/auth/login.dart';
 import 'package:platterwave/views/screens/auth/register.dart';
@@ -24,8 +22,8 @@ class _SignInSignUpState extends State<SignInSignUp> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(),
-            Text('Welcome\nto Platterwise',style: GoogleFonts.roboto(
+            const Row(),
+            const Text('Welcome\nto Platterwise',style: TextStyle(
               fontWeight: FontWeight.w900,
               fontSize: 40
             ),),
@@ -42,7 +40,7 @@ class _SignInSignUpState extends State<SignInSignUp> {
                 title: "Sign up",
                 textColor: AppColor.g900,
                 onTap: (){
-                nav(context, Register());
+                nav(context, const Register());
                 }
             )
           ],

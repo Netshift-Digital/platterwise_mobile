@@ -18,7 +18,15 @@ class RestaurantViewModel extends BaseViewModel{
   List<RestaurantData> allRestDetail = [];
   List<AllBannersList> allBannersList = [];
   List<UserReservation> userReservation = [];
+  String _state = "lagos";
+  String get state =>_state;
   AppState reviewState = AppState.idle;
+
+
+  setLocationState(String e){
+    _state =e;
+    notifyListeners();
+  }
   setReviewState(AppState state){
     reviewState =state;
     notifyListeners();

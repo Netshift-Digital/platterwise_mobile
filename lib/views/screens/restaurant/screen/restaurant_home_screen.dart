@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
 import 'package:platterwave/constant/endpoint.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
@@ -16,7 +17,6 @@ import 'package:platterwave/views/widget/containers/small_restaurant_container.d
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
 import 'package:provider/provider.dart';
-import 'package:awesome_place_search/awesome_place_search.dart';
 
 class RestaurantHomeScreen extends StatelessWidget {
   const RestaurantHomeScreen({Key? key}) : super(key: key);
@@ -38,14 +38,29 @@ class RestaurantHomeScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: GestureDetector(
-                        onTap: (){
-                          AwesomePlaceSearch(
+                        onTap: ()async{
+                          // AwesomePlaceSearch(
+                          //   context: context,
+                          //   key: "AIzaSyC44N6yERgjg8AM_UOznKlflcEZWYE8tro",
+                          //   onTap: (value) async {
+                          //     PredictionModel? prediction = await value;
+                          //   },
+                          // ).show();
+                       PlacesAutocomplete.show(
                             context: context,
-                            key: "AIzaSyC44N6yERgjg8AM_UOznKlflcEZWYE8tro",
-                            onTap: (value) async {
-                              PredictionModel? prediction = await value;
-                            },
-                          ).show();
+                            apiKey: "AIzaSyC44N6yERgjg8AM_UOznKlflcEZWYE8tro",
+                            mode: Mode.overlay, // or Mode.fullscreen
+                            language: 'en',
+                          ).then((value){
+                          if(value!=null){
+                            locationProvider.myAddress = value.structuredFormatting?.mainText??"";
+                            locationProvider.getPlaceDetails(value.structuredFormatting?.mainText??"").then((e){
+                              if(e!=null){
+                                resModel.searchRestaurant(e);
+                              }
+                            });
+                          }
+                       });
                         },
                         child: Container(
                           color: Colors.transparent,
@@ -71,10 +86,15 @@ class RestaurantHomeScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    context.watch<UserViewModel>().user==null?const SizedBox():ImageCacheCircle(
-                      context.watch<UserViewModel>().user!.userProfile.profileUrl,
-                      height: 42.h,
-                      width: 42.h,
+                    context.watch<UserViewModel>().user==null?const SizedBox():GestureDetector(
+                      onTap: (){
+                        context.read<PageViewModel>().setIndex(4);
+                      },
+                      child: ImageCacheCircle(
+                        context.watch<UserViewModel>().user!.userProfile.profileUrl,
+                        height: 42.h,
+                        width: 42.h,
+                      ),
                     ),
                   ],
                 ),

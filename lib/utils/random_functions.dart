@@ -71,15 +71,33 @@ class RandomFunction {
 
   static Color reserveColor(String e){
     if(e.contains('pend')){
-      return Colors.orange;
+      return Colors.yellow[700]!;
     }else if(e.contains('accep')){
       return Colors.blue;
     }else if(e.contains('can')){
       return Colors.red;
-    }else if(e.contains('suc')){
+    }else if(e.contains('com')){
       return Colors.green;
-    }else{
+    }else if(e.contains('split')){
+      return Colors.orange[900]!;
+    } else{
       return Colors.orange;
+    }
+  }
+
+  static String reserveString(String e){
+    if(e.contains('pend')){
+      return 'Reservation pending';
+    }else if(e.contains('accep')){
+      return "Reservation Accepted";
+    }else if(e.contains('can')){
+      return "Reservation Cancelled";
+    }else if(e.contains('com')){
+      return "Dining Completed";
+    }else if(e.contains('split')){
+      return "Bill splitted";
+    } else{
+      return "";
     }
   }
 
@@ -91,5 +109,43 @@ class RandomFunction {
 
  static num getValueOfPercentage(num whole , num percent){
     return (whole*percent)/100;
+  }
+
+
+  static Future<DateTime?> showDateTimePicker({
+    required BuildContext context,
+    DateTime? initialDate,
+    DateTime? firstDate,
+    DateTime? lastDate,
+  }) async {
+    initialDate ??= DateTime.now();
+    firstDate ??= initialDate.subtract(const Duration(days: 365 * 100));
+    lastDate ??= firstDate.add(const Duration(days: 365 * 200));
+
+    final DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+    );
+
+    if (selectedDate == null) return null;
+
+    if (!context.mounted) return selectedDate;
+
+    final TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(selectedDate),
+    );
+
+    return selectedTime == null
+        ? selectedDate
+        : DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      selectedTime.hour,
+      selectedTime.minute,
+    );
   }
 }

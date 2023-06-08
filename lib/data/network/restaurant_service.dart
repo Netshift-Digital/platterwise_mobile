@@ -10,7 +10,6 @@ import 'package:platterwave/model/failure.dart';
 import 'package:platterwave/model/request_model/split_bill_model.dart';
 import 'package:platterwave/model/restaurant/reservation_param.dart';
 import 'package:platterwave/utils/random_functions.dart';
-import 'package:platterwave/views/screens/restaurant/screen/split_bill/split_bill.dart';
 
 class RestaurantService{
   var client = http.Client();
