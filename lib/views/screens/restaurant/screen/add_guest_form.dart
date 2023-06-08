@@ -32,46 +32,49 @@ class _AddGuestFormState extends State<AddGuestForm> {
             child: Column(
               children: [
                 Expanded(
-                  child: ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: widget.guestNumber,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                          child: FormWidget(
-                            onChange: (String name, String email) {
-                              if (guest.length >= index + 1) {
-                                guest[index] = Guest(
+                  child: ListView(
+                    physics: const BouncingScrollPhysics(),
+                    children: List.generate(widget.guestNumber, (index) => index)
+                    .map((index){
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: FormWidget(
+                          onChange: (String name, String email) {
+                            if (guest.length >= index + 1) {
+                              guest[index] = Guest(
+                                guestName: name,
+                                guestEmail: email,
+                              );
+                            } else {
+                              guest.add(
+                                Guest(
                                   guestName: name,
                                   guestEmail: email,
-                                );
-                              } else {
-                                guest.add(
-                                  Guest(
-                                    guestName: name,
-                                    guestEmail: email,
-                                  ),
-                                );
-                              }
-                              setState(() {});
-                            },
-                          ),
-                        );
-                      }),
+                                ),
+                              );
+                            }
+                            setState(() {});
+                          },
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 PlatButton(
                   title: 'Done',
-                  onTap: guest.length == widget.guestNumber ? () {
-                    if(validate()){
-                      widget.onDone(guest);
-                      Navigator.pop(context);
-                    }else{
-                      RandomFunction.toast("Invalid Email");
-                    }
-                  } : null,
+                  onTap: guest.length == widget.guestNumber
+                      ? () {
+                          if (validate()) {
+                            widget.onDone(guest);
+                            Navigator.pop(context);
+                          } else {
+                            RandomFunction.toast("Invalid Email");
+                          }
+                        }
+                      : null,
                 ),
                 const SizedBox(
                   height: 30,

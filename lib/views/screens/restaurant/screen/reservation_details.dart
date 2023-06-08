@@ -58,7 +58,8 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                 },
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
+                      parent: AlwaysScrollableScrollPhysics()
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

@@ -244,18 +244,19 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                           child: ImageCacheR(widget.post.contentUrl),
                         ),
                       )
-                    : Container(
-                        height: 239.h,
-                        width: 343.w,
-                        decoration: BoxDecoration(
-                            color: AppColor.p300,
-                            borderRadius: BorderRadius.circular(15),
-                            shape: BoxShape.rectangle),
-                        child: const ImageCacheR(
-                          "https://www.balmoraltanks.com/images/common/video-icon-image.jpg",
-                        ),
-                      ),
-            //videoWid(),
+                    :videoWid(),
+
+            // Container(
+            //   height: 239.h,
+            //   width: 343.w,
+            //   decoration: BoxDecoration(
+            //       color: AppColor.p300,
+            //       borderRadius: BorderRadius.circular(15),
+            //       shape: BoxShape.rectangle),
+            //   child: const ImageCacheR(
+            //     "https://www.balmoraltanks.com/images/common/video-icon-image.jpg",
+            //   ),
+            // )
             SizedBox(
               height: 18.h,
             ),
@@ -325,47 +326,73 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
     );
   }
 
-  Widget videoWid() {
+  // Widget videoWid() {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       nav(
+  //           context,
+  //           VideoPlay(
+  //             url: widget.post.contentUrl,
+  //           ));
+  //     },
+  //     child: Container(
+  //       height: 239.h,
+  //       width: double.maxFinite,
+  //       decoration: BoxDecoration(
+  //           color: Colors.black,
+  //           borderRadius: BorderRadius.circular(15),
+  //           shape: BoxShape.rectangle),
+  //       child: Stack(
+  //         children: [
+  //           TextValidator.isValidUrl(widget.post.contentType)
+  //               ? ImageCacheR(
+  //                   widget.post.contentType,
+  //                   fit: true,
+  //                   blend: 0.5,
+  //                 )
+  //               : const ImageCacheR(
+  //                   "https://www.balmoraltanks.com/images/common/video-icon-image.jpg",
+  //                 ),
+  //           TextValidator.isValidUrl(widget.post.contentType)
+  //               ? SizedBox(
+  //                   height: 239.h,
+  //                   width: 343.w,
+  //                   child: Center(
+  //                       child:
+  //                           SvgPicture.asset("assets/images/play-circle.svg")))
+  //               : const SizedBox()
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+  Widget  videoWid() {
     return GestureDetector(
-      onTap: () {
-        nav(
-            context,
-            VideoPlay(
-              url: widget.post.contentUrl,
-            ));
+      onTap: (){
+        nav(context, VideoPlay(url: widget.post.contentUrl,));
       },
       child: Container(
         height: 239.h,
-        width: double.maxFinite,
+        width:double.maxFinite,
         decoration: BoxDecoration(
             color: Colors.black,
             borderRadius: BorderRadius.circular(15),
-            shape: BoxShape.rectangle),
-        child: Stack(
+            shape: BoxShape.rectangle
+        ),
+        child:Stack(
           children: [
-            TextValidator.isValidUrl(widget.post.contentType)
-                ? ImageCacheR(
-                    widget.post.contentType,
-                    fit: true,
-                    blend: 0.5,
-                  )
-                : const ImageCacheR(
-                    "https://www.balmoraltanks.com/images/common/video-icon-image.jpg",
-                  ),
-            TextValidator.isValidUrl(widget.post.contentType)
-                ? SizedBox(
-                    height: 239.h,
-                    width: 343.w,
-                    child: Center(
-                        child:
-                            SvgPicture.asset("assets/images/play-circle.svg")))
-                : const SizedBox()
+            TextValidator.isValidUrl(widget.post.contentType)?ImageCacheR(widget.post.contentType,fit: true,blend: 0.5,)
+                :const ImageCacheR("https://www.balmoraltanks.com/images/common/video-icon-image.jpg",),
+            TextValidator.isValidUrl(widget.post.contentType)?SizedBox(
+                height: 239.h,
+                width: 343.w,
+                child:  Center(child: SvgPicture.asset("assets/images/play-circle.svg")))
+                :const SizedBox()
           ],
         ),
       ),
     );
   }
-
   @override
   void initState() {
     // TODO: implement initState

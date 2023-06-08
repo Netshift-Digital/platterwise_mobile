@@ -110,7 +110,9 @@ class _BottomNavState extends State<BottomNav> {
     await blogModel.getTopTag();
     setLocation();
   }
-
+ getReservation(){
+   context.read<RestaurantViewModel>().getReservations();
+ }
   setLocation() {
     var locationProvider = context.read<LocationProvider>();
     locationProvider.getStoredLocation();
@@ -150,9 +152,14 @@ class _BottomNavState extends State<BottomNav> {
 
   void checkNotification() {
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      print(event.data);
+      getReservation();
     });
+    FirebaseMessaging.instance.getInitialMessage().then((value){
+     getReservation();
+    });
+
     FirebaseMessaging.onMessage.listen((event) {
+      getReservation();
       RemoteNotification? notification = event.notification;
       AndroidNotification? android = event.notification?.android;
       if (notification != null && android != null) {

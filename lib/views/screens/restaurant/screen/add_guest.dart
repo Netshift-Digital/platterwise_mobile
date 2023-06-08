@@ -51,7 +51,7 @@ class _AddGuestState extends State<AddGuest> {
           ),
           backgroundColor: Colors.transparent,
           body: Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16),
+            padding: const EdgeInsets.only(left: 16, right: 16,top: 10),
             child: Column(
               children: [
                 Row(
@@ -81,7 +81,7 @@ class _AddGuestState extends State<AddGuest> {
                   ],
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
                 AppTextField(
                   controller: searchController,

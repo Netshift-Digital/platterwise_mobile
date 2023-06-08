@@ -37,7 +37,9 @@ class UserReservations extends StatelessWidget {
                 return;
               },
               child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()
+                  ),
                   itemCount: model.userReservation.length,
                   itemBuilder: (context, index) {
                     var data = model.userReservation[index];
@@ -45,7 +47,8 @@ class UserReservations extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: GestureDetector(
                         onTap: () {
-                          nav(context, ReservationDetails(data));
+                          Navigator.push(context, MaterialPageRoute(builder:(context)=>ReservationDetails(data),settings:const RouteSettings(name: "userReservation") ));
+                          //nav(context, ReservationDetails(data));
                         },
                         child: Container(
                           decoration: BoxDecoration(
