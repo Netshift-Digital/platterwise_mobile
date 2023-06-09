@@ -60,9 +60,7 @@ class RestaurantViewModel extends BaseViewModel{
 
   Future<List<RestaurantData>> getByState() async{
     try{
-      print('ahah');
       var data = await restaurantService.getByState(state);
-      print(data);
       if(data!=null){
         var list = SearchRestaurantModel.fromJson(data).searchResult;
         nearByRestaurant = list;
