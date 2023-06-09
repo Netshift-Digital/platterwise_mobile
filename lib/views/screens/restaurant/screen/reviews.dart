@@ -30,82 +30,82 @@ class _RestaurantsReviewsState extends State<RestaurantsReviews> {
     // var user = context.read<UserViewModel>().user;
     // var resViewModel = context.read<RestaurantViewModel>();
     // var size = MediaQuery.of(context).size;
-    return Column(
+    return widget.review.isEmpty?const Column(
       children: [
-        widget.review.isEmpty?const EmptyContentContainer():ListView.builder(
-            itemCount: widget.review.length,
-            primary: false,
-            physics: const BouncingScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              var data = widget.review[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColor.g20,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+        EmptyContentContainer(),
+      ],
+    ):ListView.builder(
+        itemCount: widget.review.length,
+        padding: const EdgeInsets.only(bottom: 200),
+        physics: const BouncingScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          var data = widget.review[index];
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColor.g20,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            ImageCacheCircle(
-                              data.profileUrl,
-                              height: 32,
-                              width: 32,
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              data.fullName,
-                              style: AppTextTheme.h3.copyWith(
-                                  fontWeight: FontWeight.w500, fontSize: 14.sp),
-                            ),
-                          ],
+                        ImageCacheCircle(
+                          data.profileUrl,
+                          height: 32,
+                          width: 32,
                         ),
                         const SizedBox(
-                          height: 8,
+                          width: 8,
                         ),
-                        Row(
-                          children: [
-                            RatingBarIndicator(
-                              rating: (num.tryParse(data.rating)??0).toDouble(),
-                              itemBuilder: (context, index) => const Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                              ),
-                              itemCount: 5,
-                              itemSize: 18.0,
-                              direction: Axis.horizontal,
-                            ),
-                            const SizedBox(
-                              width: 3,
-                            ),
-                             Text(
-                             RandomFunction.timeAgo(data.timestamp),
-                              style: const TextStyle(
-                                fontSize: 10,
-                              ),
-                            ),
-                          ],
+                        Text(
+                          data.fullName,
+                          style: AppTextTheme.h3.copyWith(
+                              fontWeight: FontWeight.w500, fontSize: 14.sp),
                         ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Text(data.review),
                       ],
                     ),
-                  ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      children: [
+                        RatingBarIndicator(
+                          rating: (num.tryParse(data.rating)??0).toDouble(),
+                          itemBuilder: (context, index) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          itemCount: 5,
+                          itemSize: 18.0,
+                          direction: Axis.horizontal,
+                        ),
+                        const SizedBox(
+                          width: 3,
+                        ),
+                         Text(
+                         RandomFunction.timeAgo(data.timestamp),
+                          style: const TextStyle(
+                            fontSize: 10,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Text(data.review),
+                  ],
                 ),
-              );
-            },
-        ),
-      ],
+              ),
+            ),
+          );
+        },
     );
   }
 }
