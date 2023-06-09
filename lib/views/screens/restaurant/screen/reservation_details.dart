@@ -1,5 +1,7 @@
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
 import 'package:platterwave/res/color.dart';
@@ -20,9 +22,14 @@ import 'package:provider/provider.dart';
 class ReservationDetails extends StatefulWidget {
   UserReservation? userReservation;
   final String? id;
-  ReservationDetails(this.userReservation, {super.key, this.id})
-      : assert((userReservation != null || id != null),
-            "pass either id or UserReservation");
+  ReservationDetails(
+    this.userReservation, {
+    super.key,
+    this.id,
+  }) : assert(
+          (userReservation != null || id != null),
+          "pass either id or UserReservation",
+        );
 
   @override
   State<ReservationDetails> createState() => _ReservationDetailsState();
@@ -58,7 +65,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                 },
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()
+                    parent: AlwaysScrollableScrollPhysics(),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -268,8 +275,13 @@ class _ReservationDetailsState extends State<ReservationDetails> {
       return PlatButton(
         title: "View payment Status",
         onTap: () {
-          nav(context,
-              PaidGuestScreen(userReservation: widget.userReservation!));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PaidGuestScreen(
+                      userReservation: widget.userReservation!))).then((value) {
+            getDetails();
+          });
         },
       );
     } else if (widget.userReservation!.reservationStatus
@@ -308,15 +320,30 @@ class _ReservationDetailsState extends State<ReservationDetails> {
               .read<RestaurantViewModel>()
               .getReservationBill(widget.userReservation!.reservId)
               .then(
-            (value) {
+            (value) async {
               if (value != null) {
-                nav(
+                Navigator.push(
                   context,
-                  BillScreen(
-                    userReservation: widget.userReservation!,
-                    reservationBill: value,
+                  MaterialPageRoute(
+                    builder: (context) => BillScreen(
+                      userReservation: widget.userReservation!,
+                      reservationBill: value,
+                    ),
+                    settings: const RouteSettings(name: "userReservation"),
                   ),
-                );
+                ).then((data) {
+                  if (data == true) {
+                    getDetails();
+                    Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PaidGuestScreen(
+                                    userReservation: widget.userReservation!)))
+                        .then((value) {
+                      getDetails();
+                    });
+                  }
+                });
               } else {
                 RandomFunction.toast("Bill not ready");
               }
@@ -333,13 +360,20 @@ class _ReservationDetailsState extends State<ReservationDetails> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getDetails();
+      FirebaseFirestore.instance
+          .collection('userReservations')
+          .doc(widget.id ?? widget.userReservation!.reservId)
+          .snapshots()
+          .listen((event) {
+        getDetails();
+      });
     });
   }
 
   getDetails() async {
     var data = await context
         .read<RestaurantViewModel>()
-        .getSingleReservation(widget.userReservation!.reservId);
+        .getSingleReservation(widget.id??widget.userReservation!.reservId);
     if (data != null) {
       if (mounted) {
         setState(() {

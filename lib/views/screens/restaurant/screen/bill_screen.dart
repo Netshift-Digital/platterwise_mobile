@@ -85,15 +85,14 @@ class BillScreen extends StatelessWidget {
                               : GestureDetector(
                                   onTap: () {
                                     showImageViewer(
-                                      context,
-                                      CachedNetworkImageProvider(
-                                        reservationBill.billPix ?? "",
-                                      ),
-                                      onViewerDismissed: () {},
-                                      useSafeArea: true,
-                                      swipeDismissible: true,
-                                      immersive: true
-                                    );
+                                        context,
+                                        CachedNetworkImageProvider(
+                                          reservationBill.billPix ?? "",
+                                        ),
+                                        onViewerDismissed: () {},
+                                        useSafeArea: true,
+                                        swipeDismissible: true,
+                                        immersive: true);
                                   },
                                   child: ImageCacheR(
                                       reservationBill.billPix ?? ''),
@@ -163,6 +162,9 @@ class BillScreen extends StatelessWidget {
                         RandomFunction.sheet(
                             context,
                             SelectSplit(
+                              getPaidGuest: () {
+                                Navigator.pop(context, true);
+                              },
                               userReservation: userReservation,
                               reservationBill: reservationBill,
                             ));

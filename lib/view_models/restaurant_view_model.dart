@@ -16,6 +16,8 @@ import 'package:platterwave/utils/random_functions.dart';
 class RestaurantViewModel extends BaseViewModel{
   RestaurantService restaurantService = locator<RestaurantService>();
   List<RestaurantData> allRestDetail = [];
+  List<RestaurantData> topRestaurant = [];
+  List<RestaurantData> nearByRestaurant = [];
   List<AllBannersList> allBannersList = [];
   List<UserReservation> userReservation = [];
   String _state = "lagos";
@@ -25,7 +27,7 @@ class RestaurantViewModel extends BaseViewModel{
 
   setLocationState(String e){
     _state =e;
-    notifyListeners();
+    getByState();
   }
   setReviewState(AppState state){
     reviewState =state;
@@ -42,6 +44,34 @@ class RestaurantViewModel extends BaseViewModel{
       //
     }
     return allRestDetail;
+  }
+  Future<List<RestaurantData>> getTopRestaurant() async{
+    try{
+      var data = await restaurantService.getTopRated();
+      if(data!=null){
+        topRestaurant = Restaurant.fromJson(data).allRestDetail;
+        notifyListeners();
+      }
+    }catch(e){
+      //
+    }
+    return topRestaurant;
+  }
+
+  Future<List<RestaurantData>> getByState() async{
+    try{
+      print('ahah');
+      var data = await restaurantService.getByState(state);
+      print(data);
+      if(data!=null){
+        var list = SearchRestaurantModel.fromJson(data).searchResult;
+        nearByRestaurant = list;
+        notifyListeners();
+      }
+    }catch(e){
+      //
+    }
+    return nearByRestaurant;
   }
 
   Future<List<RestaurantData>> searchRestaurant(String text) async{

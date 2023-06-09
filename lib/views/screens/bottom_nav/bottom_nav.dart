@@ -103,6 +103,8 @@ class _BottomNavState extends State<BottomNav> {
     var resModel = context.read<RestaurantViewModel>();
 
     await userModel.getMyProfile();
+    await resModel.getByState();
+    await resModel.getTopRestaurant();
     await resModel.getRestaurant();
     await resModel.getReservations();
     await blogModel.getFollowers();

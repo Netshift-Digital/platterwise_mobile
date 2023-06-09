@@ -47,8 +47,7 @@ class UserReservations extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder:(context)=>ReservationDetails(data),settings:const RouteSettings(name: "userReservation") ));
-                          //nav(context, ReservationDetails(data));
+                          nav(context, ReservationDetails(data));
                         },
                         child: Container(
                           decoration: BoxDecoration(

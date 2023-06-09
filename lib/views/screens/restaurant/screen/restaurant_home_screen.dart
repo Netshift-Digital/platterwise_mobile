@@ -56,7 +56,7 @@ class RestaurantHomeScreen extends StatelessWidget {
                             locationProvider.myAddress = value.structuredFormatting?.mainText??"";
                             locationProvider.getPlaceDetails(value.structuredFormatting?.mainText??"").then((e){
                               if(e!=null){
-                                resModel.searchRestaurant(e);
+                                resModel.setLocationState(e);
                               }
                             });
                           }
@@ -170,9 +170,9 @@ class RestaurantHomeScreen extends StatelessWidget {
                       shrinkWrap: true,
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      itemCount: resModel.allRestDetail.length,
+                      itemCount: resModel.nearByRestaurant.length,
                       itemBuilder: (context, index) {
-                        var data = resModel.allRestDetail[index];
+                        var data = resModel.nearByRestaurant[index];
                         return SmallRestaurantContainer(
                           restaurantData: data,
                         );
@@ -221,9 +221,9 @@ class RestaurantHomeScreen extends StatelessWidget {
                         shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
-                        itemCount: resModel.allRestDetail.length,
+                        itemCount: resModel.topRestaurant.length,
                         itemBuilder: (context, index) {
-                          var data = resModel.allRestDetail[index];
+                          var data = resModel.topRestaurant[index];
                           return SmallRestaurantContainer(
                             restaurantData: data,
                           );
