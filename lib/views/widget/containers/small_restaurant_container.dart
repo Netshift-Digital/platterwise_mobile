@@ -66,8 +66,8 @@ class SmallRestaurantContainer extends StatelessWidget {
                 child: Text(
                   restaurantData.restuarantName,
                   style: AppTextTheme.h5.copyWith(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
