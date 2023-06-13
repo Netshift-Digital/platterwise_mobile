@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/model/restaurant/reservation_param.dart';
@@ -207,6 +208,9 @@ class _AddGuestState extends State<AddGuest> {
                         itemCount: searchUserResult.length,
                         itemBuilder: (context, index) {
                           var data = searchUserResult[index];
+                          if(data.email==FirebaseAuth.instance.currentUser!.uid){
+                            return const SizedBox();
+                          }
                           return ListTile(
                             onTap: () {
                               FocusScope.of(context).unfocus();

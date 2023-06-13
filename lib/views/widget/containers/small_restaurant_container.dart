@@ -7,6 +7,7 @@ import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/views/screens/restaurant/screen/res.dart';
 import 'package:platterwave/views/screens/restaurant/screen/restaurant_details.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 
@@ -21,7 +22,7 @@ class SmallRestaurantContainer extends StatelessWidget {
       onTap: () {
         nav(
           context,
-          RestaurantDetails(
+          Res(
             restaurantData: restaurantData,
           ),
         );

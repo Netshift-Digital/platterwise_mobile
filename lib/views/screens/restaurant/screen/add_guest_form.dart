@@ -8,15 +8,18 @@ import 'package:platterwave/views/widget/button/custom-button.dart';
 class AddGuestForm extends StatefulWidget {
   final int guestNumber;
   final Function(List<Guest> guest) onDone;
-  const AddGuestForm(
-      {Key? key, required this.guestNumber, required this.onDone})
-      : super(key: key);
+  const AddGuestForm({
+    Key? key,
+    required this.guestNumber,
+    required this.onDone,
+  }) : super(key: key);
 
   @override
   State<AddGuestForm> createState() => _AddGuestFormState();
 }
 
-class _AddGuestFormState extends State<AddGuestForm> with AutomaticKeepAliveClientMixin<AddGuestForm> {
+class _AddGuestFormState extends State<AddGuestForm>
+    with AutomaticKeepAliveClientMixin<AddGuestForm> {
   List<Guest> guest = [];
   @override
   Widget build(BuildContext context) {
@@ -28,7 +31,7 @@ class _AddGuestFormState extends State<AddGuestForm> with AutomaticKeepAliveClie
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 16,left: 16,right: 16),
+            padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
             child: Column(
               children: [
                 Row(
@@ -51,12 +54,13 @@ class _AddGuestFormState extends State<AddGuestForm> with AutomaticKeepAliveClie
                   child: ListView(
                     addAutomaticKeepAlives: true,
                     physics: const BouncingScrollPhysics(),
-                    children: List.generate(widget.guestNumber, (index) => index)
-                    .map((index){
+                    children:
+                        List.generate(widget.guestNumber, (index) => index)
+                            .map((index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: FormWidget(
-                          guest:guest.length>index?guest[index]:null ,
+                          guest: guest.length > index ? guest[index] : null,
                           onChange: (String name, String email) {
                             if (guest.length >= index + 1) {
                               guest[index] = Guest(
@@ -108,10 +112,11 @@ class _AddGuestFormState extends State<AddGuestForm> with AutomaticKeepAliveClie
   bool validate() {
     bool valid = true;
     for (var e in guest) {
-      if (e.guestEmail.isValidEmail() == false || e.guestName.isEmpty) {
+      if (e.guestEmail.trim().isValidEmail() == false || e.guestName.isEmpty) {
         valid = false;
       }
     }
+
     return valid;
   }
 

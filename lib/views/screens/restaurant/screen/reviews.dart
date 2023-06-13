@@ -37,12 +37,12 @@ class _RestaurantsReviewsState extends State<RestaurantsReviews> {
     ):ListView.builder(
         itemCount: widget.review.length,
         padding: const EdgeInsets.only(bottom: 200),
-        physics: const BouncingScrollPhysics(),
         shrinkWrap: true,
+        primary: false,
         itemBuilder: (context, index) {
           var data = widget.review[index];
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 16),
             child: Container(
               decoration: BoxDecoration(
                 color: AppColor.g20,

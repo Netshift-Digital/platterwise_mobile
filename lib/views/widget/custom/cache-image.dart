@@ -44,29 +44,29 @@ class ImageCacheR extends StatelessWidget {
           ),
         );
       },
-      placeholder: (context, url) {
-        // return Container(
-        //   height: height,
-        //   width: width,
-        //   decoration: BoxDecoration(
-        //       color: Colors.white,
-        //       borderRadius: radius
-        //   ),
-        // );
-        return Shimmer.fromColors(
-          baseColor: Colors.grey[200]!,
-          highlightColor: Colors.grey,
-          direction: ShimmerDirection.ltr,
-          child: Container(
-            height: height,
-            width: width,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: radius
-            ),
-          ),
-        );
-      },
+      // placeholder: (context, url) {
+      //   // return Container(
+      //   //   height: height,
+      //   //   width: width,
+      //   //   decoration: BoxDecoration(
+      //   //       color: Colors.white,
+      //   //       borderRadius: radius
+      //   //   ),
+      //   // );
+      //   return Shimmer.fromColors(
+      //     baseColor: Colors.grey[200]!,
+      //     highlightColor: Colors.grey,
+      //     direction: ShimmerDirection.ltr,
+      //     child: Container(
+      //       height: height,
+      //       width: width,
+      //       decoration: BoxDecoration(
+      //           color: Colors.white,
+      //           borderRadius: radius
+      //       ),
+      //     ),
+      //   );
+      // },
       errorWidget: (context, url, error) {
         return  Container(
           width: width,

@@ -28,7 +28,7 @@ class MakeReservationScreen extends StatefulWidget {
 }
 
 class _MakeReservationScreenState extends State<MakeReservationScreen> {
-  int guestNumber = 1;
+  int guestNumber = 0;
   List<Guest> guest = [];
   DateTime? dateTime;
   String? sitType;
@@ -203,7 +203,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                           children: [
                             InkWell(
                               onTap: () {
-                                if (guestNumber != 1) {
+                                if (guestNumber != 0) {
                                   setState(() {
                                     guestNumber = guestNumber - 1;
                                   });
@@ -315,30 +315,33 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                           }).toList(),
                         ),
                       ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: InkWell(
-                    onTap: () {
-                      RandomFunction.sheet(
-                          context,
-                          AddGuest(
-                            guestNumber: guestNumber,
-                            onGuestSelected: (e) {
-                              guest = e;
-                              setState(() {});
-                            },
+                guestNumber == 0
+                    ? const SizedBox()
+                    : Align(
+                        alignment: Alignment.bottomLeft,
+                        child: InkWell(
+                          onTap: () {
+                            RandomFunction.sheet(
+                                context,
+                                AddGuest(
+                                  guestNumber: guestNumber,
+                                  onGuestSelected: (e) {
+                                    guest = e;
+                                    setState(() {});
+                                  },
+                                ),
+                                height:
+                                    MediaQuery.of(context).size.height - 50);
+                          },
+                          child: Text(
+                            "Add Guest Details",
+                            style: AppTextTheme.h3.copyWith(
+                                color: const Color(0xffE16C52),
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12),
                           ),
-                          height: MediaQuery.of(context).size.height - 50);
-                    },
-                    child: Text(
-                      "Add Guest Details",
-                      style: AppTextTheme.h3.copyWith(
-                          color: const Color(0xffE16C52),
-                          fontWeight: FontWeight.w700,
-                          fontSize: 12),
-                    ),
-                  ),
-                ),
+                        ),
+                      ),
                 //const Spacer(),
               ],
             ),
@@ -349,10 +352,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
   }
 
   bool validate() {
-    if (sitType != null &&
-        dateTime != null &&
-        guestNumber > 0 &&
-        guest.length == guestNumber) {
+    if (sitType != null && dateTime != null && guest.length == guestNumber) {
       return false;
     } else {
       return true;

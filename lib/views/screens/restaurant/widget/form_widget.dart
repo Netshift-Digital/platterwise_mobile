@@ -26,7 +26,7 @@ class _FormWidgetState extends State<FormWidget> {
         child: Column(
           children: [
             TextFormField(
-              controller: _email,
+              controller: _name,
               onChanged: (e) {
                 widget.onChange(
                   _name.text.trim(),
@@ -39,7 +39,7 @@ class _FormWidgetState extends State<FormWidget> {
               height: 20,
             ),
             TextFormField(
-             controller: _name,
+             controller: _email,
               onChanged: (e) {
                 widget.onChange(
                   _name.text.trim(),
@@ -47,7 +47,7 @@ class _FormWidgetState extends State<FormWidget> {
                 );
               },
               decoration: const InputDecoration(
-                hintText: 'Email Address or Phone number',
+                hintText: 'Email Address',
               ),
             ),
           ],
