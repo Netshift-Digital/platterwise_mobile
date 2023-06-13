@@ -286,6 +286,10 @@ class _ReservationDetailsState extends State<ReservationDetails> {
       );
     } else if (widget.userReservation!.reservationStatus
         .toLowerCase()
+        .contains("can")) {
+      return const SizedBox();
+    } else if (widget.userReservation!.reservationStatus
+        .toLowerCase()
         .contains("com")) {
       return const SizedBox();
     } else if (!widget.userReservation!.reservationStatus
@@ -306,6 +310,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                       .cancelReservation(widget.userReservation!.reservId)
                       .then((value) {
                     if (value) {
+                      context.read<RestaurantViewModel>().getReservations();
                       Navigator.pop(context);
                     }
                   });
@@ -332,8 +337,8 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                     settings: const RouteSettings(name: "userReservation"),
                   ),
                 ).then((data) {
+                  getDetails();
                   if (data == true) {
-                    getDetails();
                     Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -373,7 +378,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
   getDetails() async {
     var data = await context
         .read<RestaurantViewModel>()
-        .getSingleReservation(widget.id??widget.userReservation!.reservId);
+        .getSingleReservation(widget.id ?? widget.userReservation!.reservId);
     if (data != null) {
       if (mounted) {
         setState(() {

@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
+import 'package:pay_with_paystack/pay_with_paystack.dart';
 import 'package:platterwave/utils/random_functions.dart';
 
 
@@ -29,6 +30,41 @@ class PayStackPayment{
       );
       plugin.dispose();
       return response.status;
+    }catch(e){
+      RandomFunction.toast('something went wrong');
+    }
+    return null;
+
+  }
+
+
+
+  static Future<bool?> makePayment(int amount ,String reserveId,BuildContext context)async{
+    try{
+      var status = true;
+      var data =  await PayWithPayStack().now(
+          context: context,
+          secretKey:
+          "sk_test_eeaf2c0b53be26ccb9371d46c1af742f2376bbb6",
+          customerEmail: FirebaseAuth.instance.currentUser!.email??"",
+          reference:
+          DateTime.now().microsecondsSinceEpoch.toString(),
+          currency: "NGN",
+          paymentChannel:["mobile_money", "card",'ussd','bank_transfer'],
+          amount: (amount*100).toString(),
+          transactionCompleted: () {
+            status =true;
+          },
+          metaData: {
+            "transactionId":DateTime.now().millisecondsSinceEpoch.toString(),
+            "mode_of_payment":"single",
+            "reserv_id":reserveId
+          },
+          transactionNotCompleted: () {
+            status =false;
+          }
+      );
+      return true;
     }catch(e){
       RandomFunction.toast('something went wrong');
     }

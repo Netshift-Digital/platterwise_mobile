@@ -229,7 +229,7 @@ class _SplitBillState extends State<SplitBill> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${amountShared.toString().toCurrency()} of ${grandPrice.toString().toCurrency()}",
+                    "${amountShared.toString().toCurrency()} of ${grandPrice.toString().toCurrency()}",
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -245,7 +245,7 @@ class _SplitBillState extends State<SplitBill> {
                                   color: AppColor.g500,
                                   fontWeight: FontWeight.w500)
                           ):Text(
-                        "${(grandPrice - amountShared).toString().toCurrency()} left",
+                        (grandPrice - amountShared) ==0?"":"${(grandPrice - amountShared).toString().toCurrency()} left",
                         style: const TextStyle(
                             fontSize: 16,
                             color: AppColor.g500,

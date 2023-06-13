@@ -144,11 +144,15 @@ class BillScreen extends StatelessWidget {
                     child: PlatButton(
                         title: "Pay Entire Bill",
                         onTap: () {
-                          PayStackPayment.investmentPlanPayment(
+                          PayStackPayment.makePayment(
                               num.parse(reservationBill.grandPrice ?? '0')
                                   .toInt(),
-                              reservationBill.restId ?? "",
-                              context);
+                              userReservation.reservId ?? "",
+                              context).then((value){
+                                if(value==true){
+                                  Navigator.pop(context);
+                                }
+                          });
                         }),
                   ),
                   const SizedBox(

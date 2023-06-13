@@ -4,6 +4,7 @@ import 'package:platterwave/model/restaurant/reservation_bill.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
+import 'package:platterwave/utils/extension.dart';
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/split_bill.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 
@@ -119,8 +120,9 @@ class _SelectSplitState extends State<SelectSplit> {
                             contentPadding: EdgeInsets.zero,
                             leading:
                                 SvgPicture.asset('assets/images/avater.svg'),
-                            title: Text(data.guestName),
-                            subtitle: Text(data.guestEmail),
+                            title: Text(data.guestName.capitalizeFirstChar()),
+                            subtitle:
+                                Text(data.guestEmail.capitalizeFirstChar()),
                           ),
                         ),
                       ),

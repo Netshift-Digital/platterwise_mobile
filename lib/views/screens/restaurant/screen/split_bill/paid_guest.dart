@@ -13,8 +13,10 @@ import 'package:provider/provider.dart';
 
 class PaidGuestScreen extends StatefulWidget {
   final UserReservation userReservation;
-  const PaidGuestScreen({Key? key, required this.userReservation})
-      : super(key: key);
+  const PaidGuestScreen({
+    Key? key,
+    required this.userReservation,
+  }) : super(key: key);
 
   @override
   State<PaidGuestScreen> createState() => _PaidGuestScreenState();
@@ -22,7 +24,8 @@ class PaidGuestScreen extends StatefulWidget {
 
 class _PaidGuestScreenState extends State<PaidGuestScreen> {
   List<AllPaidList>? paidGuest;
-  String amount = "0";
+  num amount = 0;
+  num amountPaid = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +74,7 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
                     height: 8,
                   ),
                   Text(
-                    amount,
+                    amount.toString().toCurrency(),
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
@@ -102,14 +105,14 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
                         )
                       : RefreshIndicator(
                           onRefresh: () async {
-                           await getPaidGuest(context);
-                           return;
+                            await getPaidGuest(context);
+                            return;
                           },
                           child: ListView.builder(
                             itemCount: paidGuest?.length,
-                              physics: const BouncingScrollPhysics(
-                                parent: AlwaysScrollableScrollPhysics(),
-                              ),
+                            physics: const BouncingScrollPhysics(
+                              parent: AlwaysScrollableScrollPhysics(),
+                            ),
                             itemBuilder: (context, index) {
                               var data = paidGuest![index];
                               return Padding(
@@ -145,7 +148,8 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
                                       leading: SvgPicture.asset(
                                         'assets/images/avater.svg',
                                       ),
-                                      subtitle: Text(data.guestEmail.capitalizeFirstChar()),
+                                      subtitle: Text(data.guestEmail
+                                          .capitalizeFirstChar()),
                                       title: Text(
                                         data.guestName.capitalizeFirstChar(),
                                       ),
@@ -162,10 +166,11 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
             ),
             PlatButton(
               title: "Done",
-              onTap: () {
-                //Todo
-                Navigator.pop(context);
-              },
+              onTap: amountPaid != amountPaid
+                  ? null
+                  : () {
+                      Navigator.pop(context);
+                    },
             ),
             const SizedBox(
               height: 20,
@@ -188,16 +193,17 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
     );
   }
 
-
   Future<void> getPaidGuest(BuildContext context) async {
     var model = context.read<RestaurantViewModel>();
     var value = await model.getPaidGuest(widget.userReservation.reservId);
-    if (value != null) {
-      if (mounted) {
-        setState(() {
-          paidGuest = value;
-        });
-      }
+    if (mounted) {
+      setState(() {
+        paidGuest = value;
+        for (var e in value) {
+          amountPaid = amountPaid + (num.tryParse(e.totalBill) ?? 0);
+        }
+        print(amountPaid);
+      });
     }
   }
 
@@ -207,7 +213,7 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
     if (value != null) {
       if (mounted) {
         setState(() {
-          amount = (value.grandPrice ?? "0").toCurrency();
+          amount = num.parse((value.grandPrice ?? "0"));
         });
       }
     }

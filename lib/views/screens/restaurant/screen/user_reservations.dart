@@ -114,65 +114,10 @@ class UserReservations extends StatelessWidget {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                         ),
-                                        PopupMenuButton<int>(
-                                          onSelected: (e) {
-                                            if (e == 0) {
-                                              nav(context,
-                                                  ReservationDetails(data));
-                                            } else if (e == 3) {
-                                              CustomAlert(
-                                                  context: context,
-                                                  title: "Cancel reservation",
-                                                  body:
-                                                      "Are you sure you want to cancel this reservation? ",
-                                                  onTap: () {
-                                                    context
-                                                        .read<
-                                                            RestaurantViewModel>()
-                                                        .cancelReservation(
-                                                            data.reservId);
-                                                  }).show();
-                                            }
-                                          },
-                                          itemBuilder: (ctx) => [
-                                            PopupMenuItem(
-                                              value: 0,
-                                              onTap: () {},
-                                              child: const Row(
-                                                children: [
-                                                  Icon(Icons.visibility),
-                                                  SizedBox(
-                                                    // sized box with width 10
-                                                    width: 10,
-                                                  ),
-                                                  Text("view")
-                                                ],
-                                              ),
-                                            ),
-                                            PopupMenuItem(
-                                              value: 3,
-                                              onTap: () {},
-                                              // row has two child icon and text
-                                              child: const Row(
-                                                children: [
-                                                  Icon(Icons.clear),
-                                                  SizedBox(
-                                                    // sized box with width 10
-                                                    width: 10,
-                                                  ),
-                                                  Text("Cancel reservation")
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                          // offset:const Offset(0, 100),
-                                          // color: Colors.grey,
-                                          elevation: 2,
-                                        ),
                                       ],
                                     ),
                                     SizedBox(
-                                      height: 6.h,
+                                      height: 15.h,
                                     ),
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
