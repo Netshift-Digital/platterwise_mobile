@@ -1,5 +1,6 @@
 import 'package:geocoding/geocoding.dart';
 import 'package:hive/hive.dart';
+import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
 import 'package:platterwave/common/base_view_model.dart';
 import 'package:platterwave/utils/constant.dart';
 import 'package:platterwave/utils/location_service.dart';
@@ -28,15 +29,15 @@ class LocationProvider extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<String?> getPlaceDetails(String place) async {
-    List<Location> locations =
-        await locationFromAddress(place);
+  Future<LocationData> getPlaceDetails(String place) async {
+    List<Location> locations = await locationFromAddress(place);
+
     List<Placemark> placemarks = await placemarkFromCoordinates(
       locations.first.latitude,
       locations.first.longitude,
     );
-    print(placemarks.first.toJson());
-    return placemarks.first.administrativeArea?? "";
+    return LocationData(placemarks.first,
+        LatLong(locations.first.latitude, locations.first.longitude));
   }
 
   set long(String value) {
@@ -74,4 +75,10 @@ class LocationProvider extends BaseViewModel {
       notifyListeners();
     }
   }
+}
+
+class LocationData {
+  LatLong latLong;
+  Placemark placeMark;
+  LocationData(this.placeMark, this.latLong);
 }

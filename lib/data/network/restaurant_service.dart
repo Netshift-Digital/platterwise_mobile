@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
 import 'package:platterwave/constant/endpoint.dart';
 import 'package:platterwave/model/failure.dart';
 import 'package:platterwave/model/request_model/split_bill_model.dart';
@@ -96,6 +97,42 @@ class RestaurantService {
     }
     return null;
   }
+
+
+  Future<Map<String, dynamic>?> nearBy(LatLong latLong) async {
+    var body = jsonEncode({
+      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
+      "latitude":latLong.latitude,
+      "longitude":latLong.longitude
+
+    });
+    try {
+      var response = await client.post(
+          Uri.parse("https://api.platterwise.com/jhome2/closest_rest.php"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+          }).timeout(const Duration(seconds: 10));
+      var data = jsonDecode(response.body);
+      print(data);
+      if (response.statusCode == 200) {
+        return data;
+      }else{
+        RandomFunction.toast(data['status']);
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      print(e.toString());
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
 
   Future<Map<String, dynamic>?> getRestaurantReviews(String resId) async {
     var body = jsonEncode({

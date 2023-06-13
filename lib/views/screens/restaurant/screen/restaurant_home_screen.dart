@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
-import 'package:platterwave/constant/endpoint.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
@@ -31,14 +30,14 @@ class RestaurantHomeScreen extends StatelessWidget {
             preferredSize: const Size(double.maxFinite, 100),
             child: SafeArea(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w,vertical: 15.h),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 15.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: GestureDetector(
-                        onTap: ()async{
+                        onTap: () async {
                           // AwesomePlaceSearch(
                           //   context: context,
                           //   key: "AIzaSyC44N6yERgjg8AM_UOznKlflcEZWYE8tro",
@@ -46,21 +45,26 @@ class RestaurantHomeScreen extends StatelessWidget {
                           //     PredictionModel? prediction = await value;
                           //   },
                           // ).show();
-                       PlacesAutocomplete.show(
+                          PlacesAutocomplete.show(
                             context: context,
                             apiKey: "AIzaSyC44N6yERgjg8AM_UOznKlflcEZWYE8tro",
                             mode: Mode.overlay, // or Mode.fullscreen
                             language: 'en',
-                          ).then((value){
-                          if(value!=null){
-                            locationProvider.myAddress = value.structuredFormatting?.mainText??"";
-                            locationProvider.getPlaceDetails(value.structuredFormatting?.mainText??"").then((e){
-                              if(e!=null){
-                                resModel.setLocationState(e);
-                              }
-                            });
-                          }
-                       });
+                          ).then((value) {
+                            if (value != null) {
+                              locationProvider.myAddress =
+                                  value.structuredFormatting?.mainText ?? "";
+                              locationProvider
+                                  .getPlaceDetails(
+                                      value.structuredFormatting?.mainText ??
+                                          "")
+                                  .then((e) {
+                                if (e != null) {
+                                  resModel.setLocationState(e);
+                                }
+                              });
+                            }
+                          });
                         },
                         child: Container(
                           color: Colors.transparent,
@@ -86,16 +90,22 @@ class RestaurantHomeScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    context.watch<UserViewModel>().user==null?const SizedBox():GestureDetector(
-                      onTap: (){
-                        context.read<PageViewModel>().setIndex(4);
-                      },
-                      child: ImageCacheCircle(
-                        context.watch<UserViewModel>().user!.userProfile.profileUrl,
-                        height: 42.h,
-                        width: 42.h,
-                      ),
-                    ),
+                    context.watch<UserViewModel>().user == null
+                        ? const SizedBox()
+                        : GestureDetector(
+                            onTap: () {
+                              context.read<PageViewModel>().setIndex(4);
+                            },
+                            child: ImageCacheCircle(
+                              context
+                                  .watch<UserViewModel>()
+                                  .user!
+                                  .userProfile
+                                  .profileUrl,
+                              height: 42.h,
+                              width: 42.h,
+                            ),
+                          ),
                   ],
                 ),
               ),
@@ -112,7 +122,7 @@ class RestaurantHomeScreen extends StatelessWidget {
                     height: 10.h,
                   ),
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       context.read<PageViewModel>().setIndex(1);
                     },
                     child: const AppTextField(
@@ -135,9 +145,8 @@ class RestaurantHomeScreen extends StatelessWidget {
                     children: [
                       Text(
                         "Nearby Restaurants",
-                        style: AppTextTheme.h3
-                            .copyWith(fontWeight: FontWeight.w500,fontSize:
-                        16.sp),
+                        style: AppTextTheme.h3.copyWith(
+                            fontWeight: FontWeight.w500, fontSize: 16.sp),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -153,14 +162,16 @@ class RestaurantHomeScreen extends StatelessWidget {
                   SizedBox(
                     height: 2.h,
                   ),
-                   Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("Selected Restaurants close to you",
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Selected Restaurants close to you",
                       style: AppTextTheme.h1.copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: AppColor.g600
-                      ),),),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: AppColor.g600),
+                    ),
+                  ),
                   SizedBox(
                     height: 32.h,
                   ),
@@ -170,9 +181,9 @@ class RestaurantHomeScreen extends StatelessWidget {
                       shrinkWrap: true,
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      itemCount: resModel.nearByRestaurant.length,
+                      itemCount: resModel.closeByRestaurant.length,
                       itemBuilder: (context, index) {
-                        var data = resModel.nearByRestaurant[index];
+                        var data = resModel.closeByRestaurant[index];
                         return SmallRestaurantContainer(
                           restaurantData: data,
                         );
@@ -204,14 +215,15 @@ class RestaurantHomeScreen extends StatelessWidget {
                   SizedBox(
                     height: 2.h,
                   ),
-                 Align(
+                  Align(
                       alignment: Alignment.centerLeft,
-                      child: Text("Highly recommended places for you",
-                      style: AppTextTheme.h1.copyWith(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: AppColor.g600
-                      ),)),
+                      child: Text(
+                        "Highly recommended places for you",
+                        style: AppTextTheme.h1.copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: AppColor.g600),
+                      )),
                   SizedBox(
                     height: 32.h,
                   ),
