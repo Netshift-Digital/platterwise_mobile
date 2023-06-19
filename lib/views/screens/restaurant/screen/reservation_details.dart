@@ -22,8 +22,8 @@ import 'package:provider/provider.dart';
 class ReservationDetails extends StatefulWidget {
   UserReservation? userReservation;
   final String? id;
-  ReservationDetails(
-    this.userReservation, {
+  ReservationDetails({
+    this.userReservation,
     super.key,
     this.id,
   }) : assert(
@@ -232,7 +232,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                                     style: TextStyle(fontSize: 14),
                                   ),
                                   const Spacer(),
-                                  Text(
+                                  SelectableText(
                                     widget.userReservation!.reservId,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w500,

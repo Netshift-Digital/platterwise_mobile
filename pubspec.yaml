@@ -86,6 +86,7 @@ dependencies:
   date_time_picker: ^2.1.0
   photo_view: ^0.14.0
   pay_with_paystack: 1.0.2
+  optimized_cached_image: ^3.0.1
   flutter:
     sdk: flutter
 

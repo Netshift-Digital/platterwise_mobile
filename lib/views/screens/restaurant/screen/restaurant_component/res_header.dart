@@ -7,6 +7,7 @@ import 'package:platterwave/model/restaurant/restaurant.dart';
 import 'package:platterwave/model/restaurant/restaurant_review.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
+import 'package:platterwave/utils/extension.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RestaurantHeader extends StatelessWidget {
@@ -26,7 +27,7 @@ class RestaurantHeader extends StatelessWidget {
           Row(
             children: [
               Text(
-                restaurantData.restuarantName,
+                restaurantData.restuarantName.capitalizeFirstChar(),
                 style: AppTextTheme.h3
                     .copyWith(fontWeight: FontWeight.w700, fontSize: 18),
               ),

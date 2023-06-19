@@ -114,7 +114,6 @@ class RestaurantService {
             "Content-type": "application/json",
           }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
-      print(data);
       if (response.statusCode == 200) {
         return data;
       }else{
@@ -127,7 +126,6 @@ class RestaurantService {
     } on TimeoutException catch (_) {
       throw Failure("Poor internet connection");
     } catch (e) {
-      print(e.toString());
       throw Failure("Something went wrong. Try again");
     }
     return null;

@@ -122,6 +122,7 @@ class RandomFunction {
     final TimeOfDay? selectedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(selectedDate),
+      initialEntryMode: TimePickerEntryMode.input
     );
 
     return selectedTime == null

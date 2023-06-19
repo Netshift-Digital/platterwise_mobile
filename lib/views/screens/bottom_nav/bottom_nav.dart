@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -12,6 +14,7 @@ import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
+import 'package:platterwave/views/screens/restaurant/screen/reservation_details.dart';
 import 'package:platterwave/views/screens/restaurant/screen/restaurant_home_screen.dart';
 import 'package:platterwave/views/screens/restaurant/screen/search_resturant.dart';
 import 'package:platterwave/views/screens/restaurant/screen/user_reservations.dart';
@@ -53,9 +56,9 @@ class _BottomNavState extends State<BottomNav> {
       screen: const Timeline(),
     ),
     BottomNavigationModel(
-        title: "Profile",
-        icon: "assets/icon/user_profile.svg",
-        screen: const ViewUserProfileScreen(),
+      title: "Profile",
+      icon: "assets/icon/user_profile.svg",
+      screen: const ViewUserProfileScreen(),
     )
   ];
   @override
@@ -113,9 +116,11 @@ class _BottomNavState extends State<BottomNav> {
 
     setLocation();
   }
- getReservation(){
-   context.read<RestaurantViewModel>().getReservations();
- }
+
+  getReservation() {
+    context.read<RestaurantViewModel>().getReservations();
+  }
+
   setLocation() {
     var locationProvider = context.read<LocationProvider>();
     locationProvider.getStoredLocation();
@@ -145,22 +150,32 @@ class _BottomNavState extends State<BottomNav> {
     if (user != null) {
       FirebaseMessaging.instance.getToken().then((value) {
         FirebaseMessaging.instance.subscribeToTopic(user.uid);
-        if(user.email!=null){
-          var topic = (user.email??"").replaceAll("@", "");
+        if (user.email != null) {
+          var topic = (user.email ?? "").replaceAll("@", "");
           FirebaseMessaging.instance.subscribeToTopic(topic);
         }
       });
     }
   }
 
+  navToReservation(String id) {
+    nav(
+        context,
+        ReservationDetails(
+          id: id,
+        ));
+  }
+
   void checkNotification() {
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       getReservation();
+      if (event.data['reserv_id'] != null) {
+        navToReservation(event.data['reserv_id']);
+      }
     });
-    FirebaseMessaging.instance.getInitialMessage().then((value){
-     getReservation();
+    FirebaseMessaging.instance.getInitialMessage().then((value) {
+      getReservation();
     });
-
     FirebaseMessaging.onMessage.listen((event) {
       getReservation();
       RemoteNotification? notification = event.notification;
@@ -181,7 +196,8 @@ class _BottomNavState extends State<BottomNav> {
                 priority: Priority.high,
                 ticker: 'test ticker',
               ),
-            ));
+            ),
+            payload: jsonEncode(event.data));
       }
     });
   }

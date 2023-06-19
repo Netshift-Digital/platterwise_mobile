@@ -150,7 +150,9 @@ class RestaurantHomeScreen extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          nav(context, const MoreRestaurant());
+                          nav(context,  MoreRestaurant(
+                            closeByRestaurant: resModel.closeByRestaurant,
+                          ));
                         },
                         child: const Text(
                           "See More",
@@ -203,7 +205,9 @@ class RestaurantHomeScreen extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          nav(context, const MoreRestaurant());
+                          nav(context,  MoreRestaurant(
+                            closeByRestaurant: resModel.topRestaurant,
+                          ));
                         },
                         child: const Text(
                           "See More",
@@ -255,7 +259,9 @@ class RestaurantHomeScreen extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          nav(context, const MoreRestaurant());
+                          nav(context,  MoreRestaurant(
+                            closeByRestaurant: resModel.allRestDetail,
+                          ));
                         },
                         child: const Text(
                           "See More",

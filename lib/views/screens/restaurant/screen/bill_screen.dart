@@ -111,7 +111,7 @@ class BillScreen extends StatelessWidget {
                             ),
                             const Spacer(),
                             Text(
-                              (reservationBill.grandPrice ?? '0').toCurrency(),
+                              reservationBill.grandPrice!.isEmpty?"0":(reservationBill.grandPrice ?? '0').toCurrency(),
                               style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w500),
                             ),

@@ -32,134 +32,140 @@ class UserReservations extends StatelessWidget {
                 ),
               )
             : RefreshIndicator(
-              onRefresh: ()async{
-                await model.getReservations();
-                return;
-              },
-              child: ListView.builder(
-                  physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()
-                  ),
-                  itemCount: model.userReservation.length,
-                  itemBuilder: (context, index) {
-                    var data = model.userReservation[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: GestureDetector(
-                        onTap: () {
-                          nav(context, ReservationDetails(data));
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.grey.shade300,
-                              width: 0.7,
+                onRefresh: () async {
+                  await model.getReservations();
+                  return;
+                },
+                child: ListView.builder(
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    itemCount: model.userReservation.length,
+                    itemBuilder: (context, index) {
+                      var data = model.userReservation[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: GestureDetector(
+                          onTap: () {
+                            nav(
+                                context,
+                                ReservationDetails(
+                                  userReservation: data,
+                                ));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                                width: 0.7,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.shade200,
+                                  offset: const Offset(0, 2),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                              borderRadius: BorderRadius.circular(6),
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade200,
-                                offset: const Offset(0, 2),
-                                blurRadius: 4,
-                              ),
-                            ],
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 99.w,
-                                height: 100.h,
-                                decoration: const BoxDecoration(
-                                  color: AppColor.p300,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(6),
-                                    bottomLeft: Radius.circular(6),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 99.w,
+                                  height: 100.h,
+                                  decoration: const BoxDecoration(
+                                    color: AppColor.p300,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(6),
+                                      bottomLeft: Radius.circular(6),
+                                    ),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(6),
+                                      bottomLeft: Radius.circular(6),
+                                    ),
+                                    child: ImageCacheR(
+                                      data.restDetail.isEmpty
+                                          ? ""
+                                          : data.restDetail.first.coverPic,
+                                      topRadius: 0,
+                                      topBottom: 0,
+                                    ),
                                   ),
                                 ),
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(6),
-                                    bottomLeft: Radius.circular(6),
-                                  ),
-                                  child: ImageCacheR(
-                                    data.restDetail.isEmpty
-                                        ? ""
-                                        : data.restDetail.first.coverPic,
-                                    topRadius: 0,
-                                    topBottom: 0,
-                                  ),
+                                SizedBox(
+                                  width: 12.w,
                                 ),
-                              ),
-                              SizedBox(
-                                width: 12.w,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  //mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            data.restDetail.isEmpty
-                                                ? "https://www.balmoraltanks.com/images/common/video-icon-image.jpg"
-                                                : data.restDetail.first
-                                                    .restaurantName,
-                                            overflow: TextOverflow.clip,
-                                            maxLines: 1,
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    //mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              data.restDetail.isEmpty
+                                                  ? "https://www.balmoraltanks.com/images/common/video-icon-image.jpg"
+                                                  : data.restDetail.first
+                                                      .restaurantName,
+                                              overflow: TextOverflow.clip,
+                                              maxLines: 1,
+                                              softWrap: true,
+                                              style: AppTextTheme.h3.copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 15.h,
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            height: 8,
+                                            width: 8,
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color:
+                                                    RandomFunction.reserveColor(
+                                                  data.reservationStatus
+                                                      .toLowerCase(),
+                                                )),
+                                          ),
+                                          const SizedBox(
+                                            width: 4,
+                                          ),
+                                          Text(
+                                            RandomFunction.reserveString(data
+                                                .reservationStatus
+                                                .toLowerCase()),
+                                            style: AppTextTheme.h5.copyWith(
+                                              fontSize: 12,
+                                              color:
+                                                  RandomFunction.reserveColor(
+                                                      data.reservationStatus
+                                                          .toLowerCase()),
+                                            ),
                                             softWrap: true,
-                                            style: AppTextTheme.h3.copyWith(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 15.h,
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Container(
-                                          height: 8,
-                                          width: 8,
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: RandomFunction.reserveColor(
-                                                data.reservationStatus
-                                                    .toLowerCase(),
-                                              )),
-                                        ),
-                                        const SizedBox(
-                                          width: 4,
-                                        ),
-                                        Text(
-                                          RandomFunction.reserveString(
-                                              data.reservationStatus
-                                                  .toLowerCase()),
-                                          style: AppTextTheme.h5.copyWith(
-                                            fontSize: 12,
-                                            color: RandomFunction.reserveColor(
-                                                data.reservationStatus
-                                                    .toLowerCase()),
-                                          ),
-                                          softWrap: true,
-                                          maxLines: 3,
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
+                                            maxLines: 3,
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }),
-            ),
+                      );
+                    }),
+              ),
       ),
     );
   }
