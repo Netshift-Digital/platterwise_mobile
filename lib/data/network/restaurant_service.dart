@@ -320,6 +320,7 @@ class RestaurantService {
         "Content-type": "application/json",
       }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
+      print(data);
       if (response.statusCode == 200) {
         return data;
       }

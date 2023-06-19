@@ -24,6 +24,8 @@ import 'package:platterwave/views/screens/restaurant/screen/reservation_details.
 import 'package:provider/provider.dart';
 import 'package:overlay_support/overlay_support.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -56,10 +58,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return OverlaySupport.global(
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         builder: BotToastInit(),
         title: appName,
         debugShowCheckedModeBanner: false,
@@ -84,21 +88,28 @@ class _MyAppState extends State<MyApp> {
             iOS: initializationSettingsDarwin);
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
-    flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: _onDidReceiveNotificationResponse);
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: _onDidReceiveNotificationResponse,
+      //onDidReceiveBackgroundNotificationResponse: _onDidReceiveNotificationResponse
+    );
   }
 
   _onDidReceiveNotificationResponse(NotificationResponse notificationResponse) {
-    if (notificationResponse.payload != null) {
-      var data = jsonDecode(notificationResponse.payload ?? "");
-      if (data['reserv_id'] != null &&
-          FirebaseAuth.instance.currentUser != null) {
-        nav(
-            context,
-            ReservationDetails(
-              id: data['reserv_id'],
-            ));
+    try {
+      if (notificationResponse.payload != null) {
+        var data = jsonDecode(notificationResponse.payload ?? "");
+        if (data['reserv_id'] != null &&
+            FirebaseAuth.instance.currentUser != null) {
+          nav(
+              navigatorKey.currentState?.context ?? context,
+              ReservationDetails(
+                id: data['reserv_id'],
+              ));
+        }
       }
+    } catch (e) {
+      print(e);
     }
   }
 }

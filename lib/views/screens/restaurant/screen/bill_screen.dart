@@ -111,7 +111,10 @@ class BillScreen extends StatelessWidget {
                             ),
                             const Spacer(),
                             Text(
-                              reservationBill.grandPrice!.isEmpty?"0":(reservationBill.grandPrice ?? '0').toCurrency(),
+                              reservationBill.grandPrice!.isEmpty
+                                  ? "0"
+                                  : (reservationBill.grandPrice ?? '0')
+                                      .toCurrency(),
                               style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w500),
                             ),
@@ -145,13 +148,14 @@ class BillScreen extends StatelessWidget {
                         title: "Pay Entire Bill",
                         onTap: () {
                           PayStackPayment.makePayment(
-                              num.parse(reservationBill.grandPrice ?? '0')
-                                  .toInt(),
-                              userReservation.reservId ?? "",
-                              context).then((value){
-                                if(value==true){
-                                  Navigator.pop(context);
-                                }
+                                  num.parse(reservationBill.grandPrice ?? '0')
+                                      .toInt(),
+                                  userReservation.reservId ?? "",
+                                  context)
+                              .then((value) {
+                            if (value == true) {
+                              Navigator.pop(context);
+                            }
                           });
                         }),
                   ),

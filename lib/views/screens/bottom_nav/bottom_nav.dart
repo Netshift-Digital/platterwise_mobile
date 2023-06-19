@@ -104,17 +104,14 @@ class _BottomNavState extends State<BottomNav> {
     var userModel = context.read<UserViewModel>();
     var blogModel = context.read<VBlogViewModel>();
     var resModel = context.read<RestaurantViewModel>();
-
+    setLocation();
     await userModel.getMyProfile();
-    await resModel.closeBy();
     await resModel.getTopRestaurant();
     await resModel.getRestaurant();
     await resModel.getReservations();
     await blogModel.getFollowers();
     await blogModel.getFollowing();
     await blogModel.getTopTag();
-
-    setLocation();
   }
 
   getReservation() {
@@ -122,8 +119,17 @@ class _BottomNavState extends State<BottomNav> {
   }
 
   setLocation() {
+    var resModel = context.read<RestaurantViewModel>();
     var locationProvider = context.read<LocationProvider>();
-    locationProvider.getStoredLocation();
+    var data = locationProvider.getStoredLocation();
+    if (data != null) {
+      resModel.setLocationState(data);
+    } else {
+      resModel.closeBy();
+      locationProvider.getLocation().then((value) {
+        resModel.setLocationState(value);
+      });
+    }
   }
 
   void deepLink() {
@@ -167,6 +173,23 @@ class _BottomNavState extends State<BottomNav> {
   }
 
   void checkNotification() {
+    FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails().then((value){
+      print('aahha');
+      print(value);
+      if(value!=null&&value.notificationResponse!=null){
+        if (value.notificationResponse != null) {
+          var data = jsonDecode(value.notificationResponse!.payload ?? "");
+          if (data['reserv_id'] != null &&
+              FirebaseAuth.instance.currentUser != null) {
+            nav(
+                context,
+                ReservationDetails(
+                  id: data['reserv_id'],
+                ));
+          }
+        }
+      }
+    });
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       getReservation();
       if (event.data['reserv_id'] != null) {
@@ -188,7 +211,7 @@ class _BottomNavState extends State<BottomNav> {
             const NotificationDetails(
               android: AndroidNotificationDetails(
                 '20',
-                'learnly',
+                'platerWise',
                 importance: Importance.high,
                 playSound: true,
                 showProgress: true,

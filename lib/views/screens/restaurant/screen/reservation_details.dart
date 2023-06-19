@@ -370,7 +370,9 @@ class _ReservationDetailsState extends State<ReservationDetails> {
           .doc(widget.id ?? widget.userReservation!.reservId)
           .snapshots()
           .listen((event) {
-        getDetails();
+            if(mounted){
+              getDetails();
+            }
       });
     });
   }

@@ -25,12 +25,12 @@ class RestaurantViewModel extends BaseViewModel {
   List<AllBannersList> allBannersList = [];
   List<UserReservation> userReservation = [];
   String _state = "lagos";
-  LatLong latLong = LatLong(5.5096455, 7.0390904);
+  LatLong latLong = LatLong(6.5243793, 3.3792057);
   String get state => _state;
   AppState reviewState = AppState.idle;
 
   setLocationState(LocationData locationData) async {
-    _state = locationData.placeMark.administrativeArea ?? "";
+    _state = locationData.state?? "";
     latLong = locationData.latLong;
     await closeBy();
     //await getByState();
