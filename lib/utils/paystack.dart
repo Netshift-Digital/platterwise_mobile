@@ -39,7 +39,7 @@ class PayStackPayment{
 
 
 
-  static Future<bool?> makePayment(int amount ,String reserveId,BuildContext context)async{
+  static Future<bool?> makePayment(int amount ,String reserveId,BuildContext context,{String? txnId})async{
     try{
       var status = true;
       var data =  await PayWithPayStack().now(
@@ -56,7 +56,7 @@ class PayStackPayment{
             status =true;
           },
           metaData: {
-            "transactionId":DateTime.now().millisecondsSinceEpoch.toString(),
+            "transactionId":txnId??DateTime.now().millisecondsSinceEpoch.toString(),
             "mode_of_payment":"single",
             "reserv_id":reserveId
           },

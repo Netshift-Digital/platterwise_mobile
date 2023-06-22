@@ -294,7 +294,9 @@ class _ReservationDetailsState extends State<ReservationDetails> {
       return const SizedBox();
     } else if (!widget.userReservation!.reservationStatus
         .toLowerCase()
-        .contains("inpr")) {
+        .contains("inpr")&&!widget.userReservation!.reservationStatus
+        .toLowerCase()
+        .contains("single_bill")) {
       return PlatButton(
           appState: context.watch<RestaurantViewModel>().appState,
           color: Colors.red,

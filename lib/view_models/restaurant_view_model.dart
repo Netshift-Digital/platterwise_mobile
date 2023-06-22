@@ -217,7 +217,18 @@ class RestaurantViewModel extends BaseViewModel {
     }
     return null;
   }
-
+  Future<String?> getTransactionID(String id,num bill) async {
+    try {
+      setState(AppState.busy);
+      var data = await restaurantService.getTransactionID(id, bill);
+      setState(AppState.idle);
+      return data;
+    } catch (e) {
+      setState(AppState.idle);
+      RandomFunction.toast('Something went wrong');
+    }
+    return null;
+  }
   Future<UserReservation?> getSingleReservation(String id) async {
     try {
       var data = await restaurantService.singleReservation(id);

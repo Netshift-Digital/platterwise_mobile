@@ -7,10 +7,12 @@ import 'package:platterwave/res/color.dart';
 import 'package:platterwave/utils/extension.dart';
 import 'package:platterwave/utils/paystack.dart';
 import 'package:platterwave/utils/random_functions.dart';
+import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/select_split.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
+import 'package:provider/provider.dart';
 
 class BillScreen extends StatelessWidget {
   final UserReservation userReservation;
@@ -145,16 +147,28 @@ class BillScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: PlatButton(
+                        appState: context.watch<RestaurantViewModel>().appState,
                         title: "Pay Entire Bill",
                         onTap: () {
-                          PayStackPayment.makePayment(
-                                  num.parse(reservationBill.grandPrice ?? '0')
-                                      .toInt(),
-                                  userReservation.reservId ?? "",
-                                  context)
+                          var amount =
+                              num.parse(reservationBill.grandPrice ?? '0')
+                                  .toInt();
+                          context
+                              .read<RestaurantViewModel>()
+                              .getTransactionID(
+                                  userReservation.reservId, amount)
                               .then((value) {
-                            if (value == true) {
-                              Navigator.pop(context);
+                            if (value != null) {
+                              PayStackPayment.makePayment(
+                                amount,
+                                userReservation.reservId ?? "",
+                                context,
+                                txnId: value,
+                              ).then((value) {
+                                if (value == true) {
+                                  Navigator.pop(context);
+                                }
+                              });
                             }
                           });
                         }),

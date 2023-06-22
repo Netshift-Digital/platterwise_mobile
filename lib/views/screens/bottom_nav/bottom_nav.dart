@@ -65,6 +65,11 @@ class _BottomNavState extends State<BottomNav> {
   Widget build(BuildContext context) {
     var pageViewModel = context.watch<PageViewModel>();
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          print(FirebaseAuth.instance.currentUser!.uid);
+        },
+      ),
       body: bottomNav[pageViewModel.appIndex].screen,
       bottomNavigationBar: BottomNavigationBar(
         iconSize: 18,
@@ -174,8 +179,6 @@ class _BottomNavState extends State<BottomNav> {
 
   void checkNotification() {
     FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails().then((value){
-      print('aahha');
-      print(value);
       if(value!=null&&value.notificationResponse!=null){
         if (value.notificationResponse != null) {
           var data = jsonDecode(value.notificationResponse!.payload ?? "");

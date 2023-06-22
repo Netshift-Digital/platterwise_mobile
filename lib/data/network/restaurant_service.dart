@@ -308,7 +308,6 @@ class RestaurantService {
     }
     return null;
   }
-
   Future<Map<String, dynamic>?> getBill(String id) async {
     var body = jsonEncode({
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
@@ -320,9 +319,36 @@ class RestaurantService {
         "Content-type": "application/json",
       }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
-      print(data);
       if (response.statusCode == 200) {
         return data;
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+  Future<String?> getTransactionID(String id,num bill) async {
+    var body = jsonEncode({
+      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
+      'reserv_id': id,
+      "owner_bill":bill.toString()
+    });
+    try {
+      var response = await client
+          .post(Uri.parse("${baseurl2}single_bill.php"), body: body, headers: {
+        "Content-type": "application/json",
+      }).timeout(const Duration(seconds: 10));
+      var data = jsonDecode(response.body);
+      print(data);
+      if (response.statusCode == 200) {
+        return data['transactionId'];
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
