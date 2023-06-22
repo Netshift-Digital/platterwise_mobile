@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/model/vblog/comment.dart';
 import 'package:platterwave/model/vblog/comment_reply.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
@@ -218,7 +217,10 @@ class _CommentReplyState extends State<CommentReply> {
     var model = context.read<VBlogViewModel>();
     var uid = context.read<UserViewModel>().user!.userProfile.userId;
     model.replyToComment(int.parse(widget.usersComment.commentId),
-        e, userData: context.read<UserViewModel>().user!.userProfile, id: widget.post.firebaseAuthId).then((value){
+        e, userData: context.read<UserViewModel>().user!.userProfile,
+        id: widget.post.firebaseAuthId,
+        postId: widget.post.postId
+    ).then((value){
       getComment();
     });
   }

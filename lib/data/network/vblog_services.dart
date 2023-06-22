@@ -506,7 +506,7 @@ class VBlogService{
 
 
 
-  Future<dynamic> sendNotification(String message,String topic,{String title = ""}) async {
+  Future<dynamic> sendNotification(String message,String topic,{String title = "", String? postId,String? type}) async {
    var map = {
         "to":"/topics/$topic",
         "priority": "high",
@@ -515,7 +515,8 @@ class VBlogService{
           "body": message
         },
         "data" : {
-          "your_custom_data" : "data"
+          "type":type??"blog",
+          "id" : postId
         }
     };
 

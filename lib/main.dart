@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:platterwave/constant/index.dart';
 import 'package:platterwave/constant/keys.dart';
 import 'package:platterwave/res/theme.dart';
+import 'package:platterwave/utils/enum/notification_type.dart';
 import 'package:platterwave/utils/locator.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/view_models/location_view_model.dart';
@@ -20,7 +21,9 @@ import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/auth/splash.dart';
+import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/restaurant/screen/reservation_details.dart';
+import 'package:platterwave/views/screens/vblog/shared_post.dart';
 import 'package:provider/provider.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -106,10 +109,26 @@ class _MyAppState extends State<MyApp> {
               ReservationDetails(
                 id: data['reserv_id'],
               ));
+        }else{
+          handleNotificationNavigation(data);
         }
       }
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
+  }
+}
+
+void handleNotificationNavigation(Map data) {
+  var type = data['type'];
+  var id = data['id'];
+  BuildContext ctx = navigatorKey.currentState!.context;
+  if (type == NotificationType.post.toString()) {
+    nav(ctx, SharedPost(id: id));
+  } else if (type == NotificationType.user.toString()) {
+    nav(
+      ctx,
+      ViewUserProfileScreen(
+        id: id,
+      ),
+    );
   }
 }

@@ -5,6 +5,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:platterwave/main.dart';
 import 'package:platterwave/model/bottom_nav_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/utils/nav.dart';
@@ -178,17 +179,22 @@ class _BottomNavState extends State<BottomNav> {
   }
 
   void checkNotification() {
-    FlutterLocalNotificationsPlugin().getNotificationAppLaunchDetails().then((value){
-      if(value!=null&&value.notificationResponse!=null){
+    FlutterLocalNotificationsPlugin()
+        .getNotificationAppLaunchDetails()
+        .then((value) {
+      if (value != null && value.notificationResponse != null) {
         if (value.notificationResponse != null) {
           var data = jsonDecode(value.notificationResponse!.payload ?? "");
           if (data['reserv_id'] != null &&
               FirebaseAuth.instance.currentUser != null) {
             nav(
-                context,
-                ReservationDetails(
-                  id: data['reserv_id'],
-                ));
+              context,
+              ReservationDetails(
+                id: data['reserv_id'],
+              ),
+            );
+          } else {
+            handleNotificationNavigation(data);
           }
         }
       }
@@ -197,6 +203,8 @@ class _BottomNavState extends State<BottomNav> {
       getReservation();
       if (event.data['reserv_id'] != null) {
         navToReservation(event.data['reserv_id']);
+      } else {
+        handleNotificationNavigation(event.data);
       }
     });
     FirebaseMessaging.instance.getInitialMessage().then((value) {
