@@ -18,32 +18,39 @@ class Banner {
   List<AllBannersList> allBannersList;
 
   factory Banner.fromJson(Map<dynamic, dynamic> json) => Banner(
-    status: json["status"],
-    allBannersList: List<AllBannersList>.from(json["all_banners_list"].map((x) => AllBannersList.fromJson(x))),
-  );
+        status: json["status"],
+        allBannersList: List<AllBannersList>.from(
+            json["all_banners_list"].map((x) => AllBannersList.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
-    "all_banners_list": List<dynamic>.from(allBannersList.map((x) => x.toJson())),
-  };
+        "status": status,
+        "all_banners_list":
+            List<dynamic>.from(allBannersList.map((x) => x.toJson())),
+      };
 }
 
 class AllBannersList {
-  AllBannersList({
-    required this.banner,
-    required this.name,
-  });
+  AllBannersList(
+      {required this.banner,
+      required this.name,
+      this.descriptions,
+      this.externalLink});
 
   String banner;
   String name;
+  String? descriptions, externalLink;
 
   factory AllBannersList.fromJson(Map<String, dynamic> json) => AllBannersList(
-    banner: json["banner"],
-    name: json["name"],
-  );
+      banner: json["banner"],
+      name: json["name"],
+      descriptions: json['descriptions'],
+      externalLink: json['external_link']);
 
   Map<String, dynamic> toJson() => {
-    "banner": banner,
-    "name": name,
-  };
+        "banner": banner,
+        "name": name,
+        "external_link": externalLink,
+        "descriptions": descriptions,
+      };
 }

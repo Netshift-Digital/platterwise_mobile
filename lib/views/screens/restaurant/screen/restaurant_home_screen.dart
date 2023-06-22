@@ -86,10 +86,8 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                               Row(
                                 children: [
                                   Text(locationProvider.address),
-                                  GestureDetector(
-                                      onTap: () {},
-                                      child: const Icon(
-                                          Icons.arrow_drop_down_outlined))
+                                  const Icon(
+                                      Icons.arrow_drop_down_outlined)
                                 ],
                               )
                             ],
@@ -263,9 +261,9 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                             );
                           }),
                     ),
-                    const BannerWidget(),
+                    resModel.allBannersList.isEmpty?const SizedBox():const BannerWidget(),
                     SizedBox(
-                      height: 42.h,
+                      height: 20.h,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

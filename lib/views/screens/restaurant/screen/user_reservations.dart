@@ -73,9 +73,9 @@ class UserReservations extends StatelessWidget {
                                 Container(
                                   width: 99.w,
                                   height: 100.h,
-                                  decoration: const BoxDecoration(
-                                    color: AppColor.p300,
-                                    borderRadius: BorderRadius.only(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade200,
+                                    borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(6),
                                       bottomLeft: Radius.circular(6),
                                     ),

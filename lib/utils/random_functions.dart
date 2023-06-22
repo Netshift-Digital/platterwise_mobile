@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:jiffy/jiffy.dart';
 
-
 class RandomFunction {
   static toast(String msg, {bool isError = false}) {
     var cancel = BotToast.showSimpleNotification(
@@ -122,7 +121,7 @@ class RandomFunction {
     final TimeOfDay? selectedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(selectedDate),
-      initialEntryMode: TimePickerEntryMode.input
+      // initialEntryMode: TimePickerEntryMode.input
     );
 
     return selectedTime == null
