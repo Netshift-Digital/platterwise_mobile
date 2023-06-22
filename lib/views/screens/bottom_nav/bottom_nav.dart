@@ -65,11 +65,11 @@ class _BottomNavState extends State<BottomNav> {
   Widget build(BuildContext context) {
     var pageViewModel = context.watch<PageViewModel>();
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          print(FirebaseAuth.instance.currentUser!.uid);
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: (){
+      //     print(FirebaseAuth.instance.currentUser!.uid);
+      //   },
+      // ),
       body: bottomNav[pageViewModel.appIndex].screen,
       bottomNavigationBar: BottomNavigationBar(
         iconSize: 18,

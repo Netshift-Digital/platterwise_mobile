@@ -24,6 +24,7 @@ class _VideoPlayState extends State<VideoPlay> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
         body: SafeArea(
           child: Padding(
