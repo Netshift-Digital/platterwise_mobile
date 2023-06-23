@@ -71,7 +71,16 @@ class _BottomNavState extends State<BottomNav> {
       //     print(FirebaseAuth.instance.currentUser!.uid);
       //   },
       // ),
-      body: bottomNav[pageViewModel.appIndex].screen,
+      body: IndexedStack(
+        index: pageViewModel.appIndex,
+        children: bottomNav.map((e){
+          var index = bottomNav.indexOf(e);
+          if(index==0){
+            return e.screen;
+          }
+          return pageViewModel.appIndex!=index?const SizedBox():e.screen;
+        }).toList(),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         iconSize: 18,
         selectedLabelStyle: AppTextTheme.h5.copyWith(fontSize: 9),

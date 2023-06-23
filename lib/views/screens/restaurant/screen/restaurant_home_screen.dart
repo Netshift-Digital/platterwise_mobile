@@ -25,8 +25,6 @@ class RestaurantHomeScreen extends StatefulWidget {
 }
 
 class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
@@ -86,8 +84,7 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                               Row(
                                 children: [
                                   Text(locationProvider.address),
-                                  const Icon(
-                                      Icons.arrow_drop_down_outlined)
+                                  const Icon(Icons.arrow_drop_down_outlined)
                                 ],
                               )
                             ],
@@ -261,7 +258,9 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                             );
                           }),
                     ),
-                    resModel.allBannersList.isEmpty?const SizedBox():const BannerWidget(),
+                    resModel.allBannersList.isEmpty
+                        ? const SizedBox()
+                        : const BannerWidget(),
                     SizedBox(
                       height: 20.h,
                     ),
