@@ -7,13 +7,17 @@ import 'package:platterwave/model/restaurant/restaurant.dart';
 import 'package:platterwave/model/restaurant/restaurant_review.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
+import 'package:platterwave/utils/dynamic_link.dart';
 import 'package:platterwave/utils/extension.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RestaurantHeader extends StatelessWidget {
   final RestaurantData restaurantData;
   final List<AllRestReview> review;
-  const RestaurantHeader({Key? key, required this.restaurantData, required this.review}) : super(key: key);
+  const RestaurantHeader(
+      {Key? key, required this.restaurantData, required this.review})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +38,25 @@ class RestaurantHeader extends StatelessWidget {
               const Spacer(),
               GestureDetector(
                 onTap: () {
+                  DynamicLink.createLinkRestaurant(restaurantData).then((value){
+                    if(value!=null){
+                      Share.share(value);
+                    }
+                  });
+                },
+                child: SvgPicture.asset(
+                  'assets/icon/share.svg',
+                  color: AppColor.p100,
+                ),
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+              GestureDetector(
+                onTap: () {
                   launchUrl(
-                      Uri.parse("tel:${restaurantData.phone}"));
+                    Uri.parse("tel:${restaurantData.phone}"),
+                  );
                 },
                 child: SvgPicture.asset('assets/icon/route-square.svg'),
               ),
@@ -44,8 +65,7 @@ class RestaurantHeader extends StatelessWidget {
               ),
               GestureDetector(
                   onTap: () {
-                    MapsLauncher.launchQuery(
-                        restaurantData.address);
+                    MapsLauncher.launchQuery(restaurantData.address);
                   },
                   child: SvgPicture.asset('assets/icon/route2.svg')),
             ],
@@ -59,18 +79,19 @@ class RestaurantHeader extends StatelessWidget {
               const SizedBox(
                 width: 8,
               ),
-               Text(restaurantData.rating?.toString()??"4.2",
-                   style: const TextStyle(
-                       fontSize: 12,
-                       color: AppColor.g700
-                   ),
-               ),
+              Text(
+                restaurantData.rating?.toString() ?? "4.2",
+                style: const TextStyle(fontSize: 12, color: AppColor.g700),
+              ),
               const SizedBox(
                 width: 8,
               ),
               Text(
                 '(${review.length} reviews)',
-                style: const TextStyle(color: AppColor.g100,fontSize: 12,),
+                style: const TextStyle(
+                  color: AppColor.g100,
+                  fontSize: 12,
+                ),
               ),
             ],
           ),
@@ -87,10 +108,9 @@ class RestaurantHeader extends StatelessWidget {
                 child: Text(
                   restaurantData.address,
                   style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: AppColor.g800
-                  ),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.g800),
                 ),
               )
             ],

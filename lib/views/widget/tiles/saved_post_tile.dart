@@ -51,6 +51,7 @@ class SavedPostTile extends StatelessWidget {
                 topBottom: 4,
                 topRadius: 4,
                 height: 64.h,
+                chachedImage: true,
                 width: 113.w,
                 post.contentUrl
             ),
@@ -136,8 +137,8 @@ class SavedPostTile extends StatelessWidget {
       ),
       child:Stack(
         children: [
-          TextValidator.isValidUrl(post.contentType)?ImageCacheR(post.contentType,fit: true,)
-              :const ImageCacheR("https://www.balmoraltanks.com/images/common/video-icon-image.jpg",),
+          TextValidator.isValidUrl(post.contentType)?ImageCacheR(post.contentType,fit: true,chachedImage: true,)
+              :const ImageCacheR("https://www.balmoraltanks.com/images/common/video-icon-image.jpg",chachedImage: true,),
           TextValidator.isValidUrl(post.contentType)?SizedBox(
               height: 239.h,
               width: 343.w,

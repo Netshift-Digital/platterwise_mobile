@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:platterwave/model/restaurant/restaurant.dart';
 import 'package:platterwave/model/restaurant/restaurant_review.dart';
@@ -8,13 +10,18 @@ import 'package:platterwave/views/screens/restaurant/screen/restaurant_component
 import 'package:platterwave/views/screens/restaurant/screen/restaurant_component/res_header.dart';
 import 'package:platterwave/views/screens/restaurant/screen/restaurant_component/res_tab.dart';
 import 'package:platterwave/views/screens/restaurant/screen/reviews.dart';
+import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/custom/page_view.dart';
 import 'package:provider/provider.dart';
 
 class Res extends StatefulWidget {
-  final RestaurantData restaurantData;
-  const Res({Key? key, required this.restaurantData}) : super(key: key);
+   RestaurantData? restaurantData;
+  final String? id;
+   Res({super.key, this.restaurantData,  this.id}) : assert(
+  !(restaurantData==null&&id==null),
+  "pass either restId or RestaurantData"
+  );
 
   @override
   State<Res> createState() => _ResState();
@@ -26,9 +33,15 @@ class _ResState extends State<Res> {
   List<AllRestReview> review = [];
   @override
   Widget build(BuildContext context) {
+    if(widget.restaurantData==null){
+      return Scaffold(
+        appBar: appBar(context),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       bottomNavigationBar: RestaurantBottom(
-          restaurantData: widget.restaurantData,
+          restaurantData: widget.restaurantData!,
           index: index,
           onReview: (e) {
             setState(() {
@@ -54,13 +67,14 @@ class _ResState extends State<Res> {
               background: Column(
                 children: [
                   Expanded(
-                      child: ImageCacheR(
-                    widget.restaurantData.coverPic,
-                    topRadius: 0,
-                    topBottom: 0,
-                  )),
+                    child: ImageCacheR(
+                      widget.restaurantData!.coverPic,
+                      topRadius: 0,
+                      topBottom: 0,
+                    ),
+                  ),
                   RestaurantHeader(
-                    restaurantData: widget.restaurantData,
+                    restaurantData: widget.restaurantData!,
                     review: review,
                   ),
                 ],
@@ -95,10 +109,10 @@ class _ResState extends State<Res> {
                   });
                 },
                 children: [
-                  ResDetails(restaurantData: widget.restaurantData),
+                  ResDetails(restaurantData: widget.restaurantData!),
                   RestaurantsReviews(
                     review: review,
-                    restaurantData: widget.restaurantData,
+                    restaurantData: widget.restaurantData!,
                   ),
                 ]),
           ),
@@ -114,7 +128,7 @@ class _ResState extends State<Res> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context
           .read<RestaurantViewModel>()
-          .getReview(widget.restaurantData.restId)
+          .getReview((widget.id??widget.restaurantData!.restId).toString())
           .then((value) {
         if (mounted) {
           setState(() {
@@ -122,6 +136,20 @@ class _ResState extends State<Res> {
           });
         }
       });
+
+
+      if(widget.restaurantData==null){
+        context
+            .read<RestaurantViewModel>()
+            .getRestaurantById(int.parse(widget.id!))
+            .then((value) {
+          if (mounted) {
+            setState(() {
+             widget.restaurantData=value;
+            });
+          }
+        });
+      }
     });
   }
 }

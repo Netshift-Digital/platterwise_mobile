@@ -70,6 +70,34 @@ class RestaurantService {
     return null;
   }
 
+  Future<Map<String, dynamic>?> getResturantById(int id) async {
+    var body = jsonEncode({
+      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
+      "rest_id": id,
+    });
+    try {
+      var response = await client.post(
+          Uri.parse("${baseurl2}getRestaurant_byId.php"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+          }).timeout(const Duration(seconds: 20));
+      var data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        return data;
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
   Future<Map<String, dynamic>?> getByState(String state) async {
     var body = jsonEncode({
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
@@ -98,13 +126,11 @@ class RestaurantService {
     return null;
   }
 
-
   Future<Map<String, dynamic>?> nearBy(LatLong latLong) async {
     var body = jsonEncode({
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      "latitude":latLong.latitude,
-      "longitude":latLong.longitude
-
+      "latitude": latLong.latitude,
+      "longitude": latLong.longitude
     });
     try {
       var response = await client.post(
@@ -116,7 +142,7 @@ class RestaurantService {
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         return data;
-      }else{
+      } else {
         RandomFunction.toast(data['status']);
       }
     } on SocketException catch (_) {
@@ -130,7 +156,6 @@ class RestaurantService {
     }
     return null;
   }
-
 
   Future<Map<String, dynamic>?> getRestaurantReviews(String resId) async {
     var body = jsonEncode({
@@ -308,6 +333,7 @@ class RestaurantService {
     }
     return null;
   }
+
   Future<Map<String, dynamic>?> getBill(String id) async {
     var body = jsonEncode({
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
@@ -334,11 +360,11 @@ class RestaurantService {
     return null;
   }
 
-  Future<String?> getTransactionID(String id,num bill) async {
+  Future<String?> getTransactionID(String id, num bill) async {
     var body = jsonEncode({
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
       'reserv_id': id,
-      "owner_bill":bill.toString()
+      "owner_bill": bill.toString()
     });
     try {
       var response = await client

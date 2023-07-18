@@ -27,7 +27,7 @@ class RestaurantBottom extends StatelessWidget {
     var user = context.read<UserViewModel>().user;
     return index == 0
         ? Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.only(left: 20,right: 20,bottom: 50),
             child: PlatButton(
               title: 'Make Reservation',
               onTap: () {

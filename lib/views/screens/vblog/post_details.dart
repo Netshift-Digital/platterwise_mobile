@@ -134,6 +134,7 @@ class _PostDetailsState extends State<PostDetails> {
                                                 data.profileUrl,
                                                 height: 35,
                                                 width: 35,
+                                                chachedImage: true,
                                               ),
                                             ),
                                           ),

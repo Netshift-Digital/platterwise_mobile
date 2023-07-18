@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:disposable_cached_images/disposable_cached_images.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:platterwave/views/widget/containers/empty_content_container.dart';
+import 'package:platterwave/views/widget/custom/cache-image.dart';
 
 class PhotoViewPage extends StatelessWidget {
   final List<String>? photos;
@@ -20,17 +22,18 @@ class PhotoViewPage extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
       ),
       body: PhotoViewGallery.builder(
         itemCount: photos!.length,
         builder: (context, index) => PhotoViewGalleryPageOptions.customChild(
-          child: CachedNetworkImage(
+          child: DisposableCachedImage.network(
             imageUrl: photos![index],
-            placeholder: (context, url) => Container(
-              color: Colors.grey,
-            ),
-            errorWidget: (context, url, error) => Container(
+            onLoading: (context, url, u) {
+              return const Center(child: CircularProgressIndicator());
+            },
+            onError: (context, url, error, w) => Container(
               color: Colors.black,
               child: const EmptyContentContainer(
                 errorText: "Error loading image",

@@ -8,6 +8,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:platterwave/main.dart';
 import 'package:platterwave/model/bottom_nav_model.dart';
 import 'package:platterwave/res/color.dart';
+import 'package:platterwave/utils/dynamic_link.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/view_models/location_view_model.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
@@ -15,6 +16,7 @@ import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
+import 'package:platterwave/views/screens/restaurant/screen/res.dart';
 import 'package:platterwave/views/screens/restaurant/screen/reservation_details.dart';
 import 'package:platterwave/views/screens/restaurant/screen/restaurant_home_screen.dart';
 import 'package:platterwave/views/screens/restaurant/screen/search_resturant.dart';
@@ -71,16 +73,17 @@ class _BottomNavState extends State<BottomNav> {
       //     print(FirebaseAuth.instance.currentUser!.uid);
       //   },
       // ),
-      body: IndexedStack(
-        index: pageViewModel.appIndex,
-        children: bottomNav.map((e){
-          var index = bottomNav.indexOf(e);
-          if(index==0){
-            return e.screen;
-          }
-          return pageViewModel.appIndex!=index?const SizedBox():e.screen;
-        }).toList(),
-      ),
+      body: bottomNav[pageViewModel.appIndex].screen,
+      // body: IndexedStack(
+      //   index: pageViewModel.appIndex,
+      //   children: bottomNav.map((e){
+      //     var index = bottomNav.indexOf(e);
+      //     if(index==0){
+      //       return e.screen;
+      //     }
+      //     return pageViewModel.appIndex!=index?const SizedBox():e.screen;
+      //   }).toList(),
+      // ),
       bottomNavigationBar: BottomNavigationBar(
         iconSize: 18,
         selectedLabelStyle: AppTextTheme.h5.copyWith(fontSize: 9),
@@ -162,7 +165,12 @@ class _BottomNavState extends State<BottomNav> {
     if (e != null) {
       if (e.link.path.isNotEmpty) {
         var postId = e.link.path.replaceAll("/", "");
-        nav(context, SharedPost(id: postId));
+        if(postId.contains(kShareRest)){
+          nav(context, Res(id: postId.replaceAll(kShareRest, ''),));
+        }else{
+          nav(context, SharedPost(id: postId));
+        }
+
       }
     }
   }
@@ -217,8 +225,15 @@ class _BottomNavState extends State<BottomNav> {
         handleNotificationNavigation(event.data);
       }
     });
-    FirebaseMessaging.instance.getInitialMessage().then((value) {
+    FirebaseMessaging.instance.getInitialMessage().then((event) {
       getReservation();
+      if(event!=null){
+        if (event.data['reserv_id'] != null) {
+          navToReservation(event.data['reserv_id']);
+        } else {
+          handleNotificationNavigation(event.data);
+        }
+      }
     });
     FirebaseMessaging.onMessage.listen((event) {
       getReservation();

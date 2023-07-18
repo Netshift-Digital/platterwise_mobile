@@ -65,14 +65,15 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    RandomFunction.showDateTimePicker(context: context)
-                        .then((value) {
-                      if (value != null) {
-                        dateTime = value;
-                        _date.text =
-                            RandomFunction.date(dateTime.toString()).yMMMEdjm;
-                      }
-                    });
+                    RandomFunction.showDateTimePicker(context: context).then(
+                      (value) {
+                        if (value != null) {
+                          dateTime = value;
+                          _date.text =
+                              RandomFunction.date(dateTime.toString()).yMMMEdjm;
+                        }
+                      },
+                    );
                     // dateTime = await showOmniDateTimePicker(
                     //   context: context,
                     //   is24HourMode: true,
@@ -105,10 +106,10 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
+                widget.restaurantData.seatType.isEmpty?const SizedBox():SizedBox(
                   height: 24.h,
                 ),
-                Container(
+                widget.restaurantData.seatType.isEmpty?const SizedBox():Container(
                   height: 71,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -145,7 +146,9 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                           size: 20,
                         ),
                         hint: const Text("Select sit type"),
-                        items: ['vip', 'regular'].map((e) {
+                        items: widget.restaurantData.seatType
+                            .map((e) => e.seatType)
+                            .map((e) {
                           return DropdownMenuItem<String>(
                               value: e,
                               child: Row(
@@ -336,9 +339,10 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                           child: Text(
                             "Add Guest Details",
                             style: AppTextTheme.h3.copyWith(
-                                color: const Color(0xffE16C52),
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12),
+                              color: const Color(0xffE16C52),
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ),
@@ -352,7 +356,9 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
   }
 
   bool validate() {
-    if (sitType != null && dateTime != null && guest.length == guestNumber) {
+    if(widget.restaurantData.seatType.isEmpty && dateTime != null && guest.length == guestNumber){
+      return false;
+    } else if (sitType != null && dateTime != null && guest.length == guestNumber) {
       return false;
     } else {
       return true;

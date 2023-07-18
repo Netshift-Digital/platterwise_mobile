@@ -1,9 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:disposable_cached_images/disposable_cached_images.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -28,14 +31,24 @@ import 'package:provider/provider.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
+late Directory kDir;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await DisposableImages.init();
   Directory tempDir = await getApplicationDocumentsDirectory();
+  kDir = await getApplicationSupportDirectory();
   Hive.init(tempDir.path);
   await Hive.openBox("post");
   await Hive.openBox(authKey);
+  final FirebaseCrashlytics crashlytics = FirebaseCrashlytics.instance;
+  FlutterError.onError = crashlytics.recordFlutterError;
+  // runZonedGuarded(() async {
+  //   //await crashlytics.setCrashlyticsCollectionEnabled(false);
+  //   FlutterError.onError = crashlytics.recordFlutterError;
+  // }, (error, stack) {
+  //   crashlytics.recordError(error, stack);
+  // });
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarBrightness: Brightness.light,
@@ -43,13 +56,18 @@ void main() async {
       systemNavigationBarColor: Colors.black,
       systemNavigationBarIconBrightness: Brightness.light));
   setupLocator();
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => PageViewModel()),
-    ChangeNotifierProvider(create: (_) => UserViewModel()),
-    ChangeNotifierProvider(create: (_) => VBlogViewModel()),
-    ChangeNotifierProvider(create: (_) => RestaurantViewModel()),
-    ChangeNotifierProvider(create: (_) => LocationProvider()),
-  ], child: const MyApp()));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => PageViewModel()),
+        ChangeNotifierProvider(create: (_) => UserViewModel()),
+        ChangeNotifierProvider(create: (_) => VBlogViewModel()),
+        ChangeNotifierProvider(create: (_) => RestaurantViewModel()),
+        ChangeNotifierProvider(create: (_) => LocationProvider()),
+      ],
+      child: const DisposableImages(MyApp()),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -109,7 +127,7 @@ class _MyAppState extends State<MyApp> {
               ReservationDetails(
                 id: data['reserv_id'],
               ));
-        }else{
+        } else {
           handleNotificationNavigation(data);
         }
       }

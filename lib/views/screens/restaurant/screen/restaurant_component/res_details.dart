@@ -34,26 +34,54 @@ class ResDetails extends StatelessWidget {
           const SizedBox(
             height: 33,
           ),
-          Text(
-            'Photos',
-            style: AppTextTheme.h3
-                .copyWith(fontSize: 16, fontWeight: FontWeight.w700),
+          Row(
+            children: [
+              Text(
+                'Photos',
+                style: AppTextTheme.h3
+                    .copyWith(fontSize: 16, fontWeight: FontWeight.w700),
+              ),
+              const Spacer(),
+              GestureDetector(
+                onTap: () {
+                  nav(
+                    context,
+                    PhotoViewPage(
+                      photos:
+                          restaurantData.menuPix.map((e) => e.menuPic).toList(),
+                      index: 0,
+                    ),
+                  );
+                },
+                child: Text(
+                  'See More',
+                  style: AppTextTheme.h3.copyWith(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w400,
+                    color: AppColor.p200,
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(
             height: 18,
           ),
           SizedBox(
-            height: 80,
+            height: 100,
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
               itemCount: restaurantData.menuPix.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
+                if (index > 2) {
+                  return const SizedBox();
+                }
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: SizedBox(
                     height: 80,
-                    width: 111,
+                    width: 130,
                     child: GestureDetector(
                       onTap: () {
                         nav(
@@ -64,7 +92,10 @@ class ResDetails extends StatelessWidget {
                                     .toList(),
                                 index: index));
                       },
-                      child: ImageCacheR(restaurantData.menuPix[index].menuPic),
+                      child: ImageCacheR(
+                        restaurantData.menuPix[index].menuPic,
+                        chachedImage: true,
+                      ),
                     ),
                   ),
                 );

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_parsed_text_field/flutter_parsed_text_field.dart';
 import 'package:platterwave/res/color.dart';
@@ -20,6 +19,7 @@ class _BannerWidgetState extends State<BannerWidget> {
   @override
   Widget build(BuildContext context) {
     var resModel = context.watch<RestaurantViewModel>();
+    //resModel.allBannersList
     return Padding(
       padding: const EdgeInsets.only(top: 42, bottom: 24),
       child: Column(
@@ -34,18 +34,27 @@ class _BannerWidgetState extends State<BannerWidget> {
                   onTap: () {
                     nav(context, BannerDetails(data: data));
                   },
-                  child: data.banner.isNotEmpty
-                      ? Container(
-                          decoration: BoxDecoration(
-                              color: Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(8)),
-                          child: ImageCacheR(data.banner),
-                        )
-                      : Image.asset(
-                          'assets/images/discount-banner 1.png',
-                          fit: BoxFit.cover,
-                        ),
+                  child: Image.asset(
+                    'assets/images/discount-banner 1.png',
+                    fit: BoxFit.cover,
+                  ),
                 );
+                // return GestureDetector(
+                //   onTap: () {
+                //     nav(context, BannerDetails(data: data));
+                //   },
+                //   child: data.banner.isNotEmpty
+                //       ? Container(
+                //           decoration: BoxDecoration(
+                //               color: Colors.grey.shade200,
+                //               borderRadius: BorderRadius.circular(8)),
+                //           child: ImageCacheR(data.banner),
+                //         )
+                //       : Image.asset(
+                //           'assets/images/discount-banner 1.png',
+                //           fit: BoxFit.cover,
+                //         ),
+                // );
               }).toList(),
             ),
           ),

@@ -72,7 +72,7 @@ final _formKey = GlobalKey<FormState>();
                      const SizedBox(height:four,),
                      GestureDetector(
                        onTap: (){
-                         nav(context, ForgotPassword());
+                         nav(context, const ForgotPassword());
                        },
                        child: Row(
                          mainAxisAlignment: MainAxisAlignment.end,
@@ -128,13 +128,14 @@ final _formKey = GlobalKey<FormState>();
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Row(),
+                          const Row(),
                           Text("we wont share your information without your permission",
                               style: AppTextTheme.hint.copyWith(
-                                  fontSize: 14,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w500,
                                   color: AppColor.g500
-                              )
+                              ),
+                            textAlign: TextAlign.center,
                           ),
                           SizedBox(height: size.height*0.04,),
                           GestureDetector(

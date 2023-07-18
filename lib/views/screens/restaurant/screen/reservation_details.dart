@@ -1,12 +1,10 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
-import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
@@ -287,7 +285,18 @@ class _ReservationDetailsState extends State<ReservationDetails> {
     } else if (widget.userReservation!.reservationStatus
         .toLowerCase()
         .contains("can")) {
-      return const SizedBox();
+      return PlatButton(
+        title: "View payment Status",
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PaidGuestScreen(
+                      userReservation: widget.userReservation!))).then((value) {
+            getDetails();
+          });
+        },
+      );
     } else if (widget.userReservation!.reservationStatus
         .toLowerCase()
         .contains("com")) {

@@ -241,7 +241,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                               color: AppColor.p300,
                               borderRadius: BorderRadius.circular(15),
                               shape: BoxShape.rectangle),
-                          child: ImageCacheR(widget.post.contentUrl),
+                          child: ImageCacheR(widget.post.contentUrl,chachedImage: true,),
                         ),
                       )
                     :videoWid(),
@@ -381,8 +381,8 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
         ),
         child:Stack(
           children: [
-            TextValidator.isValidUrl(widget.post.contentType)?ImageCacheR(widget.post.contentType,fit: true,blend: 0.5,)
-                :const ImageCacheR("https://www.balmoraltanks.com/images/common/video-icon-image.jpg",),
+            TextValidator.isValidUrl(widget.post.contentType)?ImageCacheR(widget.post.contentType,fit: true,blend: 0.5,chachedImage: true,)
+                :const ImageCacheR("https://www.balmoraltanks.com/images/common/video-icon-image.jpg",chachedImage: true,),
             TextValidator.isValidUrl(widget.post.contentType)?SizedBox(
                 height: 239.h,
                 width: 343.w,
