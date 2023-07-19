@@ -220,14 +220,6 @@ class _BottomNavState extends State<BottomNav> {
         }
       }
     });
-    FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      getReservation();
-      if (event.data['reserv_id'] != null) {
-        navToReservation(event.data['reserv_id']);
-      } else {
-        handleNotificationNavigation(event.data);
-      }
-    });
     FirebaseMessaging.instance.getInitialMessage().then((event) {
       getReservation();
       if (event != null) {
@@ -236,6 +228,14 @@ class _BottomNavState extends State<BottomNav> {
         } else {
           handleNotificationNavigation(event.data);
         }
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      getReservation();
+      if (event.data['reserv_id'] != null) {
+        navToReservation(event.data['reserv_id']);
+      } else {
+        handleNotificationNavigation(event.data);
       }
     });
     FirebaseMessaging.onMessage.listen((event) {

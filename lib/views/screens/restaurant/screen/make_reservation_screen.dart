@@ -71,6 +71,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                           dateTime = value;
                           _date.text =
                               RandomFunction.date(dateTime.toString()).yMMMEdjm;
+                          setState(() {});
                         }
                       },
                     );

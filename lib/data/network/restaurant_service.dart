@@ -417,10 +417,13 @@ class RestaurantService {
     return null;
   }
 
-  Future<Map<String, dynamic>?> searchRestaurant(String search) async {
+  Future<Map<String, dynamic>?> searchRestaurant(
+      String search, LatLong latLong) async {
     var body = jsonEncode({
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      'search': search.trim()
+      'search': search.trim(),
+      "latitude": latLong.latitude,
+      "longitude": latLong.longitude
     });
     try {
       var response = await client.post(
