@@ -165,12 +165,15 @@ class _BottomNavState extends State<BottomNav> {
     if (e != null) {
       if (e.link.path.isNotEmpty) {
         var postId = e.link.path.replaceAll("/", "");
-        if(postId.contains(kShareRest)){
-          nav(context, Res(id: postId.replaceAll(kShareRest, ''),));
-        }else{
+        if (postId.contains(kShareRest)) {
+          nav(
+              context,
+              Res(
+                id: postId.replaceAll(kShareRest, ''),
+              ));
+        } else {
           nav(context, SharedPost(id: postId));
         }
-
       }
     }
   }
@@ -227,7 +230,7 @@ class _BottomNavState extends State<BottomNav> {
     });
     FirebaseMessaging.instance.getInitialMessage().then((event) {
       getReservation();
-      if(event!=null){
+      if (event != null) {
         if (event.data['reserv_id'] != null) {
           navToReservation(event.data['reserv_id']);
         } else {
@@ -241,22 +244,23 @@ class _BottomNavState extends State<BottomNav> {
       AndroidNotification? android = event.notification?.android;
       if (notification != null && android != null) {
         FlutterLocalNotificationsPlugin().show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            const NotificationDetails(
-              android: AndroidNotificationDetails(
-                '20',
-                'platerWise',
-                importance: Importance.high,
-                playSound: true,
-                showProgress: true,
-                enableVibration: true,
-                priority: Priority.high,
-                ticker: 'test ticker',
-              ),
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          const NotificationDetails(
+            android: AndroidNotificationDetails(
+              '20',
+              'platerWise',
+              importance: Importance.high,
+              playSound: true,
+              showProgress: true,
+              enableVibration: true,
+              priority: Priority.high,
+              ticker: 'test ticker',
             ),
-            payload: jsonEncode(event.data));
+          ),
+          payload: jsonEncode(event.data),
+        );
       }
     });
   }
