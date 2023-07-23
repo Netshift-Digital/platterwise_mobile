@@ -66,7 +66,7 @@ class Successful extends StatelessWidget {
               PlatButton(
                   title: "Home",
                   onTap: () {
-                    context.read<PageViewModel>().setIndex(2);
+                    context.read<PageViewModel>().setIndex(1);
                     Navigator.popUntil(
                         context, (Route<dynamic> route) => route.isFirst);
                   }),
