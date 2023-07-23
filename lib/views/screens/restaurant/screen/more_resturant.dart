@@ -14,7 +14,6 @@ class MoreRestaurant extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
-    var resModel = context.watch<RestaurantViewModel>();
     return Scaffold(
       appBar: appBar(context),
       body: Padding(

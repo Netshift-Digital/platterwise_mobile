@@ -32,21 +32,12 @@ class SmallRestaurantContainer extends StatelessWidget {
         child: Container(
           height: 178.h,
           width: 161.w,
-          decoration: BoxDecoration(
+          decoration: ShapeDecoration(
             color: Colors.white,
-            border: Border.all(
-              color: Colors.grey.shade300,
-              width: 0.7,
+            shape: RoundedRectangleBorder(
+              side: const BorderSide(width: 0.50, color: Color(0xFFD6D6D6)),
+              borderRadius: BorderRadius.circular(8),
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.shade200,
-                offset: const Offset(0, 2),
-                blurRadius: 4,
-                spreadRadius: 1,
-              ),
-            ],
-            borderRadius: BorderRadius.circular(6),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,9 +69,13 @@ class SmallRestaurantContainer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SvgPicture.asset("assets/images/locations.svg"),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 3),
+                      child: SvgPicture.asset("assets/images/locations.svg"),
+                    ),
                     SizedBox(
                       width: 6.w,
                     ),

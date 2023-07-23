@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
@@ -7,15 +8,13 @@ import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/location_view_model.dart';
-import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/more_resturant.dart';
+import 'package:platterwave/views/screens/restaurant/screen/search_resturant.dart';
 import 'package:platterwave/views/screens/restaurant/widget/banner_wid.dart';
 import 'package:platterwave/views/widget/containers/large_restaurant_container.dart';
 import 'package:platterwave/views/widget/containers/small_restaurant_container.dart';
-import 'package:platterwave/views/widget/custom/cache-image.dart';
-import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
 import 'package:provider/provider.dart';
 
 class RestaurantHomeScreen extends StatefulWidget {
@@ -38,7 +37,8 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
               preferredSize: const Size(double.maxFinite, 100),
               child: SafeArea(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 15.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 15.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +87,8 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                                 Row(
                                   children: [
                                     Text(locationProvider.address),
-                                    const Icon(Icons.arrow_drop_down_outlined)
+                                    const SizedBox(width: 4,),
+                                    SvgPicture.asset('assets/icon/arrow-down.svg'),
                                   ],
                                 )
                               ],
@@ -99,17 +100,9 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                           ? const SizedBox()
                           : GestureDetector(
                               onTap: () {
-                                context.read<PageViewModel>().setIndex(4);
+                               nav(context, const RestaurantSearchScreen());
                               },
-                              child: ImageCacheCircle(
-                                context
-                                    .watch<UserViewModel>()
-                                    .user!
-                                    .userProfile
-                                    .profileUrl,
-                                height: 42.h,
-                                width: 42.h,
-                              ),
+                              child: SvgPicture.asset('assets/icon/search-normal.svg'),
                             ),
                     ],
                   ),
@@ -124,49 +117,50 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                 return;
               },
               child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
+                // physics: const BouncingScrollPhysics(),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 10.h,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          context.read<PageViewModel>().setIndex(1);
-                        },
-                        child: const AppTextField(
-                          isSearch: true,
-                          hasBorder: false,
-                          fillColor: AppColor.g20,
-                          hintText: "Search",
-                          enabled: false,
-                          prefixIcon: Icon(
-                            Icons.search,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 42.h,
-                      ),
+                      // SizedBox(
+                      //   height: 10.h,
+                      // ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     context.read<PageViewModel>().setIndex(1);
+                      //   },
+                      //   child: const AppTextField(
+                      //     isSearch: true,
+                      //     hasBorder: false,
+                      //     fillColor: AppColor.g20,
+                      //     hintText: "Search",
+                      //     enabled: false,
+                      //     prefixIcon: Icon(
+                      //       Icons.search,
+                      //       size: 20,
+                      //     ),
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 42.h,
+                      // ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             "Nearby Restaurants",
                             style: AppTextTheme.h3.copyWith(
-                                fontWeight: FontWeight.w500, fontSize: 16.sp),
+                                fontWeight: FontWeight.w700, fontSize: 16.sp),
                           ),
                           GestureDetector(
                             onTap: () {
                               nav(
-                                  context,
-                                  MoreRestaurant(
-                                    closeByRestaurant: resModel.closeByRestaurant,
-                                  ));
+                                context,
+                                MoreRestaurant(
+                                  closeByRestaurant: resModel.closeByRestaurant,
+                                ),
+                              );
                             },
                             child: const Text(
                               "See More",
@@ -199,7 +193,7 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                           scrollDirection: Axis.horizontal,
                           itemCount: resModel.closeByRestaurant.length,
                           itemBuilder: (context, index) {
-                            if(index>2){
+                            if (index > 2) {
                               return const SizedBox();
                             }
                             var data = resModel.closeByRestaurant[index];
@@ -258,7 +252,7 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                             scrollDirection: Axis.horizontal,
                             itemCount: resModel.topRestaurant.length,
                             itemBuilder: (context, index) {
-                              if(index>2){
+                              if (index > 2) {
                                 return const SizedBox();
                               }
                               var data = resModel.topRestaurant[index];
@@ -304,7 +298,7 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                         itemCount: resModel.allRestDetail.length,
                         primary: false,
                         itemBuilder: (BuildContext context, int index) {
-                          if(index>2){
+                          if (index > 2) {
                             return const SizedBox();
                           }
                           var data = resModel.allRestDetail[index];
@@ -313,7 +307,7 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                           );
                         },
                         separatorBuilder: (BuildContext context, int index) {
-                          if(index>4){
+                          if (index > 4) {
                             return const SizedBox();
                           }
                           return SizedBox(

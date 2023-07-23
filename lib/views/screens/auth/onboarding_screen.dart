@@ -22,20 +22,18 @@ class _OnboardingState extends State<Onboarding> {
     OnboardingData(
         imagePath: 'assets/images/1.png',
         title: 'Find your perfect dining experience',
-        desc: 'Experience the finest flavors and impeccable service at our curated selection of restaurants.'
-    ),
-
+        desc:
+            'Experience the finest flavors and impeccable service at our curated selection of restaurants.'),
     OnboardingData(
         imagePath: 'assets/images/2.png',
         title: 'Instant table booking for your convenience',
-        desc: 'Easily book your table with our simple and fast reservation process. No more waiting on the phone, reserve in seconds. '
-    ),
+        desc:
+            'Easily book your table with our simple and fast reservation process. No more waiting on the phone, reserve in seconds. '),
     OnboardingData(
         imagePath: 'assets/images/3.png',
         title: 'Share your dinning experience',
-        desc: 'Don’t keep the experiences to yourself, share it with family and friends. '
-    ),
-
+        desc:
+            'Don’t keep the experiences to yourself, share it with family and friends. '),
   ];
   int index = 0;
   PageController controller = PageController();
@@ -58,16 +56,20 @@ class _OnboardingState extends State<Onboarding> {
                   var data = list[index];
                   return Column(
                     children: [
-                      //Flexible(child: Container()),
-                      Expanded(
-                        flex: 3,
-                        child: Image.asset(data.imagePath,fit: BoxFit.cover,),
+                      // Flexible(child: Container()),
+                      Container(
+                        width: double.maxFinite,
+                        height: MediaQuery.of(context).size.height * 0.38,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(data.imagePath),
+                                fit: BoxFit.cover)),
                       ),
-                       SizedBox(
+                      SizedBox(
                         height: 40.h,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left:40.w,right: 40.w ),
+                        padding: EdgeInsets.only(left: 40.w, right: 40.w),
                         child: Text(
                           data.title,
                           style: AppTextTheme.h1.copyWith(
@@ -77,11 +79,11 @@ class _OnboardingState extends State<Onboarding> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                       SizedBox(
-                        height: 24.h,
+                      SizedBox(
+                        height: 20.h,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left:38.w,right: 38.w ),
+                        padding: EdgeInsets.only(left: 32.w, right: 32.w),
                         child: Text(
                           data.desc,
                           style: AppTextTheme.light,
@@ -90,51 +92,64 @@ class _OnboardingState extends State<Onboarding> {
                       ),
                     ],
                   );
-                }),
+                },
+            ),
           ),
-          SizedBox(height: 40.h,),
+          SizedBox(
+            height: 30.h,
+          ),
           Column(
             children: [
               SmoothPageIndicator(
                   controller: controller, // PageController
                   count: list.length,
-                  effect:  const ExpandingDotsEffect(
+                  effect: const ExpandingDotsEffect(
                     activeDotColor: AppColor.p200,
                     dotHeight: 6,
                     radius: 8,
                     dotWidth: 8,
                   ), // your preferred effect
                   onDotClicked: (index) {}),
-              SizedBox(height: 50.h,),
-              GestureDetector(
-                onTap: (){
-                  goToLogin(context);
-                },
-                child: Text("Log in",
-                style: AppTextTheme.h5.copyWith(
-                  fontSize: 18
-                ),),
+              SizedBox(
+                height: 40.h,
               ),
-              SizedBox(height: 24.h,),
               Padding(
-                padding:  const EdgeInsets.only(left:16,right: 16 ),
+                padding: const EdgeInsets.only(left: 16, right: 16),
                 child: PlatButton(
                     title: 'Create account',
-                    onTap:(){
-                      nav(context, const Register(),remove: true);
-                    }
+                    onTap: () {
+                      nav(context, const Register(), remove: true);
+                    }),
+              ),
+              SizedBox(
+                height: 24.h,
+              ),
+              GestureDetector(
+                onTap: () {
+                  goToLogin(context);
+                },
+                child: Text(
+                  "Log in",
+                  style: AppTextTheme.h5.copyWith(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: AppColor.p100,
+                  ),
                 ),
               ),
 
               // Flexible(child: Container()),
             ],
           ),
-          SizedBox(height: 50.h,)
+          SizedBox(
+            height: 50.h,
+          )
         ],
       ),
     );
   }
-  goToLogin(BuildContext context){
-    nav(context, Login(),remove:  true);
+
+  goToLogin(BuildContext context) {
+    nav(context, Login(), remove: true);
   }
 }

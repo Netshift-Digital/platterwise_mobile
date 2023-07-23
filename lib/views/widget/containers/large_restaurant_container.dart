@@ -28,21 +28,12 @@ class LargeRestaurantContainer extends StatelessWidget {
       child: Container(
         width: 343.w,
         height: 106.h,
-        decoration: BoxDecoration(
+        decoration: ShapeDecoration(
           color: Colors.white,
-          border: Border.all(
-            color: Colors.grey.shade300,
-            width: 0.7,
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(width: 0.50, color: Color(0xFFD6D6D6)),
+            borderRadius: BorderRadius.circular(8),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade200,
-              offset: const Offset(0, 2),
-              blurRadius: 4,
-              spreadRadius: 0.25,
-            ),
-          ],
-          borderRadius: BorderRadius.circular(6),
         ),
         child: Row(
           children: [
@@ -76,6 +67,7 @@ class LargeRestaurantContainer extends StatelessWidget {
                   ),
                   SizedBox(height: 4.h,),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Flexible(

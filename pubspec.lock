@@ -671,7 +671,7 @@ packages:
     source: hosted
     version: "3.1.0"
   flutter_native_splash:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_native_splash
       sha256: bd36d1a7f05ff8378cad17d20c33ca904630bfd3fcf8b15c9e8237efbccfad0a

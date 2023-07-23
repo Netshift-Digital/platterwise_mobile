@@ -15,9 +15,11 @@ import 'package:url_launcher/url_launcher.dart';
 class RestaurantHeader extends StatelessWidget {
   final RestaurantData restaurantData;
   final List<AllRestReview> review;
-  const RestaurantHeader(
-      {Key? key, required this.restaurantData, required this.review})
-      : super(key: key);
+  const RestaurantHeader({
+    Key? key,
+    required this.restaurantData,
+    required this.review,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,21 +34,24 @@ class RestaurantHeader extends StatelessWidget {
             children: [
               Text(
                 restaurantData.restuarantName.capitalizeFirstChar(),
-                style: AppTextTheme.h3
-                    .copyWith(fontWeight: FontWeight.w700, fontSize: 18),
+                style: AppTextTheme.h3.copyWith(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                ),
               ),
               const Spacer(),
               GestureDetector(
                 onTap: () {
-                  DynamicLink.createLinkRestaurant(restaurantData).then((value){
-                    if(value!=null){
+                  DynamicLink.createLinkRestaurant(restaurantData)
+                      .then((value) {
+                    if (value != null) {
                       Share.share(value);
                     }
                   });
                 },
                 child: SvgPicture.asset(
-                  'assets/icon/share.svg',
-                  color: AppColor.p100,
+                  'assets/icon/route-share.svg',
+                  color: AppColor.g900,
                 ),
               ),
               const SizedBox(
@@ -58,16 +63,23 @@ class RestaurantHeader extends StatelessWidget {
                     Uri.parse("tel:${restaurantData.phone}"),
                   );
                 },
-                child: SvgPicture.asset('assets/icon/route-square.svg'),
+                child: SvgPicture.asset(
+                  'assets/icon/route-square.svg',
+                  color: AppColor.g900,
+                ),
               ),
               const SizedBox(
                 width: 12,
               ),
               GestureDetector(
-                  onTap: () {
-                    MapsLauncher.launchQuery(restaurantData.address);
-                  },
-                  child: SvgPicture.asset('assets/icon/route2.svg')),
+                onTap: () {
+                  MapsLauncher.launchQuery(restaurantData.address);
+                },
+                child: SvgPicture.asset(
+                  'assets/icon/route2.svg',
+                  color: AppColor.g900,
+                ),
+              ),
             ],
           ),
           const SizedBox(

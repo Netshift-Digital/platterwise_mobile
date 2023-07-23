@@ -71,7 +71,7 @@ class _TimelineState extends State<Timeline> {
           await model.getPost(restart: true);
         },
         child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
+          //physics: const BouncingScrollPhysics(),
           controller: scrollController,
           child: Column(
             children: [

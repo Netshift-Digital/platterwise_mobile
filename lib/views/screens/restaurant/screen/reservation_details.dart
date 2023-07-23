@@ -285,22 +285,22 @@ class _ReservationDetailsState extends State<ReservationDetails> {
     } else if (widget.userReservation!.reservationStatus
         .toLowerCase()
         .contains("can")) {
-      return PlatButton(
+      return const SizedBox();
+    } else if (widget.userReservation!.reservationStatus
+        .toLowerCase()
+        .contains("completed")) {
+      return  PlatButton(
         title: "View payment Status",
         onTap: () {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => PaidGuestScreen(
-                      userReservation: widget.userReservation!))).then((value) {
+                      userReservation: widget.userReservation!),),).then((value) {
             getDetails();
           });
         },
       );
-    } else if (widget.userReservation!.reservationStatus
-        .toLowerCase()
-        .contains("com")) {
-      return const SizedBox();
     } else if (!widget.userReservation!.reservationStatus
         .toLowerCase()
         .contains("inpr")&&!widget.userReservation!.reservationStatus

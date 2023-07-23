@@ -93,6 +93,7 @@ dependencies:
   cached_network_image_builder: ^0.2.0
   firebase_crashlytics: ^3.3.3
   firebase_analytics: ^10.1.1
+  flutter_native_splash:
   flutter:
     sdk: flutter
 
@@ -109,7 +110,6 @@ flutter_icons:
   min_sdk_android: 21
 
 dev_dependencies:
-  flutter_native_splash:
   flutter_launcher_icons: ^0.11.0
   flutter_test:
     sdk: flutter

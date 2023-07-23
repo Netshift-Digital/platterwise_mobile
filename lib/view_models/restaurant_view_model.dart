@@ -1,4 +1,3 @@
-import 'package:geocoding/geocoding.dart';
 import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
 import 'package:platterwave/common/base_view_model.dart';
 import 'package:platterwave/data/network/restaurant_service.dart';
@@ -19,21 +18,28 @@ import 'package:platterwave/view_models/location_view_model.dart';
 class RestaurantViewModel extends BaseViewModel {
   RestaurantService restaurantService = locator<RestaurantService>();
   List<RestaurantData> allRestDetail = [];
+  List<RestaurantData> favouriteRestaurant = [];
   List<RestaurantData> topRestaurant = [];
   List<RestaurantData> nearByRestaurant = [];
   List<RestaurantData> closeByRestaurant = [];
   List<AllBannersList> allBannersList = [];
   List<UserReservation> userReservation = [];
+
   String _state = "lagos";
   LatLong latLong = LatLong(6.5243793, 3.3792057);
   String get state => _state;
   AppState reviewState = AppState.idle;
 
   setLocationState(LocationData locationData) async {
-    _state = locationData.state?? "";
+    _state = locationData.state;
     latLong = locationData.latLong;
     await closeBy();
     //await getByState();
+  }
+
+  bool isFavourite(String id) {
+    return favouriteRestaurant
+        .any((element) => element.restId.toString() == id);
   }
 
   setReviewState(AppState state) {
@@ -60,8 +66,8 @@ class RestaurantViewModel extends BaseViewModel {
       if (data != null) {
         closeByRestaurant = SearchRestaurantModel.fromJson(data).searchResult;
         notifyListeners();
-      }else{
-        closeByRestaurant=[];
+      } else {
+        closeByRestaurant = [];
         notifyListeners();
       }
     } catch (e) {
@@ -83,18 +89,16 @@ class RestaurantViewModel extends BaseViewModel {
     return topRestaurant;
   }
 
-
   Future<RestaurantData?> getRestaurantById(int id) async {
     try {
       var data = await restaurantService.getResturantById(id);
-      if (data != null&&data['get_restaurantById'][0]!=null) {
-        return  RestaurantData.fromJson(data['get_restaurantById'][0]);
+      if (data != null && data['get_restaurantById'][0] != null) {
+        return RestaurantData.fromJson(data['get_restaurantById'][0]);
       }
     } catch (e) {
-      print(e);
       //
     }
-    return null ;
+    return null;
   }
 
   Future<List<RestaurantData>> getByState() async {
@@ -113,7 +117,7 @@ class RestaurantViewModel extends BaseViewModel {
 
   Future<List<RestaurantData>> searchRestaurant(String text) async {
     try {
-      var data = await restaurantService.searchRestaurant(text,latLong);
+      var data = await restaurantService.searchRestaurant(text, latLong);
       if (data != null) {
         var list = SearchRestaurantModel.fromJson(data).searchResult;
         return list;
@@ -230,7 +234,8 @@ class RestaurantViewModel extends BaseViewModel {
     }
     return null;
   }
-  Future<String?> getTransactionID(String id,num bill) async {
+
+  Future<String?> getTransactionID(String id, num bill) async {
     try {
       setState(AppState.busy);
       var data = await restaurantService.getTransactionID(id, bill);
@@ -242,6 +247,7 @@ class RestaurantViewModel extends BaseViewModel {
     }
     return null;
   }
+
   Future<UserReservation?> getSingleReservation(String id) async {
     try {
       var data = await restaurantService.singleReservation(id);
@@ -283,5 +289,17 @@ class RestaurantViewModel extends BaseViewModel {
       //RandomFunction.toast('Something went wrong');
     }
     return [];
+  }
+
+  Future<void> saveRestaurant(RestaurantData restaurantData) async {
+    try {
+      if(!isFavourite(restaurantData.restId.toString())){
+        favouriteRestaurant.add(restaurantData);
+        notifyListeners();
+        await restaurantService.favouriteRestaurant(restaurantData.restId);
+      }
+    } catch (e) {
+      //
+    }
   }
 }

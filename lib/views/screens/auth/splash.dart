@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/utils/nav.dart';
-import 'package:platterwave/utils/size_config/size_config.dart';
-import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
-import 'package:platterwave/views/screens/auth/login.dart';
 import 'package:platterwave/views/screens/auth/onboarding_screen.dart';
 import 'package:platterwave/views/screens/auth/signin_signup.dart';
 import 'package:platterwave/views/screens/bottom_nav/bottom_nav.dart';
@@ -24,9 +22,10 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      backgroundColor: const Color(0xFFDB4E2E),
       body: Center(
         child: SvgPicture.asset(
-          "assets/icon/platterwise_logo.svg",
+          "assets/images/PW-logo - svg.svg",
           height: 30,
           width: 161,
         ),
@@ -38,13 +37,14 @@ class _SplashScreenState extends State<SplashScreen> {
     // TODO: implement initState
     super.initState();
     permission();
-    Future.delayed(const Duration(milliseconds: 20),(){
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      FlutterNativeSplash.remove();
       if(FirebaseAuth.instance.currentUser==null){
         nav(context, const Onboarding(),remove: true);
       }else{
         context.read<UserViewModel>()
             .getUserProfile(FirebaseAuth.instance.currentUser!.uid)
-        .then((value){
+            .then((value){
           if(value!=null){
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context)=>const BottomNav()));

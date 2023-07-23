@@ -16,6 +16,7 @@ import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
+import 'package:platterwave/views/screens/restaurant/screen/favourite.dart';
 import 'package:platterwave/views/screens/restaurant/screen/res.dart';
 import 'package:platterwave/views/screens/restaurant/screen/reservation_details.dart';
 import 'package:platterwave/views/screens/restaurant/screen/restaurant_home_screen.dart';
@@ -43,15 +44,16 @@ class _BottomNavState extends State<BottomNav> {
       screen: const RestaurantHomeScreen(),
     ),
     BottomNavigationModel(
-      title: "Search",
-      icon: "assets/icon/search-normal.svg",
-      screen: const RestaurantSearchScreen(),
-    ),
-    BottomNavigationModel(
       title: "Reservations",
       icon: "assets/icon/reserve.svg",
       screen: const UserReservations(),
       // screen: const SaveScreen()
+    ),
+    BottomNavigationModel(
+      title: "Favorites",
+      icon: "assets/icon/love.svg",
+     screen: const Favourite()
+     // screen: const RestaurantSearchScreen(),
     ),
     BottomNavigationModel(
       title: "Explore",

@@ -69,7 +69,7 @@ class _RestaurantSearchScreenState extends State<RestaurantSearchScreen> {
                 child: ListView.separated(
                   shrinkWrap: true,
                   itemCount: allRestDetail.length,
-                  physics: const BouncingScrollPhysics(),
+                  //physics: const BouncingScrollPhysics(),
                   primary: false,
                   itemBuilder: (BuildContext context, int index) {
                     var data = allRestDetail[index];

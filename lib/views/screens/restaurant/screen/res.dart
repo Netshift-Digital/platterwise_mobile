@@ -1,6 +1,6 @@
 // ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/model/restaurant/restaurant.dart';
 import 'package:platterwave/model/restaurant/restaurant_review.dart';
 import 'package:platterwave/res/theme.dart';
@@ -16,12 +16,11 @@ import 'package:platterwave/views/widget/custom/page_view.dart';
 import 'package:provider/provider.dart';
 
 class Res extends StatefulWidget {
-   RestaurantData? restaurantData;
+  RestaurantData? restaurantData;
   final String? id;
-   Res({super.key, this.restaurantData,  this.id}) : assert(
-  !(restaurantData==null&&id==null),
-  "pass either restId or RestaurantData"
-  );
+  Res({super.key, this.restaurantData, this.id})
+      : assert(!(restaurantData == null && id == null),
+            "pass either restId or RestaurantData");
 
   @override
   State<Res> createState() => _ResState();
@@ -33,7 +32,7 @@ class _ResState extends State<Res> {
   List<AllRestReview> review = [];
   @override
   Widget build(BuildContext context) {
-    if(widget.restaurantData==null){
+    if (widget.restaurantData == null) {
       return Scaffold(
         appBar: appBar(context),
         body: const Center(child: CircularProgressIndicator()),
@@ -57,6 +56,41 @@ class _ResState extends State<Res> {
             systemOverlayStyle: kOverlay,
             iconTheme: const IconThemeData(color: Colors.black),
             elevation: 0,
+            leading: Column(
+              children: [
+                GestureDetector(
+                  child: SizedBox(
+                    width: 39,
+                    height: 39,
+                    child: SvgPicture.asset('assets/icon/back.svg'),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+            actions: [
+              GestureDetector(
+                onTap: () {
+                  context
+                      .read<RestaurantViewModel>()
+                      .saveRestaurant(widget.restaurantData!);
+                },
+                child: SizedBox(
+                  width: 39,
+                  height: 39,
+                  child: context
+                          .watch<RestaurantViewModel>()
+                          .isFavourite(widget.restaurantData!.restId.toString())
+                      ? SvgPicture.asset('assets/icon/heart.svg')
+                      : SvgPicture.asset('assets/icon/favour_rite.svg'),
+                ),
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+            ],
             stretch: true,
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             flexibleSpace: FlexibleSpaceBar(
@@ -93,9 +127,11 @@ class _ResState extends State<Res> {
               child: RestaurantTab(
                 index: index,
                 onTap: (e) {
-                  pageController.animateToPage(e,
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.ease);
+                  pageController.animateToPage(
+                    e,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.ease,
+                  );
                 },
               ),
             ),
@@ -128,7 +164,7 @@ class _ResState extends State<Res> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context
           .read<RestaurantViewModel>()
-          .getReview((widget.id??widget.restaurantData!.restId).toString())
+          .getReview((widget.id ?? widget.restaurantData!.restId).toString())
           .then((value) {
         if (mounted) {
           setState(() {
@@ -137,15 +173,14 @@ class _ResState extends State<Res> {
         }
       });
 
-
-      if(widget.restaurantData==null){
+      if (widget.restaurantData == null) {
         context
             .read<RestaurantViewModel>()
             .getRestaurantById(int.parse(widget.id!))
             .then((value) {
           if (mounted) {
             setState(() {
-             widget.restaurantData=value;
+              widget.restaurantData = value;
             });
           }
         });
