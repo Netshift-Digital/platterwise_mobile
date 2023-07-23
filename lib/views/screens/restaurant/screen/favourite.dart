@@ -29,8 +29,8 @@ class Favourite extends StatelessWidget {
               ),
             )
           : Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ListView.separated(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView.separated(
                 shrinkWrap: true,
                 itemCount: resModel.favouriteRestaurant.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -45,7 +45,7 @@ class Favourite extends StatelessWidget {
                   );
                 },
               ),
-          ),
+            ),
     );
   }
 }

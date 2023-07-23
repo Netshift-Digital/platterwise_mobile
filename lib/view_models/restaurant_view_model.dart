@@ -51,6 +51,7 @@ class RestaurantViewModel extends BaseViewModel {
     try {
       var data = await restaurantService.getRestaurantList();
       if (data != null) {
+        allRestDetail = [];
         allRestDetail = Restaurant.fromJson(data).allRestDetail;
         notifyListeners();
       }
@@ -64,6 +65,7 @@ class RestaurantViewModel extends BaseViewModel {
     try {
       var data = await restaurantService.nearBy(latLong);
       if (data != null) {
+        closeByRestaurant = [];
         closeByRestaurant = SearchRestaurantModel.fromJson(data).searchResult;
         notifyListeners();
       } else {
@@ -80,6 +82,7 @@ class RestaurantViewModel extends BaseViewModel {
     try {
       var data = await restaurantService.getTopRated();
       if (data != null) {
+        topRestaurant = [];
         topRestaurant = Restaurant.fromJson(data).allRestDetail;
         notifyListeners();
       }
@@ -293,7 +296,7 @@ class RestaurantViewModel extends BaseViewModel {
 
   Future<void> saveRestaurant(RestaurantData restaurantData) async {
     try {
-      if(!isFavourite(restaurantData.restId.toString())){
+      if (!isFavourite(restaurantData.restId.toString())) {
         favouriteRestaurant.add(restaurantData);
         notifyListeners();
         await restaurantService.favouriteRestaurant(restaurantData.restId);
@@ -301,5 +304,21 @@ class RestaurantViewModel extends BaseViewModel {
     } catch (e) {
       //
     }
+  }
+
+  Future<List<RestaurantData>> getFavouriteRestaurant() async {
+    try {
+      var data = await restaurantService.getFavouriteRestaurant();
+      if (data != null) {
+        favouriteRestaurant = [];
+        for (var e in data['all_saved_rest']) {
+          favouriteRestaurant.add(RestaurantData.fromJson(e));
+        }
+        notifyListeners();
+      }
+    } catch (e) {
+      //
+    }
+    return allRestDetail;
   }
 }

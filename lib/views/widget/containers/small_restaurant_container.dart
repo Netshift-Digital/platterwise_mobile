@@ -1,12 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_parsed_text_field/flutter_parsed_text_field.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/model/restaurant/restaurant.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/res.dart';
 import 'package:platterwave/views/screens/restaurant/screen/restaurant_details.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
@@ -43,10 +45,38 @@ class SmallRestaurantContainer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: ImageCacheR(
-                  restaurantData.coverPic,
-                  topRadius: 6,
-                  topBottom: 0,
+                child: Stack(
+                  children: [
+                    ImageCacheR(
+                      restaurantData.coverPic,
+                      topRadius: 6,
+                      topBottom: 0,
+                    ),
+                    Positioned(
+                      top: 12,
+                      right: 12,
+                      child: SizedBox(
+                        height: 26,
+                        width: 26,
+                        child: GestureDetector(
+                          onTap: () {
+                            context
+                                .read<RestaurantViewModel>()
+                                .saveRestaurant(restaurantData);
+                          },
+                          child: SizedBox(
+                            width: 39,
+                            height: 39,
+                            child: context
+                                .watch<RestaurantViewModel>()
+                                .isFavourite(restaurantData.restId.toString())
+                                ? SvgPicture.asset('assets/icon/heart.svg')
+                                : SvgPicture.asset('assets/icon/favour_rite.svg'),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(
