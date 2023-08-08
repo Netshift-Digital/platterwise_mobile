@@ -23,7 +23,7 @@ import 'package:provider/provider.dart';
 class SplitBill extends StatefulWidget {
   UserReservation userReservation;
   final ReservationBill reservationBill;
-   List<GuestInfo> guestInfo;
+  List<GuestInfo> guestInfo;
   SplitBill(
       {Key? key,
       required this.userReservation,
@@ -54,8 +54,8 @@ class _SplitBillState extends State<SplitBill> {
               Container(
                 width: double.maxFinite,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: AppColor.p200,
+                  borderRadius: BorderRadius.circular(6),
+                  color: AppColor.p200,
                 ),
                 child: Column(
                   children: [
@@ -73,7 +73,7 @@ class _SplitBillState extends State<SplitBill> {
                       height: 8,
                     ),
                     Text(
-                      (widget.reservationBill.grandPrice??'0').toCurrency(),
+                      (widget.reservationBill.grandPrice ?? '0').toCurrency(),
                       style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
@@ -167,7 +167,7 @@ class _SplitBillState extends State<SplitBill> {
                               context,
                               PercentageSplit(
                                 gradPrice: num.parse(
-                                    widget.reservationBill.grandPrice??"0"),
+                                    widget.reservationBill.grandPrice ?? "0"),
                                 guestInfo: data,
                                 onDone: (e) {
                                   cal(e, index);
@@ -194,12 +194,14 @@ class _SplitBillState extends State<SplitBill> {
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(6.0),
-                                  child: (splitType == SplitType.percentage)?
-                                      Text("%${RandomFunction.getPercentage(num.parse(data.amount), grandPrice)}")
-                                      :Text(data.amount.toCurrency()),
+                                  child: (splitType == SplitType.percentage)
+                                      ? Text(
+                                          "%${RandomFunction.getPercentage(num.parse(data.amount), grandPrice)}")
+                                      : Text(data.amount.toCurrency()),
                                 )),
                             contentPadding: EdgeInsets.zero,
-                            leading: SvgPicture.asset('assets/images/avater.svg'),
+                            leading:
+                                SvgPicture.asset('assets/images/avater.svg'),
                             title: Text(data.guestName.capitalizeFirstChar()),
                           ),
                         ),
@@ -229,7 +231,7 @@ class _SplitBillState extends State<SplitBill> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                    "${amountShared.toString().toCurrency()} of ${grandPrice.toString().toCurrency()}",
+                        "${amountShared.toString().toCurrency()} of ${grandPrice.toString().toCurrency()}",
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -238,31 +240,37 @@ class _SplitBillState extends State<SplitBill> {
                       const SizedBox(
                         height: 6,
                       ),
-                      (splitType==SplitType.percentage)?
-                          Text("%${RandomFunction.getPercentage((grandPrice - amountShared), grandPrice).toStringAsFixed(2)} left",
+                      (splitType == SplitType.percentage)
+                          ? Text(
+                              "%${RandomFunction.getPercentage((grandPrice - amountShared), grandPrice).toStringAsFixed(2)} left",
                               style: const TextStyle(
                                   fontSize: 16,
                                   color: AppColor.g500,
-                                  fontWeight: FontWeight.w500)
-                          ):Text(
-                        (grandPrice - amountShared) ==0?"":"${(grandPrice - amountShared).toString().toCurrency()} left",
-                        style: const TextStyle(
-                            fontSize: 16,
-                            color: AppColor.g500,
-                            fontWeight: FontWeight.w500),
-                      )
+                                  fontWeight: FontWeight.w500))
+                          : Text(
+                              (grandPrice - amountShared) == 0
+                                  ? ""
+                                  : "${(grandPrice - amountShared).toString().toCurrency()} left",
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  color: AppColor.g500,
+                                  fontWeight: FontWeight.w500),
+                            )
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 41,),
+              const SizedBox(
+                height: 41,
+              ),
               PlatButton(
-                appState: context.watch<RestaurantViewModel>().appState,
+                  appState: context.watch<RestaurantViewModel>().appState,
                   title: "Split",
-                  onTap: grandPrice==amountShared?(){
-                   splitBill(context);
-                  }:null
-              )
+                  onTap: grandPrice == amountShared
+                      ? () {
+                          splitBill(context);
+                        }
+                      : null)
             ],
           ),
         ),
@@ -275,7 +283,7 @@ class _SplitBillState extends State<SplitBill> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      grandPrice = num.parse(widget.reservationBill.grandPrice??'0');
+      grandPrice = num.parse(widget.reservationBill.grandPrice ?? '0');
       shareEqually();
     });
   }
@@ -288,6 +296,24 @@ class _SplitBillState extends State<SplitBill> {
     }
     amountShared = money;
     setState(() {});
+    Future.delayed(const Duration(seconds: 5),(){
+      overAmount(index);
+    });
+
+  }
+
+  overAmount(int index){
+    if(amountShared>grandPrice){
+      var extra = amountShared-grandPrice;
+      for (var data in widget.guestInfo) {
+       if(widget.guestInfo[index]!=data&&num.parse(data.amount)>extra){
+         var dataIndex = widget.guestInfo.indexOf(data);
+         widget.guestInfo[dataIndex].amount = (num.parse(widget.guestInfo[dataIndex].amount)-extra).toString();
+         setState(() {});
+         break;
+       }
+      }
+    }
   }
 
   void shareEqually() {
@@ -304,7 +330,7 @@ class _SplitBillState extends State<SplitBill> {
   void splitBill(BuildContext context) {
     List<BillSplit> billSplit = [];
     String ownerBill = "0";
-    for(var e in widget.guestInfo){
+    for (var e in widget.guestInfo) {
       // if(e.guestName.toLowerCase().contains(host.toLowerCase())){
       //   ownerBill = e.amount;
       // }else{
@@ -321,14 +347,12 @@ class _SplitBillState extends State<SplitBill> {
     var split = SplitBillModel(
         firebaseAuthId: FirebaseAuth.instance.currentUser!.uid,
         reservId: int.parse(widget.userReservation.reservId),
-        ownerBill:num.parse(ownerBill) ,
-        billSplit: billSplit
-    );
+        ownerBill: num.parse(ownerBill),
+        billSplit: billSplit);
     var model = context.read<RestaurantViewModel>();
-    model.splitBill(split).then((value){
-      Navigator.pop(context,true);
+    model.splitBill(split).then((value) {
+      Navigator.pop(context, true);
       //  Navigator.popUntil(context, (route) => route.settings.name=="userReservation")
     });
-
   }
 }

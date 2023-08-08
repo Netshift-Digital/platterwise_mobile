@@ -139,7 +139,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                                       softWrap: true,
                                     ),
                                     const SizedBox(
-                                      height: 8,
+                                      height: 3,
                                     ),
                                     Row(
                                       children: [
@@ -289,23 +289,26 @@ class _ReservationDetailsState extends State<ReservationDetails> {
     } else if (widget.userReservation!.reservationStatus
         .toLowerCase()
         .contains("completed")) {
-      return  PlatButton(
+      return PlatButton(
         title: "View payment Status",
         onTap: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PaidGuestScreen(
-                      userReservation: widget.userReservation!),),).then((value) {
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  PaidGuestScreen(userReservation: widget.userReservation!),
+            ),
+          ).then((value) {
             getDetails();
           });
         },
       );
     } else if (!widget.userReservation!.reservationStatus
-        .toLowerCase()
-        .contains("inpr")&&!widget.userReservation!.reservationStatus
-        .toLowerCase()
-        .contains("single_bill")) {
+            .toLowerCase()
+            .contains("inpr") &&
+        !widget.userReservation!.reservationStatus
+            .toLowerCase()
+            .contains("single_bill")) {
       return PlatButton(
           appState: context.watch<RestaurantViewModel>().appState,
           color: Colors.red,
@@ -381,9 +384,9 @@ class _ReservationDetailsState extends State<ReservationDetails> {
           .doc(widget.id ?? widget.userReservation!.reservId)
           .snapshots()
           .listen((event) {
-            if(mounted){
-              getDetails();
-            }
+        if (mounted) {
+          getDetails();
+        }
       });
     });
   }

@@ -107,69 +107,73 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                     ),
                   ),
                 ),
-                widget.restaurantData.seatType.isEmpty?const SizedBox():SizedBox(
-                  height: 24.h,
-                ),
-                widget.restaurantData.seatType.isEmpty?const SizedBox():Container(
-                  height: 71,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      color: Colors.grey.shade300,
-                      width: 0.7,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.shade200,
-                        offset: const Offset(0, 3),
-                        blurRadius: 4,
+                widget.restaurantData.seatType.isEmpty
+                    ? const SizedBox()
+                    : SizedBox(
+                        height: 24.h,
                       ),
-                    ],
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Center(
-                    child: DropdownButtonFormField<String>(
-                        validator: (e) {
-                          if (e!.isEmpty) {
-                            return "select seat type";
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(16),
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          border: InputBorder.none,
+                widget.restaurantData.seatType.isEmpty
+                    ? const SizedBox()
+                    : Container(
+                        height: 71,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                            width: 0.7,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade200,
+                              offset: const Offset(0, 3),
+                              blurRadius: 4,
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(6),
                         ),
-                        value: sitType,
-                        icon: const Icon(
-                          Icons.keyboard_arrow_down_outlined,
-                          size: 20,
+                        child: Center(
+                          child: DropdownButtonFormField<String>(
+                              validator: (e) {
+                                if (e!.isEmpty) {
+                                  return "select seat type";
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.all(16),
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                border: InputBorder.none,
+                              ),
+                              value: sitType,
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down_outlined,
+                                size: 20,
+                              ),
+                              hint: const Text("Select sit type"),
+                              items: widget.restaurantData.seatType
+                                  .map((e) => e.seatType)
+                                  .map((e) {
+                                return DropdownMenuItem<String>(
+                                    value: e,
+                                    child: Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          "assets/icon/chair.svg",
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(e),
+                                      ],
+                                    ));
+                              }).toList(),
+                              onChanged: (e) {
+                                sitType = e;
+                                setState(() {});
+                              }),
                         ),
-                        hint: const Text("Select sit type"),
-                        items: widget.restaurantData.seatType
-                            .map((e) => e.seatType)
-                            .map((e) {
-                          return DropdownMenuItem<String>(
-                              value: e,
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/icon/chair.svg",
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(e),
-                                ],
-                              ));
-                        }).toList(),
-                        onChanged: (e) {
-                          sitType = e;
-                          setState(() {});
-                        }),
-                  ),
-                ),
+                      ),
                 SizedBox(
                   height: 24.h,
                 ),
@@ -341,7 +345,9 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SvgPicture.asset('assets/icon/add-circle.svg'),
-                              const SizedBox(width: 6,),
+                              const SizedBox(
+                                width: 6,
+                              ),
                               Text(
                                 "Add Guest Details",
                                 style: AppTextTheme.h3.copyWith(
@@ -364,9 +370,13 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
   }
 
   bool validate() {
-    if(widget.restaurantData.seatType.isEmpty && dateTime != null && guest.length == guestNumber){
+    if (widget.restaurantData.seatType.isEmpty &&
+        dateTime != null &&
+        guest.length == guestNumber) {
       return false;
-    } else if (sitType != null && dateTime != null && guest.length == guestNumber) {
+    } else if (sitType != null &&
+        dateTime != null &&
+        guest.length == guestNumber) {
       return false;
     } else {
       return true;

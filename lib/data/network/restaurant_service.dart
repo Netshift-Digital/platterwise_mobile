@@ -281,7 +281,7 @@ class RestaurantService {
   Future<Map<String, dynamic>?> makeReservation(
       ReservationData reservationData) async {
     var map = reservationData.toJson();
-   // map.putIfAbsent('subject_of_invite', () => '');
+    // map.putIfAbsent('subject_of_invite', () => '');
     var body = jsonEncode(map);
     //print(body);
     try {
@@ -293,8 +293,7 @@ class RestaurantService {
           headers: {
             "Content-type": "application/json",
           }).timeout(const Duration(seconds: 10));
-      var data = jsonDecode(response.body);
-      print(data);
+      var data = jsonDecode(response.body.replaceAll('Message sent!', ''));
       RandomFunction.toast(data['status']);
       if (response.statusCode == 200) {
         FirebaseFirestore.instance
@@ -466,7 +465,6 @@ class RestaurantService {
           .post(Uri.parse("${baseurl2}split_bill.php"), body: body, headers: {
         "Content-type": "application/json",
       }).timeout(const Duration(seconds: 10));
-      print(response.body);
       var data = jsonDecode(
           response.body.replaceAll("Message sent!Message sent!", ""));
       RandomFunction.toast(data['status']);
