@@ -8,13 +8,15 @@ class CustomAppIcon extends StatelessWidget {
   final String count;
   final Widget? like;
   final void Function()? onTap;
+  final void Function()? onTextTap;
 
   const CustomAppIcon({
     Key? key,
     required this.icon,
     required this.count,
     this.onTap,
-    this.like
+    this.like,
+    this.onTextTap,
   }) : super(key: key);
 
   @override
@@ -27,7 +29,10 @@ class CustomAppIcon extends StatelessWidget {
             child: SvgPicture.asset(icon)
         ),
         SizedBox(width: 8.w,),
-        Text(count)
+        GestureDetector(
+          onTap: onTextTap,
+            child: Text(count),
+        )
       ],
     );
   }

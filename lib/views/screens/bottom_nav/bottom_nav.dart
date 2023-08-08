@@ -57,7 +57,7 @@ class _BottomNavState extends State<BottomNav> {
     ),
     BottomNavigationModel(
       title: "Explore",
-      icon: "assets/icon/explore.svg",
+      icon: "assets/icon/people.svg",
       screen: const Timeline(),
     ),
     BottomNavigationModel(

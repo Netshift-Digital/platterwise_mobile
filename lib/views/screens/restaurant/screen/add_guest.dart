@@ -129,16 +129,23 @@ class _AddGuestState extends State<AddGuest> {
                               ),
                             );
                           },
-                          child: Text(
-                            "Add Other Guests",
-                            style: AppTextTheme.h3.copyWith(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                                color: AppColor.p200,
-                            ),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset('assets/icon/add-circle.svg'),
+                              const SizedBox(width: 6,),
+                              Text(
+                                "Add Other Guests",
+                                style: AppTextTheme.h3.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    color: AppColor.p200,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
+                const SizedBox(height: 10,),
                 guest.isEmpty
                     ? const SizedBox()
                     : Padding(

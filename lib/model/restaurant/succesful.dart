@@ -64,12 +64,13 @@ class Successful extends StatelessWidget {
                 flex: 1,
               ),
               PlatButton(
-                  title: "Home",
-                  onTap: () {
-                    context.read<PageViewModel>().setIndex(1);
-                    Navigator.popUntil(
-                        context, (Route<dynamic> route) => route.isFirst);
-                  }),
+                title: "Home",
+                onTap: () {
+                  context.read<PageViewModel>().setIndex(1);
+                  Navigator.popUntil(
+                      context, (Route<dynamic> route) => route.isFirst);
+                },
+              ),
               const Spacer(
                 flex: 2,
               ),

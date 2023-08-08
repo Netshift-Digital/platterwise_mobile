@@ -132,6 +132,7 @@ class RestaurantService {
       "latitude": latLong.latitude,
       "longitude": latLong.longitude
     });
+    print(body);
     try {
       var response = await client.post(
           Uri.parse("https://api.platterwise.com/jhome2/closest_rest.php"),
@@ -139,7 +140,9 @@ class RestaurantService {
           headers: {
             "Content-type": "application/json",
           }).timeout(const Duration(seconds: 10));
+      print(response.statusCode);
       var data = jsonDecode(response.body);
+      print(data);
       if (response.statusCode == 200) {
         return data;
       } else {
@@ -152,6 +155,7 @@ class RestaurantService {
     } on TimeoutException catch (_) {
       throw Failure("Poor internet connection");
     } catch (e) {
+      print(e);
       throw Failure("Something went wrong. Try again");
     }
     return null;
@@ -276,15 +280,21 @@ class RestaurantService {
 
   Future<Map<String, dynamic>?> makeReservation(
       ReservationData reservationData) async {
-    var body = jsonEncode(reservationData.toJson());
+    var map = reservationData.toJson();
+   // map.putIfAbsent('subject_of_invite', () => '');
+    var body = jsonEncode(map);
+    //print(body);
     try {
       var response = await client.post(
-          Uri.parse("${baseurl2}make_reservation.php"),
+          Uri.parse(
+            "${baseurl2}make_reservation.php",
+          ),
           body: body,
           headers: {
             "Content-type": "application/json",
           }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
+      print(data);
       RandomFunction.toast(data['status']);
       if (response.statusCode == 200) {
         FirebaseFirestore.instance
@@ -300,6 +310,7 @@ class RestaurantService {
     } on TimeoutException catch (_) {
       throw Failure("Poor internet connection");
     } catch (e) {
+      print(e);
       throw Failure("Something went wrong. Try again");
     }
     return null;
@@ -509,12 +520,10 @@ class RestaurantService {
       'rest_id': id
     });
     try {
-      var response = await client.post(
-          Uri.parse("${baseurl2}saved_rest.php"),
-          body: body,
-          headers: {
-            "Content-type": "application/json",
-          }).timeout(const Duration(seconds: 10));
+      var response = await client
+          .post(Uri.parse("${baseurl2}saved_rest.php"), body: body, headers: {
+        "Content-type": "application/json",
+      }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
       RandomFunction.toast(data['status']);
       if (response.statusCode == 200) {

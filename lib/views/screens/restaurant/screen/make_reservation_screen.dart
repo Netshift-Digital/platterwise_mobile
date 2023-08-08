@@ -337,13 +337,20 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                                 height:
                                     MediaQuery.of(context).size.height - 50);
                           },
-                          child: Text(
-                            "Add Guest Details",
-                            style: AppTextTheme.h3.copyWith(
-                              color: const Color(0xffE16C52),
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                            ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SvgPicture.asset('assets/icon/add-circle.svg'),
+                              const SizedBox(width: 6,),
+                              Text(
+                                "Add Guest Details",
+                                style: AppTextTheme.h3.copyWith(
+                                  color: const Color(0xffE16C52),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

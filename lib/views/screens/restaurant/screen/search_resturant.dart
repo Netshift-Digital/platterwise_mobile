@@ -55,7 +55,7 @@ class _RestaurantSearchScreenState extends State<RestaurantSearchScreen> {
                     });
                   }
                 },
-                hintText: "Search for a post or people",
+                hintText: "Search for a restaurant",
                 prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
                 suffixIcon: GestureDetector(
                     onTap: (){

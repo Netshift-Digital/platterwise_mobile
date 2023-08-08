@@ -93,11 +93,21 @@ class _CommentReplyState extends State<CommentReply> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      data.fullName??"",
-                                      style: AppTextTheme.h3.copyWith(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w700),
+                                    GestureDetector(
+                                      onTap: (){
+                                        if(data.firebaseAuthID.toString().isNotEmpty){
+                                          nav(context, ViewUserProfileScreen(
+                                            id: data.firebaseAuthID,
+                                          ));
+                                        }
+
+                                      },
+                                      child: Text(
+                                        data.fullName??"",
+                                        style: AppTextTheme.h3.copyWith(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700),
+                                      ),
                                     ),
                                     const SizedBox(height: 3,),
                                     Row(
@@ -206,7 +216,6 @@ class _CommentReplyState extends State<CommentReply> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.delayed(const Duration(milliseconds: 50),(){
       getComment();
@@ -216,7 +225,6 @@ class _CommentReplyState extends State<CommentReply> {
   postComment(String e){
     commentController.clear();
     var model = context.read<VBlogViewModel>();
-    var uid = context.read<UserViewModel>().user!.userProfile.userId;
     model.replyToComment(int.parse(widget.usersComment.commentId),
         e, userData: context.read<UserViewModel>().user!.userProfile,
         id: widget.post.firebaseAuthId,

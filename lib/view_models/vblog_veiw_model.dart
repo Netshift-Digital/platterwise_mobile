@@ -10,6 +10,7 @@ import 'package:platterwave/model/profile/user_data.dart';
 import 'package:platterwave/model/request_model/post_data.dart';
 import 'package:platterwave/model/vblog/comment.dart';
 import 'package:platterwave/model/vblog/comment_reply.dart';
+import 'package:platterwave/model/vblog/like_user.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/model/vblog/top_tags.dart';
 import 'package:platterwave/model/vblog/user_activity.dart';
@@ -111,6 +112,19 @@ class VBlogViewModel extends BaseViewModel {
       setState(AppState.idle);
     }
     return null;
+  }
+  Future<List<AllLikerDetails>> getLikeUser(int postId) async {
+    try {
+      var data = await vBlogService
+          .getPostLikes(postId);
+      if (data != null) {
+        var p = LikeUsers.fromJson(data);
+        return p.allLikerDetails??[];
+      }
+    } catch (e) {
+      setState(AppState.idle);
+    }
+    return [];
   }
 
   Future<List<AllTagRank>?> getTopTag() async {

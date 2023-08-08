@@ -9,6 +9,7 @@ import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
+import 'package:platterwave/views/screens/search/search_screen.dart';
 import 'package:platterwave/views/screens/vblog/notification.dart';
 import 'package:platterwave/views/screens/vblog/create_post/create_post.dart';
 import 'package:platterwave/views/screens/vblog/trending_page.dart';
@@ -57,10 +58,16 @@ class _TimelineState extends State<Timeline> {
             width: 16,
           ),
           GestureDetector(
-              onTap: () {
-                nav(context, const NotificationActivity());
-              },
-              child: SvgPicture.asset("assets/icon/notification-bing.svg")),
+            onTap: () {
+              nav(context, const SearchScreen());
+            },
+            child: SvgPicture.asset('assets/icon/search-normal.svg'),
+          ),
+          // GestureDetector(
+          //     onTap: () {
+          //       nav(context, const NotificationActivity());
+          //     },
+          //     child: SvgPicture.asset("assets/icon/notification-bing.svg")),
           const SizedBox(
             width: 16,
           ),

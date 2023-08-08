@@ -9,7 +9,6 @@ import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/location_view_model.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
-import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/more_resturant.dart';
 import 'package:platterwave/views/screens/restaurant/screen/search_resturant.dart';
 import 'package:platterwave/views/screens/restaurant/widget/banner_wid.dart';
@@ -67,9 +66,7 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                                         value.structuredFormatting?.mainText ??
                                             "")
                                     .then((e) {
-                                  if (e != null) {
-                                    resModel.setLocationState(e);
-                                  }
+                                  resModel.setLocationState(e);
                                 });
                               }
                             });
@@ -96,9 +93,7 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                           ),
                         ),
                       ),
-                      context.watch<UserViewModel>().user == null
-                          ? const SizedBox()
-                          : GestureDetector(
+                      GestureDetector(
                               onTap: () {
                                nav(context, const RestaurantSearchScreen());
                               },

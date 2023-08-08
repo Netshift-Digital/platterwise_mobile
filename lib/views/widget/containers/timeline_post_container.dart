@@ -21,14 +21,13 @@ import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/vblog/post_by_tag.dart';
 import 'package:platterwave/views/screens/vblog/post_details.dart';
+import 'package:platterwave/views/screens/vblog/post_like.dart';
 import 'package:platterwave/views/screens/vblog/report_screen.dart';
 import 'package:platterwave/views/screens/vblog/video_player.dart';
-import 'package:platterwave/views/widget/containers/image_view.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/dialog/alert_dialog.dart';
 import 'package:platterwave/views/widget/icon/custom_app_icon.dart';
 import 'package:provider/provider.dart';
-import 'package:readmore/readmore.dart';
 import 'package:share_plus/share_plus.dart';
 
 var vidImage =
@@ -73,7 +72,8 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                         context,
                         ViewUserProfileScreen(
                           id: widget.post.firebaseAuthId,
-                        ));
+                        ),
+                    );
                   },
                   child: ImageCacheCircle(
                     widget.post.profileUrl,
@@ -88,16 +88,27 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      widget.post.fullName,
-                      maxLines: 1,
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextTheme.h3.copyWith(
-                          fontSize: widget.post.fullName.toString().length > 23
-                              ? 15
-                              : 18,
-                          fontWeight: FontWeight.w700),
+                    GestureDetector(
+                      onTap: () {
+                        nav(
+                          context,
+                          ViewUserProfileScreen(
+                            id: widget.post.firebaseAuthId,
+                          ),
+                        );
+                      },
+                      child: Text(
+                        widget.post.fullName,
+                        maxLines: 1,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextTheme.h3.copyWith(
+                            fontSize:
+                                widget.post.fullName.toString().length > 23
+                                    ? 15
+                                    : 18,
+                            fontWeight: FontWeight.w700),
+                      ),
                     ),
                     const SizedBox(
                       height: 8,
@@ -203,19 +214,19 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
               height: 12.h,
             ),
             CustomText(
-               widget.post.contentPost,
+              widget.post.contentPost,
               matchStyle: AppTextTheme.h3.copyWith(
                 color: AppColor.p200,
                 fontWeight: FontWeight.w500,
               ),
-             style: AppTextTheme.h3,
+              style: AppTextTheme.h3,
               onTap: (text) {
                 nav(context, PostByTag(tag: text.toString()));
               },
               definitions: const [
                 TextDefinition(matcher: UrlMatcher()),
                 TextDefinition(matcher: EmailMatcher()),
-                TextDefinition(matcher:HashTagMatcher()),
+                TextDefinition(matcher: HashTagMatcher()),
               ],
             ),
             SizedBox(
@@ -241,10 +252,13 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                               color: AppColor.p300,
                               borderRadius: BorderRadius.circular(15),
                               shape: BoxShape.rectangle),
-                          child: ImageCacheR(widget.post.contentUrl,chachedImage: true,),
+                          child: ImageCacheR(
+                            widget.post.contentUrl,
+                            chachedImage: true,
+                          ),
                         ),
                       )
-                    :videoWid(),
+                    : videoWid(),
 
             // Container(
             //   height: 239.h,
@@ -280,6 +294,13 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                       return null;
                     },
                   ),
+                  onTextTap: () {
+                    RandomFunction.sheet(
+                        context,
+                        PostLike(
+                          post: widget.post,
+                        ));
+                  },
                   count: widget.post.likeCount,
                 ),
                 const Spacer(
@@ -366,33 +387,49 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
   //     ),
   //   );
   // }
-  Widget  videoWid() {
+  Widget videoWid() {
     return GestureDetector(
-      onTap: (){
-        nav(context, VideoPlay(url: widget.post.contentUrl,));
+      onTap: () {
+        nav(
+            context,
+            VideoPlay(
+              url: widget.post.contentUrl,
+            ));
       },
       child: Container(
         height: 239.h,
-        width:double.maxFinite,
+        width: double.maxFinite,
         decoration: BoxDecoration(
             color: Colors.black,
             borderRadius: BorderRadius.circular(15),
-            shape: BoxShape.rectangle
-        ),
-        child:Stack(
+            shape: BoxShape.rectangle),
+        child: Stack(
           children: [
-            TextValidator.isValidUrl(widget.post.contentType)?ImageCacheR(widget.post.contentType,fit: true,blend: 0.5,chachedImage: true,)
-                :const ImageCacheR("https://www.balmoraltanks.com/images/common/video-icon-image.jpg",chachedImage: true,),
-            TextValidator.isValidUrl(widget.post.contentType)?SizedBox(
-                height: 239.h,
-                width: 343.w,
-                child:  Center(child: SvgPicture.asset("assets/images/play-circle.svg")))
-                :const SizedBox()
+            TextValidator.isValidUrl(widget.post.contentType)
+                ? ImageCacheR(
+                    widget.post.contentType,
+                    fit: true,
+                    blend: 0.5,
+                    chachedImage: true,
+                  )
+                : const ImageCacheR(
+                    "https://www.balmoraltanks.com/images/common/video-icon-image.jpg",
+                    chachedImage: true,
+                  ),
+            TextValidator.isValidUrl(widget.post.contentType)
+                ? SizedBox(
+                    height: 239.h,
+                    width: 343.w,
+                    child: Center(
+                        child:
+                            SvgPicture.asset("assets/images/play-circle.svg")))
+                : const SizedBox()
           ],
         ),
       ),
     );
   }
+
   @override
   void initState() {
     // TODO: implement initState
