@@ -113,13 +113,13 @@ class VBlogViewModel extends BaseViewModel {
     }
     return null;
   }
+
   Future<List<AllLikerDetails>> getLikeUser(int postId) async {
     try {
-      var data = await vBlogService
-          .getPostLikes(postId);
+      var data = await vBlogService.getPostLikes(postId);
       if (data != null) {
         var p = LikeUsers.fromJson(data);
-        return p.allLikerDetails??[];
+        return p.allLikerDetails ?? [];
       }
     } catch (e) {
       setState(AppState.idle);
@@ -304,6 +304,21 @@ class VBlogViewModel extends BaseViewModel {
     return comments;
   }
 
+  Future<List<String>?> uploadFiles(List<String> images) async {
+    var imageUrls = await Future.wait(images.map((image) => uploadFile(image)));
+    return imageUrls;
+  }
+
+  Future<String> uploadFile(String image) async {
+    var id = FirebaseAuth.instance.currentUser!.uid;
+    var imageName = DateTime.now().millisecondsSinceEpoch;
+    var storageReference =
+        FirebaseStorage.instance.ref().child("post/" "$id/$imageName.jpg");
+    var uploadTask = await storageReference.putFile(File(image));
+    var url = await uploadTask.ref.getDownloadURL();
+    return url;
+  }
+
   Future<String?> uploadImage({Uint8List? memory, String? filePath}) async {
     try {
       var dat = "${DateTime.now().microsecondsSinceEpoch}.png";
@@ -326,15 +341,27 @@ class VBlogViewModel extends BaseViewModel {
     return null;
   }
 
-  Future<bool?> createPost(PostData postData,
-      {String? imagePath, Uint8List? thumbnail}) async {
+  Future<bool?> createPost(
+    PostData postData, {
+    List<String>? imagePath,
+    String? videoPath,
+    Uint8List? thumbnail,
+  }) async {
     String contentUrl = "";
     String type = postData.contentType;
     try {
       postAppState = AppState.busy;
       notifyListeners();
       if (imagePath != null) {
-        var uploadedImage = await uploadImage(filePath: imagePath);
+        var uploadedImage = await uploadFiles(imagePath);
+        if (uploadedImage != null) {
+          contentUrl =
+              uploadedImage!.join(',');
+          print(contentUrl);
+        }
+      }
+      if(videoPath!=null){
+        var uploadedImage = await uploadImage(filePath: videoPath);
         if (uploadedImage != null) {
           contentUrl = uploadedImage!;
         }
@@ -346,6 +373,7 @@ class VBlogViewModel extends BaseViewModel {
         }
       }
       var post = postData.copyWith(contentUrl: contentUrl, contentType: type);
+      print(post.toJson());
       var data = await vBlogService.createPost(post);
       if (data != null) {
         handelTags(postData.contentPost, data["post_id"].toString());

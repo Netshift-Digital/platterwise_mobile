@@ -33,6 +33,7 @@ class _CreatePostState extends State<CreatePost> {
   String type = PostType.text;
   final ImagePicker _picker = ImagePicker();
   XFile? path;
+  List<String>? images;
   Uint8List? thumbnail;
   FlutterParsedTextFieldController commentController =
       FlutterParsedTextFieldController();
@@ -119,6 +120,7 @@ class _CreatePostState extends State<CreatePost> {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,7 +151,7 @@ class _CreatePostState extends State<CreatePost> {
                 const SizedBox(
                   height: 50,
                 ),
-                path == null
+                (path == null&&images==null)
                     ? const SizedBox()
                     : type == PostType.image
                         ? imageList()
@@ -162,10 +164,11 @@ class _CreatePostState extends State<CreatePost> {
     );
   }
 
-  Widget vidImage(
-      {required String image,
-      required String text,
-      required Function() onTap}) {
+  Widget vidImage({
+    required String image,
+    required String text,
+    required Function() onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Row(
@@ -187,10 +190,16 @@ class _CreatePostState extends State<CreatePost> {
   void pickImage({ImageSource imageSource = ImageSource.camera}) async {
     final List<XFile> selectedImages =
         await _picker.pickMultiImage(imageQuality: 50);
-    if (selectedImages != null) {
+    if (selectedImages.isNotEmpty) {
       setState(() {
         type = PostType.image;
-        path = selectedImages.first;
+        var image = selectedImages.map((e) => e.path).toList();
+        if(images==null){
+          images =image;
+        }else{
+          images?.addAll(image.where((element) => !images!.contains(element)).toList());
+        }
+        path = null;
       });
     }
   }
@@ -198,10 +207,13 @@ class _CreatePostState extends State<CreatePost> {
   void pickVideo({ImageSource imageSource = ImageSource.gallery}) async {
     var size = MediaQuery.of(context).size;
     final XFile? selectedVideo = await _picker.pickVideo(
-        source: imageSource, maxDuration: const Duration(seconds: 40));
+      source: imageSource,
+      maxDuration: const Duration(seconds: 40),
+    );
     if (selectedVideo != null) {
       setState(() {
         path = selectedVideo;
+        images=null;
         type = PostType.video;
       });
       final uint8list = await VideoThumbnail.thumbnailData(
@@ -246,45 +258,59 @@ class _CreatePostState extends State<CreatePost> {
   }
 
   Widget imageList() {
-    return path == null
+    return images == null
         ? const SizedBox()
-        : Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            child: Container(
-              height: 200,
-              width: double.maxFinite,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  image: DecorationImage(
-                      image: FileImage(File(path!.path)), fit: BoxFit.cover)),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          path = null;
-                          type = PostType.text;
-                        });
-                      },
-                      child: const CircleAvatar(
-                        radius: 10,
-                        backgroundColor: Color(0xff4F4F4F),
-                        child: Icon(
-                          Icons.clear,
-                          color: Colors.white,
-                          size: 13,
-                        ),
+        : SizedBox(
+           height: 150,
+          child: SingleChildScrollView(
+             scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+                children: images!.map((e) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Container(
+                      height: 200,
+                      width: 200,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          image: DecorationImage(
+                              image: FileImage(File(e)), fit: BoxFit.cover)),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  images?.remove(e);
+                                  if (images?.isEmpty ?? true) {
+                                    type = PostType.text;
+                                    images=null;
+                                  }
+                                });
+                              },
+                              child: const CircleAvatar(
+                                radius: 10,
+                                backgroundColor: Color(0xff4F4F4F),
+                                child: Icon(
+                                  Icons.clear,
+                                  color: Colors.white,
+                                  size: 13,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                  )
-                ],
+                  );
+                }).toList(),
               ),
-            ),
-          );
+          ),
+        );
   }
 
   void cancel(BuildContext context) {
@@ -310,7 +336,8 @@ class _CreatePostState extends State<CreatePost> {
           .createPost(
         postData,
         thumbnail: thumbnail,
-        imagePath: path?.path,
+        imagePath: images,
+        videoPath: path?.path,
       )
           .then((value) {
         model.getPost(restart: true);

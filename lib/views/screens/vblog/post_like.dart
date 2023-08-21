@@ -83,7 +83,7 @@ class _PostLikeState extends State<PostLike> {
                         nav(
                           context,
                           ViewUserProfileScreen(
-                            id: widget.post.firebaseAuthId,
+                            id: data.firebaseAuthID??"",
                           ),
                         );
                       },

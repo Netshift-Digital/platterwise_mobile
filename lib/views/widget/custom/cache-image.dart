@@ -175,6 +175,7 @@ class _ImageCacheRState extends State<ImageCacheR> {
         },
 
         onError: (context, url, error, w) {
+          print(widget.image);
           return Container(
             width: widget.width,
             height: widget.height,

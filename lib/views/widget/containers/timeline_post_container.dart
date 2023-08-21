@@ -24,6 +24,7 @@ import 'package:platterwave/views/screens/vblog/post_details.dart';
 import 'package:platterwave/views/screens/vblog/post_like.dart';
 import 'package:platterwave/views/screens/vblog/report_screen.dart';
 import 'package:platterwave/views/screens/vblog/video_player.dart';
+import 'package:platterwave/views/widget/containers/image_staggered.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/dialog/alert_dialog.dart';
 import 'package:platterwave/views/widget/icon/custom_app_icon.dart';
@@ -235,29 +236,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
             widget.post.contentType == PostType.text
                 ? const SizedBox()
                 : widget.post.contentType == PostType.image
-                    ? GestureDetector(
-                        onTap: () {
-                          showImageViewer(
-                              context,
-                              CachedNetworkImageProvider(
-                                  widget.post.contentUrl),
-                              onViewerDismissed: () {},
-                              useSafeArea: true,
-                              swipeDismissible: true);
-                        },
-                        child: Container(
-                          height: 239.h,
-                          width: 343.w,
-                          decoration: BoxDecoration(
-                              color: AppColor.p300,
-                              borderRadius: BorderRadius.circular(15),
-                              shape: BoxShape.rectangle),
-                          child: ImageCacheR(
-                            widget.post.contentUrl,
-                            chachedImage: true,
-                          ),
-                        ),
-                      )
+                    ? imageWid(context)
                     : videoWid(),
 
             // Container(
@@ -446,4 +425,34 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
       return "#";
     }
   }
+
+ Widget imageWid(BuildContext context) {
+    var data = widget.post.contentUrl.replaceAll(']', '').split(',');
+    if(data.length>1){
+      return ImageStag(images: data);
+    }
+    return GestureDetector(
+      onTap: () {
+        showImageViewer(
+            context,
+            CachedNetworkImageProvider(
+                widget.post.contentUrl),
+            onViewerDismissed: () {},
+            useSafeArea: true,
+            swipeDismissible: true);
+      },
+      child: Container(
+        height: 239.h,
+        width: 343.w,
+        decoration: BoxDecoration(
+            color: AppColor.p300,
+            borderRadius: BorderRadius.circular(15),
+            shape: BoxShape.rectangle),
+        child: ImageCacheR(
+          widget.post.contentUrl,
+          chachedImage: true,
+        ),
+      ),
+    );
+ }
 }
