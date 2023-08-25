@@ -355,12 +355,10 @@ class VBlogViewModel extends BaseViewModel {
       if (imagePath != null) {
         var uploadedImage = await uploadFiles(imagePath);
         if (uploadedImage != null) {
-          contentUrl =
-              uploadedImage!.join(',');
-          print(contentUrl);
+          contentUrl = uploadedImage!.join(',');
         }
       }
-      if(videoPath!=null){
+      if (videoPath != null) {
         var uploadedImage = await uploadImage(filePath: videoPath);
         if (uploadedImage != null) {
           contentUrl = uploadedImage!;
@@ -373,7 +371,6 @@ class VBlogViewModel extends BaseViewModel {
         }
       }
       var post = postData.copyWith(contentUrl: contentUrl, contentType: type);
-      print(post.toJson());
       var data = await vBlogService.createPost(post);
       if (data != null) {
         handelTags(postData.contentPost, data["post_id"].toString());
