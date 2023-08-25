@@ -132,7 +132,6 @@ class RestaurantService {
       "latitude": latLong.latitude,
       "longitude": latLong.longitude
     });
-    print(body);
     try {
       var response = await client.post(
           Uri.parse("https://api.platterwise.com/jhome2/closest_rest.php"),
