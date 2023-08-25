@@ -294,13 +294,15 @@ class RestaurantService {
             "Content-type": "application/json",
           }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body.replaceAll('Message sent!', ''));
-      RandomFunction.toast(data['status']);
       if (response.statusCode == 200) {
+        RandomFunction.toast('Success');
         FirebaseFirestore.instance
             .collection('reservations')
             .doc(reservationData.restId)
             .set({"name": reservationData.reservationDate});
         return data;
+      } else {
+        RandomFunction.toast('Something went wrong');
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -467,9 +469,11 @@ class RestaurantService {
       }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(
           response.body.replaceAll("Message sent!Message sent!", ""));
-      RandomFunction.toast(data['status']);
       if (response.statusCode == 200) {
+        RandomFunction.toast('Success');
         return data;
+      } else {
+        RandomFunction.toast('Something went wrong');
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");

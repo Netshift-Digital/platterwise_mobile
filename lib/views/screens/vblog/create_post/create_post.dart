@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_parsed_text_field/flutter_parsed_text_field.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:platterwave/constant/post_type.dart';
 import 'package:platterwave/model/request_model/post_data.dart';
@@ -151,7 +152,7 @@ class _CreatePostState extends State<CreatePost> {
                 const SizedBox(
                   height: 50,
                 ),
-                (path == null&&images==null)
+                (path == null && images == null)
                     ? const SizedBox()
                     : type == PostType.image
                         ? imageList()
@@ -190,14 +191,43 @@ class _CreatePostState extends State<CreatePost> {
   void pickImage({ImageSource imageSource = ImageSource.camera}) async {
     final List<XFile> selectedImages =
         await _picker.pickMultiImage(imageQuality: 50);
+    var croppedImage = <String>[];
     if (selectedImages.isNotEmpty) {
+      for (var e in selectedImages) {
+        CroppedFile? croppedFile = await ImageCropper().cropImage(
+          sourcePath: e.path,
+          aspectRatioPresets: [
+            CropAspectRatioPreset.square,
+            CropAspectRatioPreset.ratio3x2,
+            CropAspectRatioPreset.original,
+            CropAspectRatioPreset.ratio4x3,
+            CropAspectRatioPreset.ratio16x9
+          ],
+          uiSettings: [
+            AndroidUiSettings(
+                toolbarTitle: 'Cropper',
+                toolbarColor: Colors.deepOrange,
+                toolbarWidgetColor: Colors.white,
+                initAspectRatio: CropAspectRatioPreset.original,
+                lockAspectRatio: false),
+            IOSUiSettings(
+              title: 'Cropper',
+            ),
+          ],
+        );
+        if (croppedFile != null) {
+          croppedImage.add(croppedFile.path);
+        }
+      }
       setState(() {
         type = PostType.image;
-        var image = selectedImages.map((e) => e.path).toList();
-        if(images==null){
-          images =image;
-        }else{
-          images?.addAll(image.where((element) => !images!.contains(element)).toList());
+        // var image = croppedImage.map((e) => e).toList();
+        if (images == null) {
+          images = croppedImage;
+        } else {
+          images?.addAll(croppedImage
+              .where((element) => !images!.contains(element))
+              .toList());
         }
         path = null;
       });
@@ -213,7 +243,7 @@ class _CreatePostState extends State<CreatePost> {
     if (selectedVideo != null) {
       setState(() {
         path = selectedVideo;
-        images=null;
+        images = null;
         type = PostType.video;
       });
       final uint8list = await VideoThumbnail.thumbnailData(
@@ -261,11 +291,11 @@ class _CreatePostState extends State<CreatePost> {
     return images == null
         ? const SizedBox()
         : SizedBox(
-           height: 150,
-          child: SingleChildScrollView(
-             scrollDirection: Axis.horizontal,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+            height: 150,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: images!.map((e) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 6),
@@ -288,7 +318,7 @@ class _CreatePostState extends State<CreatePost> {
                                   images?.remove(e);
                                   if (images?.isEmpty ?? true) {
                                     type = PostType.text;
-                                    images=null;
+                                    images = null;
                                   }
                                 });
                               },
@@ -309,8 +339,8 @@ class _CreatePostState extends State<CreatePost> {
                   );
                 }).toList(),
               ),
-          ),
-        );
+            ),
+          );
   }
 
   void cancel(BuildContext context) {

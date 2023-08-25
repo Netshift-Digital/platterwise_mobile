@@ -58,7 +58,6 @@ class _ImageCacheRState extends State<ImageCacheR> {
       String imageUrl, String cachedImagePath) async {
     try {
       var res = await Dio().download(imageUrl, cachedImagePath);
-      print('ahah');
       if (mounted) {
         setState(() {
           image = cachedImagePath;
@@ -158,6 +157,12 @@ class _ImageCacheRState extends State<ImageCacheR> {
             width: widget.width,
             decoration:
                 BoxDecoration(color: Colors.grey[300]!, borderRadius: radius),
+            child: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+              ],
+            ),
           );
           // return Shimmer.fromColors(
           //   baseColor: Colors.grey[200]!,
@@ -175,7 +180,6 @@ class _ImageCacheRState extends State<ImageCacheR> {
         },
 
         onError: (context, url, error, w) {
-          print(widget.image);
           return Container(
             width: widget.width,
             height: widget.height,
