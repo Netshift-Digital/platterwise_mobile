@@ -461,11 +461,15 @@ class RestaurantService {
 
   Future<Map<String, dynamic>?> splitBill(SplitBillModel splitBillModel) async {
     var body = jsonEncode(splitBillModel.toJson());
+    print(body);
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl2}split_bill.php"), body: body, headers: {
-        "Content-type": "application/json",
-      }).timeout(const Duration(seconds: 10));
+      var response = await client.post(
+        Uri.parse("${baseurl2}split_bill.php"),
+        body: body,
+        headers: {
+          "Content-type": "application/json",
+        },
+      ).timeout(const Duration(seconds: 10));
       var data = jsonDecode(
           response.body.replaceAll("Message sent!Message sent!", ""));
       if (response.statusCode == 200) {

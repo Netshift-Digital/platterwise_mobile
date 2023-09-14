@@ -427,7 +427,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
   }
 
  Widget imageWid(BuildContext context) {
-    var data = widget.post.contentUrl.replaceAll(']', '').split(',');
+    var data = widget.post.contentUrl.replaceAll(']', '').split('  ,');
     if(data.length>1){
       return ImageStag(images: data);
     }

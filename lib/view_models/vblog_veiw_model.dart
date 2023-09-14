@@ -355,7 +355,7 @@ class VBlogViewModel extends BaseViewModel {
       if (imagePath != null) {
         var uploadedImage = await uploadFiles(imagePath);
         if (uploadedImage != null) {
-          contentUrl = uploadedImage!.join(',');
+          contentUrl = uploadedImage!.join('  ,');
         }
       }
       if (videoPath != null) {
