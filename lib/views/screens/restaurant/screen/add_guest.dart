@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/model/restaurant/reservation_param.dart';
@@ -39,29 +40,30 @@ class _AddGuestState extends State<AddGuest> {
       child: SafeArea(
         child: Scaffold(
           floatingActionButton: Padding(
-            padding: const EdgeInsets.only(left: 30,bottom: 24),
+            padding: const EdgeInsets.only(left: 30, bottom: 24),
             child: PlatButton(
-                title: 'Done',
-                onTap: widget.guestNumber != guest.length
-                    ? null
-                    : () {
-                  widget.onGuestSelected(guest);
-                  Navigator.pop(context);
-                }),
+              title: 'Done',
+              onTap: widget.guestNumber != guest.length
+                  ? null
+                  : () {
+                      widget.onGuestSelected(guest);
+                      Navigator.pop(context);
+                    },
+            ),
           ),
           backgroundColor: Colors.transparent,
           body: Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16),
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      height:4,
+                      height: 4,
                       width: 69,
                       decoration: BoxDecoration(
-                        color:const Color(0xffD9D9D9),
+                        color: const Color(0xffD9D9D9),
                         borderRadius: BorderRadius.circular(4),
                       ),
                     )
@@ -81,7 +83,7 @@ class _AddGuestState extends State<AddGuest> {
                   ],
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
                 AppTextField(
                   controller: searchController,
@@ -127,15 +129,23 @@ class _AddGuestState extends State<AddGuest> {
                               ),
                             );
                           },
-                          child: Text(
-                            "Add Other Guests",
-                            style: AppTextTheme.h3.copyWith(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
-                                color: AppColor.p200),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset('assets/icon/add-circle.svg'),
+                              const SizedBox(width: 6,),
+                              Text(
+                                "Add Other Guests",
+                                style: AppTextTheme.h3.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    color: AppColor.p200,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
+                const SizedBox(height: 10,),
                 guest.isEmpty
                     ? const SizedBox()
                     : Padding(
@@ -207,6 +217,10 @@ class _AddGuestState extends State<AddGuest> {
                         itemCount: searchUserResult.length,
                         itemBuilder: (context, index) {
                           var data = searchUserResult[index];
+                          if (data.email ==
+                              FirebaseAuth.instance.currentUser!.uid) {
+                            return const SizedBox();
+                          }
                           return ListTile(
                             onTap: () {
                               FocusScope.of(context).unfocus();

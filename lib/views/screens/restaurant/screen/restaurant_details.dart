@@ -9,8 +9,11 @@ import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
+import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/make_reservation_screen.dart';
+import 'package:platterwave/views/screens/restaurant/screen/rate_experience_screen.dart';
 import 'package:platterwave/views/screens/restaurant/screen/reviews.dart';
+import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:provider/provider.dart';
@@ -34,18 +37,87 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    var user = context.read<UserViewModel>().user;
     return Scaffold(
+      appBar: appBar(context),
+      bottomNavigationBar: index == 0
+          ? Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: PlatButton(
+                title: 'Make Reservation',
+                onTap: () {
+                  nav(
+                    context,
+                    MakeReservationScreen(
+                      restaurantData: widget.restaurantData,
+                    ),
+                  );
+                },
+              ),
+          )
+          : GestureDetector(
+              onTap: () async {
+                var data = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RateExperienceScreen(
+                            restaurantData: widget.restaurantData)));
+                if (data != null) {
+                  setState(() {
+                    review = data;
+                  });
+                }
+              },
+              child: PhysicalModel(
+                color: Colors.black,
+                elevation: 0,
+                child: Container(
+                  height: 125,
+                  width: size.width,
+                  color: Colors.white,
+                  child: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          ImageCacheCircle(
+                            user == null ? "" : user.userProfile.profileUrl,
+                            height: 40,
+                            width: 40,
+                          ),
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          const Expanded(
+                              child: TextField(
+                            enabled: false,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "Add a comment ",
+                                filled: true,
+                                fillColor: AppColor.g30),
+                          )),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
       body: SlidingUpPanel(
         parallaxEnabled: true,
         parallaxOffset: 0.5,
-        minHeight: 130,
-        maxHeight: size.height - 200,
+        minHeight: size.height - 400,
+        maxHeight: size.height - 0,
         panel: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(
+                  height: 15,
+                ),
                 Row(
                   children: [
                     Text(
@@ -85,7 +157,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                     const SizedBox(
                       width: 8,
                     ),
-                     Text(
+                    Text(
                       '(${review.length} reviews)',
                       style: const TextStyle(color: AppColor.g100),
                     ),
@@ -194,72 +266,68 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                   },
                   physics: const BouncingScrollPhysics(),
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ReadMoreText(
-                          widget.restaurantData.descriptions,
-                          style: AppTextTheme.h3.copyWith(fontSize: 16),
-                          moreStyle: AppTextTheme.h3
-                              .copyWith(fontSize: 14, color: AppColor.p200),
-                          lessStyle: AppTextTheme.h3
-                              .copyWith(fontSize: 14, color: AppColor.p200),
-                        ),
-                        const SizedBox(
-                          height: 33,
-                        ),
-                        Text(
-                          'Photos',
-                          style: AppTextTheme.h3.copyWith(
-                              fontSize: 16, fontWeight: FontWeight.w700),
-                        ),
-                        const SizedBox(
-                          height: 18,
-                        ),
-                        SizedBox(
-                          height: 80,
-                          child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            itemCount:widget.restaurantData.menuPix.length,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return  Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
-                                child: SizedBox(
-                                  height: 80,
-                                  width: 111,
-                                  child: GestureDetector(
-                                    onTap: (){
-                                      showImageViewer(
-                                          context,
-                                          CachedNetworkImageProvider(widget.restaurantData.menuPix[index].menuPic),
-                                          onViewerDismissed: () {
-                                          },
-                                          useSafeArea: true,
-                                          swipeDismissible: true
-                                      );
-                                    },
-                                      child: ImageCacheR(widget.restaurantData.menuPix[index].menuPic),
-                                  ),
-                                ),
-                              );
-                            },
+                    SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ReadMoreText(
+                            widget.restaurantData.descriptions,
+                            style: AppTextTheme.h3.copyWith(fontSize: 16),
+                            moreStyle: AppTextTheme.h3
+                                .copyWith(fontSize: 14, color: AppColor.p200),
+                            lessStyle: AppTextTheme.h3
+                                .copyWith(fontSize: 14, color: AppColor.p200),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 93,
-                        ),
-                        PlatButton(
-                            title: 'Make Reservation',
-                            onTap: () {
-                              nav(
-                                  context,
-                                  MakeReservationScreen(
-                                    restaurantData: widget.restaurantData,
-                                  ),);
-                            },
-                        )
-                      ],
+                          const SizedBox(
+                            height: 33,
+                          ),
+                          Text(
+                            'Photos',
+                            style: AppTextTheme.h3.copyWith(
+                                fontSize: 16, fontWeight: FontWeight.w700),
+                          ),
+                          const SizedBox(
+                            height: 18,
+                          ),
+                          SizedBox(
+                            height: 80,
+                            child: ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: widget.restaurantData.menuPix.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: SizedBox(
+                                    height: 80,
+                                    width: 111,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        showImageViewer(
+                                            context,
+                                            CachedNetworkImageProvider(widget
+                                                .restaurantData
+                                                .menuPix[index]
+                                                .menuPic),
+                                            onViewerDismissed: () {},
+                                            useSafeArea: true,
+                                            swipeDismissible: true);
+                                      },
+                                      child: ImageCacheR(widget.restaurantData
+                                          .menuPix[index].menuPic),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 93,
+                          ),
+                        ],
+                      ),
                     ),
                     RestaurantsReviews(
                       review: review,
@@ -286,11 +354,11 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
           .read<RestaurantViewModel>()
           .getReview(widget.restaurantData.restId)
           .then((value) {
-            if(mounted){
-              setState(() {
-                review = value;
-              });
-            }
+        if (mounted) {
+          setState(() {
+            review = value;
+          });
+        }
       });
     });
   }

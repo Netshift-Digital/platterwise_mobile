@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:platterwave/common/base_view_model.dart';
 import 'package:platterwave/data/local/local_storage.dart';
@@ -125,21 +124,21 @@ class UserViewModel extends BaseViewModel{
   }
 
   Future<AuthMethod?> signInWithFacebook() async {
-    final LoginResult loginResult = await FacebookAuth.instance.login();
-    if (loginResult.status == LoginStatus.success) {
-      final AccessToken accessToken = loginResult.accessToken!;
-      //final userData = await FacebookAuth.instance.getUserData();
-      final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(accessToken.token);
-      final UserCredential userCredential = await
-      FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-      if(userCredential.user!=null){
-        return checkUser(userCredential);
-      }
-    } else {
-      setState(AppState.idle);
-      return null;
-    }
-    return null;
+    // final LoginResult loginResult = await FacebookAuth.instance.login();
+    // if (loginResult.status == LoginStatus.success) {
+    //   final AccessToken accessToken = loginResult.accessToken!;
+    //   //final userData = await FacebookAuth.instance.getUserData();
+    //   final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(accessToken.token);
+    //   final UserCredential userCredential = await
+    //   FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+    //   if(userCredential.user!=null){
+    //     return checkUser(userCredential);
+    //   }
+    // } else {
+    //   setState(AppState.idle);
+    //   return null;
+    // }
+    // return null;
 
   }
 

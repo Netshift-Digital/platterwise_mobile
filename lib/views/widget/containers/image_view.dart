@@ -12,7 +12,7 @@ class FullImage extends StatelessWidget {
       backgroundColor: Colors.black,
       appBar: appBar(context,appbarColor: Colors.white),
       body: InteractiveViewer(
-          child:ImageCacheR(imageUrl)
+          child:ImageCacheR(imageUrl,chachedImage: true,)
       ),
     );
   }

@@ -31,7 +31,7 @@ class CustomAlert{
                   onPressed: (){
                     Navigator.pop(context);
                   },
-                  child:  Text('cancel',style:AppTextTheme.h2.copyWith(
+                  child:  Text('No',style:AppTextTheme.h2.copyWith(
                     fontWeight: FontWeight.w500,
                     fontSize: 13
                   ) ,)
@@ -42,7 +42,7 @@ class CustomAlert{
                     onTap();
 
                   },
-                  child:  Text('confirm',style:AppTextTheme.h2.copyWith(
+                  child:  Text('Yes',style:AppTextTheme.h2.copyWith(
                       fontWeight: FontWeight.w500,
                       fontSize: 13
                   ))

@@ -4,19 +4,20 @@ import 'package:platterwave/model/restaurant/reservation_bill.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
-import 'package:platterwave/utils/nav.dart';
+import 'package:platterwave/utils/extension.dart';
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/split_bill.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
-
 
 class SelectSplit extends StatefulWidget {
   final UserReservation userReservation;
   final ReservationBill reservationBill;
-  const SelectSplit(
-      {Key? key,
-      required this.userReservation,
-      required this.reservationBill})
-      : super(key: key);
+  final Function() getPaidGuest;
+  const SelectSplit({
+    Key? key,
+    required this.userReservation,
+    required this.reservationBill,
+    required this.getPaidGuest,
+  }) : super(key: key);
 
   @override
   State<SelectSplit> createState() => _SelectSplitState();
@@ -117,9 +118,11 @@ class _SelectSplitState extends State<SelectSplit> {
                                 ? SvgPicture.asset('assets/images/mark.svg')
                                 : const SizedBox(),
                             contentPadding: EdgeInsets.zero,
-                            leading: SvgPicture.asset('assets/images/avater.svg'),
-                            title: Text(data.guestName),
-                            subtitle: Text(data.guestEmail),
+                            leading:
+                                SvgPicture.asset('assets/images/avater.svg'),
+                            title: Text(data.guestName.capitalizeFirstChar()),
+                            subtitle:
+                                Text(data.guestEmail.capitalizeFirstChar()),
                           ),
                         ),
                       ),
@@ -132,14 +135,22 @@ class _SelectSplitState extends State<SelectSplit> {
               title: 'Next',
               onTap: guest.isEmpty
                   ? null
-                  : () {
-                      nav(
-                          context,
-                          SplitBill(
-                              userReservation: widget.userReservation,
-                              reservationBill:
-                                  widget.reservationBill,
-                              guestInfo: guest));
+                  : () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SplitBill(
+                            userReservation: widget.userReservation,
+                            reservationBill: widget.reservationBill,
+                            guestInfo: guest,
+                          ),
+                        ),
+                      ).then((data) {
+                        if (data == true) {
+                          Navigator.pop(context);
+                          widget.getPaidGuest();
+                        }
+                      });
                     },
             ),
             const SizedBox(

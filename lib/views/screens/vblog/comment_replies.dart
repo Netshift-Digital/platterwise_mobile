@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/model/vblog/comment.dart';
 import 'package:platterwave/model/vblog/comment_reply.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
@@ -85,6 +84,7 @@ class _CommentReplyState extends State<CommentReply> {
                                       data.profileURL??"",
                                       height: 35,
                                       width: 35,
+                                      chachedImage: true,
                                     ),
                                   ),
                                 ),
@@ -93,11 +93,21 @@ class _CommentReplyState extends State<CommentReply> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      data.fullName??"",
-                                      style: AppTextTheme.h3.copyWith(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w700),
+                                    GestureDetector(
+                                      onTap: (){
+                                        if(data.firebaseAuthID.toString().isNotEmpty){
+                                          nav(context, ViewUserProfileScreen(
+                                            id: data.firebaseAuthID,
+                                          ));
+                                        }
+
+                                      },
+                                      child: Text(
+                                        data.fullName??"",
+                                        style: AppTextTheme.h3.copyWith(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700),
+                                      ),
                                     ),
                                     const SizedBox(height: 3,),
                                     Row(
@@ -206,7 +216,6 @@ class _CommentReplyState extends State<CommentReply> {
   }
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.delayed(const Duration(milliseconds: 50),(){
       getComment();
@@ -216,9 +225,11 @@ class _CommentReplyState extends State<CommentReply> {
   postComment(String e){
     commentController.clear();
     var model = context.read<VBlogViewModel>();
-    var uid = context.read<UserViewModel>().user!.userProfile.userId;
     model.replyToComment(int.parse(widget.usersComment.commentId),
-        e, userData: context.read<UserViewModel>().user!.userProfile, id: widget.post.firebaseAuthId).then((value){
+        e, userData: context.read<UserViewModel>().user!.userProfile,
+        id: widget.post.firebaseAuthId,
+        postId: widget.post.postId
+    ).then((value){
       getComment();
     });
   }
@@ -255,6 +266,7 @@ class _CommentReplyState extends State<CommentReply> {
                   data.profileUrl,
                   height: 35,
                   width: 35,
+                  chachedImage: true,
                 ),
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:platterwave/model/restaurant/restaurant.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
@@ -7,21 +8,21 @@ import 'package:platterwave/views/widget/containers/large_restaurant_container.d
 import 'package:provider/provider.dart';
 
 class MoreRestaurant extends StatelessWidget {
-  const MoreRestaurant({Key? key}) : super(key: key);
+  final List<RestaurantData> closeByRestaurant;
+  const MoreRestaurant({Key? key, required this.closeByRestaurant}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
-    var resModel = context.watch<RestaurantViewModel>();
     return Scaffold(
       appBar: appBar(context),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView.separated(
           shrinkWrap: true,
-          itemCount: resModel.allRestDetail.length,
+          itemCount: closeByRestaurant.length,
           itemBuilder: (BuildContext context, int index) {
-            var data = resModel.allRestDetail[index];
+            var data = closeByRestaurant[index];
             return LargeRestaurantContainer(
               restaurantData: data,
             );

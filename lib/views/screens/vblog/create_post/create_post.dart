@@ -1,10 +1,10 @@
-
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_parsed_text_field/flutter_parsed_text_field.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hashtager/widgets/hashtag_text_field.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:platterwave/constant/post_type.dart';
 import 'package:platterwave/model/request_model/post_data.dart';
@@ -21,7 +21,6 @@ import 'package:platterwave/views/screens/vblog/video_player.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/dialog/alert_dialog.dart';
-import 'package:provider/provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class CreatePost extends StatefulWidget {
@@ -35,14 +34,16 @@ class _CreatePostState extends State<CreatePost> {
   String type = PostType.text;
   final ImagePicker _picker = ImagePicker();
   XFile? path;
+  List<String>? images;
   Uint8List? thumbnail;
-  TextEditingController commentController = TextEditingController();
+  FlutterParsedTextFieldController commentController =
+      FlutterParsedTextFieldController();
   @override
   Widget build(BuildContext context) {
     var model = context.watch<VBlogViewModel>();
     var user = context.watch<UserViewModel>().user!.userProfile;
     return WillPopScope(
-      onWillPop: ()async{
+      onWillPop: () async {
         cancel(context);
 
         return false;
@@ -51,22 +52,24 @@ class _CreatePostState extends State<CreatePost> {
         floatingActionButton: SafeArea(
           child: Row(
             children: [
-              const SizedBox(width: 30,),
-              vidImage(
-                image:"assets/icon/gallery.svg",
-                text:"Pictures",
-                onTap:(){
-                  pickImage();
-                }
+              const SizedBox(
+                width: 30,
               ),
-              const SizedBox(width: 16,),
               vidImage(
-                  image:"assets/icon/video-square.svg",
-                  text:"Videos",
-                  onTap:(){
+                  image: "assets/icon/gallery.svg",
+                  text: "Pictures",
+                  onTap: () {
+                    pickImage();
+                  }),
+              const SizedBox(
+                width: 16,
+              ),
+              vidImage(
+                  image: "assets/icon/video-square.svg",
+                  text: "Videos",
+                  onTap: () {
                     pickVideo();
-                  }
-              )
+                  })
             ],
           ),
         ),
@@ -75,36 +78,40 @@ class _CreatePostState extends State<CreatePost> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: GestureDetector(
-            onTap: (){
-              cancel(context);
-            },
-              child: const Icon(Icons.clear,color: AppColor.g800,size: 30,)),
+              onTap: () {
+                cancel(context);
+              },
+              child: const Icon(
+                Icons.clear,
+                color: AppColor.g800,
+                size: 30,
+              )),
           actions: [
             Row(
               children: [
-                model.postAppState==AppState.busy?
-                   const SizedBox(
-                      height: 30,
+                model.postAppState == AppState.busy
+                    ? const SizedBox(
+                        height: 30,
                         width: 30,
                         child: CircularProgressIndicator(
-                           strokeWidth: 5,
-                           valueColor: AlwaysStoppedAnimation(AppColor.p300),
-                        )):
-                PlatButton(
-                  padding: 3,
-                    height: 32,
-                    width: 90,
-                    textSize: 14,
-                    title: "Post",
-                    radius: 6,
-                    onTap: (){
-                    if(model.appState==AppState.idle){
-                      createPost(context);
-                    }
-
-                    }
+                          strokeWidth: 5,
+                          valueColor: AlwaysStoppedAnimation(AppColor.p300),
+                        ))
+                    : PlatButton(
+                        padding: 3,
+                        height: 32,
+                        width: 90,
+                        textSize: 14,
+                        title: "Post",
+                        radius: 6,
+                        onTap: () {
+                          if (model.appState == AppState.idle) {
+                            createPost(context);
+                          }
+                        }),
+                const SizedBox(
+                  width: sixteen,
                 ),
-                const SizedBox(width:sixteen,),
               ],
             ),
           ],
@@ -114,32 +121,42 @@ class _CreatePostState extends State<CreatePost> {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ImageCacheCircle(user.profileUrl,
-                    height: forty,
-                    width: forty,),
-                   const SizedBox(width:twentyFour ,),
-                    Expanded(
-                            child: HashTagTextField(
-                              controller: commentController,
-                              maxLines: null,
-                              minLines: null,
-                              decoration: const InputDecoration(
-                                  hintText: 'Share your ideas here!',
-                                  border: InputBorder.none
-                              ),
-                              decoratedStyle: const TextStyle(fontSize: 14, color: AppColor.p300),
-                              basicStyle: const TextStyle(fontSize: 14, color: Colors.black),
-                            ),
+                    ImageCacheCircle(
+                      user.profileUrl,
+                      height: forty,
+                      width: forty,
                     ),
-
+                    const SizedBox(
+                      width: twentyFour,
+                    ),
+                    Expanded(
+                      child: FlutterParsedTextField(
+                        controller: commentController,
+                        maxLines: null,
+                        minLines: null,
+                        decoration: const InputDecoration(
+                            hintText: 'Share your ideas here!',
+                            border: InputBorder.none),
+                        // decoratedStyle: const TextStyle(fontSize: 14, color: AppColor.p300),
+                        // basicStyle: const TextStyle(fontSize: 14, color: Colors.black),
+                        matchers: [],
+                      ),
+                    ),
                   ],
                 ),
-               const SizedBox(height: 50,),
-                path==null?const SizedBox():type==PostType.image?imageList():videoWid()
+                const SizedBox(
+                  height: 50,
+                ),
+                (path == null && images == null)
+                    ? const SizedBox()
+                    : type == PostType.image
+                        ? imageList()
+                        : videoWid()
               ],
             ),
           ),
@@ -148,160 +165,225 @@ class _CreatePostState extends State<CreatePost> {
     );
   }
 
-Widget  vidImage({required String image, required String text, required  Function() onTap}) {
-
+  Widget vidImage({
+    required String image,
+    required String text,
+    required Function() onTap,
+  }) {
     return GestureDetector(
-      onTap:onTap ,
+      onTap: onTap,
       child: Row(
         children: [
           SvgPicture.asset(image),
-          const SizedBox(width:2 ,),
-          Text(text,style: AppTextTheme.h4.copyWith(
-            fontSize: 12,
-            fontWeight: FontWeight.w500
-          ),),
+          const SizedBox(
+            width: 2,
+          ),
+          Text(
+            text,
+            style: AppTextTheme.h4
+                .copyWith(fontSize: 12, fontWeight: FontWeight.w500),
+          ),
         ],
       ),
     );
-
-}
-
-  void pickImage({ImageSource imageSource =ImageSource.camera }) async{
-    final List<XFile>? selectedImages = await _picker.pickMultiImage(
-      imageQuality: 50
-    );
-    if(selectedImages!=null){
-      setState(() {
-        type=PostType.image;
-        path = selectedImages.first;
-      });
-
-    }
-
   }
 
-  void pickVideo({ImageSource imageSource =ImageSource.gallery })async{
+  void pickImage({ImageSource imageSource = ImageSource.camera}) async {
+    final List<XFile> selectedImages =
+        await _picker.pickMultiImage(imageQuality: 50);
+    var croppedImage = <String>[];
+    if (selectedImages.isNotEmpty) {
+      for (var e in selectedImages) {
+        CroppedFile? croppedFile = await ImageCropper().cropImage(
+          sourcePath: e.path,
+          aspectRatioPresets: [
+            CropAspectRatioPreset.square,
+            CropAspectRatioPreset.ratio3x2,
+            CropAspectRatioPreset.original,
+            CropAspectRatioPreset.ratio4x3,
+            CropAspectRatioPreset.ratio16x9
+          ],
+          uiSettings: [
+            AndroidUiSettings(
+                toolbarTitle: 'Cropper',
+                toolbarColor: Colors.deepOrange,
+                toolbarWidgetColor: Colors.white,
+                initAspectRatio: CropAspectRatioPreset.original,
+                lockAspectRatio: false),
+            IOSUiSettings(
+              title: 'Cropper',
+            ),
+          ],
+        );
+        if (croppedFile != null) {
+          croppedImage.add(croppedFile.path);
+        }
+      }
+      setState(() {
+        type = PostType.image;
+        // var image = croppedImage.map((e) => e).toList();
+        if (images == null) {
+          images = croppedImage;
+        } else {
+          images?.addAll(croppedImage
+              .where((element) => !images!.contains(element))
+              .toList());
+        }
+        path = null;
+      });
+    }
+  }
+
+  void pickVideo({ImageSource imageSource = ImageSource.gallery}) async {
     var size = MediaQuery.of(context).size;
     final XFile? selectedVideo = await _picker.pickVideo(
-        source: imageSource,
-      maxDuration: const Duration(seconds: 40)
+      source: imageSource,
+      maxDuration: const Duration(seconds: 40),
     );
-    if(selectedVideo!=null){
+    if (selectedVideo != null) {
       setState(() {
-        path=selectedVideo;
-        type=PostType.video;
+        path = selectedVideo;
+        images = null;
+        type = PostType.video;
       });
       final uint8list = await VideoThumbnail.thumbnailData(
         video: selectedVideo.path,
         imageFormat: ImageFormat.PNG,
-       // maxWidth:size.width.toInt(), // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+        // maxWidth:size.width.toInt(), // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
         quality: 100,
         //maxHeight: 239,
-
       );
-      thumbnail=uint8list;
+      thumbnail = uint8list;
       setState(() {});
     }
   }
-  Widget  videoWid() {
+
+  Widget videoWid() {
     return GestureDetector(
-      onTap: (){
-        nav(context, VideoPlay(url: path!.path,isLocal: true,));
+      onTap: () {
+        nav(
+            context,
+            VideoPlay(
+              url: path!.path,
+              isLocal: true,
+            ));
       },
       child: Container(
-        height:200 ,
-        width: double.maxFinite,
-        decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.circular(15),
-            shape: BoxShape.rectangle,
-          image: DecorationImage(
-             image: imageProvider(),
-            fit: BoxFit.cover
-          )
-        ),
-        child:const Center(
-          child: Icon(Icons.play_circle_outline_rounded,color: Colors.white,size: 70,),
-        )
-      ),
+          height: 200,
+          width: double.maxFinite,
+          decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(15),
+              shape: BoxShape.rectangle,
+              image:
+                  DecorationImage(image: imageProvider(), fit: BoxFit.cover)),
+          child: const Center(
+            child: Icon(
+              Icons.play_circle_outline_rounded,
+              color: Colors.white,
+              size: 70,
+            ),
+          )),
     );
   }
 
-Widget  imageList() {
-    return path==null?const SizedBox():Padding(
-      padding:const EdgeInsets.symmetric(horizontal:6 ),
-      child: Container(
-        height:200 ,
-        width: double.maxFinite,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            image: DecorationImage(
-                image: FileImage(File(path!.path)),
-                fit: BoxFit.cover
-            )
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: (){
-                  setState(() {
-                   path = null;
-                  });
-                },
-                child: const CircleAvatar(
-                  radius: 10,
-                  backgroundColor: Color(0xff4F4F4F),
-                  child:  Icon(Icons.clear,color: Colors.white,size: 13,),
-                ),
+  Widget imageList() {
+    return images == null
+        ? const SizedBox()
+        : SizedBox(
+            height: 150,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: images!.map((e) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Container(
+                      height: 200,
+                      width: 200,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          image: DecorationImage(
+                              image: FileImage(File(e)), fit: BoxFit.cover)),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  images?.remove(e);
+                                  if (images?.isEmpty ?? true) {
+                                    type = PostType.text;
+                                    images = null;
+                                  }
+                                });
+                              },
+                              child: const CircleAvatar(
+                                radius: 10,
+                                backgroundColor: Color(0xff4F4F4F),
+                                child: Icon(
+                                  Icons.clear,
+                                  color: Colors.white,
+                                  size: 13,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
               ),
-            )
-          ],
-        ),
-      ),
-    );
-}
+            ),
+          );
+  }
 
   void cancel(BuildContext context) {
-    CustomAlert(context: context,
+    CustomAlert(
+        context: context,
         title: "Confirm to leave ",
-        body:"Are you sure you want to delete your post.",
-        onTap:() {
+        body: "Are you sure you want to delete your post.",
+        onTap: () {
           Navigator.pop(context);
-        }
-    ).show();
+        }).show();
   }
 
   void createPost(BuildContext context) {
     var model = context.read<VBlogViewModel>();
     var uid = context.read<UserViewModel>().user!.userProfile.userId;
-    if(commentController.text.isNotEmpty){
-      PostData postData =
-      PostData(
-         userId: int.parse(uid),
+    if (commentController.text.isNotEmpty) {
+      PostData postData = PostData(
+          userId: int.parse(uid),
           contentPost: commentController.text,
           contentType: type,
           contentUrl: '');
-      model.createPost(postData,
-          thumbnail: thumbnail,
-          imagePath: path==null?null:path!.path).
-      then((value){
+      model
+          .createPost(
+        postData,
+        thumbnail: thumbnail,
+        imagePath: images,
+        videoPath: path?.path,
+      )
+          .then((value) {
         model.getPost(restart: true);
-       Navigator.pop(context);
+        Navigator.pop(context);
       });
-    }else{
+    } else {
       RandomFunction.toast("Enter a text");
     }
   }
 
-ImageProvider imageProvider() {
-    if(thumbnail!=null){
+  ImageProvider imageProvider() {
+    if (thumbnail != null) {
       return MemoryImage(thumbnail!);
-    }else{
-    return const NetworkImage("https://www.balmoraltanks.com/images/common/video-icon-image.jpg");
+    } else {
+      return const NetworkImage(
+          "https://www.balmoraltanks.com/images/common/video-icon-image.jpg");
     }
-}
+  }
 }

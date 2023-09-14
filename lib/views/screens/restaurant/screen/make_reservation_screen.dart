@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:platterwave/model/restaurant/reservation_param.dart';
 import 'package:platterwave/model/restaurant/restaurant.dart';
 import 'package:platterwave/model/restaurant/succesful.dart';
@@ -29,7 +28,7 @@ class MakeReservationScreen extends StatefulWidget {
 }
 
 class _MakeReservationScreenState extends State<MakeReservationScreen> {
-  int guestNumber = 1;
+  int guestNumber = 0;
   List<Guest> guest = [];
   DateTime? dateTime;
   String? sitType;
@@ -44,15 +43,15 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
       child: Scaffold(
         appBar: appBar(context),
         floatingActionButton: Padding(
-          padding: const EdgeInsets.only(left: 30,bottom: 24),
+          padding: const EdgeInsets.only(left: 30, bottom: 24),
           child: PlatButton(
             appState: context.watch<RestaurantViewModel>().appState,
             title: "Book Now",
             onTap: validate()
                 ? null
                 : () {
-              book(context);
-            },
+                    book(context);
+                  },
           ),
         ),
         body: Padding(
@@ -66,11 +65,24 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    dateTime = await showOmniDateTimePicker(context: context);
-                    if (dateTime != null) {
-                      _date.text =
-                          RandomFunction.date(dateTime.toString()).MMMEd;
-                    }
+                    RandomFunction.showDateTimePicker(context: context).then(
+                      (value) {
+                        if (value != null) {
+                          dateTime = value;
+                          _date.text =
+                              RandomFunction.date(dateTime.toString()).yMMMEdjm;
+                          setState(() {});
+                        }
+                      },
+                    );
+                    // dateTime = await showOmniDateTimePicker(
+                    //   context: context,
+                    //   is24HourMode: true,
+                    // );
+                    // if (dateTime != null) {
+                    //   _date.text =
+                    //       RandomFunction.date(dateTime.toString()).MMMEd;
+                    // }
                   },
                   child: AppTextField(
                     controller: _date,
@@ -89,15 +101,85 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                       ),
                     ),
                     hintText: "Date",
-                    suffixIcon: const Icon(Icons.keyboard_arrow_down_outlined,size: 20,),
+                    suffixIcon: const Icon(
+                      Icons.keyboard_arrow_down_outlined,
+                      size: 20,
+                    ),
                   ),
                 ),
+                widget.restaurantData.seatType.isEmpty
+                    ? const SizedBox()
+                    : SizedBox(
+                        height: 24.h,
+                      ),
+                widget.restaurantData.seatType.isEmpty
+                    ? const SizedBox()
+                    : Container(
+                        height: 71,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                            width: 0.7,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade200,
+                              offset: const Offset(0, 3),
+                              blurRadius: 4,
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Center(
+                          child: DropdownButtonFormField<String>(
+                              validator: (e) {
+                                if (e!.isEmpty) {
+                                  return "select seat type";
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.all(16),
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                border: InputBorder.none,
+                              ),
+                              value: sitType,
+                              icon: const Icon(
+                                Icons.keyboard_arrow_down_outlined,
+                                size: 20,
+                              ),
+                              hint: const Text("Select sit type"),
+                              items: widget.restaurantData.seatType
+                                  .map((e) => e.seatType)
+                                  .map((e) {
+                                return DropdownMenuItem<String>(
+                                    value: e,
+                                    child: Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          "assets/icon/chair.svg",
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(e),
+                                      ],
+                                    ));
+                              }).toList(),
+                              onChanged: (e) {
+                                sitType = e;
+                                setState(() {});
+                              }),
+                        ),
+                      ),
                 SizedBox(
                   height: 24.h,
                 ),
                 Container(
-                  height:71,
-                  decoration:BoxDecoration(
+                  height: 71,
+                  decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(
                       color: Colors.grey.shade300,
@@ -112,64 +194,6 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                     ],
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  child: Center(
-                    child: DropdownButtonFormField<String>(
-                        validator: (e) {
-                          if (e!.isEmpty) {
-                            return "select seat type";
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.all(16),
-                            enabledBorder:InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            border:InputBorder.none,
-                        ),
-                        value: sitType,
-                        icon: const Icon(Icons.keyboard_arrow_down_outlined,size: 20,),
-                        hint: const Text("Select sit type"),
-                        items: ['vip', 'regular'].map((e) {
-                          return DropdownMenuItem<String>(
-                              value: e,
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    "assets/icon/chair.svg",
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(e),
-                                ],
-                              ));
-                        }).toList(),
-                        onChanged: (e) {
-                          sitType = e;
-                          setState(() {});
-                        }),
-                  ),
-                ),
-                SizedBox(
-                  height: 24.h,
-                ),
-                Container(
-                    height:71,
-                    decoration:BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.grey.shade300,
-                        width: 0.7,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.shade200,
-                          offset: const Offset(0, 3),
-                          blurRadius: 4,
-                        ),
-                      ],
-                      borderRadius: BorderRadius.circular(6),
-                    ),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Row(
@@ -187,7 +211,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                           children: [
                             InkWell(
                               onTap: () {
-                                if (guestNumber != 1) {
+                                if (guestNumber != 0) {
                                   setState(() {
                                     guestNumber = guestNumber - 1;
                                   });
@@ -299,32 +323,43 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                           }).toList(),
                         ),
                       ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: InkWell(
-                    onTap: () {
-                      RandomFunction.sheet(
-                          context,
-                          AddGuest(
-                            guestNumber: guestNumber,
-                            onGuestSelected: (e) {
-                              guest = e;
-                              setState(() {});
-                            },
+                guestNumber == 0
+                    ? const SizedBox()
+                    : Align(
+                        alignment: Alignment.bottomLeft,
+                        child: InkWell(
+                          onTap: () {
+                            RandomFunction.sheet(
+                                context,
+                                AddGuest(
+                                  guestNumber: guestNumber,
+                                  onGuestSelected: (e) {
+                                    guest = e;
+                                    setState(() {});
+                                  },
+                                ),
+                                height:
+                                    MediaQuery.of(context).size.height - 50);
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SvgPicture.asset('assets/icon/add-circle.svg'),
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              Text(
+                                "Add Guest Details",
+                                style: AppTextTheme.h3.copyWith(
+                                  color: const Color(0xffE16C52),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
                           ),
-                        height: MediaQuery.of(context).size.height-50
-                      );
-                    },
-                    child: Text(
-                      "Add Guest Details",
-                      style: AppTextTheme.h3.copyWith(
-                          color:const Color(0xffE16C52),
-                        fontWeight: FontWeight.w700,
-                        fontSize: 12
+                        ),
                       ),
-                    ),
-                  ),
-                ),
                 //const Spacer(),
               ],
             ),
@@ -335,9 +370,12 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
   }
 
   bool validate() {
-    if (sitType != null &&
+    if (widget.restaurantData.seatType.isEmpty &&
         dateTime != null &&
-        guestNumber > 0 &&
+        guest.length == guestNumber) {
+      return false;
+    } else if (sitType != null &&
+        dateTime != null &&
         guest.length == guestNumber) {
       return false;
     } else {
@@ -363,8 +401,8 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
         guestNo: guestNumber.toString(),
         guest: g);
     var model = context.read<RestaurantViewModel>();
-    model.makeReservation(bookData).then((value){
-      if(value){
+    model.makeReservation(bookData).then((value) {
+      if (value) {
         nav(context, const Successful());
       }
     });

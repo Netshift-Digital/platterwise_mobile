@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:platterwave/model/restaurant/restaurant.dart';
 import 'package:platterwave/res/text-theme.dart';
+import 'package:platterwave/utils/enum/app_state.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
@@ -24,6 +25,7 @@ class RateExperienceScreen extends StatefulWidget {
 class _RateExperienceScreenState extends State<RateExperienceScreen> {
   List<bool> values = [false, false, false, false, false, false];
   List improve = [];
+  AppState appState = AppState.idle;
   num rate = 4;
   final TextEditingController controller = TextEditingController();
 
@@ -76,64 +78,64 @@ class _RateExperienceScreenState extends State<RateExperienceScreen> {
                   SizedBox(
                     height: 20.h,
                   ),
-                  const Divider(
-                    thickness: 2,
-                  ),
-                  SizedBox(
-                    height: 25.h,
-                  ),
-                  const Text("Tell us what we can improve?"),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Wrap(
-                    spacing: 12,
-                    children: [
-                      GestureDetector(
-                        onTap: () => toggleChip(values[0], 0),
-                        child: Chip(
-                          backgroundColor:
-                              values[0] ? AppColor.p300 : AppColor.g300,
-                          label: const Text("Hospitality"),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => toggleChip(values[1], 1),
-                        child: Chip(
-                          backgroundColor: values[1] ? AppColor.p300 : AppColor.g80,
-                          label: const Text("Customer Service"),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => toggleChip(values[2], 2),
-                        child: Chip(
-                          label: const Text("Food Quality"),
-                          backgroundColor: values[2] ? AppColor.p300 : AppColor.g80,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => toggleChip(values[3], 3),
-                        child: Chip(
-                          backgroundColor: values[3] ? AppColor.p300 : AppColor.g80,
-                          label: const Text("Menu Varities"),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => toggleChip(values[4], 4),
-                        child: Chip(
-                          backgroundColor: values[4] ? AppColor.p300 : AppColor.g80,
-                          label: const Text("Environment"),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => toggleChip(values[5], 5),
-                        child: Chip(
-                          backgroundColor: values[5] ? AppColor.p300 : AppColor.g80,
-                          label: const Text("Dishes"),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // const Divider(
+                  //   thickness: 2,
+                  // ),
+                  // SizedBox(
+                  //   height: 25.h,
+                  // ),
+                  // const Text("Tell us what we can improve?"),
+                  // SizedBox(
+                  //   height: 20.h,
+                  // ),
+                  // Wrap(
+                  //   spacing: 12,
+                  //   children: [
+                  //     GestureDetector(
+                  //       onTap: () => toggleChip(values[0], 0),
+                  //       child: Chip(
+                  //         backgroundColor:
+                  //             values[0] ? AppColor.p300 : AppColor.g300,
+                  //         label: const Text("Hospitality"),
+                  //       ),
+                  //     ),
+                  //     GestureDetector(
+                  //       onTap: () => toggleChip(values[1], 1),
+                  //       child: Chip(
+                  //         backgroundColor: values[1] ? AppColor.p300 : AppColor.g80,
+                  //         label: const Text("Customer Service"),
+                  //       ),
+                  //     ),
+                  //     GestureDetector(
+                  //       onTap: () => toggleChip(values[2], 2),
+                  //       child: Chip(
+                  //         label: const Text("Food Quality"),
+                  //         backgroundColor: values[2] ? AppColor.p300 : AppColor.g80,
+                  //       ),
+                  //     ),
+                  //     GestureDetector(
+                  //       onTap: () => toggleChip(values[3], 3),
+                  //       child: Chip(
+                  //         backgroundColor: values[3] ? AppColor.p300 : AppColor.g80,
+                  //         label: const Text("Menu Varities"),
+                  //       ),
+                  //     ),
+                  //     GestureDetector(
+                  //       onTap: () => toggleChip(values[4], 4),
+                  //       child: Chip(
+                  //         backgroundColor: values[4] ? AppColor.p300 : AppColor.g80,
+                  //         label: const Text("Environment"),
+                  //       ),
+                  //     ),
+                  //     GestureDetector(
+                  //       onTap: () => toggleChip(values[5], 5),
+                  //       child: Chip(
+                  //         backgroundColor: values[5] ? AppColor.p300 : AppColor.g80,
+                  //         label: const Text("Dishes"),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                   SizedBox(
                     height: 25.h,
                   ),
@@ -153,19 +155,31 @@ class _RateExperienceScreenState extends State<RateExperienceScreen> {
                   ),
                   const SizedBox(height: 30,),
                   PlatButton(
+                    appState: appState,
                     title: "Submit",
-                    onTap:controller.text.isNotEmpty? () {
-                       if(controller.text.isNotEmpty){
-                         var resViewModel = context.read<RestaurantViewModel>();
-                         resViewModel.addReview(
-                             resId: widget.restaurantData.restId,
-                             review: controller.text,
-                             rate: rate.toString()
-                         ).then((value){
-                           Navigator.pop(context,value);
-                         });
-                       }
-                    }:null,
+                    onTap:() {
+                      setState(() {
+                        appState=AppState.busy;
+                      });
+                      var resViewModel = context.read<RestaurantViewModel>();
+                      resViewModel.addReview(
+                          resId: widget.restaurantData.restId,
+                          review: controller.text,
+                          rate: rate.toString()
+                      ).then((value){
+                        setState(() {
+                          appState=AppState.idle;
+                        });
+                        Navigator.pop(context,value);
+                      }).catchError((e){
+                        setState(() {
+                          appState=AppState.idle;
+                        });
+                      });
+                       // if(controller.text.isNotEmpty){
+                       //
+                       // }
+                    },
                   ),
                   SizedBox(
                     height: 12.h,

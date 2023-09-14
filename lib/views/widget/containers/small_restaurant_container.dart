@@ -1,12 +1,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_parsed_text_field/flutter_parsed_text_field.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/model/restaurant/restaurant.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/restaurant_view_model.dart';
+import 'package:platterwave/views/screens/restaurant/screen/res.dart';
 import 'package:platterwave/views/screens/restaurant/screen/restaurant_details.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 
@@ -21,7 +24,7 @@ class SmallRestaurantContainer extends StatelessWidget {
       onTap: () {
         nav(
           context,
-          RestaurantDetails(
+          Res(
             restaurantData: restaurantData,
           ),
         );
@@ -31,30 +34,49 @@ class SmallRestaurantContainer extends StatelessWidget {
         child: Container(
           height: 178.h,
           width: 161.w,
-          decoration: BoxDecoration(
+          decoration: ShapeDecoration(
             color: Colors.white,
-            border: Border.all(
-              color: Colors.grey.shade300,
-              width: 0.7,
+            shape: RoundedRectangleBorder(
+              side: const BorderSide(width: 0.50, color: Color(0xFFD6D6D6)),
+              borderRadius: BorderRadius.circular(8),
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.shade200,
-                offset: const Offset(0, 2),
-                blurRadius: 4,
-                spreadRadius: 1,
-              ),
-            ],
-            borderRadius: BorderRadius.circular(6),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: ImageCacheR(
-                  restaurantData.coverPic,
-                  topRadius: 6,
-                  topBottom: 0,
+                child: Stack(
+                  children: [
+                    ImageCacheR(
+                      restaurantData.coverPic,
+                      topRadius: 6,
+                      topBottom: 0,
+                    ),
+                    Positioned(
+                      top: 12,
+                      right: 12,
+                      child: SizedBox(
+                        height: 26,
+                        width: 26,
+                        child: GestureDetector(
+                          onTap: () {
+                            context
+                                .read<RestaurantViewModel>()
+                                .saveRestaurant(restaurantData);
+                          },
+                          child: SizedBox(
+                            width: 39,
+                            height: 39,
+                            child: context
+                                .watch<RestaurantViewModel>()
+                                .isFavourite(restaurantData.restId.toString())
+                                ? SvgPicture.asset('assets/icon/heart.svg')
+                                : SvgPicture.asset('assets/icon/favour_rite.svg'),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(
@@ -65,8 +87,8 @@ class SmallRestaurantContainer extends StatelessWidget {
                 child: Text(
                   restaurantData.restuarantName,
                   style: AppTextTheme.h5.copyWith(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -77,9 +99,12 @@ class SmallRestaurantContainer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SvgPicture.asset("assets/images/locations.svg"),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 3),
+                      child: SvgPicture.asset("assets/images/locations.svg"),
+                    ),
                     SizedBox(
                       width: 6.w,
                     ),

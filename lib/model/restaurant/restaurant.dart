@@ -50,6 +50,7 @@ class RestaurantData {
     required this.website,
     required this.socialHandle,
     required this.menuPix,
+    required this.seatType
   });
 
   dynamic restId;
@@ -69,24 +70,27 @@ class RestaurantData {
   String website;
   String socialHandle;
   List<MenuPix> menuPix;
+  List<SeatType> seatType;
 
   factory RestaurantData.fromJson(Map<String, dynamic> json) => RestaurantData(
     restId: json["rest_id"],
     restuarantName: json["restuarant_name"],
     address: json["address"],
     state: json["state"],
-    localGovt: json["local_govt"],
+    localGovt: json["local_govt"]??"",
     landmark: json["landmark"],
     rating: json["rating"]??"0",
-    banner: json["banner"],
-    descriptions: json["descriptions"],
+    banner: json["banner"]??"",
+    descriptions: json["descriptions"]??"",
     coverPic: json["cover_pic"],
-    openingHour: json["opening_hour"],
-    days: json["days"],
-    email: json["email"],
-    phone: json["phone"],
-    website: json["website"],
+    openingHour: json["opening_hour"]??"",
+    days: json["days"]??"",
+    email: json["email"]??"",
+    phone: json["phone"]??"",
+    seatType: json['seat_type']==null?[]:List<SeatType>.from(json['seat_type'].map((x) => SeatType.fromJson(x))),
+    website: json["website"]??"",
     socialHandle: json["social_handle"],
+
     menuPix: List<MenuPix>.from((json["menu_pix"]??json["menu_pic"]).map((x) => MenuPix.fromJson(x))),
   );
 
@@ -111,6 +115,26 @@ class RestaurantData {
   };
 }
 
+
+class SeatType {
+  String seatType;
+
+  SeatType({
+    required this.seatType,
+  });
+
+  factory SeatType.fromJson(Map<dynamic, dynamic> json) => SeatType(
+    seatType: json["seat_type"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "seat_type": seatType,
+  };
+
+
+}
+
+
 class MenuPix {
   MenuPix({
     required this.menuPic,
@@ -119,7 +143,7 @@ class MenuPix {
   String menuPic;
 
   factory MenuPix.fromJson(Map<String, dynamic> json) => MenuPix(
-    menuPic: json["menu_pic"]??json['menu_pix'],
+    menuPic: json["menu_pic"]??json['menu_pix']??json['pic'],
   );
 
   Map<String, dynamic> toJson() => {

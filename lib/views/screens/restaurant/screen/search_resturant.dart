@@ -55,7 +55,7 @@ class _RestaurantSearchScreenState extends State<RestaurantSearchScreen> {
                     });
                   }
                 },
-                hintText: "Search for a post or people",
+                hintText: "Search for a restaurant",
                 prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
                 suffixIcon: GestureDetector(
                     onTap: (){
@@ -69,7 +69,7 @@ class _RestaurantSearchScreenState extends State<RestaurantSearchScreen> {
                 child: ListView.separated(
                   shrinkWrap: true,
                   itemCount: allRestDetail.length,
-                  physics: const BouncingScrollPhysics(),
+                  //physics: const BouncingScrollPhysics(),
                   primary: false,
                   itemBuilder: (BuildContext context, int index) {
                     var data = allRestDetail[index];

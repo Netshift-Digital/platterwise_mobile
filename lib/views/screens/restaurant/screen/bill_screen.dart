@@ -7,10 +7,12 @@ import 'package:platterwave/res/color.dart';
 import 'package:platterwave/utils/extension.dart';
 import 'package:platterwave/utils/paystack.dart';
 import 'package:platterwave/utils/random_functions.dart';
+import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/select_split.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
+import 'package:provider/provider.dart';
 
 class BillScreen extends StatelessWidget {
   final UserReservation userReservation;
@@ -85,15 +87,14 @@ class BillScreen extends StatelessWidget {
                               : GestureDetector(
                                   onTap: () {
                                     showImageViewer(
-                                      context,
-                                      CachedNetworkImageProvider(
-                                        reservationBill.billPix ?? "",
-                                      ),
-                                      onViewerDismissed: () {},
-                                      useSafeArea: true,
-                                      swipeDismissible: true,
-                                      immersive: true
-                                    );
+                                        context,
+                                        CachedNetworkImageProvider(
+                                          reservationBill.billPix ?? "",
+                                        ),
+                                        onViewerDismissed: () {},
+                                        useSafeArea: true,
+                                        swipeDismissible: true,
+                                        immersive: true);
                                   },
                                   child: ImageCacheR(
                                       reservationBill.billPix ?? ''),
@@ -112,7 +113,10 @@ class BillScreen extends StatelessWidget {
                             ),
                             const Spacer(),
                             Text(
-                              (reservationBill.grandPrice ?? '0').toCurrency(),
+                              reservationBill.grandPrice!.isEmpty
+                                  ? "0"
+                                  : (reservationBill.grandPrice ?? '0')
+                                      .toCurrency(),
                               style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w500),
                             ),
@@ -143,13 +147,30 @@ class BillScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: PlatButton(
+                        appState: context.watch<RestaurantViewModel>().appState,
                         title: "Pay Entire Bill",
                         onTap: () {
-                          PayStackPayment.investmentPlanPayment(
+                          var amount =
                               num.parse(reservationBill.grandPrice ?? '0')
-                                  .toInt(),
-                              reservationBill.restId ?? "",
-                              context);
+                                  .toInt();
+                          context
+                              .read<RestaurantViewModel>()
+                              .getTransactionID(
+                                  userReservation.reservId, amount)
+                              .then((value) {
+                            if (value != null) {
+                              PayStackPayment.makePayment(
+                                amount,
+                                userReservation.reservId ?? "",
+                                context,
+                                txnId: value,
+                              ).then((value) {
+                                if (value == true) {
+                                  Navigator.pop(context);
+                                }
+                              });
+                            }
+                          });
                         }),
                   ),
                   const SizedBox(
@@ -163,6 +184,9 @@ class BillScreen extends StatelessWidget {
                         RandomFunction.sheet(
                             context,
                             SelectSplit(
+                              getPaidGuest: () {
+                                Navigator.pop(context, true);
+                              },
                               userReservation: userReservation,
                               reservationBill: reservationBill,
                             ));

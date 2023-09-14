@@ -10,7 +10,7 @@ class Successful extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
         return false;
       },
@@ -20,47 +20,60 @@ class Successful extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 30,),
+              const SizedBox(
+                height: 30,
+              ),
               Row(
                 children: [
                   const Spacer(),
                   IconButton(
-                      onPressed: (){
-                        Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
+                      onPressed: () {
+                        Navigator.popUntil(
+                            context, (Route<dynamic> route) => route.isFirst);
                       },
-                      icon:const Icon(Icons.clear,size: 40,color: Colors.grey,)
-                  )
+                      icon: const Icon(
+                        Icons.clear,
+                        size: 40,
+                        color: Colors.grey,
+                      ))
                 ],
               ),
-              const Spacer(flex: 2,),
+              const Spacer(
+                flex: 2,
+              ),
               Image.asset('assets/images/Check gif.gif'),
               const SizedBox(
                 height: 16,
               ),
               const Text(
-                'Congratulation',
+                'Congratulations',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
               ),
               const SizedBox(
                 height: 16,
               ),
               const Text(
-                ' Your reservation has been\nsuccessfully made',
+                "Your reservation is successful.\nThe restaurant will contact you shortly.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              const Spacer(flex: 1,),
-              PlatButton(
-                  title: "Home",
-                  onTap: (){
-                    context.read<PageViewModel>().setIndex(2);
-                    Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-                  }
+              const Spacer(
+                flex: 1,
               ),
-              const Spacer(flex: 2,),
+              PlatButton(
+                title: "Home",
+                onTap: () {
+                  context.read<PageViewModel>().setIndex(1);
+                  Navigator.popUntil(
+                      context, (Route<dynamic> route) => route.isFirst);
+                },
+              ),
+              const Spacer(
+                flex: 2,
+              ),
             ],
           ),
         ),

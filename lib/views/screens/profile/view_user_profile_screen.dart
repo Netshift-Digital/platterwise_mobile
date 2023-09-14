@@ -84,7 +84,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                           onTap: () {
                             Navigator.push(
                                 context, MaterialPageRoute(builder: (context){
-                              return SettingsScreen();
+                              return const SettingsScreen();
                             })
                             );
                           },
