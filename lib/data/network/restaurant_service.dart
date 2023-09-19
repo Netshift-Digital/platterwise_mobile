@@ -84,6 +84,7 @@ class RestaurantService {
           }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
+        print(data);
         return data;
       }
     } on SocketException catch (_) {

@@ -50,11 +50,11 @@ class _BottomNavState extends State<BottomNav> {
       // screen: const SaveScreen()
     ),
     BottomNavigationModel(
-      title: "Favorites",
-      icon: "assets/icon/love.svg",
-     screen: const Favourite()
-     // screen: const RestaurantSearchScreen(),
-    ),
+        title: "Favorites",
+        icon: "assets/icon/love.svg",
+        screen: const Favourite()
+        // screen: const RestaurantSearchScreen(),
+        ),
     BottomNavigationModel(
       title: "Explore",
       icon: "assets/icon/people.svg",

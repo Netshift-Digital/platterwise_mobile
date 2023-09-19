@@ -20,7 +20,6 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color(0xFFDB4E2E),
       body: Center(
@@ -32,6 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -39,20 +39,20 @@ class _SplashScreenState extends State<SplashScreen> {
     permission();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       FlutterNativeSplash.remove();
-      if(FirebaseAuth.instance.currentUser==null){
-        nav(context, const Onboarding(),remove: true);
-      }else{
-        context.read<UserViewModel>()
+      if (FirebaseAuth.instance.currentUser == null) {
+        nav(context, const Onboarding(), remove: true);
+      } else {
+        context
+            .read<UserViewModel>()
             .getUserProfile(FirebaseAuth.instance.currentUser!.uid)
-            .then((value){
-          if(value!=null){
+            .then((value) {
+          if (value != null) {
             Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context)=>const BottomNav()));
-          }else{
-            nav(context, const SignInSignUp(),remove: true);
+                MaterialPageRoute(builder: (context) => const BottomNav()));
+          } else {
+            nav(context, const SignInSignUp(), remove: true);
           }
         });
-
       }
     });
   }
