@@ -47,6 +47,7 @@ class RestaurantService {
     var body = jsonEncode({
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
     });
+    print("This is the id ${FirebaseAuth.instance.currentUser!.uid}");
     try {
       var response = await client.post(
           Uri.parse("${baseurl2}top_ratedRest.php"),

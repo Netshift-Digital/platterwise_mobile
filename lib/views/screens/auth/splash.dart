@@ -42,6 +42,8 @@ class _SplashScreenState extends State<SplashScreen> {
       if (FirebaseAuth.instance.currentUser == null) {
         nav(context, const Onboarding(), remove: true);
       } else {
+        print("The current user is ${FirebaseAuth.instance.currentUser!.uid}");
+        //z3Ly5u8iFTMh3MNVFKKlIPc8QNZ2
         context
             .read<UserViewModel>()
             .getUserProfile(FirebaseAuth.instance.currentUser!.uid)
