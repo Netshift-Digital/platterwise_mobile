@@ -30,7 +30,7 @@ dependencies:
   maps_launcher: ^2.2.0
   flutter_svg:
   provider: ^6.0.3
-  cached_network_image:
+  #cached_network_image:
   the_validator: ^2.0.0
   get_it: ^7.2.0
   svg_icon:
@@ -90,7 +90,8 @@ dependencies:
   firebase_cached_image: ^0.4.4
   disposable_cached_images: ^1.2.1
   optimized_cached_image: ^3.0.1
-  cached_network_image_builder: ^0.2.0
+  #cached_network_image_builder: ^0.2.0
+  cached_network_image: ^3.2.3
   firebase_crashlytics: ^3.3.3
   firebase_analytics: ^10.1.1
   flutter_native_splash:

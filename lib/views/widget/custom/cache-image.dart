@@ -38,7 +38,7 @@ class ImageCacheR extends StatefulWidget {
 
 class _ImageCacheRState extends State<ImageCacheR> {
   String? image;
-
+/*
   getCachedImagePath() async {
     var dir = kDir;
     final url = "${widget.image}.png";
@@ -69,7 +69,8 @@ class _ImageCacheRState extends State<ImageCacheR> {
           cachedImagePath);
     }
   }
-
+*/
+/*
   @override
   void initState() {
     super.initState();
@@ -78,7 +79,7 @@ class _ImageCacheRState extends State<ImageCacheR> {
         //getCachedImagePath();
       }
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -87,64 +88,54 @@ class _ImageCacheRState extends State<ImageCacheR> {
         topLeft: Radius.circular(widget.topRadius),
         bottomLeft: Radius.circular(widget.topBottom),
         bottomRight: Radius.circular(widget.topBottom));
-    // if (!widget.chachedImage) {
-    //   if (image != null) {
-    //     return Container(
-    //       height: widget.height,
-    //       width: widget.width,
-    //       decoration: BoxDecoration(
-    //         image: DecorationImage(
-    //             image: FileImage(File(image!)),
-    //             fit: widget.fit ? BoxFit.cover : BoxFit.scaleDown,
-    //             colorFilter: ColorFilter.mode(
-    //                 Colors.black.withOpacity(widget.blend), BlendMode.darken)),
-    //       ),
-    //     );
-    //   } else {
-    //     Container(
-    //       height: widget.height,
-    //       width: widget.width,
-    //       decoration:
-    //           BoxDecoration(color: Colors.grey[300]!, borderRadius: radius),
-    //     );
-    //   }
-    // }
 
-    // return ClipRRect(
-    //   borderRadius: radius,
-    //   child: Image.network(
-    //     widget.image,
-    //     height: widget.height,
-    //     width: widget.width,
-    //     fit: BoxFit.cover,
-    //     errorBuilder: (s,r,c){
-    //       return Container(
-    //                   width: widget.width,
-    //                   height: widget.height,
-    //                   decoration: BoxDecoration(
-    //                     image: DecorationImage(
-    //                         image: NetworkImage(widget.errorPlaceHolder ??
-    //                             'https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg'),
-    //                         fit: widget.fit ? BoxFit.cover : BoxFit.scaleDown),
-    //                     borderRadius: radius,
-    //                   ),
-    //                 );
-    //     },
-    //   ),
-    // );
-
-    return ClipRRect(
-      borderRadius: radius,
-      child: DisposableCachedImage.network(
+    return CachedNetworkImage(
+      imageUrl: widget.image,
+      imageBuilder: (context, imageProvider) => Container(
+          height: widget.height,
+          width: widget.width,
+          decoration: BoxDecoration(
+              borderRadius: radius,
+              color: widget.blend > 0
+                  ? Colors.black.withOpacity(widget.blend)
+                  : null,
+              image: DecorationImage(
+                image: imageProvider,
+                fit: widget.fit ? BoxFit.cover : BoxFit.scaleDown,
+              ))),
+      placeholder: (context, url) => Container(
+        height: widget.height,
+        width: widget.width,
+        decoration:
+            BoxDecoration(color: Colors.grey[300]!, borderRadius: radius),
+        child: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
+      height: widget.height,
+      width: widget.width,
+      filterQuality: FilterQuality.none,
+      fadeInDuration: Duration.zero,
+      fit: widget.fit ? BoxFit.cover : BoxFit.scaleDown,
+      repeat: ImageRepeat.repeat,
+      colorBlendMode: BlendMode.darken,
+      color: widget.blend > 0 ? Colors.black.withOpacity(widget.blend) : null,
+      errorWidget: (context, url, error) => Container(
+        width: widget.width,
+        height: widget.height,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: NetworkImage(widget.errorPlaceHolder ??
+                  'https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg'),
+              fit: widget.fit ? BoxFit.cover : BoxFit.scaleDown),
+          borderRadius: radius,
+        ),
+      ), /* DisposableCachedImage.network(
         height: widget.height,
         keepAlive: true,
         width: widget.width,
         keepBytesInMemory: false,
         imageUrl: widget.image.toString(),
-        // cacheKey: widget.image.toString(),
-        // fadeInDuration: Duration.zero,
-        // fadeOutDuration: Duration.zero,
-        // placeholderFadeInDuration: Duration.zero,
         filterQuality: FilterQuality.none,
         fit: widget.fit ? BoxFit.cover : BoxFit.scaleDown,
         fadeDuration: Duration.zero,
@@ -164,21 +155,7 @@ class _ImageCacheRState extends State<ImageCacheR> {
               ],
             ),
           );
-          // return Shimmer.fromColors(
-          //   baseColor: Colors.grey[200]!,
-          //   highlightColor: Colors.grey,
-          //   direction: ShimmerDirection.ltr,
-          //   child: Container(
-          //     height: height,
-          //     width: width,
-          //     decoration: BoxDecoration(
-          //         color: Colors.white,
-          //         borderRadius: radius
-          //     ),
-          //   ),
-          // );
         },
-
         onError: (context, url, error, w) {
           return Container(
             width: widget.width,
@@ -192,7 +169,7 @@ class _ImageCacheRState extends State<ImageCacheR> {
             ),
           );
         },
-      ),
+      ),*/
     );
   }
 }
@@ -239,7 +216,8 @@ class ImageCacheCircle extends StatelessWidget {
         return Container(
           height: height,
           width: width,
-          decoration: BoxDecoration(color: Colors.white, borderRadius: radius),
+          decoration: BoxDecoration(
+              color: Colors.white.withAlpha(210), borderRadius: radius),
         );
       },
       errorWidget: (context, url, error) {

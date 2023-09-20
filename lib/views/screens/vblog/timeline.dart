@@ -10,7 +10,6 @@ import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/search/search_screen.dart';
-import 'package:platterwave/views/screens/vblog/notification.dart';
 import 'package:platterwave/views/screens/vblog/create_post/create_post.dart';
 import 'package:platterwave/views/screens/vblog/trending_page.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';

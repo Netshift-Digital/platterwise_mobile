@@ -38,7 +38,7 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp();
-  await DisposableImages.init();
+  //await DisposableImages.init();
   Directory tempDir = await getApplicationDocumentsDirectory();
   kDir = await getApplicationSupportDirectory();
   Hive.init(tempDir.path);
@@ -61,15 +61,17 @@ void main() async {
   setupLocator();
   runApp(
     MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => PageViewModel()),
-        ChangeNotifierProvider(create: (_) => UserViewModel()),
-        ChangeNotifierProvider(create: (_) => VBlogViewModel()),
-        ChangeNotifierProvider(create: (_) => RestaurantViewModel()),
-        ChangeNotifierProvider(create: (_) => LocationProvider()),
-      ],
-      child: const DisposableImages(MyApp()),
-    ),
+        providers: [
+          ChangeNotifierProvider(create: (_) => PageViewModel()),
+          ChangeNotifierProvider(create: (_) => UserViewModel()),
+          ChangeNotifierProvider(create: (_) => VBlogViewModel()),
+          ChangeNotifierProvider(create: (_) => RestaurantViewModel()),
+          ChangeNotifierProvider(create: (_) => LocationProvider()),
+        ],
+        child: // const DisposableImages(
+            MyApp()
+        //),
+        ),
   );
 }
 

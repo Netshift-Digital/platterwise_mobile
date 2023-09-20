@@ -20,7 +20,6 @@ import 'package:platterwave/views/screens/restaurant/screen/favourite.dart';
 import 'package:platterwave/views/screens/restaurant/screen/res.dart';
 import 'package:platterwave/views/screens/restaurant/screen/reservation_details.dart';
 import 'package:platterwave/views/screens/restaurant/screen/restaurant_home_screen.dart';
-import 'package:platterwave/views/screens/restaurant/screen/search_resturant.dart';
 import 'package:platterwave/views/screens/restaurant/screen/user_reservations.dart';
 import 'package:platterwave/views/screens/vblog/shared_post.dart';
 import 'package:platterwave/views/screens/vblog/timeline.dart';
