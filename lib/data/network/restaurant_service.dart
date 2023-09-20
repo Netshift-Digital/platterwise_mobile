@@ -332,6 +332,7 @@ class RestaurantService {
           }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
       RandomFunction.toast(data['status']);
+      print("After cancelling reservation i get $data");
       if (response.statusCode == 200) {
         return data;
       }
