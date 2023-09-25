@@ -11,7 +11,6 @@ import 'package:platterwave/views/screens/restaurant/screen/reservation_details.
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/containers/empty_content_container.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
-import 'package:platterwave/views/widget/dialog/alert_dialog.dart';
 import 'package:provider/provider.dart';
 
 class UserReservations extends StatelessWidget {

@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -21,14 +20,14 @@ import 'package:the_validator/the_validator.dart';
 class Login extends StatelessWidget {
   Login({Key? key}) : super(key: key);
 
-  final TextEditingController _email =  TextEditingController();
-  final TextEditingController _password =  TextEditingController();
-final _formKey = GlobalKey<FormState>();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: AnnotatedRegion(
@@ -36,71 +35,92 @@ final _formKey = GlobalKey<FormState>();
         child: Scaffold(
           // appBar: appBar(context),
           body: SingleChildScrollView(
-            physics:const BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.only(left: sixteen,right: sixteen,bottom: sixteen),
+                padding: const EdgeInsets.only(
+                    left: sixteen, right: sixteen, bottom: sixteen),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: twenty,),
-                      Text("Sign in",style: AppTextTheme.h4.copyWith(
-                          fontSize: twentyFour,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700
-                      ),),
-                      const SizedBox(height: fiftyFour,),
-                      Text("Email",style: AppTextTheme.hint),
-                      const SizedBox(height: hintSpacing,),
+                      const SizedBox(
+                        height: twenty,
+                      ),
+                      Text(
+                        "Sign in",
+                        style: AppTextTheme.h4.copyWith(
+                            fontSize: twentyFour,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(
+                        height: fiftyFour,
+                      ),
+                      Text("Email", style: AppTextTheme.hint),
+                      const SizedBox(
+                        height: hintSpacing,
+                      ),
                       Field(
                         controller: _email,
                         hint: "gsswuw@gmail.com",
                         textInputType: TextInputType.emailAddress,
                         validate: FieldValidator.email(),
                       ),
-                      const SizedBox(height: twenty,),
-                      Text("Password",style: AppTextTheme.hint),
-                      const SizedBox(height: hintSpacing,),
+                      const SizedBox(
+                        height: twenty,
+                      ),
+                      Text("Password", style: AppTextTheme.hint),
+                      const SizedBox(
+                        height: hintSpacing,
+                      ),
                       Field(
                         controller: _password,
                         hint: "",
                         isPassword: true,
                         validate: FieldValidator.minLength(3),
                       ),
-                     const SizedBox(height:four,),
-                     GestureDetector(
-                       onTap: (){
-                         nav(context, const ForgotPassword());
-                       },
-                       child: Row(
-                         mainAxisAlignment: MainAxisAlignment.end,
-                         children: [
-                           Text("Forgot password",style: AppTextTheme.h4.copyWith(
-                             fontSize: 14,
-                             fontWeight: FontWeight.w500
-                           ),)
-                         ],
-                       ),
-                     ),
-                     SizedBox(height: size.height*0.07,),
-                      PlatButton(
-                          appState:context.watch<UserViewModel>().appState ,
-                       // color: _formKey.currentState!.validate()?null :AppColor.g500,
-                          title: "Sign in",
-                          onTap: (){
-                            login(context);
-                          }
+                      const SizedBox(
+                        height: four,
                       ),
-                      SizedBox(height: size.height*0.05,),
-                     Row(
-                       mainAxisAlignment: MainAxisAlignment.center,
-                       children: [
-                         SvgPicture.asset("assets/icon/login with.svg"),
-                       ],
-                     ),
-                      SizedBox(height: size.height*0.02,),
+                      GestureDetector(
+                        onTap: () {
+                          nav(context, const ForgotPassword());
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              "Forgot password",
+                              style: AppTextTheme.h4.copyWith(
+                                  fontSize: 14, fontWeight: FontWeight.w500),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.07,
+                      ),
+                      PlatButton(
+                          appState: context.watch<UserViewModel>().appState,
+                          // color: _formKey.currentState!.validate()?null :AppColor.g500,
+                          title: "Sign in",
+                          onTap: () {
+                            login(context);
+                          }),
+                      SizedBox(
+                        height: size.height * 0.05,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset("assets/icon/login with.svg"),
+                        ],
+                      ),
+                      SizedBox(
+                        height: size.height * 0.02,
+                      ),
                       // Row(
                       //   //mainAxisAlignment: MainAxisAlignment.spaceAround,
                       //   children: [
@@ -124,23 +144,27 @@ final _formKey = GlobalKey<FormState>();
                       //     const Spacer(),
                       //   ],
                       // ),
-                      SizedBox(height: size.height*0.02,),
+                      SizedBox(
+                        height: size.height * 0.02,
+                      ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const Row(),
-                          Text("we wont share your information without your permission",
-                              style: AppTextTheme.hint.copyWith(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColor.g500
-                              ),
+                          Text(
+                            "we wont share your information without your permission",
+                            style: AppTextTheme.hint.copyWith(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.g500),
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: size.height*0.04,),
+                          SizedBox(
+                            height: size.height * 0.04,
+                          ),
                           GestureDetector(
-                            onTap: (){
-                             nav(context, const Register());
+                            onTap: () {
+                              nav(context, const Register());
                             },
                             child: RichText(
                               text: TextSpan(
@@ -148,16 +172,12 @@ final _formKey = GlobalKey<FormState>();
                                   TextSpan(
                                     text: 'No account yet? ',
                                     style: AppTextTheme.h6.copyWith(
-                                        fontSize: 14,
-                                        color: AppColor.g500
-                                    ),
+                                        fontSize: 14, color: AppColor.g500),
                                   ),
                                   TextSpan(
                                     text: 'Create an account',
                                     style: AppTextTheme.h6.copyWith(
-                                        color:AppColor.p200,
-                                        fontSize: 14
-                                    ),
+                                        color: AppColor.p200, fontSize: 14),
                                   ),
                                 ],
                               ),
@@ -178,51 +198,53 @@ final _formKey = GlobalKey<FormState>();
 
   void login(BuildContext context) {
     //nav(context, const BottomNav());
-    if(_formKey.currentState!.validate()){
-      context.read<UserViewModel>().login(
-          _email.text,
-          _password.text
-      ).then((value){
-        if(value!=null){
-          if(value.emailVerified){
-            nav(context, const BottomNav(),remove: true);
-          }else{
+    if (_formKey.currentState!.validate()) {
+      context
+          .read<UserViewModel>()
+          .login(_email.text, _password.text)
+          .then((value) {
+        if (value != null) {
+          if (value.emailVerified) {
+            nav(context, const BottomNav(), remove: true);
+          } else {
             //FirebaseAuth.instance.currentUser!.sendEmailVerification();
-            RandomFunction.toast("Account has not been verified, a verification link has been sent to your email");
+            RandomFunction.toast(
+                "Account has not been verified, a verification link has been sent to your email");
           }
-
         }
       });
     }
-
   }
 
-  Future<void>google(BuildContext context) async{
-
-      context.read<UserViewModel>().google().then((value){
-        if(value!=null){
-          if(value.newUser){
-            nav(context,  Register(authMethod:value,));
-          }else{
-            nav(context, const BottomNav(),remove: true);
-          }
-        }
-      });
-  }
-
-  Future<void>facebook (BuildContext context) async{
-
-    context.read<UserViewModel>().signInWithFacebook().then((value){
-      if(value!=null){
-        if(value.newUser){
-          nav(context,  Register(authMethod:value,));
-        }else{
-          nav(context, const BottomNav(),remove: true);
+  Future<void> google(BuildContext context) async {
+    context.read<UserViewModel>().google().then((value) {
+      if (value != null) {
+        if (value.newUser) {
+          nav(
+              context,
+              Register(
+                authMethod: value,
+              ));
+        } else {
+          nav(context, const BottomNav(), remove: true);
         }
       }
     });
   }
 
-
-
+  Future<void> facebook(BuildContext context) async {
+    context.read<UserViewModel>().signInWithFacebook().then((value) {
+      if (value != null) {
+        if (value.newUser) {
+          nav(
+              context,
+              Register(
+                authMethod: value,
+              ));
+        } else {
+          nav(context, const BottomNav(), remove: true);
+        }
+      }
+    });
+  }
 }
