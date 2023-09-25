@@ -22,40 +22,46 @@ class SaveScreen extends StatelessWidget {
     return Scaffold(
       appBar: appBar(context),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection("savedPost").
-        doc("users").collection(FirebaseAuth.instance.currentUser!.uid).snapshots(),
-        builder: (context, snapshot) {
-          if(snapshot.hasData){
-            return snapshot.data!.docs.isEmpty?
-         const  Center(child:  EmptyContentContainer(
-           errorText: "No save post !",
-         )):
-            Padding(
-              padding: const EdgeInsets.only(left: 16,right: 16),
-              child: ListView.builder(
-                itemCount:snapshot.data!.docs.length,
-                itemBuilder:(context,index){
-                  var data = snapshot.data!.docs[index].data() as Map;
-                  var postData= Post.fromJson(data);
-                  return SavedPostTile(
-                    post: postData,
-                    onTap: (){
-                      nav(context, SharedPost(id: postData.postId,));
-                    },
-                  );
-                },
-              ),
-            );
-
-          }else{
-            return const Center(
-              child:   EmptyContentContainer(
-                errorText: "No save post !",
-              ),
-            );
-          }
-        }
-      ),
+          stream: FirebaseFirestore.instance
+              .collection("savedPost")
+              .doc("users")
+              .collection(FirebaseAuth.instance.currentUser!.uid)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return snapshot.data!.docs.isEmpty
+                  ? const Center(
+                      child: EmptyContentContainer(
+                      errorText: "No save post !",
+                    ))
+                  : Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: ListView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          var data = snapshot.data!.docs[index].data() as Map;
+                          var postData = Post.fromJson(data);
+                          return SavedPostTile(
+                            post: postData,
+                            onTap: () {
+                              nav(
+                                  context,
+                                  SharedPost(
+                                    id: postData.postId,
+                                  ));
+                            },
+                          );
+                        },
+                      ),
+                    );
+            } else {
+              return const Center(
+                child: EmptyContentContainer(
+                  errorText: "No save post !",
+                ),
+              );
+            }
+          }),
     );
   }
 }

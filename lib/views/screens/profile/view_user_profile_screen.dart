@@ -18,10 +18,10 @@ import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/auth/login.dart';
 import 'package:platterwave/views/screens/profile/followers_list.dart';
-import 'package:platterwave/views/screens/profile/saved_posts_screen.dart';
 import 'package:platterwave/views/screens/profile/settings_screen.dart';
 import 'package:platterwave/views/screens/profile/view_likes_page.dart';
 import 'package:platterwave/views/screens/profile/view_posts_page.dart';
+import 'package:platterwave/views/screens/save/save_screen.dart';
 import 'package:platterwave/views/widget/appbar/custom_app_bar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
@@ -106,7 +106,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                               onTap: () {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
-                                  return SavedPostScreen();
+                                  return SaveScreen();
                                 }));
                               },
                             ),
