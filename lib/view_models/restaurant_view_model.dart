@@ -276,7 +276,7 @@ class RestaurantViewModel extends BaseViewModel {
       }
     } catch (e) {
       setState(AppState.idle);
-     // RandomFunction.toast('Something went wrong');
+      // RandomFunction.toast('Something went wrong');
     }
     return false;
   }
@@ -301,6 +301,11 @@ class RestaurantViewModel extends BaseViewModel {
         favouriteRestaurant.add(restaurantData);
         notifyListeners();
         await restaurantService.favouriteRestaurant(restaurantData.restId);
+      }
+      else {
+        favouriteRestaurant.remove(restaurantData);
+        notifyListeners();
+        await restaurantService.unfavouriteRestaurant(restaurantData.restId);
       }
     } catch (e) {
       //

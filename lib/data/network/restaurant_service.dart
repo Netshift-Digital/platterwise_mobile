@@ -546,6 +546,33 @@ class RestaurantService {
     return null;
   }
 
+  Future<Map<String, dynamic>?> unfavouriteRestaurant(String id) async {
+    var body = jsonEncode({
+      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
+      'rest_id': id
+    });
+    try {
+      var response = await client
+          .delete(Uri.parse("${baseurl2}unsaved_rest.php"), body: body, headers: {
+        "Content-type": "application/json",
+      }).timeout(const Duration(seconds: 10));
+      var data = jsonDecode(response.body);
+      RandomFunction.toast(data['status']);
+      if (response.statusCode == 200) {
+        return data;
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
   Future<Map<String, dynamic>?> getFavouriteRestaurant() async {
     var body = jsonEncode({
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
