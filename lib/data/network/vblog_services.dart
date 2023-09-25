@@ -121,6 +121,7 @@ class VBlogService {
 
   Future<dynamic> createPost(PostData postData) async {
     var body = jsonEncode(postData.toJson());
+    print("This is the post $body");
     try {
       var response = await client
           .post(Uri.parse("${baseurl}create_post.php"), body: body, headers: {

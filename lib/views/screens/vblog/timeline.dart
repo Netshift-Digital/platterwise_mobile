@@ -10,7 +10,6 @@ import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/search/search_screen.dart';
-import 'package:platterwave/views/screens/vblog/notification.dart';
 import 'package:platterwave/views/screens/vblog/create_post/create_post.dart';
 import 'package:platterwave/views/screens/vblog/trending_page.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
@@ -139,6 +138,7 @@ class _TimelineState extends State<Timeline> {
                   itemCount: context.watch<VBlogViewModel>().posts.length,
                   itemBuilder: (context, index) {
                     var data = model.posts[index];
+                    print("Here are the posts ${model.posts}");
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       //child: Text('chisom'),

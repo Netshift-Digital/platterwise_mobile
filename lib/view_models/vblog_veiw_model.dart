@@ -337,6 +337,7 @@ class VBlogViewModel extends BaseViewModel {
       if (memory != null) {
         var data = await firebaseStorage.ref().child(dat).putData(memory);
         var url = await data.ref.getDownloadURL();
+        print("An image url is $url");
         return url;
       } else {
         File file = File(filePath!);
@@ -345,6 +346,7 @@ class VBlogViewModel extends BaseViewModel {
             .child(file.path)
             .putData(file.readAsBytesSync());
         var url = await data.ref.getDownloadURL();
+        print("An image url is $url");
         return url;
       }
     } on FirebaseException catch (e) {

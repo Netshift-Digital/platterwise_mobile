@@ -47,6 +47,7 @@ class RestaurantService {
     var body = jsonEncode({
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
     });
+    print("This is the id ${FirebaseAuth.instance.currentUser!.uid}");
     try {
       var response = await client.post(
           Uri.parse("${baseurl2}top_ratedRest.php"),
@@ -84,6 +85,7 @@ class RestaurantService {
           }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
+        print(data);
         return data;
       }
     } on SocketException catch (_) {
@@ -330,6 +332,7 @@ class RestaurantService {
           }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
       RandomFunction.toast(data['status']);
+      print("After cancelling reservation i get $data");
       if (response.statusCode == 200) {
         return data;
       }

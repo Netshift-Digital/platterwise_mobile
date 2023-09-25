@@ -83,7 +83,19 @@ class RestaurantHeader extends StatelessWidget {
             ],
           ),
           const SizedBox(
-            height: 12,
+            height: 7,
+          ),
+          Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                restaurantData.days.capitalizeFirstChar(),
+                style: const TextStyle(
+                  color: AppColor.g800,
+                  fontSize: 13,
+                ),
+              )),
+          const SizedBox(
+            height: 7,
           ),
           Row(
             children: [

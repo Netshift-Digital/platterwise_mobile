@@ -114,14 +114,14 @@ class RandomFunction {
       lastDate: lastDate,
     );
 
-    if (selectedDate == null) return null;
-
+    if (selectedDate == null || selectedDate.isBefore(DateTime.now())) {
+      return null;
+    }
     if (!context.mounted) return selectedDate;
 
     final TimeOfDay? selectedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(selectedDate),
-      // initialEntryMode: TimePickerEntryMode.input
     );
 
     return selectedTime == null

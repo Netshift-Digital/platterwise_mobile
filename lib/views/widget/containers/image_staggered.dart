@@ -20,6 +20,7 @@ class ImageStag extends StatelessWidget {
           mainAxisCellCount: 2,
           child: GestureDetector(
             onTap: () {
+              print("These are the images $images");
               nav(context, PhotoViewPage(photos: images, index: 0));
             },
             child: ImageCacheR(

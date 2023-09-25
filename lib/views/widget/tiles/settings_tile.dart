@@ -9,23 +9,26 @@ class SettingsTile extends StatelessWidget {
   final VoidCallback? onTap;
   final bool trailingVisible;
 
-  const SettingsTile({
-    Key? key,
-    required this.title,
-    required this.leading,
-    this.color = Colors.black,
-    this.onTap,
-    this.trailingVisible = true}) : super(key: key);
+  const SettingsTile(
+      {Key? key,
+      required this.title,
+      required this.leading,
+      this.color = Colors.black,
+      this.onTap,
+      this.trailingVisible = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: SvgPicture.asset(leading, color: color,),
+      leading: SvgPicture.asset(
+        leading,
+        color: color,
+      ),
       onTap: onTap,
-      title: Text(title,style: AppTextTheme.h3,),
-      trailing: Visibility(
-          visible: trailingVisible,
-          child: const Icon(Icons.chevron_right)
+      title: Text(
+        "  $title",
+        style: AppTextTheme.h3,
       ),
       dense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 0),

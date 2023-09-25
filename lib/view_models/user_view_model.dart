@@ -16,111 +16,95 @@ import 'package:platterwave/utils/enum/app_state.dart';
 import 'package:platterwave/utils/locator.dart';
 import 'package:platterwave/utils/random_functions.dart';
 
-class UserViewModel extends BaseViewModel{
+class UserViewModel extends BaseViewModel {
   UserService userService = locator<UserService>();
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   UserData? user;
-   String error ="";
+  String error = "";
 
-
-
-  Future<bool> registerUser(RegisterModel registerModel,String imagePath)async{
-    try{
+  Future<bool> registerUser(
+      RegisterModel registerModel, String imagePath) async {
+    try {
       setState(AppState.busy);
       //var image = await uploadImage(imagePath);
-      if(registerModel.authId.isNotEmpty){
+      if (registerModel.authId.isNotEmpty) {
         var data = await userService.signUp(registerModel);
         setState(AppState.idle);
-        if(data!=null){
+        if (data != null) {
           return data["status"].toString().toLowerCase().contains("success");
         }
-      }else{
+      } else {
         var user = await firebaseAuth.createUserWithEmailAndPassword(
-            email: registerModel.email,
-            password: registerModel.password);
-        var reg =   registerModel.copyWith(
-            authId: user.user!.uid
-        );
+            email: registerModel.email, password: registerModel.password);
+        var reg = registerModel.copyWith(authId: user.user!.uid);
         var data = await userService.signUp(reg);
         setState(AppState.idle);
-        if(data!=null){
+        if (data != null) {
           return data["status"].toString().toLowerCase().contains("success");
         }
       }
-
-
-    }on FirebaseAuthException catch(e){
+    } on FirebaseAuthException catch (e) {
       setState(AppState.idle);
       RandomFunction.toast(e.code);
       if (kDebugMode) {
         print(e.code);
-        error=e.code;
+        error = e.code;
         notifyListeners();
       }
-    } catch(e){
+    } catch (e) {
       print(e);
       setState(AppState.idle);
     }
 
-
     return false;
   }
-  Future<AuthMethod?>google() async{
-    try{
+
+  Future<AuthMethod?> google() async {
+    try {
       setState(AppState.busy);
       final FirebaseAuth auth = FirebaseAuth.instance;
       final GoogleSignIn googleSignIn = GoogleSignIn();
       GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
-      if(googleSignInAccount!=null){
+      if (googleSignInAccount != null) {
         GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
+            await googleSignInAccount.authentication;
         AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
           idToken: googleSignInAuthentication.idToken,
         );
         final UserCredential userCredential =
-        await auth.signInWithCredential(credential);
+            await auth.signInWithCredential(credential);
         setState(AppState.idle);
-        if(userCredential.user!=null){
+        if (userCredential.user != null) {
           return await checkUser(userCredential);
         }
-      }else{
+      } else {
         setState(AppState.idle);
       }
-
-    }on FirebaseAuthException catch (e){
+    } on FirebaseAuthException catch (e) {
       setState(AppState.idle);
-
-    } catch(e){
+    } catch (e) {
       //
     }
-
-
   }
 
-  Future<AuthMethod?>checkUser(UserCredential userCredential) async{
-   try{
-     setState(AppState.busy);
-     var data = await getUserProfile(userCredential.user!.uid);
-     setState(AppState.idle);
-     if(data==null){
-       return AuthMethod(
-           newUser:true ,
-           user: userCredential.user
-       );
-     }else{
-       return AuthMethod(
-           newUser:false ,
-           user: userCredential.user
-       );
-     }
-   }catch(e){
-     setState(AppState.idle);
-     //
-   }
-   return null;
+  Future<AuthMethod?> checkUser(UserCredential userCredential) async {
+    try {
+      setState(AppState.busy);
+      var data = await getUserProfile(userCredential.user!.uid);
+      setState(AppState.idle);
+      if (data == null) {
+        return AuthMethod(newUser: true, user: userCredential.user);
+      } else {
+        return AuthMethod(newUser: false, user: userCredential.user);
+      }
+    } catch (e) {
+      setState(AppState.idle);
+      //
+    }
+    return null;
   }
 
   Future<AuthMethod?> signInWithFacebook() async {
@@ -139,47 +123,42 @@ class UserViewModel extends BaseViewModel{
     //   return null;
     // }
     // return null;
-
   }
 
-
-
-  Future<String?> uploadImage(String filePath,{String username="platerwise"})async{
-   try{
-     File file = File(filePath);
-     var d = "${DateTime.now().microsecondsSinceEpoch}.png";
-     var data = await firebaseStorage.ref().child(d).putData(file.readAsBytesSync());
-     var url = await data.ref.getDownloadURL();
-     return url;
-   }on FirebaseException catch (e){
-     setState(AppState.idle);
-   }
-    return null;
-  }
-
-
-
-  Future<User?> login(String email, String password)async{
-    try{
-      setState(AppState.busy);
-      var data = await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-      setState(AppState.idle);
-      return data.user;
-    }on FirebaseAuthException catch(e){
-      RandomFunction.toast(e.code);
-      setState(AppState.idle);
-    }catch(e){
+  Future<String?> uploadImage(String filePath,
+      {String username = "platerwise"}) async {
+    try {
+      File file = File(filePath);
+      var d = "${DateTime.now().microsecondsSinceEpoch}.png";
+      var data =
+          await firebaseStorage.ref().child(d).putData(file.readAsBytesSync());
+      var url = await data.ref.getDownloadURL();
+      return url;
+    } on FirebaseException catch (e) {
       setState(AppState.idle);
     }
     return null;
-
-
-
-
   }
 
-  Future<bool> changePassword(String newPassword,String currentPassword)async{
-    final user =  FirebaseAuth.instance.currentUser!;
+  Future<User?> login(String email, String password) async {
+    try {
+      setState(AppState.busy);
+      var data = await firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
+      setState(AppState.idle);
+      return data.user;
+    } on FirebaseAuthException catch (e) {
+      RandomFunction.toast(e.code);
+      setState(AppState.idle);
+    } catch (e) {
+      setState(AppState.idle);
+    }
+    return null;
+  }
+
+  Future<bool> changePassword(
+      String newPassword, String currentPassword) async {
+    final user = FirebaseAuth.instance.currentUser!;
     final cred = EmailAuthProvider.credential(
         email: user.email!, password: currentPassword);
     setState(AppState.busy);
@@ -198,80 +177,73 @@ class UserViewModel extends BaseViewModel{
       RandomFunction.toast(err.toString());
     });
     return false;
-
   }
 
-  Future<bool?> editUser(EditData editData)async{
-    try{
+  Future<bool?> editUser(EditData editData) async {
+    try {
       setState(AppState.busy);
       var data = await userService.editProfile(editData);
       setState(AppState.idle);
-      if(data!=null){
+      if (data != null) {
         return true;
       }
-    }catch(e){
+    } catch (e) {
       RandomFunction.toast("something went wrong");
       setState(AppState.idle);
     }
     return null;
   }
 
-  Future<UserData?> getUserCacheData()async{
-    try{
+  Future<UserData?> getUserCacheData() async {
+    try {
       user = LocalStorage.getUser();
-      if(user!=null){
+      if (user != null) {
         getMyProfile();
       }
       return user;
-    }catch(e){
+    } catch (e) {
       //
     }
     return null;
   }
 
-  Future<UserData?> getMyProfile()async{
-    try{
-      var data = await userService.getUser(FirebaseAuth.instance.currentUser!.uid);
-      if(data!=null){
+  Future<UserData?> getMyProfile() async {
+    try {
+      var data =
+          await userService.getUser(FirebaseAuth.instance.currentUser!.uid);
+      if (data != null) {
         var userData = UserData.fromJson(data);
-        var userInfo = UserData(status: userData.status,
+        var userInfo = UserData(
+            status: userData.status,
             userProfile: userData.userProfile.copyWith(
-                firebaseAuthID:FirebaseAuth.instance.currentUser!.uid
-            )
-        );
+                firebaseAuthID: FirebaseAuth.instance.currentUser!.uid));
         LocalStorage.saveUser(userInfo.toJson());
         user = userInfo;
         notifyListeners();
         return user;
       }
       setState(AppState.idle);
-    }catch(e){
+    } catch (e) {
       RandomFunction.toast("something went wrong");
       setState(AppState.idle);
     }
     return null;
   }
 
-  Future<UserData?> getUserProfile(String uid)async{
-    try{
+  Future<UserData?> getUserProfile(String uid) async {
+    try {
       var data = await userService.getUser(uid);
-      if(data!=null){
+      if (data != null) {
         var user = UserData.fromJson(data);
-       return UserData(status: user.status,
-           userProfile: user.userProfile.copyWith(
-             firebaseAuthID: uid
-           ));
+        return UserData(
+            status: user.status,
+            userProfile: user.userProfile.copyWith(firebaseAuthID: uid));
       }
       setState(AppState.idle);
-    }catch(e){
+    } catch (e) {
       RandomFunction.toast("something went wrong");
       setState(AppState.idle);
     }
     return null;
   }
-
-
-
-
-
 }

@@ -1,5 +1,3 @@
-
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +21,7 @@ import 'package:platterwave/views/screens/profile/followers_list.dart';
 import 'package:platterwave/views/screens/profile/settings_screen.dart';
 import 'package:platterwave/views/screens/profile/view_likes_page.dart';
 import 'package:platterwave/views/screens/profile/view_posts_page.dart';
+import 'package:platterwave/views/screens/save/save_screen.dart';
 import 'package:platterwave/views/widget/appbar/custom_app_bar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
@@ -44,7 +43,7 @@ class ViewUserProfileScreen extends StatefulWidget {
 
 class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
   var user = FirebaseAuth.instance.currentUser!;
-  List<Post> myPost =  [];
+  List<Post> myPost = [];
   UserData? userData;
   @override
   Widget build(BuildContext context) {
@@ -53,304 +52,405 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
     SizeConfig.init(context);
     return Scaffold(
       appBar: CustomAppBar(
-        showMenuB: (widget.id==null||widget.id==FirebaseAuth.instance.currentUser!.uid),
-        onTap: (){
-          showBottomSheet(
+        showMenuB: (widget.id == null ||
+            widget.id == FirebaseAuth.instance.currentUser!.uid),
+        onTap: () {
+          showModalBottomSheet(
               context: context,
               enableDrag: true,
-              builder: (context){
+              builder: (context) {
                 return Container(
                   height: 350.h,
                   decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        topRight: Radius.circular(16),
-
-                      )
-                  ),
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  )),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 18.h,),
-                        const Divider(
-                          thickness: 2,
-                          indent: 150,
-                          endIndent: 150,
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 18.h,
+                            ),
+                            const Divider(
+                              thickness: 2,
+                              indent: 150,
+                              endIndent: 150,
+                            ),
+                            SettingsTile(
+                              title: "Settings",
+                              leading: "assets/icon/settings.svg",
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return const SettingsScreen();
+                                }));
+                              },
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            SettingsTile(
+                              title: "Content and Privacy Policy",
+                              leading: "assets/icon/note-text.svg",
+                              onTap: () {},
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            SettingsTile(
+                              title: "Saved Post",
+                              leading: "assets/icon/love.svg",
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return SaveScreen();
+                                }));
+                              },
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            SettingsTile(
+                              title: "Help Center",
+                              leading: "assets/icon/help-center-icon.svg",
+                              onTap: () {},
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            SettingsTile(
+                              title: "Logout",
+                              leading: "assets/icon/logout.svg",
+                              onTap: () {
+                                nav(context, Login(), remove: true);
+                                context.read<PageViewModel>().setIndex(0);
+                                FirebaseMessaging.instance.unsubscribeFromTopic(
+                                    FirebaseAuth.instance.currentUser!.uid);
+                                Future.delayed(
+                                    const Duration(milliseconds: 500), () {
+                                  FirebaseAuth.instance.signOut();
+                                  LocalStorage.clear();
+                                  blogModel.myPosts.clear();
+                                  blogModel.myLikes.clear();
+                                });
+                              },
+                            ),
+                          ],
                         ),
-                        SettingsTile(
-                          title: "Settings",
-                          leading: "assets/icon/settings.svg",
-                          onTap: () {
-                            Navigator.push(
-                                context, MaterialPageRoute(builder: (context){
-                              return const SettingsScreen();
-                            })
-                            );
-                          },
-                        ),
-                        SizedBox(height: 25.h,),
-                        SettingsTile(
-                          title: "Content and Privacy Policy",
-                          leading: "assets/icon/note-text.svg",
-                          onTap: () {},
-                        ),
-                        SizedBox(height: 25.h,),
-                        SettingsTile(
-                          title: "Help Center",
-                          leading: "assets/icon/help-center-icon.svg",
-                          onTap: () {},
-                        ),
-                        SizedBox(height: 45.h,),
-                        SettingsTile(
-                          title: "Logout",
-                          leading: "assets/icon/logout.svg",
-                          onTap: () {
-                            nav(context, Login(),remove: true);
-                            context.read<PageViewModel>().setIndex(0);
-                            FirebaseMessaging.instance.unsubscribeFromTopic(FirebaseAuth.instance.currentUser!.uid);
-                            Future.delayed(const Duration(milliseconds: 500),(){
-                              FirebaseAuth.instance.signOut();
-                              LocalStorage.clear();
-                              blogModel.myPosts.clear();
-                              blogModel.myLikes.clear();
-                            });
-
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
+                      )),
                 );
-              }
-          );
-
+              });
         },
         trailing: "assets/icon/option.svg",
       ),
-      body: userData==null?const Center(child: CircularProgressIndicator(
-        color: AppColor.p300,
-      ))
-          :DefaultTabController(
-        length: 2,
-        child: NestedScrollView(
-          physics:const BouncingScrollPhysics(),
-            headerSliverBuilder: (context,scroll){
-              return [
-                SliverToBoxAdapter(
-                  child: Container(
-                    color: Colors.transparent,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: (){
-                                  showImageViewer(
-                                      context,
-                                      CachedNetworkImageProvider(userData!.userProfile.profileUrl),
-                                      onViewerDismissed: () {
+      body: userData == null
+          ? const Center(
+              child: CircularProgressIndicator(
+              color: AppColor.p300,
+            ))
+          : DefaultTabController(
+              length: 2,
+              child: NestedScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  headerSliverBuilder: (context, scroll) {
+                    return [
+                      SliverToBoxAdapter(
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        showImageViewer(
+                                            context,
+                                            CachedNetworkImageProvider(userData!
+                                                .userProfile.profileUrl),
+                                            onViewerDismissed: () {},
+                                            useSafeArea: true,
+                                            swipeDismissible: true);
                                       },
-                                      useSafeArea: true,
-                                      swipeDismissible: true
-                                  );
-                                },
-                                child: ImageCacheCircle(
-                                  userData!.userProfile.profileUrl,
-                                  height: 80,
-                                  width: 80,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 12.w,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(userData!.userProfile.username,style: AppTextTheme.h1,),
-                                  SizedBox(height: 4.h,),
-                                  Text(userData!.userProfile.fullName, style: AppTextTheme.h4,)
-                                ],
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 30.h,),
-                          LinkifyText(
-                            userData!.userProfile.bio,
-                            textStyle: AppTextTheme.h3,
-                            linkStyle:AppTextTheme.h3.copyWith(
-                                color: Colors.blue[900],
-                                decoration: TextDecoration.underline
-                            ) ,
-                            linkTypes: const [LinkType.url,LinkType.hashTag],
-                            onTap: (link){
-                              launchLink(link.value!);
-                            },),
-                          SizedBox(height: 30.h,),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              GestureDetector(
-                                onTap: (){
-                                  nav(context,  FollowersList(
-                                    index: 0,
-                                    id: widget.id??FirebaseAuth.instance.currentUser!.uid,
-
-                                  ));
-                                },
-                                child: Container(
-                                  color: Colors.transparent,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      StreamBuilder<QuerySnapshot>(
-                                          stream:FirebaseFirestore.instance.collection("following").
-                                          doc("users").collection(widget.id??FirebaseAuth.instance.currentUser!.uid).snapshots(),
-                                          builder: (context, snapshot) {
-
-                                            return Text(snapshot.hasData?snapshot.data!.docs.length.toString():
-                                            "0", style: AppTextTheme.h3,);
-                                          }
+                                      child: ImageCacheCircle(
+                                        userData!.userProfile.profileUrl,
+                                        height: 80,
+                                        width: 80,
                                       ),
-                                      Text(
-                                        "Following",
-                                        style: AppTextTheme.h4.copyWith(
-                                            color: AppColor.g300),
-                                      )
-                                    ],
-                                  ),
+                                    ),
+                                    SizedBox(
+                                      width: 12.w,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          userData!.userProfile.username,
+                                          style: AppTextTheme.h1,
+                                        ),
+                                        SizedBox(
+                                          height: 4.h,
+                                        ),
+                                        Text(
+                                          userData!.userProfile.fullName,
+                                          style: AppTextTheme.h4,
+                                        )
+                                      ],
+                                    )
+                                  ],
                                 ),
-
-                              ),
-                              GestureDetector(
-                                onTap: (){
-                                  nav(context,  FollowersList(
-                                    index: 1,
-                                    id: widget.id??FirebaseAuth.instance.currentUser!.uid,
-                                  ));
-                                },
-                                child: Container(
-                                  color: Colors.transparent,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      StreamBuilder<QuerySnapshot>(
-                                          stream:FirebaseFirestore.instance.collection("followers").
-                                          doc("users").collection(widget.id??FirebaseAuth.instance.currentUser!.uid).snapshots(),
-                                          builder: (context, snapshot) {
-
-                                            return Text(snapshot.hasData?snapshot.data!.docs.length.toString():
-                                            "0", style: AppTextTheme.h3,);
-                                          }
+                                SizedBox(
+                                  height: 30.h,
+                                ),
+                                LinkifyText(
+                                  userData!.userProfile.bio,
+                                  textStyle: AppTextTheme.h3,
+                                  linkStyle: AppTextTheme.h3.copyWith(
+                                      color: Colors.blue[900],
+                                      decoration: TextDecoration.underline),
+                                  linkTypes: const [
+                                    LinkType.url,
+                                    LinkType.hashTag
+                                  ],
+                                  onTap: (link) {
+                                    launchLink(link.value!);
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 30.h,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        nav(
+                                            context,
+                                            FollowersList(
+                                              index: 0,
+                                              id: widget.id ??
+                                                  FirebaseAuth.instance
+                                                      .currentUser!.uid,
+                                            ));
+                                      },
+                                      child: Container(
+                                        color: Colors.transparent,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            StreamBuilder<QuerySnapshot>(
+                                                stream: FirebaseFirestore
+                                                    .instance
+                                                    .collection("following")
+                                                    .doc("users")
+                                                    .collection(widget.id ??
+                                                        FirebaseAuth.instance
+                                                            .currentUser!.uid)
+                                                    .snapshots(),
+                                                builder: (context, snapshot) {
+                                                  return Text(
+                                                    snapshot.hasData
+                                                        ? snapshot
+                                                            .data!.docs.length
+                                                            .toString()
+                                                        : "0",
+                                                    style: AppTextTheme.h3,
+                                                  );
+                                                }),
+                                            Text(
+                                              "Following",
+                                              style: AppTextTheme.h4.copyWith(
+                                                  color: AppColor.g300),
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      Text(
-                                        "Followers",
-                                        style: AppTextTheme.h4.copyWith(
-                                            color: AppColor.g300),)
-                                    ],
-                                  ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        nav(
+                                            context,
+                                            FollowersList(
+                                              index: 1,
+                                              id: widget.id ??
+                                                  FirebaseAuth.instance
+                                                      .currentUser!.uid,
+                                            ));
+                                      },
+                                      child: Container(
+                                        color: Colors.transparent,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            StreamBuilder<QuerySnapshot>(
+                                                stream: FirebaseFirestore
+                                                    .instance
+                                                    .collection("followers")
+                                                    .doc("users")
+                                                    .collection(widget.id ??
+                                                        FirebaseAuth.instance
+                                                            .currentUser!.uid)
+                                                    .snapshots(),
+                                                builder: (context, snapshot) {
+                                                  return Text(
+                                                    snapshot.hasData
+                                                        ? snapshot
+                                                            .data!.docs.length
+                                                            .toString()
+                                                        : "0",
+                                                    style: AppTextTheme.h3,
+                                                  );
+                                                }),
+                                            Text(
+                                              "Followers",
+                                              style: AppTextTheme.h4.copyWith(
+                                                  color: AppColor.g300),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    showFollow()
+                                        ? StreamBuilder<DocumentSnapshot>(
+                                            stream: FirebaseFirestore.instance
+                                                .collection('followButton')
+                                                .doc(widget.id)
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              bool disable = false;
+                                              if (snapshot.data != null) {
+                                                if (snapshot.data!.exists) {
+                                                  var data = snapshot.data!
+                                                      .data()! as Map;
+                                                  disable = data['disable'];
+                                                }
+                                              }
+                                              if (disable == false) {
+                                                return PlatButton(
+                                                  title:
+                                                      blogModel.getIsFollowed(
+                                                              userData!
+                                                                  .userProfile
+                                                                  .email)
+                                                          ? "Unfollow"
+                                                          : "Follow",
+                                                  padding: 0,
+                                                  textSize: 14,
+                                                  color:
+                                                      blogModel.getIsFollowed(
+                                                              userData!
+                                                                  .userProfile
+                                                                  .email)
+                                                          ? AppColor.g700
+                                                          : AppColor.p200,
+                                                  onTap: () {
+                                                    var user = context
+                                                        .read<UserViewModel>()
+                                                        .user;
+                                                    //blogModel.following.add(userData!.userProfile);
+                                                    if (blogModel.getIsFollowed(
+                                                        userData!.userProfile
+                                                            .email)) {
+                                                      blogModel.unFollowUser(
+                                                          widget.id!,
+                                                          userData!
+                                                              .userProfile);
+                                                    } else {
+                                                      blogModel.followUser(
+                                                          widget.id!,
+                                                          user!.userProfile,
+                                                          userData!
+                                                              .userProfile);
+                                                    }
+                                                  },
+                                                  width: 95.w,
+                                                  height: 38.h,
+                                                );
+                                              } else {
+                                                return const SizedBox();
+                                              }
+                                            })
+                                        : PlatButton(
+                                            title: "Edit Profile",
+                                            padding: 0,
+                                            textSize: 14,
+                                            onTap: () {
+                                              settings(context);
+                                            },
+                                            width: 95.w,
+                                            height: 38.h,
+                                          )
+                                  ],
                                 ),
-                              ),
-                              showFollow()?StreamBuilder<DocumentSnapshot>(
-                                  stream: FirebaseFirestore.instance.collection('followButton')
-                                      .doc(widget.id).snapshots(),
-                                  builder: (context, snapshot) {
-                                    bool disable = false;
-                                    if(snapshot.data!=null){
-                                      if(snapshot.data!.exists){
-                                        var data = snapshot.data!.data()! as Map;
-                                        disable =data['disable'];
-                                      }
-
-                                    }
-                                    if(disable==false){
-                                      return PlatButton(
-                                        title: blogModel.getIsFollowed(userData!.userProfile.email)?"Unfollow":"Follow",
-                                        padding: 0,
-                                        textSize: 14,
-                                        color:blogModel.getIsFollowed(userData!.userProfile.email)?AppColor.g700:AppColor.p200 ,
-                                        onTap: (){
-                                          var user = context.read<UserViewModel>().user;
-                                          //blogModel.following.add(userData!.userProfile);
-                                          if(blogModel.getIsFollowed(userData!.userProfile.email)){
-                                            blogModel.unFollowUser(widget.id!, userData!.userProfile);
-                                          }else{
-                                            blogModel.followUser(widget.id!, user!.userProfile, userData!.userProfile);
-
-                                          }
-                                        },
-                                        width: 95.w,
-                                        height: 38.h,
-                                      );
-                                    }else{
-                                      return const SizedBox();
-                                    }
-
-                                  }
-                              ) : PlatButton(
-                                title: "Edit Profile",
-                                padding: 0,
-                                textSize: 14,
-                                onTap: (){
-                                  settings(context);
-                                },
-                                width: 95.w,
-                                height: 38.h,
-                              )
-                            ],
+                                SizedBox(
+                                  height: 30.h,
+                                ),
+                              ],
+                            ),
                           ),
-                          SizedBox(height: 30.h,),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                SliverAppBar(
-                  backgroundColor:AppColor.g0,
-                  elevation: 0.0,
-                  pinned: true,
-                  toolbarHeight: 60,
-                  //collapsedHeight: 0,
-                  expandedHeight: 0,
-                  primary: false,
-                  automaticallyImplyLeading: false,
-                  title: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 20.w),
-                        child: TabBar(
-                          tabs: const [
-                            Tab(text: "Posts",),
-                            Tab(text: "Likes",)
+                      SliverAppBar(
+                        backgroundColor: AppColor.g0,
+                        elevation: 0.0,
+                        pinned: true,
+                        toolbarHeight: 60,
+                        //collapsedHeight: 0,
+                        expandedHeight: 0,
+                        primary: false,
+                        automaticallyImplyLeading: false,
+                        title: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(right: 20.w),
+                              child: TabBar(
+                                tabs: const [
+                                  Tab(
+                                    text: "Posts",
+                                  ),
+                                  Tab(
+                                    text: "Likes",
+                                  )
+                                ],
+                                // padding: EdgeInsets.only(right: 100.w),
+                                labelStyle:
+                                    AppTextTheme.h6.copyWith(fontSize: 18),
+                                unselectedLabelStyle:
+                                    AppTextTheme.h6.copyWith(fontSize: 18),
+                                labelColor: AppColor.textColor,
+                                unselectedLabelColor: AppColor.g60,
+                                indicatorColor: AppColor.p300,
+                                indicatorSize: TabBarIndicatorSize.label,
+                                indicatorWeight: 1.w,
+                                indicatorPadding:
+                                    EdgeInsets.symmetric(horizontal: 7.w),
+                              ),
+                            )
                           ],
-                          // padding: EdgeInsets.only(right: 100.w),
-                          labelStyle: AppTextTheme.h6.copyWith(fontSize: 18),
-                          unselectedLabelStyle: AppTextTheme.h6.copyWith(fontSize: 18),
-                          labelColor: AppColor.textColor,
-                          unselectedLabelColor: AppColor.g60,
-                          indicatorColor: AppColor.p300,
-                          indicatorSize: TabBarIndicatorSize.label,
-                          indicatorWeight: 1.w,
-                          indicatorPadding: EdgeInsets.symmetric(horizontal: 7.w),
-
                         ),
                       )
+                    ];
+                  },
+                  body: TabBarView(
+                    children: [
+                      ViewPostsPage(
+                        post: myPost,
+                      ),
+                      ViewLikesPage(
+                        id: widget.id,
+                      ),
                     ],
-                  ),
-                )
-              ];
-            },
-            body: TabBarView(
-              children: [
-                ViewPostsPage(post: myPost,),
-                ViewLikesPage(id: widget.id,),
-              ],)
-        ),
-      ),
-
+                  )),
+            ),
     );
   }
 
@@ -358,43 +458,39 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(milliseconds: 20),(){
+    Future.delayed(const Duration(milliseconds: 20), () {
       getData();
       getPost();
     });
   }
 
-  void getData() async{
+  void getData() async {
     var userModel = context.read<UserViewModel>();
     var blogModel = context.read<VBlogViewModel>();
-    if(widget.id==null){
-      if(userModel.user!=null){
-        if(mounted){
+    if (widget.id == null) {
+      if (userModel.user != null) {
+        if (mounted) {
           setState(() {
-            userData=userModel.user;
+            userData = userModel.user;
           });
         }
-
-
-      }else{
-        userModel.getMyProfile().then((value){
-          if(mounted){
+      } else {
+        userModel.getMyProfile().then((value) {
+          if (mounted) {
             setState(() {
-              userData=value;
+              userData = value;
             });
           }
-
         });
       }
-    }else{
-      userModel.getUserProfile(widget.id!).then((value){
-        if(value!=null){
-          if(mounted){
+    } else {
+      userModel.getUserProfile(widget.id!).then((value) {
+        if (value != null) {
+          if (mounted) {
             setState(() {
-              userData=value;
+              userData = value;
             });
           }
-
         }
       });
     }
@@ -405,70 +501,63 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
 
   void getPost() {
     var blogModel = context.read<VBlogViewModel>();
-    if(widget.id==null){
-      if(blogModel.myPosts.isEmpty){
-        blogModel.getMyPost().then((value){
-          if(value!=null){
-            if(mounted){
+    if (widget.id == null) {
+      if (blogModel.myPosts.isEmpty) {
+        blogModel.getMyPost().then((value) {
+          if (value != null) {
+            if (mounted) {
               setState(() {
-                myPost=value;
+                myPost = value;
               });
             }
           }
         });
-      }else{
-        myPost=blogModel.myPosts;
+      } else {
+        myPost = blogModel.myPosts;
       }
-    }else{
-      blogModel.getUserPost(widget.id!).then((value){
-        if(value!=null){
-          if(mounted){
+    } else {
+      blogModel.getUserPost(widget.id!).then((value) {
+        if (value != null) {
+          if (mounted) {
             setState(() {
-              myPost=value;
+              myPost = value;
             });
           }
-
         }
       });
     }
-
   }
 
-  void settings(BuildContext context) async{
+  void settings(BuildContext context) async {
     var userModel = context.read<UserViewModel>();
-    var data =  await Navigator.push(
-        context, MaterialPageRoute(builder: (context){
-      return EditProfileScreen(userData: userData!,);
-    })
-    );
-    if(data!=null){
-      userModel.getMyProfile().then((value){
-        if(mounted){
+    var data =
+        await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return EditProfileScreen(
+        userData: userData!,
+      );
+    }));
+    if (data != null) {
+      userModel.getMyProfile().then((value) {
+        if (mounted) {
           setState(() {
-            userData=value;
+            userData = value;
           });
         }
-
       });
     }
-
-
   }
 
-  void launchLink(String link) async{
+  void launchLink(String link) async {
     if (!await launchUrl(Uri.parse(link))) {
       throw 'Could not launch $link';
     }
   }
 
   bool showFollow() {
-    if(widget.id!=null&&widget.id!=user.uid){
+    if (widget.id != null && widget.id != user.uid) {
       return true;
-    }else{
+    } else {
       return false;
     }
   }
-
-
 }
-
