@@ -1,18 +1,11 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
-import 'package:disposable_cached_images/disposable_cached_images.dart';
-import 'package:firebase_cached_image/firebase_cached_image.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:optimized_cached_image/optimized_cached_image.dart';
-import 'package:platterwave/main.dart';
+import 'package:platterwave/utils/cache_manager.dart';
 
 const kPlaceHolder =
     'https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt67a59125151d76ef/625e7dffceb10b47dfaba4dc/GettyImages-1348618431.jpg';
 
-class ImageCacheR extends StatefulWidget {
+class ImageCacheR extends StatelessWidget {
   final double height, width, topRadius, topBottom, blend;
   final String image;
   final bool fit;
@@ -32,12 +25,6 @@ class ImageCacheR extends StatefulWidget {
     this.chachedImage = false,
   }) : super(key: key);
 
-  @override
-  State<ImageCacheR> createState() => _ImageCacheRState();
-}
-
-class _ImageCacheRState extends State<ImageCacheR> {
-  String? image;
 /*
   getCachedImagePath() async {
     var dir = kDir;
@@ -84,93 +71,46 @@ class _ImageCacheRState extends State<ImageCacheR> {
   @override
   Widget build(BuildContext context) {
     var radius = BorderRadius.only(
-        topRight: Radius.circular(widget.topRadius),
-        topLeft: Radius.circular(widget.topRadius),
-        bottomLeft: Radius.circular(widget.topBottom),
-        bottomRight: Radius.circular(widget.topBottom));
+        topRight: Radius.circular(topRadius),
+        topLeft: Radius.circular(topRadius),
+        bottomLeft: Radius.circular(topBottom),
+        bottomRight: Radius.circular(topBottom));
 
-    return CachedNetworkImage(
-      imageUrl: widget.image,
-      imageBuilder: (context, imageProvider) => Container(
-          height: widget.height,
-          width: widget.width,
-          decoration: BoxDecoration(
-              borderRadius: radius,
-              color: widget.blend > 0
-                  ? Colors.black.withOpacity(widget.blend)
-                  : null,
-              image: DecorationImage(
-                image: imageProvider,
-                fit: widget.fit ? BoxFit.cover : BoxFit.scaleDown,
-              ))),
-      placeholder: (context, url) => Container(
-        height: widget.height,
-        width: widget.width,
-        decoration:
-            BoxDecoration(color: Colors.grey[300]!, borderRadius: radius),
-        child: const Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
-      height: widget.height,
-      width: widget.width,
-      filterQuality: FilterQuality.none,
-      fadeInDuration: Duration.zero,
-      fit: widget.fit ? BoxFit.cover : BoxFit.scaleDown,
-      repeat: ImageRepeat.repeat,
-      colorBlendMode: BlendMode.darken,
-      color: widget.blend > 0 ? Colors.black.withOpacity(widget.blend) : null,
-      errorWidget: (context, url, error) => Container(
-        width: widget.width,
-        height: widget.height,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: NetworkImage(widget.errorPlaceHolder ??
-                  'https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg'),
-              fit: widget.fit ? BoxFit.cover : BoxFit.scaleDown),
-          borderRadius: radius,
-        ),
-      ), /* DisposableCachedImage.network(
-        height: widget.height,
-        keepAlive: true,
-        width: widget.width,
-        keepBytesInMemory: false,
-        imageUrl: widget.image.toString(),
-        filterQuality: FilterQuality.none,
-        fit: widget.fit ? BoxFit.cover : BoxFit.scaleDown,
-        fadeDuration: Duration.zero,
-        repeat: ImageRepeat.repeat,
-        colorBlendMode: BlendMode.darken,
-        color: widget.blend > 0 ? Colors.black.withOpacity(widget.blend) : null,
-        onLoading: (context, url, u) {
-          return Container(
-            height: widget.height,
-            width: widget.width,
+    return ClipRRect(
+        borderRadius: radius,
+        child: CachedNetworkImage(
+          imageUrl: image,
+          cacheManager: CustomCacheManager.instance,
+          placeholder: (context, url) => Container(
+            height: height,
+            width: width,
             decoration:
                 BoxDecoration(color: Colors.grey[300]!, borderRadius: radius),
-            child: const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(),
-              ],
+            child: const Center(
+              child: CircularProgressIndicator(),
             ),
-          );
-        },
-        onError: (context, url, error, w) {
-          return Container(
-            width: widget.width,
-            height: widget.height,
+          ),
+          height: height,
+          width: width,
+          key: UniqueKey(),
+          filterQuality: FilterQuality.none,
+          fadeInDuration: Duration.zero,
+          fit: fit ? BoxFit.cover : BoxFit.scaleDown,
+          repeat: ImageRepeat.repeat,
+          colorBlendMode: BlendMode.darken,
+          color: blend > 0 ? Colors.black.withOpacity(blend) : null,
+          errorWidget: (context, url, error) => Container(
+            width: width,
+            height: height,
             decoration: BoxDecoration(
               image: DecorationImage(
-                  image: NetworkImage(widget.errorPlaceHolder ??
+                  image: NetworkImage(errorPlaceHolder ??
                       'https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg'),
-                  fit: widget.fit ? BoxFit.cover : BoxFit.scaleDown),
+                  fit: fit ? BoxFit.cover : BoxFit.scaleDown),
               borderRadius: radius,
             ),
-          );
-        },
-      ),*/
-    );
+          ),
+        ));
   }
 }
 
@@ -201,6 +141,7 @@ class ImageCacheCircle extends StatelessWidget {
       width: width,
       placeholderFadeInDuration: Duration.zero,
       fadeInDuration: Duration.zero,
+      cacheManager: CustomCacheManager.instance,
       imageUrl: image,
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
@@ -217,7 +158,7 @@ class ImageCacheCircle extends StatelessWidget {
           height: height,
           width: width,
           decoration: BoxDecoration(
-              color: Colors.white.withAlpha(210), borderRadius: radius),
+              color: Colors.white.withAlpha(170), borderRadius: radius),
         );
       },
       errorWidget: (context, url, error) {

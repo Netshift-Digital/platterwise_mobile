@@ -48,6 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
             .read<UserViewModel>()
             .getUserProfile(FirebaseAuth.instance.currentUser!.uid)
             .then((value) {
+          print("The value is $value");
           if (value != null) {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const BottomNav()));

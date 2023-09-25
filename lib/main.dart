@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
-import 'package:disposable_cached_images/disposable_cached_images.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -24,6 +23,7 @@ import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
+import 'package:platterwave/views/screens/auth/login.dart';
 import 'package:platterwave/views/screens/auth/splash.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/restaurant/screen/reservation_details.dart';
@@ -35,10 +35,9 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 late Directory kDir;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await Firebase.initializeApp();
-  //await DisposableImages.init();
   Directory tempDir = await getApplicationDocumentsDirectory();
   kDir = await getApplicationSupportDirectory();
   Hive.init(tempDir.path);
@@ -46,12 +45,6 @@ void main() async {
   await Hive.openBox(authKey);
   final FirebaseCrashlytics crashlytics = FirebaseCrashlytics.instance;
   FlutterError.onError = crashlytics.recordFlutterError;
-  // runZonedGuarded(() async {
-  //   //await crashlytics.setCrashlyticsCollectionEnabled(false);
-  //   FlutterError.onError = crashlytics.recordFlutterError;
-  // }, (error, stack) {
-  //   crashlytics.recordError(error, stack);
-  // });
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarBrightness: Brightness.light,
@@ -60,18 +53,13 @@ void main() async {
       systemNavigationBarIconBrightness: Brightness.light));
   setupLocator();
   runApp(
-    MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => PageViewModel()),
-          ChangeNotifierProvider(create: (_) => UserViewModel()),
-          ChangeNotifierProvider(create: (_) => VBlogViewModel()),
-          ChangeNotifierProvider(create: (_) => RestaurantViewModel()),
-          ChangeNotifierProvider(create: (_) => LocationProvider()),
-        ],
-        child: // const DisposableImages(
-            MyApp()
-        //),
-        ),
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (_) => PageViewModel()),
+      ChangeNotifierProvider(create: (_) => UserViewModel()),
+      ChangeNotifierProvider(create: (_) => VBlogViewModel()),
+      ChangeNotifierProvider(create: (_) => RestaurantViewModel()),
+      ChangeNotifierProvider(create: (_) => LocationProvider()),
+    ], child: MyApp()),
   );
 }
 
@@ -83,8 +71,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
-
   @override
   Widget build(BuildContext context) {
     return OverlaySupport.global(
@@ -92,9 +78,10 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: navigatorKey,
         builder: BotToastInit(),
         title: appName,
+        navigatorObservers: [BotToastNavigatorObserver()],
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
-        home: const SplashScreen(),
+        home: SplashScreen(),
       ),
     );
   }

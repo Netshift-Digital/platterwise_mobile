@@ -138,6 +138,7 @@ class _TimelineState extends State<Timeline> {
                   itemCount: context.watch<VBlogViewModel>().posts.length,
                   itemBuilder: (context, index) {
                     var data = model.posts[index];
+                    print("Here are the posts ${model.posts}");
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       //child: Text('chisom'),

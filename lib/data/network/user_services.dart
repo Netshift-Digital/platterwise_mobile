@@ -9,24 +9,23 @@ import 'package:platterwave/model/request_model/edit_data.dart';
 import 'package:platterwave/model/request_model/register_model.dart';
 import 'package:platterwave/utils/random_functions.dart';
 
-
-class UserService{
+class UserService {
   var client = http.Client();
-
-
 
   Future<dynamic> signUp(RegisterModel registerModel) async {
     var body = jsonEncode(registerModel.toJson());
     try {
-      var response =
-      await client.post(Uri.parse("${baseurl}createacc_json.php"), body: body, headers: {
-        "Content-type": "application/json",
-      });
+      var response = await client.post(
+          Uri.parse("${baseurl}createacc_json.php"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+          });
       var data = jsonDecode(response.body);
-      if(response.statusCode==200){
+      if (response.statusCode == 200) {
         return data;
-      }else{
-        RandomFunction.toast(data['status']??"");
+      } else {
+        RandomFunction.toast(data['status'] ?? "");
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -39,20 +38,17 @@ class UserService{
     }
     return null;
   }
-
-
-
 
   Future<dynamic> editProfile(EditData editData) async {
     var body = jsonEncode(editData.toJson());
     try {
-      var response =
-      await client.post(Uri.parse("${baseurl}edit_user.php"), body: body, headers: {
+      var response = await client
+          .post(Uri.parse("${baseurl}edit_user.php"), body: body, headers: {
         "Content-type": "application/json",
       });
       var data = jsonDecode(response.body);
-      RandomFunction.toast(data['status']??"");
-      if(response.statusCode==200){
+      RandomFunction.toast(data['status'] ?? "");
+      if (response.statusCode == 200) {
         return data;
       }
     } on SocketException catch (_) {
@@ -66,19 +62,16 @@ class UserService{
     }
     return null;
   }
-
 
   Future<Map<String, dynamic>?> getUser(String uid) async {
-    var body = jsonEncode({
-      "firebaseAuthID":uid
-    });
+    var body = jsonEncode({"firebaseAuthID": uid});
     try {
-      var response =
-      await client.post(Uri.parse("${baseurl}get_profile.php"), body: body, headers: {
+      var response = await client
+          .post(Uri.parse("${baseurl}get_profile.php"), body: body, headers: {
         "Content-type": "application/json",
-      }).timeout(const Duration(seconds: 10));
+      }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body);
-      if(response.statusCode==200){
+      if (response.statusCode == 200) {
         return data;
       }
     } on SocketException catch (_) {
@@ -92,6 +85,4 @@ class UserService{
     }
     return null;
   }
-
-
 }

@@ -29,10 +29,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: e0902a06f0e00414e4e3438a084580161279f137aeb862274710f29ec10cf01e
+      sha256: "1227dc3efc4ea571eebb2dfb814506ed2cfb1d4b1b89fb918abdddde617ead3c"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.3.9"
+    version: "3.4.0"
   args:
     dependency: transitive
     description:
@@ -369,14 +369,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "5.3.2"
-  disposable_cached_images:
-    dependency: "direct main"
-    description:
-      name: disposable_cached_images
-      sha256: a2b3eb1d948ce494135edf36c31160845c01d5bc663a78137653fa9724b0775c
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.2.1"
   equatable:
     dependency: transitive
     description:
@@ -631,7 +623,7 @@ packages:
     source: hosted
     version: "0.7.0"
   flutter_cache_manager:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_cache_manager
       sha256: "8207f27539deb83732fdda03e259349046a39a4c767269285f449ade355d54ba"
@@ -758,14 +750,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.0.1"
-  flutter_riverpod:
-    dependency: transitive
-    description:
-      name: flutter_riverpod
-      sha256: "1bd39b04f1bcd217a969589777ca6bd642d116e3e5de65c3e6a8e8bdd8b178ec"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.4.0"
   flutter_staggered_grid_view:
     dependency: "direct main"
     description:
@@ -775,7 +759,7 @@ packages:
     source: hosted
     version: "0.7.0"
   flutter_svg:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_svg
       sha256: "9ac1967e2f72a08af11b05b39167920f90d043cf67163d13a544a358c8f31afa"
@@ -1136,14 +1120,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.2.0"
-  isolate_generator_annotation:
-    dependency: transitive
-    description:
-      name: isolate_generator_annotation
-      sha256: "9d152a9955cd6b7fc48acaeb663edbcf6b4308a1d1f0fc426e8429a1dd869311"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.0.6+1"
   jiffy:
     dependency: "direct main"
     description:
@@ -1624,14 +1600,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.2.0"
-  riverpod:
-    dependency: transitive
-    description:
-      name: riverpod
-      sha256: a600120d6f213a9922860eea1abc32597436edd5b2c4e73b91410f8c2af67d22
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.4.0"
   rxdart:
     dependency: transitive
     description:
@@ -1797,14 +1765,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.11.0"
-  state_notifier:
-    dependency: transitive
-    description:
-      name: state_notifier
-      sha256: b8677376aa54f2d7c58280d5a007f9e8774f1968d1fb1c096adcb4792fba29bb
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.0"
   sticky_headers:
     dependency: "direct main"
     description:

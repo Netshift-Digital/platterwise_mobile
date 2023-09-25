@@ -70,10 +70,10 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                 GestureDetector(
                   onTap: () {
                     nav(
-                        context,
-                        ViewUserProfileScreen(
-                          id: widget.post.firebaseAuthId,
-                        ),
+                      context,
+                      ViewUserProfileScreen(
+                        id: widget.post.firebaseAuthId,
+                      ),
                     );
                   },
                   child: ImageCacheCircle(
@@ -426,17 +426,15 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
     }
   }
 
- Widget imageWid(BuildContext context) {
+  Widget imageWid(BuildContext context) {
     var data = widget.post.contentUrl.replaceAll(']', '').split('  ,');
-    if(data.length>1){
+    if (data.length > 1) {
       return ImageStag(images: data);
     }
     return GestureDetector(
       onTap: () {
         showImageViewer(
-            context,
-            CachedNetworkImageProvider(
-                widget.post.contentUrl),
+            context, CachedNetworkImageProvider(widget.post.contentUrl),
             onViewerDismissed: () {},
             useSafeArea: true,
             swipeDismissible: true);
@@ -445,7 +443,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
         height: 239.h,
         width: 343.w,
         decoration: BoxDecoration(
-            color: AppColor.p300,
+            //  color: AppColor.p300,
             borderRadius: BorderRadius.circular(15),
             shape: BoxShape.rectangle),
         child: ImageCacheR(
@@ -454,5 +452,5 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
         ),
       ),
     );
- }
+  }
 }
