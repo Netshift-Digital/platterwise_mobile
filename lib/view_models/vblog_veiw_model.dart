@@ -309,18 +309,6 @@ class VBlogViewModel extends BaseViewModel {
     return imageUrls;
   }
 
-  // Future<List<String>> uploadFiles(List<String> images) async {
-  //   List<Future<String>> uploadTasks = [];
-
-  //   for (var image in images) {
-  //     uploadTasks.add(uploadFile(image));
-  //   }
-
-  //   List<String> imageUrls = await Future.wait(uploadTasks);
-
-  //   return imageUrls;
-  // }
-
   Future<String> uploadFile(String image) async {
     var id = FirebaseAuth.instance.currentUser!.uid;
     var imageName = DateTime.now().millisecondsSinceEpoch;

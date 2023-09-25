@@ -299,46 +299,41 @@ class _CreatePostState extends State<CreatePost> {
                 children: images!.map((e) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child: GestureDetector(
-                      onTap: () {
-                        cropImage(e);
-                      },
-                      child: Container(
-                        height: 200,
-                        width: 200,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            image: DecorationImage(
-                                image: FileImage(File(e)), fit: BoxFit.cover)),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    images?.remove(e);
-                                    if (images?.isEmpty ?? true) {
-                                      type = PostType.text;
-                                      images = null;
-                                    }
-                                  });
-                                },
-                                child: const CircleAvatar(
-                                  radius: 10,
-                                  backgroundColor: Color(0xff4F4F4F),
-                                  child: Icon(
-                                    Icons.clear,
-                                    color: Colors.white,
-                                    size: 13,
-                                  ),
+                    child: Container(
+                      height: 200,
+                      width: 200,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          image: DecorationImage(
+                              image: FileImage(File(e)), fit: BoxFit.cover)),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  images?.remove(e);
+                                  if (images?.isEmpty ?? true) {
+                                    type = PostType.text;
+                                    images = null;
+                                  }
+                                });
+                              },
+                              child: const CircleAvatar(
+                                radius: 10,
+                                backgroundColor: Color(0xff4F4F4F),
+                                child: Icon(
+                                  Icons.clear,
+                                  color: Colors.white,
+                                  size: 13,
                                 ),
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   );
@@ -346,30 +341,6 @@ class _CreatePostState extends State<CreatePost> {
               ),
             ),
           );
-  }
-
-  Future<void> cropImage(String imagePath) async {
-    await ImageCropper().cropImage(
-      sourcePath: imagePath,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
-      ],
-      uiSettings: [
-        AndroidUiSettings(
-            toolbarTitle: 'Cropper',
-            toolbarColor: Colors.deepOrange,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        IOSUiSettings(
-          title: 'Cropper',
-        ),
-      ],
-    );
   }
 
   void cancel(BuildContext context) {
