@@ -77,20 +77,26 @@ class _FollowingTabState extends State<FollowingTab> {
           //     ],
           //   ),
           // ),
-          ListView.builder(
-              padding: EdgeInsets.zero,
-              primary: false,
-              shrinkWrap: true,
-              itemCount: context.watch<VBlogViewModel>().posts.length,
-              itemBuilder: (context, index) {
-                var data = model.posts[index];
-                print("Here are the posts ${model.posts}");
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  //child: Text('chisom'),
-                  child: TimelinePostContainer(data),
-                );
-              }),
+          Consumer<VBlogViewModel>(
+            builder: (context, vBlogModel, child) {
+              final posts = vBlogModel.posts;
+              return ListView.builder(
+                padding: EdgeInsets.zero,
+                primary: false,
+                shrinkWrap: true,
+                itemCount: posts.length,
+                itemBuilder: (context, index) {
+                  var data = posts[index];
+                  print("Here are the posts $posts");
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: TimelinePostContainer(data),
+                  );
+                },
+              );
+            },
+          ),
+
           model.postAppState == AppState.busy
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 100),
