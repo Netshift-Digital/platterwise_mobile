@@ -22,7 +22,7 @@ class _SignInSignUpState extends State<SignInSignUp> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Row(),
+            Row(),
             const Text('Welcome\nto Platterwise',style: TextStyle(
               fontWeight: FontWeight.w900,
               fontSize: 40

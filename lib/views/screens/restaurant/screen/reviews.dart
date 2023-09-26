@@ -30,7 +30,7 @@ class _RestaurantsReviewsState extends State<RestaurantsReviews> {
     // var user = context.read<UserViewModel>().user;
     // var resViewModel = context.read<RestaurantViewModel>();
     // var size = MediaQuery.of(context).size;
-    return widget.review.isEmpty?const Column(
+    return widget.review.isEmpty?Column(
       children: [
         EmptyContentContainer(),
       ],

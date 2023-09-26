@@ -30,7 +30,7 @@ class _SharedPostState extends State<SharedPost> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Row(),
+            Row(),
             model.appState==AppState.busy?
                const CircularProgressIndicator(
                  valueColor: AlwaysStoppedAnimation(AppColor.p200),

@@ -161,7 +161,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                         context.read<VBlogViewModel>().savePost(widget.post);
                       },
                       // row has two child icon and text
-                      child: const Row(
+                      child: Row(
                         children: [
                           Icon(Icons.bookmark),
                           SizedBox(
@@ -178,7 +178,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                             value: 3,
                             onTap: () {},
                             // row has two child icon and text
-                            child: const Row(
+                            child: Row(
                               children: [
                                 Icon(Icons.delete),
                                 SizedBox(
@@ -193,7 +193,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                             value: 1,
                             onTap: () {},
                             // row has two child icon and text
-                            child: const Row(
+                            child: Row(
                               children: [
                                 Icon(Icons.flag),
                                 SizedBox(
