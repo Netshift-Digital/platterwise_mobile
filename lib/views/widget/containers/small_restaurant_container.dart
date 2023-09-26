@@ -10,7 +10,6 @@ import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/res.dart';
-import 'package:platterwave/views/screens/restaurant/screen/restaurant_details.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 
 class SmallRestaurantContainer extends StatelessWidget {
@@ -60,6 +59,7 @@ class SmallRestaurantContainer extends StatelessWidget {
                         width: 26,
                         child: GestureDetector(
                           onTap: () {
+                            print("Fav rest clicked");
                             context
                                 .read<RestaurantViewModel>()
                                 .saveRestaurant(restaurantData);
@@ -67,11 +67,15 @@ class SmallRestaurantContainer extends StatelessWidget {
                           child: SizedBox(
                             width: 39,
                             height: 39,
-                            child: context
-                                .watch<RestaurantViewModel>()
-                                .isFavourite(restaurantData.restId.toString())
-                                ? SvgPicture.asset('assets/icon/heart.svg')
-                                : SvgPicture.asset('assets/icon/favour_rite.svg'),
+                            child: Consumer<RestaurantViewModel>(
+                              builder: (context, restaurantModel, child) {
+                                return restaurantModel.isFavourite(
+                                        restaurantData.restId.toString())
+                                    ? SvgPicture.asset('assets/icon/heart.svg')
+                                    : SvgPicture.asset(
+                                        'assets/icon/favour_rite.svg');
+                              },
+                            ),
                           ),
                         ),
                       ),
@@ -114,10 +118,9 @@ class SmallRestaurantContainer extends StatelessWidget {
                         softWrap: true,
                         maxLines: 2,
                         style: AppTextTheme.h5.copyWith(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          color: AppColor.g600
-                        ),
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            color: AppColor.g600),
                         overflow: TextOverflow.ellipsis,
                       ),
                     )

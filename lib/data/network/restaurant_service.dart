@@ -533,6 +533,7 @@ class RestaurantService {
         "Content-type": "application/json",
       }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
+      print("This is the result unfav $data");
       RandomFunction.toast(data['status']);
       if (response.statusCode == 200) {
         return data;
@@ -554,12 +555,14 @@ class RestaurantService {
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
       'rest_id': id
     });
+    print("The body is $body");
     try {
       var response = await client
-          .delete(Uri.parse("${baseurl2}unsaved_rest.php"), body: body, headers: {
+          .post(Uri.parse("${baseurl2}unsaved_rest.php"), body: body, headers: {
         "Content-type": "application/json",
       }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
+      print("This is the result unfav $data");
       RandomFunction.toast(data['status']);
       if (response.statusCode == 200) {
         return data;

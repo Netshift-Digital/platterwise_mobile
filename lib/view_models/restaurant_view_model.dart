@@ -299,10 +299,12 @@ class RestaurantViewModel extends BaseViewModel {
   Future<void> saveRestaurant(RestaurantData restaurantData) async {
     try {
       if (!isFavourite(restaurantData.restId.toString())) {
+        print("This rest is not fav");
         favouriteRestaurant.add(restaurantData);
         notifyListeners();
         await restaurantService.favouriteRestaurant(restaurantData.restId);
       } else {
+        print("This rest is fav");
         favouriteRestaurant.remove(restaurantData);
         notifyListeners();
         await restaurantService.unfavouriteRestaurant(restaurantData.restId);
