@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
-import 'package:platterwave/utils/enum/app_state.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
@@ -15,10 +14,6 @@ import 'package:platterwave/views/screens/vblog/create_post/create_post.dart';
 import 'package:platterwave/views/screens/vblog/following_tab.dart';
 import 'package:platterwave/views/screens/vblog/notification.dart';
 import 'package:platterwave/views/screens/vblog/recommended_tab.dart';
-import 'package:platterwave/views/screens/vblog/trending_page.dart';
-import 'package:platterwave/views/widget/button/custom-button.dart';
-import 'package:platterwave/views/widget/containers/sub_categories_container.dart';
-import 'package:platterwave/views/widget/containers/timeline_post_container.dart';
 import 'package:provider/provider.dart';
 
 class Timeline extends StatefulWidget {
