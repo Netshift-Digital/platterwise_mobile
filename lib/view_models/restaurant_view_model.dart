@@ -302,6 +302,10 @@ class RestaurantViewModel extends BaseViewModel {
         favouriteRestaurant.add(restaurantData);
         notifyListeners();
         await restaurantService.favouriteRestaurant(restaurantData.restId);
+      } else {
+        favouriteRestaurant.remove(restaurantData);
+        notifyListeners();
+        await restaurantService.unfavouriteRestaurant(restaurantData.restId);
       }
     } catch (e) {
       //

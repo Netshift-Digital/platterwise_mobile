@@ -55,7 +55,7 @@ class _BottomNavState extends State<BottomNav> {
         // screen: const RestaurantSearchScreen(),
         ),
     BottomNavigationModel(
-      title: "Explore",
+      title: "Community",
       icon: "assets/icon/people.svg",
       screen: const Timeline(),
     ),

@@ -150,7 +150,7 @@ class Login extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const Row(),
+                          Row(),
                           Text(
                             "we wont share your information without your permission",
                             style: AppTextTheme.hint.copyWith(
