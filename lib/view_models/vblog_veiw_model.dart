@@ -312,10 +312,12 @@ class VBlogViewModel extends BaseViewModel {
   Future<String> uploadFile(String image) async {
     var id = FirebaseAuth.instance.currentUser!.uid;
     var imageName = DateTime.now().millisecondsSinceEpoch;
+    print("This is the date time image name $imageName");
     var storageReference =
         FirebaseStorage.instance.ref().child("post/" "$id/$imageName.jpg");
     var uploadTask = await storageReference.putFile(File(image));
     var url = await uploadTask.ref.getDownloadURL();
+    print("This is an image url $url");
     return url;
   }
 

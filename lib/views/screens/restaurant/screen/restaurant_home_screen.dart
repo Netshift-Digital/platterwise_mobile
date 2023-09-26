@@ -84,8 +84,11 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                                 Row(
                                   children: [
                                     Text(locationProvider.address),
-                                    const SizedBox(width: 4,),
-                                    SvgPicture.asset('assets/icon/arrow-down.svg'),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    SvgPicture.asset(
+                                        'assets/icon/arrow-down.svg'),
                                   ],
                                 )
                               ],
@@ -94,11 +97,12 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                         ),
                       ),
                       GestureDetector(
-                              onTap: () {
-                               nav(context, const RestaurantSearchScreen());
-                              },
-                              child: SvgPicture.asset('assets/icon/search-normal.svg'),
-                            ),
+                        onTap: () {
+                          nav(context, const RestaurantSearchScreen());
+                        },
+                        child:
+                            SvgPicture.asset('assets/icon/search-normal.svg'),
+                      ),
                     ],
                   ),
                 ),
@@ -262,6 +266,7 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                       SizedBox(
                         height: 20.h,
                       ),
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
