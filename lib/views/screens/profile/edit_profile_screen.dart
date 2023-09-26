@@ -222,7 +222,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               firebaseAuthID:
                                   FirebaseAuth.instance.currentUser!.uid,
                               bio: _bio.text,
-                              location: _address.text);
+                              location: _address.text,
+                              fullName: _fullName.text,
+                              username: _userName.text,
+                              email: _email.text,
+                              number: _number.text);
                           model.editUser(editData).then((value) {
                             Navigator.pop(context, true);
                           });
