@@ -191,7 +191,9 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                           )
                         : PopupMenuItem(
                             value: 1,
-                            onTap: () {},
+                            onTap: () {
+                              //Report post
+                            },
                             // row has two child icon and text
                             child: Row(
                               children: [

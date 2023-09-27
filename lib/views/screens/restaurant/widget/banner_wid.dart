@@ -34,10 +34,19 @@ class _BannerWidgetState extends State<BannerWidget> {
                   onTap: () {
                     nav(context, BannerDetails(data: data));
                   },
-                  child: Image.asset(
-                    'assets/images/discount-banner 1.png',
-                    fit: BoxFit.cover,
-                  ),
+                  child: data.banner.isNotEmpty
+                      ? Container(
+                          height: 120,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: ImageCacheR(data.banner),
+                        )
+                      : Image.asset(
+                          'assets/images/discount-banner 1.png',
+                          fit: BoxFit.cover,
+                          height: 120,
+                        ),
                 );
                 // return GestureDetector(
                 //   onTap: () {
