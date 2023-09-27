@@ -9,12 +9,17 @@ import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/dynamic_link.dart';
 import 'package:platterwave/utils/extension.dart';
+import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/restaurant_view_model.dart';
+import 'package:platterwave/views/widget/button/custom-button.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RestaurantHeader extends StatelessWidget {
   final RestaurantData restaurantData;
   final List<AllRestReview> review;
+
   const RestaurantHeader({
     Key? key,
     required this.restaurantData,
@@ -23,6 +28,7 @@ class RestaurantHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var resModel = context.watch<RestaurantViewModel>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -97,26 +103,51 @@ class RestaurantHeader extends StatelessWidget {
           const SizedBox(
             height: 7,
           ),
-          Row(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SvgPicture.asset('assets/icon/star.svg'),
-              const SizedBox(
-                width: 8,
+              Row(
+                children: [
+                  SvgPicture.asset('assets/icon/star.svg'),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    restaurantData.rating?.toString() ?? "4.2",
+                    style: const TextStyle(fontSize: 12, color: AppColor.g700),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    '(${review.length} reviews)',
+                    style: const TextStyle(
+                      color: AppColor.g100,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                restaurantData.rating?.toString() ?? "4.2",
-                style: const TextStyle(fontSize: 12, color: AppColor.g700),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Text(
-                '(${review.length} reviews)',
-                style: const TextStyle(
-                  color: AppColor.g100,
-                  fontSize: 12,
-                ),
-              ),
+              PlatButton(
+                title: resModel.getIsRestFollowed(restaurantData.restId)
+                    ? "Unfollow"
+                    : "Follow",
+                padding: 0,
+                textSize: 14,
+                color: resModel.getIsRestFollowed(restaurantData.restId)
+                    ? AppColor.g700
+                    : AppColor.p200,
+                onTap: () {
+                  var model = context.read<RestaurantViewModel>();
+                  if (model.getIsRestFollowed(restaurantData.restId)) {
+                    model.unFollowRestaurant(restaurantData.restId);
+                  } else {
+                    model.followRestaurant(restaurantData.restId);
+                  }
+                },
+                width: 95.w,
+                height: 38.h,
+              )
             ],
           ),
           const SizedBox(

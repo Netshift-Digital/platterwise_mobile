@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
 import 'package:platterwave/common/base_view_model.dart';
 import 'package:platterwave/data/network/restaurant_service.dart';
@@ -24,6 +26,7 @@ class RestaurantViewModel extends BaseViewModel {
   List<RestaurantData> closeByRestaurant = [];
   List<AllBannersList> allBannersList = [];
   List<UserReservation> userReservation = [];
+  List<RestaurantData> followedRestaurants = [];
 
   String _state = "lagos";
   LatLong latLong = LatLong(6.5243793, 3.3792057);
@@ -77,6 +80,57 @@ class RestaurantViewModel extends BaseViewModel {
       //
     }
     return closeByRestaurant;
+  }
+
+  Future<dynamic> getRestaurantsFollowed() async {
+    final data = await FirebaseFirestore.instance
+        .collection("following")
+        .doc("restaurants")
+        .collection(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    followedRestaurants = [];
+    for (var v in data.docs) {
+      followedRestaurants.add(RestaurantData.fromJson(v.data()));
+      print(v.data());
+    }
+    notifyListeners();
+  }
+
+  bool getIsRestFollowed(String id) {
+    var d = followedRestaurants.where((element) => element.restId == id);
+    return d.isNotEmpty;
+  }
+
+  Future<dynamic> followRestaurant(RestaurantData rest) async {
+    try {
+      await restaurantService.followRestaurant(rest.restId);
+      FirebaseFirestore.instance
+          .collection("following")
+          .doc("restaurants")
+          .collection(FirebaseAuth.instance.currentUser!.uid)
+          .doc(rest.restId)
+          .set(rest.toJson());
+      notifyListeners();
+    } on FirebaseException catch (e) {
+      print(e);
+    } catch (e) {
+      setState(AppState.idle);
+    }
+  }
+
+  Future<dynamic> unFollowRestaurant(String restId) async {
+    try {
+      await restaurantService.unfollowRestaurant(restId);
+      FirebaseFirestore.instance
+          .collection("following")
+          .doc('restaurants')
+          .collection(FirebaseAuth.instance.currentUser!.uid)
+          .doc(restId)
+          .delete();
+      notifyListeners();
+    } catch (e) {
+      setState(AppState.idle);
+    }
   }
 
   Future<List<RestaurantData>> getTopRestaurant() async {

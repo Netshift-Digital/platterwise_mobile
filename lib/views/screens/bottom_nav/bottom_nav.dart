@@ -130,6 +130,7 @@ class _BottomNavState extends State<BottomNav> {
     await resModel.getBanner();
     await resModel.getFavouriteRestaurant();
     await resModel.getReservations();
+    resModel.getRestaurantsFollowed();
     await blogModel.getFollowers();
     await blogModel.getFollowing();
     await blogModel.getTopTag();
