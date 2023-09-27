@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -128,26 +130,40 @@ class RestaurantHeader extends StatelessWidget {
                   ),
                 ],
               ),
-              PlatButton(
-                title: resModel.getIsRestFollowed(restaurantData.restId)
-                    ? "Unfollow"
-                    : "Follow",
-                padding: 0,
-                textSize: 14,
-                color: resModel.getIsRestFollowed(restaurantData.restId)
-                    ? AppColor.g700
-                    : AppColor.p200,
-                onTap: () {
-                  var model = context.read<RestaurantViewModel>();
-                  if (model.getIsRestFollowed(restaurantData.restId)) {
-                    model.unFollowRestaurant(restaurantData.restId);
-                  } else {
-                    model.followRestaurant(restaurantData.restId);
-                  }
-                },
-                width: 95.w,
-                height: 38.h,
-              )
+              StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('following')
+                      .doc("restaurants")
+                      .collection(FirebaseAuth.instance.currentUser!.uid)
+                      .doc(restaurantData.restId)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return PlatButton(
+                        title: "Follow",
+                        padding: 0,
+                        textSize: 14,
+                        color: AppColor.p200,
+                        onTap: () {
+                          resModel.followRestaurant(restaurantData.restId);
+                        },
+                        width: 95.w,
+                        height: 38.h,
+                      );
+                    } else {
+                      return PlatButton(
+                        title: "Unfollow",
+                        padding: 0,
+                        textSize: 14,
+                        color: AppColor.g700,
+                        onTap: () {
+                          resModel.unFollowRestaurant(restaurantData.restId);
+                        },
+                        width: 95.w,
+                        height: 38.h,
+                      );
+                    }
+                  })
             ],
           ),
           const SizedBox(

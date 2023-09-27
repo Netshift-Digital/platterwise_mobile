@@ -26,7 +26,7 @@ class RestaurantViewModel extends BaseViewModel {
   List<RestaurantData> closeByRestaurant = [];
   List<AllBannersList> allBannersList = [];
   List<UserReservation> userReservation = [];
-  List<RestaurantData> followedRestaurants = [];
+  //List<RestaurantData> followedRestaurants = [];
 
   String _state = "lagos";
   LatLong latLong = LatLong(6.5243793, 3.3792057);
@@ -82,7 +82,7 @@ class RestaurantViewModel extends BaseViewModel {
     return closeByRestaurant;
   }
 
-  Future<dynamic> getRestaurantsFollowed() async {
+  /*Future<dynamic> getRestaurantsFollowed() async {
     final data = await FirebaseFirestore.instance
         .collection("following")
         .doc("restaurants")
@@ -94,12 +94,12 @@ class RestaurantViewModel extends BaseViewModel {
       print(v.data());
     }
     notifyListeners();
-  }
+  }*/
 
-  bool getIsRestFollowed(String id) {
+  /*bool getIsRestFollowed(String id) {
     var d = followedRestaurants.where((element) => element.restId == id);
     return d.isNotEmpty;
-  }
+  }*/
 
   Future<dynamic> followRestaurant(RestaurantData rest) async {
     try {
