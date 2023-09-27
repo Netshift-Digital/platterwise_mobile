@@ -194,13 +194,14 @@ class RestaurantViewModel extends BaseViewModel {
       setState(AppState.busy);
       var data = await restaurantService.makeReservation(reservationData);
       setState(AppState.idle);
-      getReservations();
       if (data != null) {
+        getReservations();
         return true;
       }
     } catch (e) {
+      print("Error with making reservation ${e.toString()}");
       setState(AppState.idle);
-      RandomFunction.toast('Something went wrong');
+      RandomFunction.toast('Something went wrong.');
     }
     return false;
   }

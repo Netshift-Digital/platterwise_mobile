@@ -293,7 +293,7 @@ class RestaurantService {
           body: body,
           headers: {
             "Content-type": "application/json",
-          }).timeout(const Duration(seconds: 10));
+          }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body.replaceAll('Message sent!', ''));
       if (response.statusCode == 200) {
         RandomFunction.toast('Success');
