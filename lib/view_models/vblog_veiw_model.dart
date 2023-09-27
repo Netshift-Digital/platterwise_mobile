@@ -19,6 +19,7 @@ import 'package:platterwave/utils/enum/app_state.dart';
 import 'package:platterwave/utils/enum/notification_type.dart';
 import 'package:platterwave/utils/enum/saerch_type.dart';
 import 'package:platterwave/utils/locator.dart';
+import 'package:platterwave/utils/random_functions.dart';
 
 class VBlogViewModel extends BaseViewModel {
   VBlogService vBlogService = locator<VBlogService>();
@@ -311,7 +312,8 @@ class VBlogViewModel extends BaseViewModel {
 
   Future<String> uploadFile(String image) async {
     var id = FirebaseAuth.instance.currentUser!.uid;
-    var imageName = DateTime.now().millisecondsSinceEpoch;
+    //var imageName = DateTime.now().millisecondsSinceEpoch;
+    var imageName = RandomFunction.generateRandomStringWithRepetition();
     print("This is the date time image name $imageName");
     var storageReference =
         FirebaseStorage.instance.ref().child("post/" "$id/$imageName.jpg");

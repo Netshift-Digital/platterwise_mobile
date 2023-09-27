@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,21 @@ class RandomFunction {
     var cancel = BotToast.showSimpleNotification(
       title: msg,
     );
+  }
+
+  static String generateRandomStringWithRepetition() {
+    const String characters =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+    Random random = Random();
+    String result = '';
+
+    for (int i = 0; i < 10; i++) {
+      int randomIndex = random.nextInt(characters.length);
+      result += characters[randomIndex];
+    }
+
+    return result + DateTime.now().millisecondsSinceEpoch.toString();
   }
 
   static String greetingMessage() {
