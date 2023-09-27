@@ -520,7 +520,7 @@ class VBlogService {
     var body = jsonEncode(data);
     try {
       var response = await client.post(
-          Uri.parse("https://platterwise.com/jhome/report_post.php"),
+          Uri.parse("https://api.platterwise.com/jhome/report_post.php"),
           body: body,
           headers: {
             "Content-type": "application/json",
@@ -550,7 +550,7 @@ class VBlogService {
     var body = jsonEncode(data);
     try {
       var response = await client.post(
-          Uri.parse("https://platterwise.com/jhome/delete_post.php"),
+          Uri.parse("https://api.platterwise.com/jhome/delete_post.php"),
           body: body,
           headers: {
             "Content-type": "application/json",
