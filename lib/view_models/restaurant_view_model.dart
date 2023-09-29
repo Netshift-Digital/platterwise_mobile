@@ -82,13 +82,13 @@ class RestaurantViewModel extends BaseViewModel {
     return closeByRestaurant;
   }
 
-  /*Future<dynamic> getRestaurantsFollowed() async {
+  /* Future<dynamic> getRestaurantsFollowed() async {
     final data = await FirebaseFirestore.instance
         .collection("following")
         .doc("restaurants")
         .collection(FirebaseAuth.instance.currentUser!.uid)
         .get();
-    followedRestaurants = [];
+  //  followedRestaurants = [];
     for (var v in data.docs) {
       followedRestaurants.add(RestaurantData.fromJson(v.data()));
       print(v.data());
@@ -106,13 +106,13 @@ class RestaurantViewModel extends BaseViewModel {
       await restaurantService.followRestaurant(rest.restId);
       FirebaseFirestore.instance
           .collection("following")
-          .doc("restaurants")
+          .doc("rest")
           .collection(FirebaseAuth.instance.currentUser!.uid)
           .doc(rest.restId)
           .set(rest.toJson());
       notifyListeners();
     } on FirebaseException catch (e) {
-      print(e);
+      print("The firebase exception is $e");
     } catch (e) {
       setState(AppState.idle);
     }
@@ -123,12 +123,14 @@ class RestaurantViewModel extends BaseViewModel {
       await restaurantService.unfollowRestaurant(restId);
       FirebaseFirestore.instance
           .collection("following")
-          .doc('restaurants')
+          .doc('rest')
           .collection(FirebaseAuth.instance.currentUser!.uid)
           .doc(restId)
           .delete();
       notifyListeners();
     } catch (e) {
+      print("The firebase exception is $e");
+
       setState(AppState.idle);
     }
   }

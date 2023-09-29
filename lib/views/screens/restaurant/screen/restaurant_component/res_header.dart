@@ -105,7 +105,7 @@ class RestaurantHeader extends StatelessWidget {
           const SizedBox(
             height: 7,
           ),
-          Column(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
@@ -133,35 +133,41 @@ class RestaurantHeader extends StatelessWidget {
               StreamBuilder<DocumentSnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('following')
-                      .doc("restaurants")
+                      .doc("rest")
                       .collection(FirebaseAuth.instance.currentUser!.uid)
                       .doc(restaurantData.restId)
                       .snapshots(),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return PlatButton(
-                        title: "Follow",
-                        padding: 0,
-                        textSize: 14,
-                        color: AppColor.p200,
-                        onTap: () {
-                          resModel.followRestaurant(restaurantData.restId);
-                        },
-                        width: 95.w,
-                        height: 38.h,
-                      );
+                    if (snapshot.data == null) {
+                      return Container();
                     } else {
-                      return PlatButton(
-                        title: "Unfollow",
-                        padding: 0,
-                        textSize: 14,
-                        color: AppColor.g700,
-                        onTap: () {
-                          resModel.unFollowRestaurant(restaurantData.restId);
-                        },
-                        width: 95.w,
-                        height: 38.h,
-                      );
+                      if (snapshot.data?.data() == null) {
+                        print("${snapshot.data!.data()} Is the snapsho");
+                        return PlatButton(
+                          title: "Follow",
+                          padding: 0,
+                          textSize: 14,
+                          color: AppColor.p200,
+                          onTap: () {
+                            resModel.followRestaurant(restaurantData);
+                          },
+                          width: 95.w,
+                          height: 38.h,
+                        );
+                      } else {
+                        print("${snapshot.data!.data()} Is the snapsho");
+                        return PlatButton(
+                          title: "Unfollow",
+                          padding: 0,
+                          textSize: 14,
+                          color: AppColor.g700,
+                          onTap: () {
+                            resModel.unFollowRestaurant(restaurantData.restId);
+                          },
+                          width: 95.w,
+                          height: 38.h,
+                        );
+                      }
                     }
                   })
             ],
