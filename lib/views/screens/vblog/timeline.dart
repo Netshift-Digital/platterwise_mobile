@@ -46,11 +46,18 @@ class _TimelineState extends State<Timeline> {
         backgroundColor: Colors.white,
         title: ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: 28, maxWidth: 300),
-            child: SvgPicture.asset(
-              "assets/icon/platterwise_logo.svg",
-              height: 15.h,
-              width: 161.w,
+            child: const Text(
+              'Community',
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFFCCCCCC)),
             )),
+        // SvgPicture.asset(
+        //   "assets/icon/platterwise_logo.svg",
+        //   height: 15.h,
+        //   width: 161.w,
+        // )),
         actions: [
           const SizedBox(
             width: 16,
@@ -62,7 +69,7 @@ class _TimelineState extends State<Timeline> {
             child: SvgPicture.asset('assets/icon/search-normal.svg'),
           ),
           const SizedBox(
-            width: 10,
+            width: 16,
           ),
           GestureDetector(
               onTap: () {
@@ -80,7 +87,7 @@ class _TimelineState extends State<Timeline> {
           physics: const BouncingScrollPhysics(),
           headerSliverBuilder: (context, scroll) {
             return [
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                   child: SizedBox(
                 height: 10,
               )),
@@ -123,7 +130,7 @@ class _TimelineState extends State<Timeline> {
               )
             ];
           },
-          body: TabBarView(
+          body: const TabBarView(
             children: [FollowingTab(), RecommendedTab()],
           ),
         ),
