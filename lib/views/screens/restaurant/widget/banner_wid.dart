@@ -14,6 +14,7 @@ class BannerWidget extends StatefulWidget {
   State<BannerWidget> createState() => _BannerWidgetState();
 }
 
+//vWuxAODpiyUnTiai4vg7qIZEEvs2
 class _BannerWidgetState extends State<BannerWidget> {
   PageController pageController = PageController(viewportFraction: 1);
   @override

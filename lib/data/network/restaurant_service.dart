@@ -20,6 +20,7 @@ class RestaurantService {
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
       "get_all_resturant": "get_all_resturant"
     });
+    print("This is the body $body");
     try {
       var response =
           await client.get(Uri.parse("${baseurl2}get_all_details.php"),
@@ -47,6 +48,8 @@ class RestaurantService {
     var body = jsonEncode({
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
     });
+    print("This is the body $body");
+
     print("This is the id ${FirebaseAuth.instance.currentUser!.uid}");
     try {
       var response = await client.post(
@@ -76,6 +79,8 @@ class RestaurantService {
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
       "rest_id": id,
     });
+    print("This is the body $body");
+
     try {
       var response = await client.post(
           Uri.parse("${baseurl2}getRestaurant_byId.php"),
@@ -105,6 +110,8 @@ class RestaurantService {
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
       "state": state
     });
+    print("This is the body $body");
+
     try {
       var response = await client.post(
           Uri.parse("${baseurl2}search_by_state.php"),
@@ -134,6 +141,8 @@ class RestaurantService {
       "latitude": latLong.latitude,
       "longitude": latLong.longitude
     });
+    print("This is the body $body");
+
     try {
       var response = await client.post(
           Uri.parse("https://api.platterwise.com/jhome2/closest_rest.php"),
@@ -167,6 +176,8 @@ class RestaurantService {
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
       "rest_id": resId
     });
+    print("This is the body $body");
+
     try {
       var response = await client.post(
           Uri.parse("${baseurl2}get_restaurant_review.php"),
@@ -285,6 +296,8 @@ class RestaurantService {
     // map.putIfAbsent('subject_of_invite', () => '');
     var body = jsonEncode(map);
     //print(body);
+    print("This is the body $body");
+
     try {
       var response = await client.post(
           Uri.parse(
@@ -295,6 +308,7 @@ class RestaurantService {
             "Content-type": "application/json",
           }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body.replaceAll('Message sent!', ''));
+      print("The response is $data");
       if (response.statusCode == 200) {
         RandomFunction.toast('Success');
         FirebaseFirestore.instance

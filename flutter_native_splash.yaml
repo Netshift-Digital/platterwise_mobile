@@ -34,9 +34,9 @@ flutter_native_splash:
   # parameters from above. If the image_dark parameter is specified, color_dark or
   # background_image_dark must be specified.  color_dark and background_image_dark cannot both be
   # set.
-  #color_dark: "#042a49"
+  color_dark: "#DB4E2E"
   #background_image_dark: "assets/dark-background.png"
-  #image_dark: assets/splash-invert.png
+  image_dark: assets/images/PW-logo.png
   #branding_dark: assets/dart_dark.png
 
   # Android 12 handles the splash screen differently than previous versions.  Please visit
@@ -51,6 +51,8 @@ flutter_native_splash:
   # App icon without an icon background: This should be 1152×1152 pixels, and fit within a circle
   # 768 pixels in diameter.
   #image: assets/android12splash.png
+  #image: assets/images/PW-logo.png
+
 
   # Splash screen background color.
   #color: "#42a5f5"
@@ -65,6 +67,8 @@ flutter_native_splash:
   # apply when the device is in dark mode. If they are not specified, the app will use the
   # parameters from above.
   #image_dark: assets/android12splash-invert.png
+  #image_dark: assets/images/PW-logo.png
+
   #color_dark: "#042a49"
   #icon_background_color_dark: "#eeeeee"
 
