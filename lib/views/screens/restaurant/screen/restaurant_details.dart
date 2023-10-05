@@ -42,8 +42,8 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
       appBar: appBar(context),
       bottomNavigationBar: index == 0
           ? Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: PlatButton(
+              padding: const EdgeInsets.all(20.0),
+              child: PlatButton(
                 title: 'Make Reservation',
                 onTap: () {
                   nav(
@@ -54,7 +54,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                   );
                 },
               ),
-          )
+            )
           : GestureDetector(
               onTap: () async {
                 var data = await Navigator.push(
