@@ -93,88 +93,6 @@ class RestaurantHeader extends StatelessWidget {
           const SizedBox(
             height: 7,
           ),
-          Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                restaurantData.days.capitalizeFirstChar(),
-                style: const TextStyle(
-                  color: AppColor.g800,
-                  fontSize: 13,
-                ),
-              )),
-          const SizedBox(
-            height: 7,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  SvgPicture.asset('assets/icon/star.svg'),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    restaurantData.rating?.toString() ?? "4.2",
-                    style: const TextStyle(fontSize: 12, color: AppColor.g700),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    '(${review.length} reviews)',
-                    style: const TextStyle(
-                      color: AppColor.g100,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-              StreamBuilder<DocumentSnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('following')
-                      .doc("rest")
-                      .collection(FirebaseAuth.instance.currentUser!.uid)
-                      .doc(restaurantData.restId)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.data == null) {
-                      return Container();
-                    } else {
-                      if (snapshot.data?.data() == null) {
-                        print("${snapshot.data!.data()} Is the snapsho");
-                        return PlatButton(
-                          title: "Follow",
-                          padding: 0,
-                          textSize: 14,
-                          color: AppColor.p200,
-                          onTap: () {
-                            resModel.followRestaurant(restaurantData);
-                          },
-                          width: 95.w,
-                          height: 38.h,
-                        );
-                      } else {
-                        print("${snapshot.data!.data()} Is the snapsho");
-                        return PlatButton(
-                          title: "Unfollow",
-                          padding: 0,
-                          textSize: 14,
-                          color: AppColor.g700,
-                          onTap: () {
-                            resModel.unFollowRestaurant(restaurantData.restId);
-                          },
-                          width: 95.w,
-                          height: 38.h,
-                        );
-                      }
-                    }
-                  })
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
           Row(
             children: [
               SvgPicture.asset('assets/icon/location.svg'),
@@ -192,6 +110,84 @@ class RestaurantHeader extends StatelessWidget {
               )
             ],
           ),
+          const SizedBox(
+            height: 6,
+          ),
+          Row(
+            children: [
+              SvgPicture.asset('assets/icon/star.svg'),
+              const SizedBox(
+                width: 8,
+              ),
+              Text(
+                restaurantData.rating?.toString() ?? "4.2",
+                style: const TextStyle(fontSize: 12, color: AppColor.g700),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Text(
+                '(${review.length} reviews)',
+                style: const TextStyle(
+                  color: AppColor.g100,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 7,
+          ),
+          Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                "Opens ${restaurantData.days.capitalizeFirstChar()} (${restaurantData.openingHour} daily)",
+                style: const TextStyle(
+                  color: AppColor.g800,
+                  fontSize: 13,
+                ),
+              )),
+          const SizedBox(
+            height: 12,
+          ),
+          StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('following')
+                  .doc("rest")
+                  .collection(FirebaseAuth.instance.currentUser!.uid)
+                  .doc(restaurantData.restId)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.data == null) {
+                  return Container();
+                } else {
+                  if (snapshot.data?.data() == null) {
+                    print("${snapshot.data!.data()} Is the snapsho");
+                    return PlatButtonBorder(
+                      title: "Follow Restaurant",
+                      padding: 0,
+                      height: 48.h,
+                      textSize: 14,
+                      onTap: () {
+                        resModel.followRestaurant(restaurantData);
+                      },
+                    );
+                  } else {
+                    print("${snapshot.data!.data()} Is the snapsho");
+                    return PlatButtonBorder(
+                      title: "Followed",
+                      padding: 0,
+                      textSize: 14,
+                      color: AppColor.g500,
+                      textColor: AppColor.g500,
+                      onTap: () {
+                        resModel.unFollowRestaurant(restaurantData.restId);
+                      },
+                      height: 48.h,
+                    );
+                  }
+                }
+              }),
         ],
       ),
     );

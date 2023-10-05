@@ -18,7 +18,7 @@ class Trending extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-         Padding(
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -40,17 +40,14 @@ class Trending extends StatelessWidget {
                   height: 20.h,
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SubCategoriesContainer(
                       onTap: () {
-                        nav(context,
-                            const TrendingPage(basedOn: 'baselike'));
+                        nav(context, const TrendingPage(basedOn: 'baselike'));
                       },
                       title: 'Most Liked',
                       image: "assets/images/likes.png",
-                    ),
-                    const SizedBox(
-                      width: 15,
                     ),
                     SubCategoriesContainer(
                       onTap: () {

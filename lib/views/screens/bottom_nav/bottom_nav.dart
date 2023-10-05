@@ -91,6 +91,7 @@ class _BottomNavState extends State<BottomNav> {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppColor.p300,
         unselectedItemColor: AppColor.g700,
+        backgroundColor: Colors.white,
         currentIndex: pageViewModel.appIndex,
         onTap: (index) {
           pageViewModel.setIndex(index);
