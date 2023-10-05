@@ -11,7 +11,6 @@ import 'package:platterwave/view_models/location_view_model.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/more_resturant.dart';
 import 'package:platterwave/views/screens/restaurant/screen/search_resturant.dart';
-import 'package:platterwave/views/screens/restaurant/search_location.dart';
 import 'package:platterwave/views/screens/restaurant/widget/banner_wid.dart';
 import 'package:platterwave/views/widget/containers/large_restaurant_container.dart';
 import 'package:platterwave/views/widget/containers/small_restaurant_container.dart';
