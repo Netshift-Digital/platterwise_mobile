@@ -58,14 +58,7 @@ class UserReservations extends StatelessWidget {
                                 color: Colors.grey.shade300,
                                 width: 0.7,
                               ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.shade200,
-                                  offset: const Offset(0, 2),
-                                  blurRadius: 4,
-                                ),
-                              ],
-                              borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(6),
                             ),
                             child: Row(
                               children: [

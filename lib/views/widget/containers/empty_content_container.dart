@@ -14,13 +14,23 @@ class EmptyContentContainer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: 58.h,),
-          SvgPicture.asset("assets/icon/no-content-saved.svg"),
-          SizedBox(height: 20.h,),
-          Text("Nothing here!", style: AppTextTheme.large.copyWith(
-            fontWeight: FontWeight.bold,
-          ),),
-          SizedBox(height: 12.h,),
+          SizedBox(
+            height: 58.h,
+          ),
+          SvgPicture.asset("assets/icon/no-content-saved.svg",
+              width: 60, height: 60),
+          SizedBox(
+            height: 20.h,
+          ),
+          Text(
+            "Nothing here!",
+            style: AppTextTheme.large.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(
+            height: 12.h,
+          ),
           Text(
             errorText ?? "Nothing to see here!",
             textAlign: TextAlign.center,

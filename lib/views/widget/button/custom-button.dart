@@ -36,7 +36,7 @@ class PlatButton extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: onTap==null?const Color(0xffEAEAEA):color,
+          color: onTap == null ? const Color(0xffEAEAEA) : color,
           borderRadius: BorderRadius.circular(radius),
         ),
         child: Padding(
@@ -59,11 +59,61 @@ class PlatButton extends StatelessWidget {
                         style: AppTextTheme.h3.copyWith(
                             fontSize: textSize,
                             fontWeight: FontWeight.w500,
-                            color: textColor ?? (onTap==null?const Color(0xff797979):AppColor.g0)
-                        ),
+                            color: textColor ??
+                                (onTap == null
+                                    ? const Color(0xff797979)
+                                    : AppColor.g0)),
                       ),
                     ],
                   ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PlatButtonBorder extends StatelessWidget {
+  final String title;
+  final Function()? onTap;
+  final double width, height, radius, textSize, padding, iconSize, spacing;
+  final Color color, textColor;
+  const PlatButtonBorder({
+    this.radius = 10,
+    this.width = double.maxFinite,
+    this.height = 54,
+    this.color = AppColor.p300,
+    this.textColor = AppColor.p300,
+    required this.title,
+    required this.onTap,
+    this.textSize = 18,
+    this.iconSize = 17,
+    this.padding = 10,
+    this.spacing = 0,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(radius),
+            border: Border.all(color: color)),
+        child: Padding(
+          padding: EdgeInsets.all(padding),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child: Text(
+              title,
+              style: AppTextTheme.h3.copyWith(
+                  fontSize: textSize,
+                  fontWeight: FontWeight.w500,
+                  color: textColor),
+            ),
           ),
         ),
       ),

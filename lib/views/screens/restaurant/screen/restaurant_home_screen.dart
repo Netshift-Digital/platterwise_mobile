@@ -52,6 +52,8 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                             //     PredictionModel? prediction = await value;
                             //   },
                             // ).show();
+                            // nav(context, LocationSearchScreen());
+
                             PlacesAutocomplete.show(
                               context: context,
                               apiKey: "AIzaSyC44N6yERgjg8AM_UOznKlflcEZWYE8tro",
