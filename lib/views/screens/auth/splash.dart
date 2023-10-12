@@ -25,8 +25,8 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: SvgPicture.asset(
           "assets/images/PW-logo - svg.svg",
-          height: 30,
-          width: 161,
+          height: 24,
+          width: 140,
         ),
       ),
     );

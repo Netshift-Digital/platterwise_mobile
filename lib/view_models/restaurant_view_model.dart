@@ -257,7 +257,7 @@ class RestaurantViewModel extends BaseViewModel {
     } catch (e) {
       print("Error with making reservation ${e.toString()}");
       setState(AppState.idle);
-      RandomFunction.toast('Something went wrong.');
+      //   RandomFunction.toast('Something went wrong.');
     }
     return false;
   }
