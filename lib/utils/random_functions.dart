@@ -131,7 +131,8 @@ class RandomFunction {
       lastDate: lastDate,
     );
 
-    if (selectedDate == null || selectedDate.isBefore(DateTime.now())) {
+    if (selectedDate == null ||
+        selectedDate.isBefore(DateTime.now().subtract(Duration(days: 1)))) {
       return null;
     }
     if (!context.mounted) return selectedDate;
