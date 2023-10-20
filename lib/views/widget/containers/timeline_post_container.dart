@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_text/custom_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -159,10 +160,14 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                       value: 0,
                       onTap: () {
                         context.read<VBlogViewModel>().savePost(widget.post);
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Saved"),
+                        ));
                       },
                       // row has two child icon and text
                       child: Row(
-                        children: [
+                        children: const [
                           Icon(Icons.bookmark),
                           SizedBox(
                             // sized box with width 10
@@ -179,7 +184,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                             onTap: () {},
                             // row has two child icon and text
                             child: Row(
-                              children: [
+                              children: const [
                                 Icon(Icons.delete),
                                 SizedBox(
                                   // sized box with width 10
@@ -196,7 +201,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                             },
                             // row has two child icon and text
                             child: Row(
-                              children: [
+                              children: const [
                                 Icon(Icons.flag),
                                 SizedBox(
                                   // sized box with width 10
