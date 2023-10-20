@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:platterwave/model/request_model/auth_medthod.dart';
@@ -235,10 +236,11 @@ class _RegisterState extends State<Register> {
             "")
         .then((value) {
       if (value == true) {
-        RandomFunction.toast(
-            "Account created successfully, a verification mail has been sent to you");
         FirebaseAuth.instance.currentUser!.sendEmailVerification();
         nav(context, Login());
+        BotToast.showSimpleNotification(
+            title:
+                "Account created successfully, a verification mail has been sent to you");
       }
     });
   }
