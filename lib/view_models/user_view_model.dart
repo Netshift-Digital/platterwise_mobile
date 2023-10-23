@@ -29,22 +29,23 @@ class UserViewModel extends BaseViewModel {
     try {
       setState(AppState.busy);
       //var image = await uploadImage(imagePath);
-      if (registerModel.authId.isNotEmpty) {
+      /* if (registerModel.authId.isNotEmpty) {
         var data = await userService.signUp(registerModel);
         setState(AppState.idle);
         if (data != null) {
           return data["status"].toString().toLowerCase().contains("success");
         }
       } else {
-        var user = await firebaseAuth.createUserWithEmailAndPassword(
-            email: registerModel.email, password: registerModel.password);
-        var reg = registerModel.copyWith(authId: user.user!.uid);
-        var data = await userService.signUp(reg);
-        setState(AppState.idle);
-        if (data != null) {
-          return data["status"].toString().toLowerCase().contains("success");
-        }
+       */
+      var user = await firebaseAuth.createUserWithEmailAndPassword(
+          email: registerModel.email, password: registerModel.password);
+      var reg = registerModel.copyWith(authId: user.user!.uid);
+      var data = await userService.signUp(reg);
+      setState(AppState.idle);
+      if (data != null) {
+        return data["success"];
       }
+      // }
     } on FirebaseAuthException catch (e) {
       setState(AppState.idle);
       RandomFunction.toast(e.code);
@@ -57,7 +58,6 @@ class UserViewModel extends BaseViewModel {
       print(e);
       setState(AppState.idle);
     }
-
     return false;
   }
 

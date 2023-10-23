@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-RegisterModel registerModelFromJson(String str) => RegisterModel.fromJson(json.decode(str));
+RegisterModel registerModelFromJson(String str) =>
+    RegisterModel.fromJson(json.decode(str));
 
 String registerModelToJson(RegisterModel data) => json.encode(data.toJson());
 
@@ -15,8 +16,8 @@ class RegisterModel {
     required this.password,
     required this.phone,
     required this.username,
-   this.imageUrl='',
-    this.authId='',
+    this.imageUrl = '',
+    this.authId = '',
   });
 
   String fullName;
@@ -47,22 +48,22 @@ class RegisterModel {
       );
 
   factory RegisterModel.fromJson(Map<String, dynamic> json) => RegisterModel(
-    fullName: json["full_name"],
-    email: json["email"],
-    password: json["password"],
-    phone: json["phone"],
-    username: json["username"],
-    imageUrl: json["imageUrl"],
-    authId: json["authID"],
-  );
+        fullName: json["full_name"],
+        email: json["email"],
+        password: json["password"],
+        phone: json["phone"],
+        username: json["username"],
+        imageUrl: json["imageUrl"],
+        authId: json["authID"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "full_name": fullName,
-    "email": email,
-    "password": password,
-    "phone": phone,
-    "username": username,
-    "profileURL": imageUrl,
-    "firebaseAuthID": authId,
-  };
+        "full_name": fullName,
+        "email": email,
+        "password": password,
+        "phone": phone,
+        "username": username,
+        //   "profileURL": imageUrl,
+        // "firebaseAuthID": authId,
+      };
 }

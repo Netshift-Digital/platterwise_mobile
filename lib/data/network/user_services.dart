@@ -15,17 +15,45 @@ class UserService {
   Future<dynamic> signUp(RegisterModel registerModel) async {
     var body = jsonEncode(registerModel.toJson());
     try {
-      var response = await client.post(
-          Uri.parse("${baseurl}createacc_json.php"),
-          body: body,
-          headers: {
-            "Content-type": "application/json",
-          });
+      var response = await client
+          .post(Uri.parse("${baseurl3}auth/register"), body: body, headers: {
+        "Content-type": "application/json",
+      });
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && data["status"] == true) {
         return data;
       } else {
-        RandomFunction.toast(data['status'] ?? "");
+        RandomFunction.toast(data['response'] ?? "");
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+  Future<dynamic> signIn(String email, String password) async {
+    var body = '''
+      {        "email": email,
+              "password": password
+      }
+''';
+    try {
+      var response = await client
+          .post(Uri.parse("${baseurl3}auth/login"), body: body, headers: {
+        "Content-type": "application/json",
+      });
+      var data = jsonDecode(response.body);
+      if (response.statusCode == 200 && data["status"] == true) {
+        print("This is the data $data");
+        return data;
+      } else {
+        RandomFunction.toast(data['response'] ?? "");
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
