@@ -10,8 +10,8 @@ String userDataToJson(UserData data) => json.encode(data.toJson());
 
 class UserData {
   UserData({
-   required this.status,
-   required this.userProfile,
+    required this.status,
+    required this.userProfile,
   });
 
   String status;
@@ -27,28 +27,27 @@ class UserData {
       );
 
   factory UserData.fromJson(Map<String, dynamic> json) => UserData(
-    status: json["status"],
-    userProfile: UserProfile.fromJson(json["user_profile"]),
-  );
+        status: json["status"] ?? "",
+        userProfile: UserProfile.fromJson(json["user_profile"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
-    "user_profile": userProfile.toJson(),
-  };
+        "status": status,
+        "user_profile": userProfile.toJson(),
+      };
 }
 
 class UserProfile {
-  UserProfile({
-   required this.userId,
-    required this.fullName,
-    required this.username,
-    required this.email,
-    required  this.phone,
-    required  this.bio,
-    required  this.profileUrl,
-    required  this.location,
-    required this.firebaseAuthID
-  });
+  UserProfile(
+      {required this.userId,
+      required this.fullName,
+      required this.username,
+      required this.email,
+      required this.phone,
+      required this.bio,
+      required this.profileUrl,
+      required this.location,
+      required this.firebaseAuthID});
 
   String userId;
   String fullName;
@@ -72,7 +71,7 @@ class UserProfile {
     String? firebaseAuthID,
   }) =>
       UserProfile(
-        firebaseAuthID: firebaseAuthID??this.firebaseAuthID,
+        firebaseAuthID: firebaseAuthID ?? this.firebaseAuthID,
         userId: userId ?? this.userId,
         fullName: fullName ?? this.fullName,
         username: username ?? this.username,
@@ -84,26 +83,26 @@ class UserProfile {
       );
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
-    userId: json["user_id"]??"",
-    fullName: json["full_name"]??"",
-    username: json["username"]??"",
-    email: json["email"],
-    phone: json["phone"]??"",
-    bio: json["bio"]??"",
-    profileUrl: json["profileURL"]??"'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png'",
-    location: json["location"]??"",
-    firebaseAuthID: json['firebaseAuthID']??""
-  );
+      userId: json["id"] ?? "",
+      fullName: json["full_name"] ?? "",
+      username: json["username"] ?? "",
+      email: json["email"],
+      phone: json["phone"] ?? "",
+      bio: json["bio"] ?? "",
+      profileUrl: json["img_url"] ??
+          "'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png'",
+      location: json["location"] ?? "",
+      firebaseAuthID: "");
 
   Map<String, dynamic> toJson() => {
-    "user_id": userId,
-    "full_name": fullName,
-    "username": username,
-    "email": email,
-    "phone": phone,
-    "bio": bio,
-    "profileURL": profileUrl,
-    "location": location,
-    "firebaseAuthID":firebaseAuthID
-  };
+        "user_id": userId,
+        "full_name": fullName,
+        "username": username,
+        "email": email,
+        "phone": phone,
+        "bio": bio,
+        "profileURL": profileUrl,
+        "location": location,
+        "firebaseAuthID": firebaseAuthID
+      };
 }

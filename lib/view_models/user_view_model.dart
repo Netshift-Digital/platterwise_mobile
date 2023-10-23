@@ -37,10 +37,10 @@ class UserViewModel extends BaseViewModel {
         }
       } else {
        */
-      var user = await firebaseAuth.createUserWithEmailAndPassword(
-          email: registerModel.email, password: registerModel.password);
-      var reg = registerModel.copyWith(authId: user.user!.uid);
-      var data = await userService.signUp(reg);
+      //   var user = await firebaseAuth.createUserWithEmailAndPassword(
+      //     email: registerModel.email, password: registerModel.password);
+      //  var reg = registerModel.copyWith(authId: user.user!.uid);
+      var data = await userService.signUp(registerModel);
       setState(AppState.idle);
       if (data != null) {
         return data["success"];
@@ -140,17 +140,14 @@ class UserViewModel extends BaseViewModel {
     return null;
   }
 
-  Future<User?> login(String email, String password) async {
+  Future<int?> login(String email, String password) async {
     try {
       setState(AppState.busy);
-      var data = await firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
+      var data = await userService.signIn(email, password);
       setState(AppState.idle);
-      return data.user;
-    } on FirebaseAuthException catch (e) {
-      RandomFunction.toast(e.code);
-      setState(AppState.idle);
+      return data["data"]["original"]["is_verified"] ?? 0;
     } catch (e) {
+      print(e.toString());
       setState(AppState.idle);
     }
     return null;

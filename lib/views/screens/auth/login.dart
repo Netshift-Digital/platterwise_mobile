@@ -197,17 +197,15 @@ class Login extends StatelessWidget {
   }
 
   void login(BuildContext context) {
-    //nav(context, const BottomNav());
     if (_formKey.currentState!.validate()) {
       context
           .read<UserViewModel>()
           .login(_email.text, _password.text)
           .then((value) {
         if (value != null) {
-          if (value.emailVerified) {
+          if (value == 0) {
             nav(context, const BottomNav(), remove: true);
           } else {
-            //FirebaseAuth.instance.currentUser!.sendEmailVerification();
             RandomFunction.toast(
                 "Account has not been verified, a verification link has been sent to your email");
           }

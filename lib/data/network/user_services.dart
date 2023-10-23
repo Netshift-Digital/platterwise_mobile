@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:platterwave/constant/endpoint.dart';
+import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/model/failure.dart';
 import 'package:platterwave/model/request_model/edit_data.dart';
 import 'package:platterwave/model/request_model/register_model.dart';
@@ -38,19 +39,22 @@ class UserService {
   }
 
   Future<dynamic> signIn(String email, String password) async {
-    var body = '''
-      {        "email": email,
-              "password": password
-      }
-''';
+    var boDy = jsonEncode({"email": email, "password": password});
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl3}auth/login"), body: body, headers: {
+      var response = await http
+          .post(Uri.parse("${baseurl3}auth/login"), body: boDy, headers: {
         "Content-type": "application/json",
       });
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200 && data["status"] == true) {
+      print("This is the data $data");
+
+      if (data["status_code"] == 200 && data["status"] == true) {
         print("This is the data $data");
+        var token = data["token"]["original"]["access_token"];
+        print("This is the user token $token");
+        LocalStorage.saveToken(token);
+        LocalStorage.saveLoginTime();
+        LocalStorage.saveUser(data["data"]["original"]);
         return data;
       } else {
         RandomFunction.toast(data['response'] ?? "");

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/model/onboarding_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
@@ -46,53 +47,53 @@ class _OnboardingState extends State<Onboarding> {
           Expanded(
             flex: 2,
             child: PageView.builder(
-                controller: controller,
-                onPageChanged: (i) {
-                  index = i;
-                },
-                physics: const BouncingScrollPhysics(),
-                itemCount: list.length,
-                itemBuilder: (context, index) {
-                  var data = list[index];
-                  return Column(
-                    children: [
-                      // Flexible(child: Container()),
-                      Container(
-                        width: double.maxFinite,
-                        height: MediaQuery.of(context).size.height * 0.38,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(data.imagePath),
-                                fit: BoxFit.cover)),
-                      ),
-                      SizedBox(
-                        height: 40.h,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 40.w, right: 40.w),
-                        child: Text(
-                          data.title,
-                          style: AppTextTheme.h1.copyWith(
-                            fontSize: 24.sp,
-                            fontWeight: FontWeight.w700,
-                          ),
-                          textAlign: TextAlign.center,
+              controller: controller,
+              onPageChanged: (i) {
+                index = i;
+              },
+              physics: const BouncingScrollPhysics(),
+              itemCount: list.length,
+              itemBuilder: (context, index) {
+                var data = list[index];
+                return Column(
+                  children: [
+                    // Flexible(child: Container()),
+                    Container(
+                      width: double.maxFinite,
+                      height: MediaQuery.of(context).size.height * 0.38,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(data.imagePath),
+                              fit: BoxFit.cover)),
+                    ),
+                    SizedBox(
+                      height: 40.h,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 40.w, right: 40.w),
+                      child: Text(
+                        data.title,
+                        style: AppTextTheme.h1.copyWith(
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.w700,
                         ),
+                        textAlign: TextAlign.center,
                       ),
-                      SizedBox(
-                        height: 20.h,
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 32.w, right: 32.w),
+                      child: Text(
+                        data.desc,
+                        style: AppTextTheme.light,
+                        textAlign: TextAlign.center,
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 32.w, right: 32.w),
-                        child: Text(
-                          data.desc,
-                          style: AppTextTheme.light,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  );
-                },
+                    ),
+                  ],
+                );
+              },
             ),
           ),
           SizedBox(

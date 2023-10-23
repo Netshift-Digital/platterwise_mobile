@@ -43,6 +43,7 @@ void main() async {
   Hive.init(tempDir.path);
   await Hive.openBox("post");
   await Hive.openBox(authKey);
+  await Hive.openBox(token);
   final FirebaseCrashlytics crashlytics = FirebaseCrashlytics.instance;
   FlutterError.onError = crashlytics.recordFlutterError;
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
