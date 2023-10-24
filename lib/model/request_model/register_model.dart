@@ -57,11 +57,13 @@ class RegisterModel {
         authId: json["authID"],
       );
 
-  String toJson() => '{
-        "full_name": "$fullName",
-        "email": "$email",
-        "password": "$password",
-        "phone": "$phone",
-        "username": "$username",
-        }';
+  Map<String, dynamic> toJson() => {
+        "full_name": fullName,
+        "email": "email",
+        "password": password,
+        "phone": phone,
+        "username": username,
+        //   "profileURL": imageUrl,
+        // "firebaseAuthID": authId,
+      };
 }
