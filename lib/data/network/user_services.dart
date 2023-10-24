@@ -14,17 +14,9 @@ class UserService {
   var client = http.Client();
 
   Future<dynamic> signUp(RegisterModel registerModel) async {
-    var body = {
-      "full_name": "${registerModel.fullName}",
-      "email": "${registerModel.email}",
-      "password": "${registerModel.password}",
-      "phone": "${registerModel.phone}",
-      "username": "${registerModel.username}",
-    };
-
     try {
       var response = await client.post(Uri.parse("${baseurl3}auth/register"),
-          body: jsonEncode(body),
+          body: jsonEncode(registerModel.toJson()),
           headers: {
             "Content-type": "application/json",
           });

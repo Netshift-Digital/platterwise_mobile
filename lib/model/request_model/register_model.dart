@@ -59,7 +59,7 @@ class RegisterModel {
 
   Map<String, dynamic> toJson() => {
         "full_name": fullName,
-        "email": "email",
+        "email": email,
         "password": password,
         "phone": phone,
         "username": username,
