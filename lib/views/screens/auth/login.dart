@@ -202,14 +202,7 @@ class Login extends StatelessWidget {
           .read<UserViewModel>()
           .login(_email.text, _password.text)
           .then((value) {
-        if (value != null) {
-          if (value == 0) {
-            nav(context, const BottomNav(), remove: true);
-          } else {
-            RandomFunction.toast(
-                "Account has not been verified, a verification link has been sent to your email");
-          }
-        }
+        nav(context, const BottomNav(), remove: true);
       });
     }
   }

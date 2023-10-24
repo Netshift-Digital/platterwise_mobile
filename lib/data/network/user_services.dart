@@ -14,8 +14,7 @@ class UserService {
   var client = http.Client();
 
   Future<dynamic> signUp(RegisterModel registerModel) async {
-    var body =
-    '''
+    var body = '''
       {  "full_name": "${registerModel.fullName}",
         "email": "${registerModel.email}",
         "password": "${registerModel.password}",
@@ -58,7 +57,7 @@ class UserService {
       var data = jsonDecode(response.body);
       print("This is the data $data");
 
-      if (data["status_code"] == 200 && data["status"] == true) {
+      if (data["status_code"] == 200 && data["success"] == true) {
         print("This is the data $data");
         var token = data["token"]["original"]["access_token"];
         print("This is the user token $token");

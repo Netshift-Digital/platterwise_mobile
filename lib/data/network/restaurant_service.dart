@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:platterwave/data/local/local_storage.dart';
 import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
 import 'package:platterwave/constant/endpoint.dart';
 import 'package:platterwave/model/failure.dart';
@@ -75,18 +76,19 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> getResturantById(int id) async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      "rest_id": id,
-    });
-    print("This is the body $body");
-
+    var body = '''
+    {
+      "restaurant_id": "$id",
+    }
+    ''';
+    var token = LocalStorage.getToken();
+    print("This is the token $token");
     try {
-      var response = await client.post(
-          Uri.parse("${baseurl2}getRestaurant_byId.php"),
+      var response = await client.post(Uri.parse("${baseurl3}restaurant/view"),
           body: body,
           headers: {
             "Content-type": "application/json",
+            "Authorization": "Bearer: $token"
           }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {

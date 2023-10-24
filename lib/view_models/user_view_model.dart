@@ -140,17 +140,15 @@ class UserViewModel extends BaseViewModel {
     return null;
   }
 
-  Future<int?> login(String email, String password) async {
+  Future<void> login(String email, String password) async {
     try {
       setState(AppState.busy);
-      var data = await userService.signIn(email, password);
+      await userService.signIn(email, password);
       setState(AppState.idle);
-      return data["data"]["original"]["is_verified"] ?? 0;
     } catch (e) {
       print(e.toString());
       setState(AppState.idle);
     }
-    return null;
   }
 
   Future<bool> changePassword(
