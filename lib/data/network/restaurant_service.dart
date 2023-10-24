@@ -138,19 +138,17 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> nearBy(LatLong latLong) async {
-    var body = '''
-{
+    var body = {
       "latitude": "${latLong.latitude}",
       "longitude": "${latLong.longitude}"
-    }
-    ''';
+    };
     print("This is the body $body");
 
     var token = LocalStorage.getToken();
     try {
       var response = await client.post(
           Uri.parse("${baseurl2}restaurant/near-you"),
-          body: body,
+          body: jsonEncode(body),
           headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer: $token"
@@ -542,18 +540,19 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> favouriteRestaurant(String id) async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      'rest_id': id
-    });
+    var body = jsonEncode({'restaurant_id': id});
+    var token = LocalStorage.getToken();
+
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl2}saved_rest.php"), body: body, headers: {
-        "Content-type": "application/json",
-      }).timeout(const Duration(seconds: 10));
+      var response = await client.post(Uri.parse("${baseurl3}restaurant/save"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer: $token"
+          }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
       print("This is the result unfav $data");
-      RandomFunction.toast(data['status']);
+      RandomFunction.toast(data['response']);
       if (response.statusCode == 200) {
         return data;
       }
@@ -570,19 +569,21 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> unfavouriteRestaurant(String id) async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      'rest_id': id
-    });
+    var body = jsonEncode({'restaurant_id': id});
     print("The body is $body");
+    var token = LocalStorage.getToken();
+
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl2}unsaved_rest.php"), body: body, headers: {
-        "Content-type": "application/json",
-      }).timeout(const Duration(seconds: 10));
+      var response = await client.post(
+          Uri.parse("${baseurl3}restaurant/unsave"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer: $token"
+          }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
       print("This is the result unfav $data");
-      RandomFunction.toast(data['status']);
+      RandomFunction.toast(data['response']);
       if (response.statusCode == 200) {
         return data;
       }
@@ -599,16 +600,13 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> getFavouriteRestaurant() async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-    });
+    var token = LocalStorage.getToken();
     try {
-      var response = await client.post(
-          Uri.parse("${baseurl2}get_saved_rest.php"),
-          body: body,
+      var response = await client.get(Uri.parse("${baseurl3}restaurant/saved"),
           headers: {
             "Content-type": "application/json",
-          }).timeout(const Duration(seconds: 10));
+            "Authorization": "Bearer: $token"
+          }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         return data;
@@ -626,17 +624,18 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> followRestaurant(String id) async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      'rest_id': id
-    });
+    var body = jsonEncode({'restaurant_id': id});
+    var token = LocalStorage.getToken();
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl2}follow_rest.php"), body: body, headers: {
-        "Content-type": "application/json",
-      }).timeout(const Duration(seconds: 10));
+      var response = await client.post(
+          Uri.parse("${baseurl3}restaurant/follow"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer: $token"
+          }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
-      RandomFunction.toast(data['status']);
+      RandomFunction.toast(data['response']);
       if (response.statusCode == 200) {
         return data;
       }
@@ -653,20 +652,19 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> unfollowRestaurant(String id) async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      'rest_id': id
-    });
-    print("The body is $body");
+    var body = jsonEncode({'restaurant_id': id});
+    var token = LocalStorage.getToken();
+
     try {
       var response = await client.post(
-          Uri.parse("${baseurl2}unfollow_rest.php"),
+          Uri.parse("${baseurl3}restaurant/unfollow"),
           body: body,
           headers: {
             "Content-type": "application/json",
-          }).timeout(const Duration(seconds: 10));
+            "Authorization": "Bearer: $token"
+          }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
-      RandomFunction.toast(data['status']);
+      RandomFunction.toast(data['response']);
       if (response.statusCode == 200) {
         return data;
       }
