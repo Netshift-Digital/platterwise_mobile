@@ -16,7 +16,7 @@ class UserService {
   Future<dynamic> signUp(RegisterModel registerModel) async {
     var body =
     '''
-    {   "full_name": "${registerModel.fullName}",
+      {  "full_name": "${registerModel.fullName}",
         "email": "${registerModel.email}",
         "password": "${registerModel.password}",
         "phone": "${registerModel.phone}",
