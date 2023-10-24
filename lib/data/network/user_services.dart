@@ -14,7 +14,7 @@ class UserService {
   var client = http.Client();
 
   Future<dynamic> signUp(RegisterModel registerModel) async {
-    var body = jsonEncode(registerModel.toJson());
+    var body = registerModel.toJson();
     try {
       var response = await client
           .post(Uri.parse("${baseurl3}auth/register"), body: body, headers: {
@@ -39,12 +39,13 @@ class UserService {
   }
 
   Future<dynamic> signIn(String email, String password) async {
-    var boDy = jsonEncode({"email": email, "password": password});
+    var boDy = '{"email": "$email", "password": "$password"}';
     try {
-      var response = await http
+      var response = await client
           .post(Uri.parse("${baseurl3}auth/login"), body: boDy, headers: {
         "Content-type": "application/json",
       });
+
       var data = jsonDecode(response.body);
       print("This is the data $data");
 
