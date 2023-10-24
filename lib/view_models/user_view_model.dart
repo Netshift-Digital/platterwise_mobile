@@ -28,24 +28,11 @@ class UserViewModel extends BaseViewModel {
       RegisterModel registerModel, String imagePath) async {
     try {
       setState(AppState.busy);
-      //var image = await uploadImage(imagePath);
-      /* if (registerModel.authId.isNotEmpty) {
-        var data = await userService.signUp(registerModel);
-        setState(AppState.idle);
-        if (data != null) {
-          return data["status"].toString().toLowerCase().contains("success");
-        }
-      } else {
-       */
-      //   var user = await firebaseAuth.createUserWithEmailAndPassword(
-      //     email: registerModel.email, password: registerModel.password);
-      //  var reg = registerModel.copyWith(authId: user.user!.uid);
       var data = await userService.signUp(registerModel);
       setState(AppState.idle);
       if (data != null) {
         return data["success"];
       }
-      // }
     } on FirebaseAuthException catch (e) {
       setState(AppState.idle);
       RandomFunction.toast(e.code);
@@ -140,15 +127,17 @@ class UserViewModel extends BaseViewModel {
     return null;
   }
 
-  Future<void> login(String email, String password) async {
+  Future<bool?> login(String email, String password) async {
     try {
       setState(AppState.busy);
-      await userService.signIn(email, password);
+      var res = await userService.signIn(email, password);
       setState(AppState.idle);
+      return res["status"];
     } catch (e) {
       print(e.toString());
       setState(AppState.idle);
     }
+    return null;
   }
 
   Future<bool> changePassword(

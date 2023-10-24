@@ -236,7 +236,6 @@ class _RegisterState extends State<Register> {
             "")
         .then((value) {
       if (value == true) {
-        FirebaseAuth.instance.currentUser!.sendEmailVerification();
         nav(context, Login());
         BotToast.showSimpleNotification(
             title:

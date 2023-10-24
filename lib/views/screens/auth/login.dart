@@ -202,7 +202,9 @@ class Login extends StatelessWidget {
           .read<UserViewModel>()
           .login(_email.text, _password.text)
           .then((value) {
-        nav(context, const BottomNav(), remove: true);
+        if (value != null && value == true) {
+          nav(context, const BottomNav(), remove: true);
+        }
       });
     }
   }

@@ -14,21 +14,22 @@ class UserService {
   var client = http.Client();
 
   Future<dynamic> signUp(RegisterModel registerModel) async {
-    var body = '''
-      {  "full_name": "${registerModel.fullName}",
-        "email": "${registerModel.email}",
-        "password": "${registerModel.password}",
-        "phone": "${registerModel.phone}",
-        "username": "${registerModel.username}",
-      }
-      ''';
+    var body = {
+      "full_name": "${registerModel.fullName}",
+      "email": "${registerModel.email}",
+      "password": "${registerModel.password}",
+      "phone": "${registerModel.phone}",
+      "username": "${registerModel.username}",
+    };
 
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl3}auth/register"), body: body, headers: {
-        "Content-type": "application/json",
-      });
+      var response = await client.post(Uri.parse("${baseurl3}auth/register"),
+          body: jsonEncode(body),
+          headers: {
+            "Content-type": "application/json",
+          });
       var data = jsonDecode(response.body);
+      print("The data is $data");
       if (response.statusCode == 200 && data["status"] == true) {
         return data;
       } else {
@@ -47,12 +48,13 @@ class UserService {
   }
 
   Future<dynamic> signIn(String email, String password) async {
-    var boDy = '{"email": "$email", "password": "$password"}';
+    var boDy = {"email": "$email", "password": "$password"};
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl3}auth/login"), body: boDy, headers: {
-        "Content-type": "application/json",
-      });
+      var response = await client.post(Uri.parse("${baseurl3}auth/login"),
+          body: jsonEncode(boDy),
+          headers: {
+            "Content-type": "application/json",
+          });
 
       var data = jsonDecode(response.body);
       print("This is the data $data");

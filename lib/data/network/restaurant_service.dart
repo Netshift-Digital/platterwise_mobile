@@ -138,20 +138,23 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> nearBy(LatLong latLong) async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      "latitude": latLong.latitude,
-      "longitude": latLong.longitude
-    });
+    var body = '''
+{
+      "latitude": "${latLong.latitude}",
+      "longitude": "${latLong.longitude}"
+    }
+    ''';
     print("This is the body $body");
 
+    var token = LocalStorage.getToken();
     try {
       var response = await client.post(
-          Uri.parse("https://api.platterwise.com/jhome2/closest_rest.php"),
+          Uri.parse("${baseurl2}restaurant/near-you"),
           body: body,
           headers: {
             "Content-type": "application/json",
-          }).timeout(const Duration(seconds: 10));
+            "Authorization": "Bearer: $token"
+          }).timeout(const Duration(seconds: 15));
       print(response.statusCode);
       var data = jsonDecode(response.body);
       print(data);
