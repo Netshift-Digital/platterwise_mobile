@@ -200,6 +200,7 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                             var data = resModel.closeByRestaurant[index];
                             return SmallRestaurantContainer(
                               restaurantData: data,
+                              id: data.restId,
                             );
                           },
                         ),
@@ -259,6 +260,7 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                               var data = resModel.topRestaurant[index];
                               return SmallRestaurantContainer(
                                 restaurantData: data,
+                                id: data.restId,
                               );
                             }),
                       ),
@@ -306,6 +308,7 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                           var data = resModel.allRestDetail[index];
                           return LargeRestaurantContainer(
                             restaurantData: data,
+                            id: data.restId,
                           );
                         },
                         separatorBuilder: (BuildContext context, int index) {

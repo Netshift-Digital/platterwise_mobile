@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:platterwave/model/restaurant/restaurant_review.dart';
+
 Restaurant restaurantFromJson(String str) =>
     Restaurant.fromJson(json.decode(str));
 
@@ -42,9 +44,10 @@ class RestaurantData {
       required this.website,
       required this.socialHandle,
       required this.menuPix,
+      required this.review,
       required this.seatType});
 
-  dynamic restId;
+  int restId;
   String restuarantName;
   String address;
   String state;
@@ -62,9 +65,10 @@ class RestaurantData {
   String socialHandle;
   List<MenuPix> menuPix;
   List<SeatType> seatType;
+  List<AllRestReview> review;
 
   factory RestaurantData.fromJson(Map<String, dynamic> json) => RestaurantData(
-        restId: json["id"] ?? "",
+        restId: json["id"] ?? 0,
         restuarantName: json["name"] ?? "",
         address: json["address"] ?? "",
         state: json["state"] ?? "",
@@ -84,6 +88,10 @@ class RestaurantData {
                 json['seat_type'].map((x) => SeatType.fromJson(x))),
         website: json["website"] ?? "",
         socialHandle: json["social_handle"] ?? "",
+        review: json['review'] == null
+            ? []
+            : List<AllRestReview>.from(
+                (json["review"]).map((x) => AllRestReview.fromJson(x))),
         menuPix: json['menu_pic'] == null
             ? []
             : List<MenuPix>.from(
@@ -119,11 +127,11 @@ class SeatType {
   });
 
   factory SeatType.fromJson(Map<dynamic, dynamic> json) => SeatType(
-        seatType: json["seat_type"],
+        seatType: json["name"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
-        "seat_type": seatType,
+        "name": seatType,
       };
 }
 
@@ -135,10 +143,10 @@ class MenuPix {
   String menuPic;
 
   factory MenuPix.fromJson(Map<String, dynamic> json) => MenuPix(
-        menuPic: json["menu_pic"] ?? json['menu_pix'] ?? json['pic'],
+        menuPic: json['image_url'] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
-        "menu_pic": menuPic,
+        "image_url": menuPic,
       };
 }

@@ -349,7 +349,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    /*   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context
           .read<RestaurantViewModel>()
           .getReview(widget.restaurantData.restId)
@@ -361,5 +361,6 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
         }
       });
     });
+*/
   }
 }

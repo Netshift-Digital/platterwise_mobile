@@ -14,7 +14,9 @@ import 'package:platterwave/views/widget/custom/cache-image.dart';
 
 class SmallRestaurantContainer extends StatelessWidget {
   final RestaurantData restaurantData;
-  const SmallRestaurantContainer({Key? key, required this.restaurantData})
+  final int id;
+  const SmallRestaurantContainer(
+      {Key? key, required this.restaurantData, required this.id})
       : super(key: key);
 
   @override
@@ -25,6 +27,7 @@ class SmallRestaurantContainer extends StatelessWidget {
           context,
           Res(
             restaurantData: restaurantData,
+            id: restaurantData.restId,
           ),
         );
       },

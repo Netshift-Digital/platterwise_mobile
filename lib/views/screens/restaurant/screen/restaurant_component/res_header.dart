@@ -31,6 +31,7 @@ class RestaurantHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var resModel = context.watch<RestaurantViewModel>();
+    print("The data is ${restaurantData.days}");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -141,7 +142,9 @@ class RestaurantHeader extends StatelessWidget {
           Align(
               alignment: Alignment.topLeft,
               child: Text(
-                "Opens ${restaurantData.days.capitalizeFirstChar()} (${restaurantData.openingHour} daily)",
+                restaurantData.days.isEmpty
+                    ? "Opens (${restaurantData.openingHour} daily)"
+                    : "Opens (${restaurantData.days.capitalizeFirstChar()} (${restaurantData.openingHour} daily)",
                 style: const TextStyle(
                   color: AppColor.g800,
                   fontSize: 13,
@@ -150,29 +153,17 @@ class RestaurantHeader extends StatelessWidget {
           const SizedBox(
             height: 12,
           ),
-          StreamBuilder<DocumentSnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('following')
-                  .doc("rest")
-                  .collection(FirebaseAuth.instance.currentUser!.uid)
-                  .doc(restaurantData.restId)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.data == null) {
-                  return Container();
-                } else {
-                  if (snapshot.data?.data() == null) {
-                    print("${snapshot.data!.data()} Is the snapsho");
-                    return PlatButtonBorder(
-                      title: "Follow Restaurant",
-                      padding: 0,
-                      height: 48.h,
-                      textSize: 14,
-                      onTap: () {
-                        resModel.followRestaurant(restaurantData);
-                      },
-                    );
-                  } else {
+          PlatButtonBorder(
+            title: "Follow Restaurant",
+            padding: 0,
+            height: 48.h,
+            textSize: 14,
+            onTap: () {
+              resModel.followRestaurant(restaurantData);
+            },
+          )
+          /* } 
+                  else {
                     print("${snapshot.data!.data()} Is the snapsho");
                     return PlatButtonBorder(
                       title: "Followed",
@@ -181,13 +172,13 @@ class RestaurantHeader extends StatelessWidget {
                       color: AppColor.g500,
                       textColor: AppColor.g500,
                       onTap: () {
-                        resModel.unFollowRestaurant(restaurantData.restId);
+                        resModel.unFollowRestaurant(
+                            restaurantData.restId.toString());
                       },
                       height: 48.h,
                     );
                   }
-                }
-              }),
+                }*/
         ],
       ),
     );

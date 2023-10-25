@@ -9,7 +9,8 @@ import 'package:provider/provider.dart';
 
 class MoreRestaurant extends StatelessWidget {
   final List<RestaurantData> closeByRestaurant;
-  const MoreRestaurant({Key? key, required this.closeByRestaurant}) : super(key: key);
+  const MoreRestaurant({Key? key, required this.closeByRestaurant})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +26,7 @@ class MoreRestaurant extends StatelessWidget {
             var data = closeByRestaurant[index];
             return LargeRestaurantContainer(
               restaurantData: data,
+              id: data.restId,
             );
           },
           separatorBuilder: (BuildContext context, int index) {

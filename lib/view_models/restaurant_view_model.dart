@@ -103,12 +103,12 @@ class RestaurantViewModel extends BaseViewModel {
 
   Future<dynamic> followRestaurant(RestaurantData rest) async {
     try {
-      await restaurantService.followRestaurant(rest.restId);
+      await restaurantService.followRestaurant(rest.restId as String);
       FirebaseFirestore.instance
           .collection("following")
           .doc("rest")
           .collection(FirebaseAuth.instance.currentUser!.uid)
-          .doc(rest.restId)
+          .doc(rest.restId as String?)
           .set(rest.toJson());
       notifyListeners();
     } on FirebaseException catch (e) {
@@ -359,12 +359,12 @@ class RestaurantViewModel extends BaseViewModel {
         print("This rest is not fav");
         favouriteRestaurant.add(restaurantData);
         notifyListeners();
-        await restaurantService.favouriteRestaurant(restaurantData.restId);
+        //  await restaurantService.favouriteRestaurant(restaurantData.restId);
       } else {
         print("This rest is fav");
         favouriteRestaurant.remove(restaurantData);
         notifyListeners();
-        await restaurantService.unfavouriteRestaurant(restaurantData.restId);
+        //  await restaurantService.unfavouriteRestaurant(restaurantData.restId);
       }
     } catch (e) {
       //

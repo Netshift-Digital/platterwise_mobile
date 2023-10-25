@@ -129,7 +129,7 @@ class _BottomNavState extends State<BottomNav> {
     //  await resModel.getTopRestaurant();
     await resModel.getRestaurant();
     //  await resModel.getBanner();
-    //  await resModel.getFavouriteRestaurant();
+    await resModel.getFavouriteRestaurant();
     //  await resModel.getReservations();
     //resModel.getRestaurantsFollowed();
     //  await blogModel.getFollowers();
@@ -173,7 +173,7 @@ class _BottomNavState extends State<BottomNav> {
           nav(
               context,
               Res(
-                id: postId.replaceAll(kShareRest, ''),
+                id: int.parse(postId.replaceAll(kShareRest, '')),
               ));
         } else {
           nav(context, SharedPost(id: postId));

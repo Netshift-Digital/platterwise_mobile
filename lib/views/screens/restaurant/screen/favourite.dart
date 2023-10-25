@@ -37,6 +37,7 @@ class Favourite extends StatelessWidget {
                   var data = resModel.favouriteRestaurant[index];
                   return LargeRestaurantContainer(
                     restaurantData: data,
+                    id: data.restId,
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {

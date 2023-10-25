@@ -12,16 +12,20 @@ import '../../../res/color.dart';
 
 class LargeRestaurantContainer extends StatelessWidget {
   final RestaurantData restaurantData;
-  const LargeRestaurantContainer({Key? key, required this.restaurantData}) : super(key: key);
+  final int id;
+  const LargeRestaurantContainer(
+      {Key? key, required this.restaurantData, required this.id})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         nav(
           context,
           Res(
             restaurantData: restaurantData,
+            id: id,
           ),
         );
       },
@@ -45,44 +49,49 @@ class LargeRestaurantContainer extends StatelessWidget {
                   topLeft: Radius.circular(6),
                   bottomLeft: Radius.circular(6),
                 ),
-                 child: ImageCacheR(restaurantData.coverPic,
-                 topBottom: 0,
-                 topRadius: 0,
-                 ),
+                child: ImageCacheR(
+                  restaurantData.coverPic,
+                  topBottom: 0,
+                  topRadius: 0,
+                ),
               ),
             ),
-            SizedBox(width: 12.w,),
+            SizedBox(
+              width: 12.w,
+            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                   restaurantData.restuarantName,
+                    restaurantData.restuarantName,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: AppTextTheme.h3.copyWith(
-                      fontWeight: FontWeight.w500
-                    ),
+                    style:
+                        AppTextTheme.h3.copyWith(fontWeight: FontWeight.w500),
                   ),
-                  SizedBox(height: 4.h,),
+                  SizedBox(
+                    height: 4.h,
+                  ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Flexible(
-                          child: SvgPicture.asset("assets/images/locations.svg")
+                          child:
+                              SvgPicture.asset("assets/images/locations.svg")),
+                      SizedBox(
+                        width: 6.w,
                       ),
-                      SizedBox(width: 6.w,),
                       Flexible(
                         flex: 2,
                         child: Text(
                           restaurantData.address,
-                           style: AppTextTheme.h5.copyWith(
-                             fontSize: 12,
-                             color: AppColor.g600,
-                             fontWeight: FontWeight.w500
-                           ),
+                          style: AppTextTheme.h5.copyWith(
+                              fontSize: 12,
+                              color: AppColor.g600,
+                              fontWeight: FontWeight.w500),
                           softWrap: true,
                           maxLines: 3,
                         ),

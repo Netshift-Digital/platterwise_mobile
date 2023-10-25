@@ -13,7 +13,6 @@ import 'package:platterwave/views/widget/containers/large_restaurant_container.d
 import 'package:platterwave/views/widget/text_feild/app_textfield.dart';
 import 'package:provider/provider.dart';
 
-
 class RestaurantSearchScreen extends StatefulWidget {
   const RestaurantSearchScreen({Key? key}) : super(key: key);
 
@@ -29,7 +28,7 @@ class _RestaurantSearchScreenState extends State<RestaurantSearchScreen> {
     var model = context.watch<RestaurantViewModel>();
     SizeConfig.init(context);
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
@@ -38,18 +37,20 @@ class _RestaurantSearchScreenState extends State<RestaurantSearchScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             children: [
-              SizedBox(height: 10.h,),
+              SizedBox(
+                height: 10.h,
+              ),
               AppTextField(
                 controller: searchController,
                 fillColor: AppColor.g30,
                 isSearch: true,
                 hasBorder: false,
-                onChanged: (e){
-                  if(e.length>2){
-                    model.searchRestaurant(e).then((value){
-                      if(mounted){
+                onChanged: (e) {
+                  if (e.length > 2) {
+                    model.searchRestaurant(e).then((value) {
+                      if (mounted) {
                         setState(() {
-                          allRestDetail=value;
+                          allRestDetail = value;
                         });
                       }
                     });
@@ -58,13 +59,17 @@ class _RestaurantSearchScreenState extends State<RestaurantSearchScreen> {
                 hintText: "Search for a restaurant",
                 prefixIcon: SvgPicture.asset("assets/icon/search-normal.svg"),
                 suffixIcon: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       searchController.clear();
                     },
-                    child:const  Icon(Icons.clear,color: Colors.grey,)
-                ),
+                    child: const Icon(
+                      Icons.clear,
+                      color: Colors.grey,
+                    )),
               ),
-              SizedBox(height: 33.h,),
+              SizedBox(
+                height: 33.h,
+              ),
               Expanded(
                 child: ListView.separated(
                   shrinkWrap: true,
@@ -75,6 +80,7 @@ class _RestaurantSearchScreenState extends State<RestaurantSearchScreen> {
                     var data = allRestDetail[index];
                     return LargeRestaurantContainer(
                       restaurantData: data,
+                      id: data.restId,
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) {
@@ -84,32 +90,28 @@ class _RestaurantSearchScreenState extends State<RestaurantSearchScreen> {
                   },
                 ),
               )
-
             ],
           ),
-      ),
+        ),
       ),
     );
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    searchController.addListener(() {
-
-    });
+    searchController.addListener(() {});
   }
 
   void filterSheet(VBlogViewModel vBlogViewModel) {
     showModalBottomSheet(
         context: context,
-        builder: (context){
+        builder: (context) {
           return Container(
             height: 150,
-            decoration: const BoxDecoration(
-                color: Colors.white
-            ),
+            decoration: const BoxDecoration(color: Colors.white),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -117,47 +119,47 @@ class _RestaurantSearchScreenState extends State<RestaurantSearchScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("By post",
+                      Text(
+                        "By post",
                         style: AppTextTheme.large.copyWith(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16
-                        ),),
+                            fontWeight: FontWeight.w600, fontSize: 16),
+                      ),
                       Checkbox(
-                          value: vBlogViewModel.searchType==SearchType.post?true:false,
-                          onChanged:(e){
-                            if(e==true){
+                          value: vBlogViewModel.searchType == SearchType.post
+                              ? true
+                              : false,
+                          onChanged: (e) {
+                            if (e == true) {
                               vBlogViewModel.setSearchType(SearchType.post);
                               Navigator.pop(context);
                             }
-                          }
-                      )
+                          })
                     ],
                   ),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("By User",
+                      Text(
+                        "By User",
                         style: AppTextTheme.large.copyWith(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16
-                        ),),
+                            fontWeight: FontWeight.w600, fontSize: 16),
+                      ),
                       Checkbox(
-                          value: vBlogViewModel.searchType==SearchType.user?true:false,
-                          onChanged:(e){
-                            if(e==true){
+                          value: vBlogViewModel.searchType == SearchType.user
+                              ? true
+                              : false,
+                          onChanged: (e) {
+                            if (e == true) {
                               vBlogViewModel.setSearchType(SearchType.user);
                               Navigator.pop(context);
                             }
-                          }
-                      )
+                          })
                     ],
                   )
                 ],
               ),
             ),
           );
-        }
-    );
+        });
   }
 }

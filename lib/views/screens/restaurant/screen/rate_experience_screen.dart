@@ -38,7 +38,7 @@ class _RateExperienceScreenState extends State<RateExperienceScreen> {
   Widget build(BuildContext context) {
     SizeConfig.init(context);
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
@@ -147,38 +147,41 @@ class _RateExperienceScreenState extends State<RateExperienceScreen> {
                   ),
                   AppTextField(
                     controller: controller,
-                    onChanged: (e){
+                    onChanged: (e) {
                       setState(() {});
                     },
                     hintText: "Add a brief introduction about you.",
                     maxLines: 8,
                   ),
-                  const SizedBox(height: 30,),
+                  const SizedBox(
+                    height: 30,
+                  ),
                   PlatButton(
                     appState: appState,
                     title: "Submit",
-                    onTap:() {
+                    onTap: () {
                       setState(() {
-                        appState=AppState.busy;
+                        appState = AppState.busy;
                       });
                       var resViewModel = context.read<RestaurantViewModel>();
-                      resViewModel.addReview(
-                          resId: widget.restaurantData.restId,
-                          review: controller.text,
-                          rate: rate.toString()
-                      ).then((value){
+                      resViewModel
+                          .addReview(
+                              resId: widget.restaurantData.restId.toString(),
+                              review: controller.text,
+                              rate: rate.toString())
+                          .then((value) {
                         setState(() {
-                          appState=AppState.idle;
+                          appState = AppState.idle;
                         });
-                        Navigator.pop(context,value);
-                      }).catchError((e){
+                        Navigator.pop(context, value);
+                      }).catchError((e) {
                         setState(() {
-                          appState=AppState.idle;
+                          appState = AppState.idle;
                         });
                       });
-                       // if(controller.text.isNotEmpty){
-                       //
-                       // }
+                      // if(controller.text.isNotEmpty){
+                      //
+                      // }
                     },
                   ),
                   SizedBox(

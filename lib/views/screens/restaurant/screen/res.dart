@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/model/restaurant/restaurant.dart';
-import 'package:platterwave/model/restaurant/restaurant_review.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/restaurant_component/res_bottom.dart';
@@ -17,8 +16,8 @@ import 'package:provider/provider.dart';
 
 class Res extends StatefulWidget {
   RestaurantData? restaurantData;
-  final String? id;
-  Res({super.key, this.restaurantData, this.id})
+  final int id;
+  Res({super.key, this.restaurantData, required this.id})
       : assert(!(restaurantData == null && id == null),
             "pass either restId or RestaurantData");
 
@@ -29,7 +28,6 @@ class Res extends StatefulWidget {
 class _ResState extends State<Res> {
   int index = 0;
   PageController pageController = PageController();
-  List<AllRestReview> review = [];
   @override
   Widget build(BuildContext context) {
     if (widget.restaurantData == null) {
@@ -44,7 +42,7 @@ class _ResState extends State<Res> {
           index: index,
           onReview: (e) {
             setState(() {
-              review = e;
+              widget.restaurantData!.review = e;
             });
           }),
       body: CustomScrollView(
@@ -109,7 +107,7 @@ class _ResState extends State<Res> {
                   ),
                   RestaurantHeader(
                     restaurantData: widget.restaurantData!,
-                    review: review,
+                    review: widget.restaurantData!.review,
                   ),
                 ],
               ),
@@ -147,7 +145,7 @@ class _ResState extends State<Res> {
                 children: [
                   ResDetails(restaurantData: widget.restaurantData!),
                   RestaurantsReviews(
-                    review: review,
+                    review: widget.restaurantData!.review,
                     restaurantData: widget.restaurantData!,
                   ),
                 ]),
@@ -162,7 +160,7 @@ class _ResState extends State<Res> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context
+      /* context
           .read<RestaurantViewModel>()
           .getReview((widget.id ?? widget.restaurantData!.restId).toString())
           .then((value) {
@@ -172,19 +170,17 @@ class _ResState extends State<Res> {
           });
         }
       });
-
-      if (widget.restaurantData == null) {
-        context
-            .read<RestaurantViewModel>()
-            .getRestaurantById(int.parse(widget.id!))
-            .then((value) {
-          if (mounted) {
-            setState(() {
-              widget.restaurantData = value;
-            });
-          }
-        });
-      }
+*/
+      context
+          .read<RestaurantViewModel>()
+          .getRestaurantById(widget.id)
+          .then((value) {
+        if (mounted) {
+          setState(() {
+            widget.restaurantData = value!;
+          });
+        }
+      });
     });
   }
 }

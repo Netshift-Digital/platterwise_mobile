@@ -397,7 +397,7 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
     var bookData = ReservationData(
         firebaseAuthId: FirebaseAuth.instance.currentUser?.uid ?? "",
         reservationDate: dateTime.toString(),
-        restId: widget.restaurantData.restId,
+        restId: widget.restaurantData.restId.toString(),
         sitType: sitType ?? "",
         guestNo: guestNumber.toString(),
         guest: g);
