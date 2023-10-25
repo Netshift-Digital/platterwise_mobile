@@ -356,15 +356,15 @@ class RestaurantViewModel extends BaseViewModel {
   Future<void> saveRestaurant(RestaurantData restaurantData) async {
     try {
       if (!isFavourite(restaurantData.restId.toString())) {
-        print("This rest is not fav");
         favouriteRestaurant.add(restaurantData);
         notifyListeners();
-        //  await restaurantService.favouriteRestaurant(restaurantData.restId);
+        await restaurantService
+            .favouriteRestaurant(restaurantData.restId.toString());
       } else {
-        print("This rest is fav");
         favouriteRestaurant.remove(restaurantData);
         notifyListeners();
-        //  await restaurantService.unfavouriteRestaurant(restaurantData.restId);
+        await restaurantService
+            .unfavouriteRestaurant(restaurantData.restId.toString());
       }
     } catch (e) {
       //
@@ -376,7 +376,7 @@ class RestaurantViewModel extends BaseViewModel {
       var data = await restaurantService.getFavouriteRestaurant();
       if (data != null) {
         favouriteRestaurant = [];
-        for (var e in data['all_saved_rest']) {
+        for (var e in data['data']['restaurant']) {
           favouriteRestaurant.add(RestaurantData.fromJson(e));
         }
         notifyListeners();
