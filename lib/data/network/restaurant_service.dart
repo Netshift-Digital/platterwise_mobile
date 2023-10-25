@@ -17,21 +17,20 @@ class RestaurantService {
   var client = http.Client();
 
   Future<Map<String, dynamic>?> getRestaurantList() async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      "get_all_resturant": "get_all_resturant"
-    });
-    print("This is the body $body");
+    var token = LocalStorage.getToken();
+
     try {
-      var response =
-          await client.get(Uri.parse("${baseurl2}get_all_details.php"),
-              //body: body,
-              headers: {
+      var response = await client.get(Uri.parse("${baseurl3}restaurant/index"),
+          headers: {
             "Content-type": "application/json",
-          }).timeout(const Duration(seconds: 10));
+            "Authorization": "Bearer $token"
+          }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+      print("This is the data $data");
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data;
+      } else {
+        RandomFunction.toast(data['response']);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -88,7 +87,7 @@ class RestaurantService {
           body: body,
           headers: {
             "Content-type": "application/json",
-            "Authorization": "Bearer: $token"
+            "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
@@ -147,19 +146,19 @@ class RestaurantService {
     var token = LocalStorage.getToken();
     try {
       var response = await client.post(
-          Uri.parse("${baseurl2}restaurant/near-you"),
+          Uri.parse("${baseurl3}restaurant/near-you"),
           body: jsonEncode(body),
           headers: {
             "Content-type": "application/json",
-            "Authorization": "Bearer: $token"
+            "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
       print(response.statusCode);
       var data = jsonDecode(response.body);
       print(data);
-      if (response.statusCode == 200) {
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       } else {
-        RandomFunction.toast(data['status']);
+        RandomFunction.toast(data['response']);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -548,12 +547,12 @@ class RestaurantService {
           body: body,
           headers: {
             "Content-type": "application/json",
-            "Authorization": "Bearer: $token"
+            "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
       print("This is the result unfav $data");
       RandomFunction.toast(data['response']);
-      if (response.statusCode == 200) {
+      if (data["statusCode"] == 200 && data["success"] == true) {
         return data;
       }
     } on SocketException catch (_) {
@@ -579,12 +578,12 @@ class RestaurantService {
           body: body,
           headers: {
             "Content-type": "application/json",
-            "Authorization": "Bearer: $token"
+            "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
       print("This is the result unfav $data");
       RandomFunction.toast(data['response']);
-      if (response.statusCode == 200) {
+      if (data["statusCode"] == 200 && data["success"] == true) {
         return data;
       }
     } on SocketException catch (_) {
@@ -605,11 +604,13 @@ class RestaurantService {
       var response = await client.get(Uri.parse("${baseurl3}restaurant/saved"),
           headers: {
             "Content-type": "application/json",
-            "Authorization": "Bearer: $token"
+            "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+      if (data["statusCode"] == 200 && data["success"] == true) {
         return data;
+      } else {
+        RandomFunction.toast(data['response']);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -632,11 +633,11 @@ class RestaurantService {
           body: body,
           headers: {
             "Content-type": "application/json",
-            "Authorization": "Bearer: $token"
+            "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
       RandomFunction.toast(data['response']);
-      if (response.statusCode == 200) {
+      if (data["statusCode"] == 200 && data["success"] == true) {
         return data;
       }
     } on SocketException catch (_) {
@@ -661,11 +662,11 @@ class RestaurantService {
           body: body,
           headers: {
             "Content-type": "application/json",
-            "Authorization": "Bearer: $token"
+            "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
       RandomFunction.toast(data['response']);
-      if (response.statusCode == 200) {
+      if (data["statusCode"] == 200 && data["success"] == true) {
         return data;
       }
     } on SocketException catch (_) {
