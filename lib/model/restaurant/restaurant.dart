@@ -7,8 +7,6 @@ import 'dart:convert';
 Restaurant restaurantFromJson(String str) =>
     Restaurant.fromJson(json.decode(str));
 
-String restaurantToJson(Restaurant data) => json.encode(data.toJson());
-
 class Restaurant {
   Restaurant({
     required this.status,
@@ -19,16 +17,10 @@ class Restaurant {
   List<RestaurantData> allRestDetail;
 
   factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
-        status: json["status"],
+        status: "",
         allRestDetail: List<RestaurantData>.from(
-            json["all_rest_detail"].map((x) => RestaurantData.fromJson(x))),
+            json["data"].map((x) => RestaurantData.fromJson(x))),
       );
-
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "all_rest_detail":
-            List<dynamic>.from(allRestDetail.map((x) => x.toJson())),
-      };
 }
 
 class RestaurantData {
@@ -72,18 +64,18 @@ class RestaurantData {
   List<SeatType> seatType;
 
   factory RestaurantData.fromJson(Map<String, dynamic> json) => RestaurantData(
-        restId: json["rest_id"],
-        restuarantName: json["restuarant_name"],
-        address: json["address"],
-        state: json["state"],
+        restId: json["id"] ?? "",
+        restuarantName: json["name"] ?? "",
+        address: json["address"] ?? "",
+        state: json["state"] ?? "",
         localGovt: json["local_govt"] ?? "",
-        landmark: json["landmark"],
+        landmark: json["landmark"] ?? "",
         rating: json["rating"] ?? json["rest_rating"] ?? 0,
         banner: json["banner"] ?? "",
         descriptions: json["descriptions"] ?? "",
-        coverPic: json["cover_pic"],
+        coverPic: json["cover_pic"] ?? "",
         openingHour: json["opening_hour"] ?? "",
-        days: json["days"] ?? "",
+        days: json["working_days"] ?? "",
         email: json["email"] ?? "",
         phone: json["phone"] ?? "",
         seatType: json['seat_type'] == null
@@ -91,9 +83,11 @@ class RestaurantData {
             : List<SeatType>.from(
                 json['seat_type'].map((x) => SeatType.fromJson(x))),
         website: json["website"] ?? "",
-        socialHandle: json["social_handle"],
-        menuPix: List<MenuPix>.from((json["menu_pix"] ?? json["menu_pic"])
-            .map((x) => MenuPix.fromJson(x))),
+        socialHandle: json["social_handle"] ?? "",
+        menuPix: json['menu_pic'] == null
+            ? []
+            : List<MenuPix>.from(
+                (json["menu_pic"]).map((x) => MenuPix.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

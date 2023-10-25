@@ -152,8 +152,8 @@ class RestaurantViewModel extends BaseViewModel {
   Future<RestaurantData?> getRestaurantById(int id) async {
     try {
       var data = await restaurantService.getResturantById(id);
-      if (data != null && data['get_restaurantById'][0] != null) {
-        return RestaurantData.fromJson(data['get_restaurantById'][0]);
+      if (data != null) {
+        return RestaurantData.fromJson(data['data']);
       }
     } catch (e) {
       //

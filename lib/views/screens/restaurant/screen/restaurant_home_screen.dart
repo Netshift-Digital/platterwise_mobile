@@ -112,8 +112,8 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
           body: SafeArea(
             child: RefreshIndicator(
               onRefresh: () async {
-                await resModel.closeBy();
-                await resModel.getTopRestaurant();
+                //await resModel.closeBy();
+                //  await resModel.getTopRestaurant();
                 await resModel.getRestaurant();
                 return;
               },

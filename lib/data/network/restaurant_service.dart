@@ -28,7 +28,7 @@ class RestaurantService {
       var data = jsonDecode(response.body);
       print("This is the data $data");
       if (data["status_code"] == 200 && data["success"] == true) {
-        return data;
+        return data['data'];
       } else {
         RandomFunction.toast(data['response']);
       }
