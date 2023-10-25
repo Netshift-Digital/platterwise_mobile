@@ -39,7 +39,7 @@ class AllRestReview {
   dynamic reviewId;
   String fullName;
   String profileUrl;
-  String rating;
+  dynamic rating;
   String review;
   String timestamp;
 

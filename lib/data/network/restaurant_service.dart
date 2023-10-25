@@ -549,9 +549,9 @@ class RestaurantService {
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
-      print("This is the result unfav $data");
+      print("This is the result fav $data");
       RandomFunction.toast(data['response']);
-      if (data["statusCode"] == 200 && data["success"] == true) {
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       }
     } on SocketException catch (_) {
@@ -582,7 +582,7 @@ class RestaurantService {
       var data = jsonDecode(response.body);
       print("This is the result unfav $data");
       RandomFunction.toast(data['response']);
-      if (data["statusCode"] == 200 && data["success"] == true) {
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       }
     } on SocketException catch (_) {
@@ -607,7 +607,7 @@ class RestaurantService {
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
       if (data["statusCode"] == 200 && data["success"] == true) {
-        return data;
+        return data["data"];
       } else {
         RandomFunction.toast(data['response']);
       }
