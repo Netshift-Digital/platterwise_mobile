@@ -296,17 +296,19 @@ class RestaurantService {
     var map = reservationData.toJson();
     // map.putIfAbsent('subject_of_invite', () => '');
     var body = jsonEncode(map);
+    var token = LocalStorage.getToken();
     //print(body);
     print("This is the body $body");
 
     try {
       var response = await client.post(
           Uri.parse(
-            "${baseurl2}make_reservation.php",
+            "${baseurl3}reservation/create",
           ),
           body: body,
           headers: {
             "Content-type": "application/json",
+            "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body.replaceAll('Message sent!', ''));
       print("The response is $data");
@@ -335,15 +337,17 @@ class RestaurantService {
 
   Future<Map<String, dynamic>?> cancelReservation(String id) async {
     var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      'reserv_id': id
+      // "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
+      'reservation_id': id
     });
+    var token = LocalStorage.getToken();
     try {
       var response = await client.post(
-          Uri.parse("${baseurl2}cancel_reservationt.php"),
+          Uri.parse("${baseurl3}reservation/cancel"),
           body: body,
           headers: {
             "Content-type": "application/json",
+            "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
       RandomFunction.toast(data['status']);
