@@ -85,7 +85,7 @@ class PlatButtonBorder extends StatelessWidget {
     this.color = AppColor.p300,
     this.textColor = AppColor.p300,
     required this.title,
-    required this.onTap,
+    this.onTap,
     this.textSize = 18,
     this.iconSize = 17,
     this.padding = 10,

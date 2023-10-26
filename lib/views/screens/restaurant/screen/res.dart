@@ -70,21 +70,23 @@ class _ResState extends State<Res> {
             ),
             actions: [
               GestureDetector(
-                onTap: () {
-                  context
-                      .read<RestaurantViewModel>()
-                      .saveRestaurant(widget.restaurantData!);
-                },
-                child: SizedBox(
-                  width: 39,
-                  height: 39,
-                  child: context
-                          .watch<RestaurantViewModel>()
-                          .isFavourite(widget.restaurantData!.restId.toString())
-                      ? SvgPicture.asset('assets/icon/heart.svg')
-                      : SvgPicture.asset('assets/icon/favour_rite.svg'),
-                ),
-              ),
+                  onTap: () {
+                    context
+                        .read<RestaurantViewModel>()
+                        .saveRestaurant(widget.restaurantData!);
+                  },
+                  child: SizedBox(
+                      width: 39,
+                      height: 39,
+                      child: Consumer<RestaurantViewModel>(
+                        builder: (context, restaurantViewModel, child) {
+                          final isFavourite = restaurantViewModel.isFavourite(
+                              widget.restaurantData!.restId.toString());
+                          return isFavourite
+                              ? SvgPicture.asset('assets/icon/heart.svg')
+                              : SvgPicture.asset('assets/icon/favour_rite.svg');
+                        },
+                      ))),
               const SizedBox(
                 width: 16,
               ),

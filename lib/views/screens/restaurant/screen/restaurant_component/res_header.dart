@@ -153,32 +153,32 @@ class RestaurantHeader extends StatelessWidget {
           const SizedBox(
             height: 12,
           ),
-          PlatButtonBorder(
-            title: "Follow Restaurant",
-            padding: 0,
-            height: 48.h,
-            textSize: 14,
-            onTap: () {
-              resModel.followRestaurant(restaurantData);
+          Consumer<RestaurantViewModel>(
+            builder: (context, restaurantViewModel, child) {
+              final isFollowed = restaurantViewModel
+                  .isFollowed(restaurantData.restId.toString());
+              return GestureDetector(
+                onTap: () {
+                  resModel.followRestaurant(restaurantData);
+                },
+                child: isFollowed
+                    ? PlatButtonBorder(
+                        title: "Followed",
+                        padding: 0,
+                        textSize: 14,
+                        color: AppColor.g500,
+                        textColor: AppColor.g500,
+                        height: 48.h,
+                      )
+                    : PlatButtonBorder(
+                        title: "Follow Restaurant",
+                        padding: 0,
+                        height: 48.h,
+                        textSize: 14,
+                      ),
+              );
             },
-          )
-          /* } 
-                  else {
-                    print("${snapshot.data!.data()} Is the snapsho");
-                    return PlatButtonBorder(
-                      title: "Followed",
-                      padding: 0,
-                      textSize: 14,
-                      color: AppColor.g500,
-                      textColor: AppColor.g500,
-                      onTap: () {
-                        resModel.unFollowRestaurant(
-                            restaurantData.restId.toString());
-                      },
-                      height: 48.h,
-                    );
-                  }
-                }*/
+          ),
         ],
       ),
     );

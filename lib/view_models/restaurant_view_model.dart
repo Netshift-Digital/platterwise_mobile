@@ -21,6 +21,7 @@ class RestaurantViewModel extends BaseViewModel {
   RestaurantService restaurantService = locator<RestaurantService>();
   List<RestaurantData> allRestDetail = [];
   List<RestaurantData> favouriteRestaurant = [];
+  List<RestaurantData> followedRestaurant = [];
   List<RestaurantData> topRestaurant = [];
   List<RestaurantData> nearByRestaurant = [];
   List<RestaurantData> closeByRestaurant = [];
@@ -43,6 +44,10 @@ class RestaurantViewModel extends BaseViewModel {
   bool isFavourite(String id) {
     return favouriteRestaurant
         .any((element) => element.restId.toString() == id);
+  }
+
+  bool isFollowed(String id) {
+    return followedRestaurant.any((element) => element.restId.toString() == id);
   }
 
   setReviewState(AppState state) {
@@ -82,56 +87,22 @@ class RestaurantViewModel extends BaseViewModel {
     return closeByRestaurant;
   }
 
-  /* Future<dynamic> getRestaurantsFollowed() async {
-    final data = await FirebaseFirestore.instance
-        .collection("following")
-        .doc("restaurants")
-        .collection(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-  //  followedRestaurants = [];
-    for (var v in data.docs) {
-      followedRestaurants.add(RestaurantData.fromJson(v.data()));
-      print(v.data());
-    }
-    notifyListeners();
-  }*/
-
-  /*bool getIsRestFollowed(String id) {
-    var d = followedRestaurants.where((element) => element.restId == id);
-    return d.isNotEmpty;
-  }*/
-
-  Future<dynamic> followRestaurant(RestaurantData rest) async {
+  Future<void> followRestaurant(RestaurantData restaurantData) async {
     try {
-      await restaurantService.followRestaurant(rest.restId as String);
-      FirebaseFirestore.instance
-          .collection("following")
-          .doc("rest")
-          .collection(FirebaseAuth.instance.currentUser!.uid)
-          .doc(rest.restId as String?)
-          .set(rest.toJson());
-      notifyListeners();
-    } on FirebaseException catch (e) {
-      print("The firebase exception is $e");
+      if (!isFollowed(restaurantData.restId.toString())) {
+        followedRestaurant.add(restaurantData);
+        notifyListeners();
+        await restaurantService
+            .followRestaurant(restaurantData.restId.toString());
+      } else {
+        followedRestaurant.removeWhere(
+            (r) => r.restId.toString() == restaurantData.restId.toString());
+        notifyListeners();
+        await restaurantService
+            .unfollowRestaurant(restaurantData.restId.toString());
+      }
     } catch (e) {
-      setState(AppState.idle);
-    }
-  }
-
-  Future<dynamic> unFollowRestaurant(String restId) async {
-    try {
-      await restaurantService.unfollowRestaurant(restId);
-      FirebaseFirestore.instance
-          .collection("following")
-          .doc('rest')
-          .collection(FirebaseAuth.instance.currentUser!.uid)
-          .doc(restId)
-          .delete();
-      notifyListeners();
-    } catch (e) {
-      print("The firebase exception is $e");
-
-      setState(AppState.idle);
+      //
     }
   }
 
@@ -361,10 +332,11 @@ class RestaurantViewModel extends BaseViewModel {
         await restaurantService
             .favouriteRestaurant(restaurantData.restId.toString());
       } else {
-        favouriteRestaurant.remove(restaurantData);
-        notifyListeners();
         await restaurantService
             .unfavouriteRestaurant(restaurantData.restId.toString());
+        favouriteRestaurant.removeWhere(
+            (r) => r.restId.toString() == restaurantData.restId.toString());
+        notifyListeners();
       }
     } catch (e) {
       //
@@ -379,6 +351,23 @@ class RestaurantViewModel extends BaseViewModel {
         for (var e in data['data']) {
           print("A single e is $e");
           favouriteRestaurant.add(RestaurantData.fromJson(e['restaurant'][0]));
+        }
+        notifyListeners();
+      }
+    } catch (e) {
+      //
+    }
+    return favouriteRestaurant;
+  }
+
+  Future<List<RestaurantData>> getFollowedRestaurant() async {
+    try {
+      var data = await restaurantService.getFollowedRestaurant();
+      if (data != null) {
+        followedRestaurant = [];
+        for (var e in data['data']) {
+          print("A single e is $e");
+          followedRestaurant.add(RestaurantData.fromJson(e['restaurant']));
         }
         notifyListeners();
       }

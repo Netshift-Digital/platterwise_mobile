@@ -6,9 +6,9 @@ import 'dart:convert';
 
 import 'package:platterwave/model/restaurant/restaurant.dart';
 
-SearchRestaurantModel searchRestaurantModelFromJson(String str) => SearchRestaurantModel.fromJson(json.decode(str));
+SearchRestaurantModel searchRestaurantModelFromJson(String str) =>
+    SearchRestaurantModel.fromJson(json.decode(str));
 
-String searchRestaurantModelToJson(SearchRestaurantModel data) => json.encode(data.toJson());
 
 class SearchRestaurantModel {
   SearchRestaurantModel({
@@ -19,16 +19,10 @@ class SearchRestaurantModel {
   String status;
   List<RestaurantData> searchResult;
 
-  factory SearchRestaurantModel.fromJson(Map<String, dynamic> json) => SearchRestaurantModel(
-    status: json["status"],
-    searchResult: List<RestaurantData>.from(json["search_result"].map((x) => RestaurantData.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "status": status,
-    "search_result": List<dynamic>.from(searchResult.map((x) => x.toJson())),
-  };
+  factory SearchRestaurantModel.fromJson(Map<String, dynamic> json) =>
+      SearchRestaurantModel(
+        status: "",
+        searchResult: List<RestaurantData>.from(
+            json["data"].map((x) => RestaurantData.fromJson(x))),
+      );
 }
-
-
-

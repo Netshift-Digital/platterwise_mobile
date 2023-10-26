@@ -103,22 +103,21 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> getByState(String state) async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      "state": state
-    });
-    print("This is the body $body");
+    var body = jsonEncode({"state": state});
+    var token = LocalStorage.getToken();
 
     try {
-      var response = await client.post(
-          Uri.parse("${baseurl2}search_by_state.php"),
+      var response = await client.post(Uri.parse("${baseurl3}state-filter"),
           body: body,
           headers: {
             "Content-type": "application/json",
+            "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+      if (data['status_code'] == 200 && data['success'] == true) {
         return data;
+      } else {
+        RandomFunction.toast(data["response"]);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -447,22 +446,27 @@ class RestaurantService {
 
   Future<Map<String, dynamic>?> searchRestaurant(
       String search, LatLong latLong) async {
+    print("The search query is $search");
     var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      'search': search.trim(),
-      "latitude": latLong.latitude,
-      "longitude": latLong.longitude
+      "name": search,
+      "latitude": "${latLong.latitude}",
+      "longitude": "${latLong.longitude}"
     });
+    var token = LocalStorage.getToken();
+
     try {
-      var response = await client.post(
-          Uri.parse("${baseurl2}search_restaurant.php"),
+      var response = await client.post(Uri.parse("${baseurl3}search-filter"),
           body: body,
           headers: {
             "Content-type": "application/json",
-          }).timeout(const Duration(seconds: 10));
+            "Authorization": "Bearer $token"
+          }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+      print("the earch result is $data");
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data;
+      } else {
+        RandomFunction.toast(data["response"]);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -602,6 +606,33 @@ class RestaurantService {
             "Content-type": "application/json",
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
+      var data = jsonDecode(response.body);
+      print("These are the list of saved restaurants ${data['data']}");
+      if (data["status_code"] == 200 && data["success"] == true) {
+        return data["data"];
+      } else {
+        RandomFunction.toast(data['response']);
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> getFollowedRestaurant() async {
+    var token = LocalStorage.getToken();
+    try {
+      var response = await client
+          .get(Uri.parse("${baseurl3}restaurant/followed"), headers: {
+        "Content-type": "application/json",
+        "Authorization": "Bearer $token"
+      }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
       print("These are the list of saved restaurants ${data['data']}");
       if (data["status_code"] == 200 && data["success"] == true) {
