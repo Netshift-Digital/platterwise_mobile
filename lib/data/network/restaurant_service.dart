@@ -107,7 +107,8 @@ class RestaurantService {
     var token = LocalStorage.getToken();
 
     try {
-      var response = await client.post(Uri.parse("${baseurl3}state-filter"),
+      var response = await client.post(
+          Uri.parse("${baseurl3}restaurant/state-filter"),
           body: body,
           headers: {
             "Content-type": "application/json",
@@ -455,13 +456,15 @@ class RestaurantService {
     var token = LocalStorage.getToken();
 
     try {
-      var response = await client.post(Uri.parse("${baseurl3}search-filter"),
+      var response = await client.post(
+          Uri.parse("${baseurl3}restaurant/search-filter"),
           body: body,
           headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
+      print("This is the search data $data");
       if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       } else {
