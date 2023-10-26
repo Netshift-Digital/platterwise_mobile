@@ -40,8 +40,8 @@ class ReservationData {
   Map<String, dynamic> toJson() => {
         // "firebaseAuthID": firebaseAuthId,
         "reservation_date": reservationDate,
-        "rest_id": restId,
-        "sit_type": sitType,
+        "restaurant_id": restId,
+        "seat_type": sitType,
         "guest_no": guestNo,
         // "guest": List<dynamic>.from(guest.map((x) => x.toJson())),
       };

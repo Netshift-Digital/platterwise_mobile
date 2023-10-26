@@ -395,13 +395,13 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
     //   ),
     // );
     var bookData = ReservationData(
-        // firebaseAuthId: FirebaseAuth.instance.currentUser?.uid ?? "",
-        reservationDate: dateTime.toString(),
-        restId: widget.restaurantData.restId.toString(),
-        sitType: sitType ?? "",
-        guestNo: guestNumber.toString(),
-        // guest: g,
-        );
+      // firebaseAuthId: FirebaseAuth.instance.currentUser?.uid ?? "",
+      reservationDate: dateTime.toString(),
+      restId: widget.restaurantData.restId.toString(),
+      sitType: sitType ?? "",
+      guestNo: guestNumber.toString(),
+      // guest: g,
+    );
     var model = context.read<RestaurantViewModel>();
     model.makeReservation(bookData).then((value) {
       if (value) {
