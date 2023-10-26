@@ -462,7 +462,6 @@ class RestaurantService {
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
-      print("the earch result is $data");
       if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       } else {
