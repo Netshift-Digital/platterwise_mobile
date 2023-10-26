@@ -376,14 +376,15 @@ class RestaurantViewModel extends BaseViewModel {
       var data = await restaurantService.getFavouriteRestaurant();
       if (data != null) {
         favouriteRestaurant = [];
-        for (var e in data['data']['restaurant']) {
-          favouriteRestaurant.add(RestaurantData.fromJson(e));
+        for (var e in data['data']) {
+          print("A single e is $e");
+          favouriteRestaurant.add(RestaurantData.fromJson(e['restaurant'][0]));
         }
         notifyListeners();
       }
     } catch (e) {
       //
     }
-    return allRestDetail;
+    return favouriteRestaurant;
   }
 }

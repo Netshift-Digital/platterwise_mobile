@@ -48,9 +48,6 @@ class RestaurantService {
     var body = jsonEncode({
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
     });
-    print("This is the body $body");
-
-    print("This is the id ${FirebaseAuth.instance.currentUser!.uid}");
     try {
       var response = await client.post(
           Uri.parse("${baseurl2}top_ratedRest.php"),
@@ -553,7 +550,6 @@ class RestaurantService {
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
-      print("This is the result fav $data");
       RandomFunction.toast(data['response']);
       if (data["status_code"] == 200 && data["success"] == true) {
         return data;
@@ -584,7 +580,6 @@ class RestaurantService {
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
-      print("This is the result unfav $data");
       RandomFunction.toast(data['response']);
       if (data["status_code"] == 200 && data["success"] == true) {
         return data;
@@ -610,7 +605,8 @@ class RestaurantService {
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
-      if (data["statusCode"] == 200 && data["success"] == true) {
+      print("These are the list of saved restaurants ${data['data']}");
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data["data"];
       } else {
         RandomFunction.toast(data['response']);
@@ -640,7 +636,7 @@ class RestaurantService {
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
       RandomFunction.toast(data['response']);
-      if (data["statusCode"] == 200 && data["success"] == true) {
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       }
     } on SocketException catch (_) {
@@ -669,7 +665,7 @@ class RestaurantService {
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
       RandomFunction.toast(data['response']);
-      if (data["statusCode"] == 200 && data["success"] == true) {
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       }
     } on SocketException catch (_) {
