@@ -292,7 +292,7 @@ class _PostDetailsState extends State<PostDetails> {
                       child: Row(
                         children: [
                           ImageCacheCircle(
-                            user == null ? "" : user.userProfile.profileUrl,
+                            user == null ? "" : user.profileUrl,
                             height: 40,
                             width: 40,
                           ),
@@ -351,13 +351,13 @@ class _PostDetailsState extends State<PostDetails> {
   void postComment(String e) {
     commentController.clear();
     var model = context.read<VBlogViewModel>();
-    var uid = context.read<UserViewModel>().user!.userProfile.userId;
+    var uid = context.read<UserViewModel>().user!.userId;
     model
         .commentOnPost(
       int.parse(widget.post.postId),
       uid.toString(),
       e,
-      userData: context.read<UserViewModel>().user!.userProfile,
+      userData: context.read<UserViewModel>().user!,
       id: widget.post.firebaseAuthId,
     )
         .then((value) {

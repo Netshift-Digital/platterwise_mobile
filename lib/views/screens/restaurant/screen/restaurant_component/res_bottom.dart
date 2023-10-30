@@ -65,7 +65,7 @@ class RestaurantBottom extends StatelessWidget {
                     child: Row(
                       children: [
                         ImageCacheCircle(
-                          user == null ? "" : user.userProfile.profileUrl,
+                          user == null ? "" : user.profileUrl,
                           height: 40,
                           width: 40,
                         ),

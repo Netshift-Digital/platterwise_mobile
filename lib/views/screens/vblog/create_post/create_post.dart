@@ -41,7 +41,7 @@ class _CreatePostState extends State<CreatePost> {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<VBlogViewModel>();
-    var user = context.watch<UserViewModel>().user!.userProfile;
+    var user = context.watch<UserViewModel>().user!;
     return WillPopScope(
       onWillPop: () async {
         cancel(context);
@@ -384,7 +384,7 @@ class _CreatePostState extends State<CreatePost> {
 
   void createPost(BuildContext context) {
     var model = context.read<VBlogViewModel>();
-    var uid = context.read<UserViewModel>().user!.userProfile.userId;
+    var uid = context.read<UserViewModel>().user!.userId;
     if (commentController.text.isNotEmpty) {
       PostData postData = PostData(
           userId: uid,

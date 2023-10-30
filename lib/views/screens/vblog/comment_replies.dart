@@ -19,7 +19,8 @@ import 'package:provider/provider.dart';
 class CommentReply extends StatefulWidget {
   final UsersComment usersComment;
   final Post post;
-  const CommentReply({Key? key, required this.usersComment, required this.post}) : super(key: key);
+  const CommentReply({Key? key, required this.usersComment, required this.post})
+      : super(key: key);
 
   @override
   State<CommentReply> createState() => _CommentReplyState();
@@ -41,137 +42,178 @@ class _CommentReplyState extends State<CommentReply> {
             width: size.width,
           ),
           Padding(
-            padding: const EdgeInsets.only(left: twenty,right: twenty),
-            child: searchResult==null?
-            const Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(AppColor.p200),
-              ),
-            )
-                :
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                   topComment(widget.usersComment),
-                  const SizedBox(height: 10,),
-                  searchResult!.isEmpty?
-                  const EmptyContentContainer()
-                      :ListView.builder(
-                      padding: EdgeInsets.zero,
-                      shrinkWrap: true,
-                      primary: false,
-                      itemCount: searchResult!.length,
-                      itemBuilder: (context,index) {
-                        var data =  searchResult![index];
-                        return  Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 10,),
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: (){
-                                    if(data.firebaseAuthID.toString().isNotEmpty){
-                                      nav(context, ViewUserProfileScreen(
-                                        id: data.firebaseAuthID,
-                                      ));
-                                    }
-
-                                  },
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(34),
-                                    child: ImageCacheR(
-                                      data.profileURL??"",
-                                      height: 35,
-                                      width: 35,
-                                      chachedImage: true,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 12,),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: (){
-                                        if(data.firebaseAuthID.toString().isNotEmpty){
-                                          nav(context, ViewUserProfileScreen(
-                                            id: data.firebaseAuthID,
-                                          ));
-                                        }
-
-                                      },
-                                      child: Text(
-                                        data.fullName??"",
-                                        style: AppTextTheme.h3.copyWith(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w700),
+            padding: const EdgeInsets.only(left: twenty, right: twenty),
+            child: searchResult == null
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(AppColor.p200),
+                    ),
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        topComment(widget.usersComment),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        searchResult!.isEmpty
+                            ? const EmptyContentContainer()
+                            : ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                primary: false,
+                                itemCount: searchResult!.length,
+                                itemBuilder: (context, index) {
+                                  var data = searchResult![index];
+                                  return Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        height: 10,
                                       ),
-                                    ),
-                                    const SizedBox(height: 3,),
-                                    Row(
-                                      children: [
-                                        Text("@${data.username}",
-                                          style: AppTextTheme.h6.copyWith(
-                                              fontSize: 12,
-                                              color: AppColor.g600
-                                          ),),
-                                        const SizedBox(width:5,),
-                                        Text(RandomFunction.timeAgo(data.timestampo.toString()),
-                                          style: AppTextTheme.h4.copyWith(
-                                              fontSize:11,
-                                              fontWeight: FontWeight.w500
-                                          ),),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 12,),
-                                  ],
-                                ),
-                                const Spacer(),
-                                //SvgPicture.asset("assets/icon/option.svg")
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text("Replying to ",
-                                  style: AppTextTheme.h4.copyWith(
-                                      fontSize:14,
-                                      color: AppColor.g500,
-                                      fontWeight: FontWeight.w700
-                                  ),),
-                                Text("@${widget.usersComment.username}",
-                                  style: AppTextTheme.h4.copyWith(
-                                      fontSize:14,
-                                      color: AppColor.p200,
-                                      fontWeight: FontWeight.w700
-                                  ),),
-                              ],
-                            ),
-                            const SizedBox(height: 12,),
-                            Text(data.replyPost??"",
-                              style: AppTextTheme.h4.copyWith(
-                                  fontSize:16,
-                                  color: AppColor.g900,
-                                  fontWeight: FontWeight.w400
-                              ),),
-                            const SizedBox(height: 12,),
-                            const Divider(
-                              color: AppColor.g50,
-                              thickness: 0.5,
-                            ),
-                            const SizedBox(height: 12,),
-                          ],
-                        );
-                      }
+                                      Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (data.firebaseAuthID
+                                                  .toString()
+                                                  .isNotEmpty) {
+                                                nav(
+                                                    context,
+                                                    ViewUserProfileScreen(
+                                                      id: data.firebaseAuthID,
+                                                    ));
+                                              }
+                                            },
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(34),
+                                              child: ImageCacheR(
+                                                data.profileURL ?? "",
+                                                height: 35,
+                                                width: 35,
+                                                chachedImage: true,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 12,
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  if (data.firebaseAuthID
+                                                      .toString()
+                                                      .isNotEmpty) {
+                                                    nav(
+                                                        context,
+                                                        ViewUserProfileScreen(
+                                                          id: data
+                                                              .firebaseAuthID,
+                                                        ));
+                                                  }
+                                                },
+                                                child: Text(
+                                                  data.fullName ?? "",
+                                                  style: AppTextTheme.h3
+                                                      .copyWith(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 3,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    "@${data.username}",
+                                                    style: AppTextTheme.h6
+                                                        .copyWith(
+                                                            fontSize: 12,
+                                                            color:
+                                                                AppColor.g600),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Text(
+                                                    RandomFunction.timeAgo(data
+                                                        .timestampo
+                                                        .toString()),
+                                                    style: AppTextTheme.h4
+                                                        .copyWith(
+                                                            fontSize: 11,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 12,
+                                              ),
+                                            ],
+                                          ),
+                                          const Spacer(),
+                                          //SvgPicture.asset("assets/icon/option.svg")
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Replying to ",
+                                            style: AppTextTheme.h4.copyWith(
+                                                fontSize: 14,
+                                                color: AppColor.g500,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                          Text(
+                                            "@${widget.usersComment.username}",
+                                            style: AppTextTheme.h4.copyWith(
+                                                fontSize: 14,
+                                                color: AppColor.p200,
+                                                fontWeight: FontWeight.w700),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                      Text(
+                                        data.replyPost ?? "",
+                                        style: AppTextTheme.h4.copyWith(
+                                            fontSize: 16,
+                                            color: AppColor.g900,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                      const Divider(
+                                        color: AppColor.g50,
+                                        thickness: 0.5,
+                                      ),
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                    ],
+                                  );
+                                }),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
           ),
           Positioned(
             bottom: 0,
-            child:  PhysicalModel(
+            child: PhysicalModel(
               color: Colors.black,
               elevation: 10,
               child: Container(
@@ -180,19 +222,22 @@ class _CommentReplyState extends State<CommentReply> {
                 color: Colors.white,
                 child: SafeArea(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 20,right: 30),
+                    padding: const EdgeInsets.only(left: 20, right: 30),
                     child: Row(
                       children: [
                         ImageCacheCircle(
-                          user==null?"":user.userProfile.profileUrl,
+                          user == null ? "" : user.profileUrl,
                           height: 40,
                           width: 40,
                         ),
-                        const SizedBox(width: 12,),
-                        Expanded(child: TextField(
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        Expanded(
+                            child: TextField(
                           controller: commentController,
-                          onSubmitted: (e){
-                            if(e.isNotEmpty){
+                          onSubmitted: (e) {
+                            if (e.isNotEmpty) {
                               postComment(e);
                             }
                           },
@@ -200,8 +245,7 @@ class _CommentReplyState extends State<CommentReply> {
                               border: InputBorder.none,
                               hintText: "Add a comment ",
                               filled: true,
-                              fillColor: AppColor.g30
-                          ),
+                              fillColor: AppColor.g30),
                         )),
                       ],
                     ),
@@ -214,51 +258,57 @@ class _CommentReplyState extends State<CommentReply> {
       ),
     );
   }
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 50),(){
+    Future.delayed(const Duration(milliseconds: 50), () {
       getComment();
     });
   }
 
-  postComment(String e){
+  postComment(String e) {
     commentController.clear();
     var model = context.read<VBlogViewModel>();
-    model.replyToComment(int.parse(widget.usersComment.commentId),
-        e, userData: context.read<UserViewModel>().user!.userProfile,
-        id: widget.post.firebaseAuthId,
-        postId: widget.post.postId
-    ).then((value){
+    model
+        .replyToComment(int.parse(widget.usersComment.commentId), e,
+            userData: context.read<UserViewModel>().user!,
+            id: widget.post.firebaseAuthId,
+            postId: widget.post.postId)
+        .then((value) {
       getComment();
     });
   }
 
-
-  getComment(){
-    context.read<VBlogViewModel>().getCommentReply(int.parse(widget.usersComment.commentId))
-        .then((value){
+  getComment() {
+    context
+        .read<VBlogViewModel>()
+        .getCommentReply(int.parse(widget.usersComment.commentId))
+        .then((value) {
       setState(() {
-        searchResult=value;
+        searchResult = value;
       });
     });
   }
 
- Widget topComment(UsersComment data) {
+  Widget topComment(UsersComment data) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 10,),
+        const SizedBox(
+          height: 10,
+        ),
         Row(
           children: [
             GestureDetector(
-              onTap: (){
-                if(data.firebaseAuthID.toString().isNotEmpty){
-                  nav(context, ViewUserProfileScreen(
-                    id: data.firebaseAuthID,
-                  ));
+              onTap: () {
+                if (data.firebaseAuthID.toString().isNotEmpty) {
+                  nav(
+                      context,
+                      ViewUserProfileScreen(
+                        id: data.firebaseAuthID,
+                      ));
                 }
-
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(34),
@@ -270,34 +320,41 @@ class _CommentReplyState extends State<CommentReply> {
                 ),
               ),
             ),
-            const SizedBox(width: 12,),
+            const SizedBox(
+              width: 12,
+            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   data.fullName,
-                  style: AppTextTheme.h3.copyWith(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700),
+                  style: AppTextTheme.h3
+                      .copyWith(fontSize: 18, fontWeight: FontWeight.w700),
                 ),
-                const SizedBox(height: 3,),
+                const SizedBox(
+                  height: 3,
+                ),
                 Row(
                   children: [
-                    Text("@${data.username}",
-                      style: AppTextTheme.h6.copyWith(
-                          fontSize: 12,
-                          color: AppColor.g600
-                      ),),
-                    const SizedBox(width:5,),
-                    Text(RandomFunction.timeAgo(data.timestamp.toString()),
-                      style: AppTextTheme.h4.copyWith(
-                          fontSize:11,
-                        fontWeight: FontWeight.w500
-                      ),),
+                    Text(
+                      "@${data.username}",
+                      style: AppTextTheme.h6
+                          .copyWith(fontSize: 12, color: AppColor.g600),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      RandomFunction.timeAgo(data.timestamp.toString()),
+                      style: AppTextTheme.h4
+                          .copyWith(fontSize: 11, fontWeight: FontWeight.w500),
+                    ),
                   ],
                 ),
-                const SizedBox(height: 12,),
+                const SizedBox(
+                  height: 12,
+                ),
               ],
             ),
             const Spacer(),
@@ -306,61 +363,68 @@ class _CommentReplyState extends State<CommentReply> {
         ),
         Row(
           children: [
-            Text("Replying to ",
+            Text(
+              "Replying to ",
               style: AppTextTheme.h4.copyWith(
-                  fontSize:14,
+                  fontSize: 14,
                   color: AppColor.g500,
-                  fontWeight: FontWeight.w700
-              ),),
-            Text("@${widget.post.username}",
+                  fontWeight: FontWeight.w700),
+            ),
+            Text(
+              "@${widget.post.username}",
               style: AppTextTheme.h4.copyWith(
-                  fontSize:14,
+                  fontSize: 14,
                   color: AppColor.p200,
-                  fontWeight: FontWeight.w700
-              ),),
+                  fontWeight: FontWeight.w700),
+            ),
           ],
         ),
-        const SizedBox(height: 12,),
-        Text(data.comment,
+        const SizedBox(
+          height: 12,
+        ),
+        Text(
+          data.comment,
           style: AppTextTheme.h4.copyWith(
-              fontSize:16,
-              color: AppColor.g900,
-              fontWeight: FontWeight.w400
-          ),),
-        const SizedBox(height: 20,),
-
-      Row(
-        children: [
-          CustomAppIcon(
-            onTap: (){
-
-            },
-            icon: "assets/icon/comment.svg",
-            count: "",
-          ),
-          Column(
-            children: [
-              Text(" Reply (${searchResult!.length.toString()})",style: AppTextTheme.h1.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w300
-              ),),
-              // const SizedBox(height: 5,),
-              // Container(
-              //   height: 1,
-              //   width: 32,
-              //   color: AppColor.p200,
-              // )
-            ],
-          ),
-        ],
-      ),
-        const SizedBox(height: 10,),
+              fontSize: 16, color: AppColor.g900, fontWeight: FontWeight.w400),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Row(
+          children: [
+            CustomAppIcon(
+              onTap: () {},
+              icon: "assets/icon/comment.svg",
+              count: "",
+            ),
+            Column(
+              children: [
+                Text(
+                  " Reply (${searchResult!.length.toString()})",
+                  style: AppTextTheme.h1
+                      .copyWith(fontSize: 14, fontWeight: FontWeight.w300),
+                ),
+                // const SizedBox(height: 5,),
+                // Container(
+                //   height: 1,
+                //   width: 32,
+                //   color: AppColor.p200,
+                // )
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
         const Divider(
           color: AppColor.g100,
           thickness: 0.5,
         ),
-        const SizedBox(height: 20,),
+        const SizedBox(
+          height: 20,
+        ),
       ],
     );
- }
+  }
 }

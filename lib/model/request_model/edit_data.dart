@@ -1,5 +1,4 @@
 class EditData {
-  String firebaseAuthID;
   String bio;
   String location;
   String profileURL;
@@ -9,8 +8,7 @@ class EditData {
   String email;
 
   EditData(
-      {required this.firebaseAuthID,
-      required this.bio,
+      {required this.bio,
       required this.location,
       required this.fullName,
       required this.username,

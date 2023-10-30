@@ -15,7 +15,8 @@ import 'package:provider/provider.dart';
 class UserCard extends StatelessWidget {
   final UserProfile data;
   final String id;
-  const UserCard({Key? key, required this.data, required this.id}) : super(key: key);
+  const UserCard({Key? key, required this.data, required this.id})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,35 +24,43 @@ class UserCard extends StatelessWidget {
     var blogModel = context.watch<VBlogViewModel>();
     var isFollower = blogModel.getIsFollowed(data.email);
     return ListTile(
-      onTap: (){
-        nav(context, ViewUserProfileScreen(id: data.firebaseAuthID,));
+      onTap: () {
+        nav(
+            context,
+            ViewUserProfileScreen(
+              id: data.firebaseAuthID,
+            ));
       },
-      leading:ImageCacheCircle(data.profileUrl,
+      leading: ImageCacheCircle(
+        data.profileUrl,
         height: 42,
-        width: 42,),
-      title: Text(data.fullName,style: AppTextTheme.h3.copyWith(
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-
-      ),),
-      subtitle:Text("@${data.username}",
+        width: 42,
+      ),
+      title: Text(
+        data.fullName,
+        style: AppTextTheme.h3.copyWith(
+          fontSize: 16,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      subtitle: Text(
+        "@${data.username}",
         style: AppTextTheme.h3.copyWith(
             fontSize: 12,
             fontWeight: FontWeight.w400,
-            color: const Color(0xffB1B1B1)
-        ),) ,
+            color: const Color(0xffB1B1B1)),
+      ),
       trailing: PlatButton(
-        title: isFollower?"Remove":"Follow",
+        title: isFollower ? "Remove" : "Follow",
         padding: 0,
-        color: isFollower?AppColor.g700:AppColor.p200,
+        color: isFollower ? AppColor.g700 : AppColor.p200,
         textSize: 14,
-        onTap: (){
-          if(isFollower){
-           blogModel.unFollowUser(data.firebaseAuthID, data);
-          }else{
+        onTap: () {
+          if (isFollower) {
+            blogModel.unFollowUser(data.firebaseAuthID, data);
+          } else {
             var user = context.read<UserViewModel>().user;
-           blogModel.followUser(data.firebaseAuthID,user!.userProfile, data);
-
+            blogModel.followUser(data.firebaseAuthID, user!, data);
           }
         },
         width: 103.w,

@@ -43,7 +43,7 @@ class ViewUserProfileScreen extends StatefulWidget {
 
 class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
   List<Post> myPost = [];
-  UserData? userData;
+  UserProfile? userData;
   @override
   Widget build(BuildContext context) {
     var blogModel = context.watch<VBlogViewModel>();
@@ -168,14 +168,14 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                       onTap: () {
                                         showImageViewer(
                                             context,
-                                            CachedNetworkImageProvider(userData!
-                                                .userProfile.profileUrl),
+                                            CachedNetworkImageProvider(
+                                                userData!.profileUrl),
                                             onViewerDismissed: () {},
                                             useSafeArea: true,
                                             swipeDismissible: true);
                                       },
                                       child: ImageCacheCircle(
-                                        userData!.userProfile.profileUrl,
+                                        userData!.profileUrl,
                                         height: 80,
                                         width: 80,
                                       ),
@@ -188,14 +188,14 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          userData!.userProfile.username,
+                                          userData!.username,
                                           style: AppTextTheme.h1,
                                         ),
                                         SizedBox(
                                           height: 4.h,
                                         ),
                                         Text(
-                                          userData!.userProfile.fullName,
+                                          userData!.fullName,
                                           style: AppTextTheme.h4,
                                         )
                                       ],
@@ -206,7 +206,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                   height: 30.h,
                                 ),
                                 LinkifyText(
-                                  userData!.userProfile.bio,
+                                  userData!.bio,
                                   textStyle: AppTextTheme.h3,
                                   linkStyle: AppTextTheme.h3.copyWith(
                                       color: Colors.blue[900],
@@ -376,16 +376,17 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                                 return const SizedBox();
                                               }
                                             })
-                                        : PlatButton(
-                                            title: "Edit Profile",
-                                            padding: 0,
-                                            textSize: 14,
-                                            onTap: () {
-                                              settings(context);
-                                            },
-                                            width: 95.w,
-                                            height: 38.h,
-                                          )*/
+                                        : */
+                                    PlatButton(
+                                      title: "Edit Profile",
+                                      padding: 0,
+                                      textSize: 14,
+                                      onTap: () {
+                                        settings(context);
+                                      },
+                                      width: 95.w,
+                                      height: 38.h,
+                                    )
                                   ],
                                 ),
                                 SizedBox(

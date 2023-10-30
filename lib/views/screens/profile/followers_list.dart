@@ -16,16 +16,18 @@ import 'package:platterwave/views/widget/custom/cache-image.dart';
 class FollowersList extends StatefulWidget {
   final int index;
   final String id;
-  const FollowersList({Key? key, required this.index, required this.id}) : super(key: key);
+  const FollowersList({Key? key, required this.index, required this.id})
+      : super(key: key);
 
   @override
   State<FollowersList> createState() => _FollowersListState();
 }
 
-class _FollowersListState extends State<FollowersList> with SingleTickerProviderStateMixin {
+class _FollowersListState extends State<FollowersList>
+    with SingleTickerProviderStateMixin {
   TabController? controller;
-  List<UserData> following = [];
-  List<UserData> followers = [];
+  List<UserProfile> following = [];
+  List<UserProfile> followers = [];
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
@@ -36,8 +38,12 @@ class _FollowersListState extends State<FollowersList> with SingleTickerProvider
           TabBar(
             controller: controller,
             tabs: const [
-              Tab(text: "Following",),
-              Tab(text: "Followers",)
+              Tab(
+                text: "Following",
+              ),
+              Tab(
+                text: "Followers",
+              )
             ],
             // padding: EdgeInsets.only(right: 100.w),
             labelStyle: AppTextTheme.h6.copyWith(fontSize: 18),
@@ -48,64 +54,80 @@ class _FollowersListState extends State<FollowersList> with SingleTickerProvider
             indicatorSize: TabBarIndicatorSize.label,
             indicatorWeight: 1.w,
             indicatorPadding: EdgeInsets.symmetric(horizontal: 7.w),
-
-          ) ,
-         const SizedBox(height: 20,),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
           Expanded(
             child: TabBarView(
               controller: controller,
               children: [
                 StreamBuilder<QuerySnapshot>(
-                    stream:FirebaseFirestore.instance.collection("following").
-                    doc("users").collection(widget.id).snapshots(),
+                    stream: FirebaseFirestore.instance
+                        .collection("following")
+                        .doc("users")
+                        .collection(widget.id)
+                        .snapshots(),
                     builder: (context, snapshot) {
-                   if(snapshot.hasData){
-                     return snapshot.data!.docs.isEmpty?const Padding(
-                       padding:  EdgeInsets.only(left: 30,right: 30),
-                       child: EmptyContentContainer(),
-                     ):ListView.builder(
-                         itemCount: snapshot.data!.docs.length,
-                         itemBuilder: (context,index){
-                           var encode =  json.encode(snapshot.data!.docs[index].data());
-                           Map<String ,dynamic>  user = jsonDecode(encode);
-                          var data = UserProfile.fromJson(user);
-                           return UserCard(data: data,id: widget.id,);
-                         }
-                     );
-                   }
-                   return const Padding(
-                     padding:  EdgeInsets.only(left: 30,right: 30),
-                     child: EmptyContentContainer(),
-                   );
-
-                    }
-                ),
-                StreamBuilder<QuerySnapshot>(
-                    stream:FirebaseFirestore.instance.collection("followers").
-                    doc("users").collection(widget.id).snapshots(),
-                    builder: (context, snapshot) {
-
-                      if(snapshot.hasData){
-                        return snapshot.data!.docs.isEmpty?const Padding(
-                          padding:  EdgeInsets.only(left: 30,right: 30),
-                          child: EmptyContentContainer(),
-                        ):ListView.builder(
-                            itemCount: snapshot.data!.docs.length,
-                            itemBuilder: (context,index){
-                              var encode =  json.encode(snapshot.data!.docs[index].data());
-                              Map<String ,dynamic>  user = jsonDecode(encode);
-                              var data = UserProfile.fromJson(user);
-                              return UserCard(data: data,id: widget.id,);
-                            }
-                        );
+                      if (snapshot.hasData) {
+                        return snapshot.data!.docs.isEmpty
+                            ? const Padding(
+                                padding: EdgeInsets.only(left: 30, right: 30),
+                                child: EmptyContentContainer(),
+                              )
+                            : ListView.builder(
+                                itemCount: snapshot.data!.docs.length,
+                                itemBuilder: (context, index) {
+                                  var encode = json.encode(
+                                      snapshot.data!.docs[index].data());
+                                  Map<String, dynamic> user =
+                                      jsonDecode(encode);
+                                  var data = UserProfile.fromJson(user);
+                                  return UserCard(
+                                    data: data,
+                                    id: widget.id,
+                                  );
+                                });
                       }
                       return const Padding(
-                        padding:  EdgeInsets.only(left: 30,right: 30),
+                        padding: EdgeInsets.only(left: 30, right: 30),
                         child: EmptyContentContainer(),
                       );
-                    }
-                ),
-              ],),
+                    }),
+                StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("followers")
+                        .doc("users")
+                        .collection(widget.id)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return snapshot.data!.docs.isEmpty
+                            ? const Padding(
+                                padding: EdgeInsets.only(left: 30, right: 30),
+                                child: EmptyContentContainer(),
+                              )
+                            : ListView.builder(
+                                itemCount: snapshot.data!.docs.length,
+                                itemBuilder: (context, index) {
+                                  var encode = json.encode(
+                                      snapshot.data!.docs[index].data());
+                                  Map<String, dynamic> user =
+                                      jsonDecode(encode);
+                                  var data = UserProfile.fromJson(user);
+                                  return UserCard(
+                                    data: data,
+                                    id: widget.id,
+                                  );
+                                });
+                      }
+                      return const Padding(
+                        padding: EdgeInsets.only(left: 30, right: 30),
+                        child: EmptyContentContainer(),
+                      );
+                    }),
+              ],
+            ),
           ),
         ],
       ),
@@ -116,23 +138,26 @@ class _FollowersListState extends State<FollowersList> with SingleTickerProvider
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller = TabController(length: 2, vsync: this,initialIndex: widget.index);
-    Future.delayed(const Duration(milliseconds: 50),(){
-   //getData();
+    controller =
+        TabController(length: 2, vsync: this, initialIndex: widget.index);
+    Future.delayed(const Duration(milliseconds: 50), () {
+      //getData();
     });
   }
 
   void getData() {
-    FirebaseFirestore.instance.collection("following").
-    doc("users").collection(widget.id).get().then((value){
+    FirebaseFirestore.instance
+        .collection("following")
+        .doc("users")
+        .collection(widget.id)
+        .get()
+        .then((value) {});
 
-    });
-
-
-    FirebaseFirestore.instance.collection("following").
-    doc("users").collection(widget.id).get().then((value){
-
-    });
+    FirebaseFirestore.instance
+        .collection("following")
+        .doc("users")
+        .collection(widget.id)
+        .get()
+        .then((value) {});
   }
-
 }

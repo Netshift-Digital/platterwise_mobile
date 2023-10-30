@@ -39,10 +39,10 @@ class LocalStorage {
     Hive.box(authKey).put(authKey, data);
   }
 
-  static UserData? getUser() {
+  static UserProfile? getUser() {
     var data = Hive.box(authKey).get(authKey);
     if (data != null) {
-      return UserData.fromJsonLocal(data);
+      return UserProfile.fromJson(data);
     }
     return null;
   }

@@ -21,7 +21,7 @@ class UserViewModel extends BaseViewModel {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-  UserData? user;
+  UserProfile? user;
   String error = "";
 
   Future<bool> registerUser(
@@ -192,14 +192,12 @@ class UserViewModel extends BaseViewModel {
     return null;
   }*/
 
-  Future<UserData?> getMyProfile() async {
+  Future<UserProfile?> getMyProfile() async {
     try {
       var data = await userService.getMyProfile();
       if (data != null) {
-        var userData = UserData.fromJson(data);
-        var userInfo = UserData(
-            status: userData.status, userProfile: userData.userProfile);
-        LocalStorage.saveUser(userInfo.userProfile.toJson());
+        var userInfo = UserProfile.fromJson(data["profile"]);
+        LocalStorage.saveUser(userInfo.toJson());
         user = userInfo;
         notifyListeners();
         return user;
@@ -214,12 +212,12 @@ class UserViewModel extends BaseViewModel {
   }
 
 //This can be for getting another user profile
-  Future<UserData?> getUserProfile() async {
+  Future<UserProfile?> getUserProfile() async {
     try {
       var data = await userService.getMyProfile();
       if (data != null) {
-        var user = UserData.fromJson(data);
-        return UserData(status: user.status, userProfile: user.userProfile);
+        var user = UserProfile.fromJson(data);
+        return user;
       }
       setState(AppState.idle);
     } catch (e) {

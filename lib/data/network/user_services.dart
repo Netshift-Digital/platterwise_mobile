@@ -76,6 +76,7 @@ class UserService {
 
   Future<dynamic> editProfile(EditData editData) async {
     var body = jsonEncode(editData.toJson());
+    print("Here is the edit profile body $body");
     var token = LocalStorage.getToken();
 
     try {
@@ -86,6 +87,7 @@ class UserService {
             "Authorization": "Bearer $token"
           });
       var data = jsonDecode(response.body);
+      print("The edit profile result is $data");
       RandomFunction.toast(data["response"]);
       if (data["status_code"] == 200 && data["success"] == true) {
         return data;
@@ -112,6 +114,7 @@ class UserService {
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body);
+
       print("This user profile is $data");
       if (data["status_code"] == 200 && data["success"] == true) {
         return data["data"];

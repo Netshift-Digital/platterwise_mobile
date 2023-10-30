@@ -268,8 +268,8 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                     isLiked: widget.post.liked.isNotEmpty,
                     onTap: (v) async {
                       if (blogModel.checkIsLiked(widget.post.postId) == false) {
-                        blogModel.likePost(widget.post,
-                            context.read<UserViewModel>().user!.userProfile);
+                        blogModel.likePost(
+                            widget.post, context.read<UserViewModel>().user!);
                         setState(() {
                           widget.post.likeCount =
                               (int.parse(widget.post.likeCount) + 1).toString();

@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,7 +21,7 @@ import '../../../res/color.dart';
 import '../../../res/text-theme.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  final UserData userData;
+  final UserProfile userData;
   const EditProfileScreen({Key? key, required this.userData}) : super(key: key);
 
   @override
@@ -69,7 +68,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
-  var user = FirebaseAuth.instance.currentUser!;
   final TextEditingController _bio = TextEditingController();
   final TextEditingController _fullName = TextEditingController();
   final TextEditingController _userName = TextEditingController();
@@ -81,7 +79,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     var model = context.watch<UserViewModel>();
-    var userData = model.user!.userProfile;
+    var userData = model.user;
     SizeConfig.init(context);
     return GestureDetector(
       onTap: () {
@@ -98,7 +96,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: Column(
                 children: [
                   Center(
-                    child: profilePicture(userData),
+                    child: profilePicture(userData!),
                   ),
                   SizedBox(
                     height: 20.h,
@@ -219,8 +217,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         if (_formKey.currentState!.validate()) {
                           var editData = EditData(
                               profileURL: photoUrl ?? userData.profileUrl,
-                              firebaseAuthID:
-                                  FirebaseAuth.instance.currentUser!.uid,
                               bio: _bio.text,
                               location: _address.text,
                               fullName: _fullName.text,
@@ -289,11 +285,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _address.text = widget.userData.userProfile.location;
-    _bio.text = widget.userData.userProfile.bio;
-    _fullName.text = widget.userData.userProfile.fullName;
-    _userName.text = widget.userData.userProfile.username;
-    _number.text = widget.userData.userProfile.phone;
-    _email.text = widget.userData.userProfile.email;
+    _address.text = widget.userData.location;
+    _bio.text = widget.userData.bio;
+    _fullName.text = widget.userData.fullName;
+    _userName.text = widget.userData.username;
+    _number.text = widget.userData.phone;
+    _email.text = widget.userData.email;
   }
 }
