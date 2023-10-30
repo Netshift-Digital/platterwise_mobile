@@ -21,9 +21,7 @@ class EditData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['firebaseAuthID'] = this.firebaseAuthID;
     data['bio'] = this.bio;
-    data['location'] = this.location;
     data['profileURL'] = this.profileURL;
     data['phone'] = this.number;
     data['email'] = this.email;

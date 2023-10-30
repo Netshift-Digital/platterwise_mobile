@@ -76,14 +76,18 @@ class UserService {
 
   Future<dynamic> editProfile(EditData editData) async {
     var body = jsonEncode(editData.toJson());
+    var token = LocalStorage.getToken();
+
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl}edit_user.php"), body: body, headers: {
-        "Content-type": "application/json",
-      });
+      var response = await client.post(Uri.parse("${baseurl3}user/edit"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $token"
+          });
       var data = jsonDecode(response.body);
-      RandomFunction.toast(data['status'] ?? "");
-      if (response.statusCode == 200) {
+      RandomFunction.toast(data["response"]);
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       }
     } on SocketException catch (_) {
@@ -98,16 +102,21 @@ class UserService {
     return null;
   }
 
-  Future<Map<String, dynamic>?> getUser(String uid) async {
-    var body = jsonEncode({"firebaseAuthID": uid});
+  Future<Map<String, dynamic>?> getUser() async {
+    var token = LocalStorage.getToken();
+
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl}get_profile.php"), body: body, headers: {
-        "Content-type": "application/json",
-      }).timeout(const Duration(seconds: 20));
+      var response = await client.get(Uri.parse("${baseurl}user/profile"),
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $token"
+          }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+      RandomFunction.toast(data["response"]);
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data;
+      } else {
+        RandomFunction.toast(data["response"]);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
