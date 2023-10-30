@@ -102,19 +102,19 @@ class UserService {
     return null;
   }
 
-  Future<Map<String, dynamic>?> getUser() async {
+  Future<Map<String, dynamic>?> getMyProfile() async {
     var token = LocalStorage.getToken();
 
     try {
-      var response = await client.get(Uri.parse("${baseurl}user/profile"),
+      var response = await client.get(Uri.parse("${baseurl3}user/profile"),
           headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body);
-      RandomFunction.toast(data["response"]);
+      print("This user profile is $data");
       if (data["status_code"] == 200 && data["success"] == true) {
-        return data;
+        return data["data"];
       } else {
         RandomFunction.toast(data["response"]);
       }

@@ -69,22 +69,9 @@ class _BottomNavState extends State<BottomNav> {
   Widget build(BuildContext context) {
     var pageViewModel = context.watch<PageViewModel>();
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: (){
-      //     print(FirebaseAuth.instance.currentUser!.uid);
-      //   },
-      // ),
+ 
       body: bottomNav[pageViewModel.appIndex].screen,
-      // body: IndexedStack(
-      //   index: pageViewModel.appIndex,
-      //   children: bottomNav.map((e){
-      //     var index = bottomNav.indexOf(e);
-      //     if(index==0){
-      //       return e.screen;
-      //     }
-      //     return pageViewModel.appIndex!=index?const SizedBox():e.screen;
-      //   }).toList(),
-      // ),
+    
       bottomNavigationBar: BottomNavigationBar(
         iconSize: 18,
         selectedLabelStyle: AppTextTheme.h5.copyWith(fontSize: 9),
@@ -125,7 +112,7 @@ class _BottomNavState extends State<BottomNav> {
     var blogModel = context.read<VBlogViewModel>();
     var resModel = context.read<RestaurantViewModel>();
     setLocation();
-    //  await userModel.getMyProfile();
+    await userModel.getMyProfile();
     //  await resModel.getTopRestaurant();
     await resModel.getRestaurant();
     //  await resModel.getBanner();

@@ -575,15 +575,15 @@ class VBlogService {
   Future<Map<String, dynamic>?> searchUser(String query) async {
     var body = jsonEncode({"search_user": query});
     try {
-      var response = await client.post(
-          Uri.parse("https://platterwise.com/jhome/search_users.php"),
-          body: body,
-          headers: {
-            "Content-type": "application/json",
-          }).timeout(const Duration(seconds: 10));
+      var response = await client
+          .post(Uri.parse("${baseurl3}user/search-name"), body: body, headers: {
+        "Content-type": "application/json",
+      }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+      if (data['status_code'] == 200 && data['success'] == true) {
         return data;
+      } else {
+        RandomFunction.toast(data['response']);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");

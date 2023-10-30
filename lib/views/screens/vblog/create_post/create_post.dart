@@ -387,7 +387,7 @@ class _CreatePostState extends State<CreatePost> {
     var uid = context.read<UserViewModel>().user!.userProfile.userId;
     if (commentController.text.isNotEmpty) {
       PostData postData = PostData(
-          userId: int.parse(uid),
+          userId: uid,
           contentPost: commentController.text,
           contentType: type,
           contentUrl: '');

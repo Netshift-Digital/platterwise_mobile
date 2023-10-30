@@ -42,18 +42,15 @@ class ViewUserProfileScreen extends StatefulWidget {
 }
 
 class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
-  var user = FirebaseAuth.instance.currentUser!;
   List<Post> myPost = [];
   UserData? userData;
   @override
   Widget build(BuildContext context) {
-    var userModel = context.watch<UserViewModel>();
     var blogModel = context.watch<VBlogViewModel>();
     SizeConfig.init(context);
     return Scaffold(
       appBar: CustomAppBar(
-        showMenuB: (widget.id == null ||
-            widget.id == FirebaseAuth.instance.currentUser!.uid),
+        showMenuB: widget.id == null,
         onTap: () {
           showModalBottomSheet(
               context: context,
@@ -246,7 +243,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            StreamBuilder<QuerySnapshot>(
+                                            /*  StreamBuilder<QuerySnapshot>(
                                                 stream: FirebaseFirestore
                                                     .instance
                                                     .collection("following")
@@ -264,12 +261,12 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                                         : "0",
                                                     style: AppTextTheme.h3,
                                                   );
-                                                }),
-                                            Text(
+                                                }),*/
+                                            /*     Text(
                                               "Following",
                                               style: AppTextTheme.h4.copyWith(
                                                   color: AppColor.g300),
-                                            )
+                                            )*/
                                           ],
                                         ),
                                       ),
@@ -291,7 +288,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            StreamBuilder<QuerySnapshot>(
+                                            /*StreamBuilder<QuerySnapshot>(
                                                 stream: FirebaseFirestore
                                                     .instance
                                                     .collection("followers")
@@ -314,12 +311,12 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                               "Followers",
                                               style: AppTextTheme.h4.copyWith(
                                                   color: AppColor.g300),
-                                            )
+                                            )*/
                                           ],
                                         ),
                                       ),
                                     ),
-                                    showFollow()
+                                    /*   showFollow()
                                         ? StreamBuilder<DocumentSnapshot>(
                                             stream: FirebaseFirestore.instance
                                                 .collection('followButton')
@@ -388,7 +385,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                             },
                                             width: 95.w,
                                             height: 38.h,
-                                          )
+                                          )*/
                                   ],
                                 ),
                                 SizedBox(
@@ -442,12 +439,12 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                   },
                   body: TabBarView(
                     children: [
-                      ViewPostsPage(
-                        post: myPost,
-                      ),
-                      ViewLikesPage(
-                        id: widget.id,
-                      ),
+                      //   ViewPostsPage(
+                      //   post: myPost,
+                      // ),
+                      // ViewLikesPage(
+                      // id: widget.id,
+                      // ),
                     ],
                   )),
             ),
@@ -456,7 +453,6 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.delayed(const Duration(milliseconds: 20), () {
       getData();
@@ -466,7 +462,6 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
 
   void getData() async {
     var userModel = context.read<UserViewModel>();
-    var blogModel = context.read<VBlogViewModel>();
     if (widget.id == null) {
       if (userModel.user != null) {
         if (mounted) {
@@ -484,7 +479,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
         });
       }
     } else {
-      userModel.getUserProfile(widget.id!).then((value) {
+      userModel.getUserProfile().then((value) {
         if (value != null) {
           if (mounted) {
             setState(() {
@@ -554,7 +549,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
   }
 
   bool showFollow() {
-    if (widget.id != null && widget.id != user.uid) {
+    if (widget.id != null) {
       return true;
     } else {
       return false;

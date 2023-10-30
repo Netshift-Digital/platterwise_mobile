@@ -27,13 +27,28 @@ class UserData {
       );
 
   factory UserData.fromJson(Map<String, dynamic> json) => UserData(
-        status: json["status"] ?? "",
-        userProfile: UserProfile.fromJson(json["user_profile"]),
+        status: "",
+        userProfile: UserProfile.fromJson(json["profile"]),
+      );
+
+  factory UserData.fromJsonLocal(Map<String, dynamic> json) => UserData(
+        status: "",
+        userProfile: UserProfile(
+            userId: json["id"] ?? "",
+            fullName: json["full_name"] ?? "",
+            username: json["username"] ?? "",
+            email: json["email"],
+            phone: json["phone"] ?? "",
+            bio: json["bio"] ?? "",
+            profileUrl: json["img_url"] ??
+                "'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png'",
+            location: json["location"] ?? "",
+            firebaseAuthID: ""),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "user_profile": userProfile.toJson(),
+        "profile": userProfile.toJson(),
       };
 }
 
@@ -49,7 +64,7 @@ class UserProfile {
       required this.location,
       required this.firebaseAuthID});
 
-  String userId;
+  int userId;
   String fullName;
   String username;
   String email;
@@ -60,7 +75,7 @@ class UserProfile {
   dynamic location;
 
   UserProfile copyWith({
-    String? userId,
+    int? userId,
     String? fullName,
     String? username,
     String? email,
@@ -83,10 +98,10 @@ class UserProfile {
       );
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
-      userId: json["id"] ?? "",
+      userId: json["id"] ?? 0,
       fullName: json["full_name"] ?? "",
       username: json["username"] ?? "",
-      email: json["email"],
+      email: json["email"] ?? "",
       phone: json["phone"] ?? "",
       bio: json["bio"] ?? "",
       profileUrl: json["img_url"] ??
@@ -101,8 +116,7 @@ class UserProfile {
         "email": email,
         "phone": phone,
         "bio": bio,
-        "profileURL": profileUrl,
+        "img_url": profileUrl,
         "location": location,
-        "firebaseAuthID": firebaseAuthID
       };
 }

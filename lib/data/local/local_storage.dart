@@ -42,7 +42,7 @@ class LocalStorage {
   static UserData? getUser() {
     var data = Hive.box(authKey).get(authKey);
     if (data != null) {
-      return UserData.fromJson(data);
+      return UserData.fromJsonLocal(data);
     }
     return null;
   }

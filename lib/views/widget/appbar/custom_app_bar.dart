@@ -12,15 +12,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showMenuB;
   PreferredSizeWidget? bottom;
 
-  CustomAppBar({
-    Key? key,
-    this.bottom,
-    this.automaticallyImplyLeading = true,
-    required this.trailing,
-    this.padding,
-
-    this.onTap,  this.showMenuB=true
-  }) : super(key: key);
+  CustomAppBar(
+      {Key? key,
+      this.bottom,
+      this.automaticallyImplyLeading = true,
+      required this.trailing,
+      this.padding,
+      this.onTap,
+      this.showMenuB = true})
+      : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(52);
@@ -33,15 +33,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       iconTheme: const IconThemeData(color: Colors.black),
       elevation: 0,
       automaticallyImplyLeading: automaticallyImplyLeading,
-      centerTitle:false,
+      centerTitle: false,
       actions: [
-        showMenuB?Padding(
-          padding: EdgeInsets.only(right: padding ?? 30),
-          child: InkWell(
-            onTap: onTap,
-              child: SvgPicture.asset(trailing)
-          ),
-        ):const SizedBox()
+        showMenuB
+            ? Padding(
+                padding: EdgeInsets.only(right: padding ?? 30),
+                child: InkWell(onTap: onTap, child: SvgPicture.asset(trailing)),
+              )
+            : const SizedBox()
       ],
     );
   }

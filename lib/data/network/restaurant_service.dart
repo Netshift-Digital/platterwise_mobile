@@ -26,7 +26,6 @@ class RestaurantService {
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
-      print("This is the data $data");
       if (data["status_code"] == 200 && data["success"] == true) {
         return data['data'];
       } else {
@@ -76,7 +75,6 @@ class RestaurantService {
       "restaurant_id": "$id",
     };
     var token = LocalStorage.getToken();
-    print("This is the token $token");
     try {
       var response = await client.post(Uri.parse("${baseurl3}restaurant/view"),
           body: jsonEncode(body),
@@ -87,7 +85,6 @@ class RestaurantService {
       var data = jsonDecode(response.body);
       print("This is the single data $data");
       if (response.statusCode == 200) {
-        print(data);
         return data;
       }
     } on SocketException catch (_) {
@@ -137,7 +134,6 @@ class RestaurantService {
       "latitude": "${latLong.latitude}",
       "longitude": "${latLong.longitude}"
     };
-    print("This is the body $body");
 
     var token = LocalStorage.getToken();
     try {
@@ -148,9 +144,7 @@ class RestaurantService {
             "Content-type": "application/json",
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
-      print(response.statusCode);
       var data = jsonDecode(response.body);
-      print(data);
       if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       } else {
@@ -267,8 +261,7 @@ class RestaurantService {
     // });
     var token = LocalStorage.getToken();
     try {
-      var response = await client.get(
-          Uri.parse("${baseurl3}reservation/all"),
+      var response = await client.get(Uri.parse("${baseurl3}reservation/all"),
           // body: body,
           headers: {
             "Content-type": "application/json",
@@ -293,10 +286,9 @@ class RestaurantService {
   Future<Map<String, dynamic>?> makeReservation(
       ReservationData reservationData) async {
     var map = reservationData.toJson();
+    print("The body for making reservation is $map");
     var body = jsonEncode(map);
     var token = LocalStorage.getToken();
-
-    print("This is the body $body");
 
     try {
       var response = await client.post(
@@ -311,11 +303,6 @@ class RestaurantService {
       var data = jsonDecode(response.body);
       print("The response is $data");
       if (data['status_code'] == 200 && data['success'] == true) {
-        // RandomFunction.toast('Success');
-        /*  FirebaseFirestore.instance
-            .collection('reservations')
-            .doc(reservationData.restId)
-            .set({"name": reservationData.reservationDate});*/
         return data;
       } else {
         RandomFunction.toast(data['response']);
@@ -345,7 +332,6 @@ class RestaurantService {
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
-      RandomFunction.toast(data['status']);
       print("After cancelling reservation i get $data");
       if (data['status_code'] == 200 && data['success'] == true) {
         return data;
@@ -574,7 +560,6 @@ class RestaurantService {
 
   Future<Map<String, dynamic>?> unfavouriteRestaurant(String id) async {
     var body = jsonEncode({'restaurant_id': id});
-    print("The body is $body");
     var token = LocalStorage.getToken();
 
     try {
@@ -611,7 +596,6 @@ class RestaurantService {
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
-      print("These are the list of saved restaurants ${data['data']}");
       if (data["status_code"] == 200 && data["success"] == true) {
         return data["data"];
       } else {
@@ -638,7 +622,6 @@ class RestaurantService {
         "Authorization": "Bearer $token"
       }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
-      print("These are the list of saved restaurants ${data['data']}");
       if (data["status_code"] == 200 && data["success"] == true) {
         return data["data"];
       } else {

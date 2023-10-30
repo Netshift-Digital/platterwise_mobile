@@ -64,9 +64,9 @@ class UserViewModel extends BaseViewModel {
         final UserCredential userCredential =
             await auth.signInWithCredential(credential);
         setState(AppState.idle);
-        if (userCredential.user != null) {
-          return await checkUser(userCredential);
-        }
+        //  if (userCredential.user != null) {
+        //  return await checkUser(userCredential);
+        // }
       } else {
         setState(AppState.idle);
       }
@@ -77,10 +77,11 @@ class UserViewModel extends BaseViewModel {
     }
   }
 
+/*
   Future<AuthMethod?> checkUser(UserCredential userCredential) async {
     try {
       setState(AppState.busy);
-      var data = await getUserProfile(userCredential.user!.uid);
+      var data = await getUserProfile();
       setState(AppState.idle);
       if (data == null) {
         return AuthMethod(newUser: true, user: userCredential.user);
@@ -92,7 +93,7 @@ class UserViewModel extends BaseViewModel {
       //
     }
     return null;
-  }
+  }*/
 
   Future<AuthMethod?> signInWithFacebook() async {
     // final LoginResult loginResult = await FacebookAuth.instance.login();
@@ -178,10 +179,10 @@ class UserViewModel extends BaseViewModel {
     return null;
   }
 
-  Future<UserData?> getUserCacheData() async {
+  /*Future<UserData?> getUserCacheData() async {
     try {
       user = LocalStorage.getUser();
-      if (user != null) {
+      if (user == null) {
         getMyProfile();
       }
       return user;
@@ -189,19 +190,16 @@ class UserViewModel extends BaseViewModel {
       //
     }
     return null;
-  }
+  }*/
 
   Future<UserData?> getMyProfile() async {
     try {
-      var data =
-          await userService.getUser(FirebaseAuth.instance.currentUser!.uid);
+      var data = await userService.getMyProfile();
       if (data != null) {
         var userData = UserData.fromJson(data);
         var userInfo = UserData(
-            status: userData.status,
-            userProfile: userData.userProfile.copyWith(
-                firebaseAuthID: FirebaseAuth.instance.currentUser!.uid));
-        LocalStorage.saveUser(userInfo.toJson());
+            status: userData.status, userProfile: userData.userProfile);
+        LocalStorage.saveUser(userInfo.userProfile.toJson());
         user = userInfo;
         notifyListeners();
         return user;
@@ -209,19 +207,19 @@ class UserViewModel extends BaseViewModel {
       setState(AppState.idle);
     } catch (e) {
       RandomFunction.toast("something went wrong");
+      print(e.toString());
       setState(AppState.idle);
     }
     return null;
   }
 
-  Future<UserData?> getUserProfile(String uid) async {
+//This can be for getting another user profile
+  Future<UserData?> getUserProfile() async {
     try {
-      var data = await userService.getUser(uid);
+      var data = await userService.getMyProfile();
       if (data != null) {
         var user = UserData.fromJson(data);
-        return UserData(
-            status: user.status,
-            userProfile: user.userProfile.copyWith(firebaseAuthID: uid));
+        return UserData(status: user.status, userProfile: user.userProfile);
       }
       setState(AppState.idle);
     } catch (e) {

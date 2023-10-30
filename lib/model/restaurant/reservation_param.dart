@@ -16,16 +16,14 @@ class ReservationData {
     required this.reservationDate,
     required this.restId,
     required this.sitType,
-    required this.guestNo,
-    // required this.guest,
+    required this.guest,
   });
 
   // String firebaseAuthId;
   String reservationDate;
   String restId;
   String sitType;
-  String guestNo;
-  // List<Guest> guest;
+  List<Guest> guest;
 
   factory ReservationData.fromJson(Map<String, dynamic> json) =>
       ReservationData(
@@ -33,8 +31,7 @@ class ReservationData {
         reservationDate: json["reservation_date"],
         restId: json["rest_id"],
         sitType: json["sit_type"],
-        guestNo: json["guest_no"],
-        // guest: List<Guest>.from(json["guest"].map((x) => Guest.fromJson(x))),
+        guest: List<Guest>.from(json["guest"].map((x) => Guest.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -42,8 +39,7 @@ class ReservationData {
         "reservation_date": reservationDate,
         "restaurant_id": restId,
         "seat_type": sitType,
-        "guest_no": guestNo,
-        // "guest": List<dynamic>.from(guest.map((x) => x.toJson())),
+        "guest": List<dynamic>.from(guest.map((x) => x.toJson())),
       };
 }
 
@@ -59,12 +55,12 @@ class Guest {
   String profilePic;
 
   factory Guest.fromJson(Map<String, dynamic> json) => Guest(
-        guestName: json["guest_name"],
-        guestEmail: json["guest_email"],
+        guestName: json["name"],
+        guestEmail: json["email"],
       );
 
   Map<String, dynamic> toJson() => {
-        "guest_name": guestName,
-        "guest_email": guestEmail,
+        "name": guestName,
+        "email": guestEmail,
       };
 }

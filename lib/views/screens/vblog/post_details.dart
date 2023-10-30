@@ -355,7 +355,7 @@ class _PostDetailsState extends State<PostDetails> {
     model
         .commentOnPost(
       int.parse(widget.post.postId),
-      uid,
+      uid.toString(),
       e,
       userData: context.read<UserViewModel>().user!.userProfile,
       id: widget.post.firebaseAuthId,

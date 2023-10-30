@@ -1,15 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
-import 'package:platterwave/views/screens/profile/edit_profile_screen.dart';
 import 'package:platterwave/views/screens/profile/settings_screen.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
-
 import '../../../res/color.dart';
-import '../../../res/text-theme.dart';
 import '../../widget/tiles/settings_tile.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -65,50 +61,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
               thickness: 1,
               color: AppColor.g40,
             ),
-            SizedBox(height: 40.h,),
+            SizedBox(
+              height: 40.h,
+            ),
             SettingsTile(
               title: "Profile",
               leading: "assets/icon/user.svg",
-              onTap: () {
-
-              },
+              onTap: () {},
             ),
-            SizedBox(height: 25.h,),
+            SizedBox(
+              height: 25.h,
+            ),
             SettingsTile(
               title: "Settings",
               leading: "assets/icon/settings.svg",
               onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context){
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return SettingsScreen();
-                })
-                );
+                }));
               },
             ),
-            SizedBox(height: 25.h,),
+            SizedBox(
+              height: 25.h,
+            ),
             SettingsTile(
               title: "Content and Privacy Policy",
               leading: "assets/icon/note-text.svg",
               onTap: () {},
             ),
-            SizedBox(height: 25.h,),
+            SizedBox(
+              height: 25.h,
+            ),
             SettingsTile(
               title: "Help Center",
               leading: "assets/icon/help-center-icon.svg",
               onTap: () {},
             ),
-            SizedBox(height: 45.h,),
+            SizedBox(
+              height: 45.h,
+            ),
             SettingsTile(
               title: "Logout",
               leading: "assets/icon/logout.svg",
               onTap: () {},
             ),
-
           ],
         ),
       ),
     );
   }
-
-
 }
