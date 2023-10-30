@@ -262,15 +262,17 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> getReservation() async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-    });
+    // var body = jsonEncode({
+    //   "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
+    // });
+    var token = LocalStorage.getToken();
     try {
-      var response = await client.post(
-          Uri.parse("${baseurl2}user_all_reserv.php"),
-          body: body,
+      var response = await client.get(
+          Uri.parse("${baseurl3}reservation/all"),
+          // body: body,
           headers: {
             "Content-type": "application/json",
+            "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
