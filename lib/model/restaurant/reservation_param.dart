@@ -55,8 +55,8 @@ class Guest {
   String profilePic;
 
   factory Guest.fromJson(Map<String, dynamic> json) => Guest(
-        guestName: json["name"],
-        guestEmail: json["email"],
+        guestName: json["name"] ?? "",
+        guestEmail: json["email"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {

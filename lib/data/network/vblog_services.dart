@@ -575,7 +575,7 @@ class VBlogService {
 
   Future<Map<String, dynamic>?> searchUser(String query) async {
     final token = LocalStorage.getToken();
-    var body = jsonEncode({"search_user": query});
+    var body = jsonEncode({"name": query});
     try {
       var response = await client.post(Uri.parse("${baseurl3}user/search-name"),
           body: body,

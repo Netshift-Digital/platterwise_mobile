@@ -222,10 +222,6 @@ class _AddGuestState extends State<AddGuest> {
                         itemCount: searchUserResult.length,
                         itemBuilder: (context, index) {
                           var data = searchUserResult[index];
-                          if (data.email ==
-                              FirebaseAuth.instance.currentUser!.uid) {
-                            return const SizedBox();
-                          }
                           return ListTile(
                             onTap: () {
                               FocusScope.of(context).unfocus();

@@ -39,10 +39,12 @@ class UserReservation {
         noOfGuest: json["guest_no"] ?? 1,
         reservationDate: json["reservation_date"] ?? "",
         reservationStatus: json["status"] ?? 1,
-        guestInfo: List<GuestInfo>.from(
-          (jsonDecode(json["guests"] ?? "[]") as List)
+       guestInfo: (json["guests"] != null && json["guests"] != "null")
+      ? List<GuestInfo>.from(
+          (jsonDecode(json["guests"]) as List)
               .map((x) => GuestInfo.fromJson(x)),
-        ),
+        )
+      : <GuestInfo>[],
         restDetail: RestDetail.fromJson(json["restaurant"]),
       );
 }

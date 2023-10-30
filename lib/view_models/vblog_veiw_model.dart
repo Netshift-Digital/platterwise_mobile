@@ -567,6 +567,8 @@ class VBlogViewModel extends BaseViewModel {
         var search = List<UserProfile>.from(
             data["data"].map((x) => UserProfile.fromJson(x)));
         notifyListeners();
+        print("The user name is ${search[0].username}");
+
         return search;
       }
       setState(AppState.idle);
