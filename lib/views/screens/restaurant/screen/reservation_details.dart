@@ -1,5 +1,4 @@
 import 'package:barcode_widget/barcode_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
@@ -94,7 +93,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                             ),
                             title: Text(widget.userReservation!.username),
                             subtitle: Text(
-                              'Host ID: ${(FirebaseAuth.instance.currentUser?.uid ?? "").substring(0, 10)}',
+                              'Host ID: ',
                             ),
                           ),
                         ),
@@ -267,7 +266,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
   }
 
   Widget getButton(BuildContext context) {
-    if (widget.userReservation!.reservationStatus == 5) {
+    if (widget.userReservation!.reservationStatus == 4) {
       return PlatButton(
         title: "View payment Status",
         onTap: () {
@@ -282,21 +281,6 @@ class _ReservationDetailsState extends State<ReservationDetails> {
       );
     } else if (widget.userReservation!.reservationStatus == 0) {
       return const SizedBox();
-    } else if (widget.userReservation!.reservationStatus == 4) {
-      return PlatButton(
-        title: "View payment Status",
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  PaidGuestScreen(userReservation: widget.userReservation!),
-            ),
-          ).then((value) {
-            getDetails();
-          });
-        },
-      );
     } else if (widget.userReservation!.reservationStatus == 1 ||
         widget.userReservation!.reservationStatus == 2) {
       return PlatButton(

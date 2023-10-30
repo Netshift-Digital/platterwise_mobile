@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:platterwave/constant/endpoint.dart';
+import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/model/failure.dart';
 import 'package:platterwave/model/request_model/post_data.dart';
 import 'package:platterwave/utils/random_functions.dart';
@@ -573,13 +574,17 @@ class VBlogService {
   }
 
   Future<Map<String, dynamic>?> searchUser(String query) async {
+    final token = LocalStorage.getToken();
     var body = jsonEncode({"search_user": query});
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl3}user/search-name"), body: body, headers: {
-        "Content-type": "application/json",
-      }).timeout(const Duration(seconds: 10));
+      var response = await client.post(Uri.parse("${baseurl3}user/search-name"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $token"
+          }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
+      print("The searched user is $data");
       if (data['status_code'] == 200 && data['success'] == true) {
         return data;
       } else {

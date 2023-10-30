@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:platterwave/model/profile/user_data.dart';
 import 'package:platterwave/model/restaurant/reservation_param.dart';
 import 'package:platterwave/model/vblog/user_search.dart';
 import 'package:platterwave/res/color.dart';
@@ -27,7 +28,7 @@ class AddGuest extends StatefulWidget {
 }
 
 class _AddGuestState extends State<AddGuest> {
-  List<SearchResultElement> searchUserResult = [];
+  List<UserProfile> searchUserResult = [];
   List<Guest> guest = [];
   TextEditingController searchController = TextEditingController();
   bool addManuel = false;
@@ -94,7 +95,7 @@ class _AddGuestState extends State<AddGuest> {
                     if (searchController.text.length > 1) {
                       context
                           .read<VBlogViewModel>()
-                          .searchUser(searchController.text)
+                          .searchUserForGuest(searchController.text)
                           .then((value) {
                         if (value != null) {
                           if (mounted) {
@@ -132,20 +133,24 @@ class _AddGuestState extends State<AddGuest> {
                           child: Row(
                             children: [
                               SvgPicture.asset('assets/icon/add-circle.svg'),
-                              const SizedBox(width: 6,),
+                              const SizedBox(
+                                width: 6,
+                              ),
                               Text(
                                 "Add Other Guests",
                                 style: AppTextTheme.h3.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                    color: AppColor.p200,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  color: AppColor.p200,
                                 ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 guest.isEmpty
                     ? const SizedBox()
                     : Padding(
@@ -261,7 +266,7 @@ class _AddGuestState extends State<AddGuest> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<VBlogViewModel>().searchUser('chi').then((value) {
+      context.read<VBlogViewModel>().searchUserForGuest('chi').then((value) {
         if (value != null) {
           if (mounted) {
             setState(() {

@@ -165,7 +165,6 @@ class RestaurantViewModel extends BaseViewModel {
       if (data != null) {
         userReservation = List<UserReservation>.from(
             data["data"].map((x) => UserReservation.fromJson(x)));
-        print("The reservation list are: ${userReservation.length}");
         notifyListeners();
       }
     } catch (e) {

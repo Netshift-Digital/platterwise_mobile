@@ -38,7 +38,7 @@ class UserReservation {
         seatType: json["seat_type"] ?? "",
         noOfGuest: json["guest_no"] ?? 1,
         reservationDate: json["reservation_date"] ?? "",
-        reservationStatus: json["reservation_status"] ?? 1,
+        reservationStatus: json["status"] ?? 1,
         guestInfo: List<GuestInfo>.from(
           (jsonDecode(json["guests"] ?? "[]") as List)
               .map((x) => GuestInfo.fromJson(x)),

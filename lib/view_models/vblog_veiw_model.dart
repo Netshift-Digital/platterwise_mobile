@@ -560,6 +560,24 @@ class VBlogViewModel extends BaseViewModel {
     return null;
   }
 
+  Future<List<UserProfile>?> searchUserForGuest(String search) async {
+    try {
+      var data = await vBlogService.searchUser(search);
+      if (data != null) {
+        var search = List<UserProfile>.from(
+            data["data"].map((x) => UserProfile.fromJson(x)));
+        notifyListeners();
+        return search;
+      }
+      setState(AppState.idle);
+    } catch (e) {
+      print(e);
+      // RandomFunction.toast("something went wrong");
+      setState(AppState.idle);
+    }
+    return null;
+  }
+
   Future<List<SearchResultElement>?> searchUser(String search) async {
     try {
       var data = await vBlogService.searchUser(search);
