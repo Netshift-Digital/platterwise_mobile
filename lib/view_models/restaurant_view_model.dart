@@ -163,11 +163,14 @@ class RestaurantViewModel extends BaseViewModel {
     try {
       var data = await restaurantService.getReservation();
       if (data != null) {
-        userReservation = ReservationList.fromJson(data).userReservation;
+        userReservation = List<UserReservation>.from(
+            data["data"].map((x) => UserReservation.fromJson(x)));
+        print("The reservation list are: ${userReservation.length}");
         notifyListeners();
       }
     } catch (e) {
-      //
+      print("Error parsing data,");
+      print(e.toString());
     }
     return userReservation;
   }
@@ -286,7 +289,7 @@ class RestaurantViewModel extends BaseViewModel {
       var data = await restaurantService.singleReservation(id);
       setState(AppState.idle);
       if (data != null) {
-        return ReservationList.fromJson(data).userReservation.first;
+        //  return ReservationList.fromJson(data).userReservation.first;
       }
     } catch (e) {
       setState(AppState.idle);
@@ -349,7 +352,6 @@ class RestaurantViewModel extends BaseViewModel {
       if (data != null) {
         favouriteRestaurant = [];
         for (var e in data['data']) {
-          print("A single e is $e");
           favouriteRestaurant.add(RestaurantData.fromJson(e['restaurant'][0]));
         }
         notifyListeners();

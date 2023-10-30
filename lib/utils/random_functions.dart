@@ -74,35 +74,35 @@ class RandomFunction {
     return result;
   }
 
-  static Color reserveColor(String e) {
-    if (e.contains('pend')) {
+  static Color reserveColor(int e) {
+    if (e == 1) {
       return Colors.yellow[700]!;
-    } else if (e.contains('accep')) {
+    } else if (e == 2) {
       return Colors.blue;
-    } else if (e.contains('can')) {
+    } else if (e == 0) {
       return Colors.red;
-    } else if (e.contains('com')) {
+    } else if (e == 4) {
       return Colors.green;
-    } else if (e.contains('split')) {
-      return Colors.orange[900]!;
-    } else {
+    } else if (e == 3) {
       return Colors.orange;
+    } else {
+      return Colors.orange[900]!;
     }
   }
 
-  static String reserveString(String e) {
-    if (e.contains('pend')) {
+  static String reserveString(int e) {
+    if (e == 1) {
       return 'Reservation pending';
-    } else if (e.contains('accep')) {
+    } else if (e == 2) {
       return "Reservation Accepted";
-    } else if (e.contains('can')) {
+    } else if (e == 0) {
       return "Reservation Cancelled";
-    } else if (e.contains('com')) {
+    } else if (e == 4) {
       return "Dining Completed";
-    } else if (e.contains('split')) {
-      return "Bill splitted";
-    } else {
+    } else if (e == 3) {
       return "Reservation in progress";
+    } else {
+      return "Bill splitted";
     }
   }
 

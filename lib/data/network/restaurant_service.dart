@@ -256,20 +256,19 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> getReservation() async {
-    // var body = jsonEncode({
-    //   "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-    // });
     var token = LocalStorage.getToken();
     try {
       var response = await client.get(Uri.parse("${baseurl3}reservation/all"),
-          // body: body,
           headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        return data;
+      print("These are all the reservations $data");
+      if (data["status_code"] == 200 && data["success"] == true) {
+        return data["data"];
+      } else {
+        RandomFunction.toast(data['response']);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -301,7 +300,7 @@ class RestaurantService {
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body);
-      print("The response is $data");
+      print("The response for make reservation is $data");
       if (data['status_code'] == 200 && data['success'] == true) {
         return data;
       } else {

@@ -51,7 +51,8 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                 onRefresh: () async {
                   var data = await context
                       .read<RestaurantViewModel>()
-                      .getSingleReservation(widget.userReservation!.reservId);
+                      .getSingleReservation(
+                          widget.userReservation!.reservId.toString());
                   if (data != null) {
                     if (mounted) {
                       setState(() {
@@ -86,6 +87,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                           padding: const EdgeInsets.all(8.0),
                           child: ListTile(
                             leading: ImageCacheCircle(
+                              //Made changes here
                               widget.userReservation!.profileUrl,
                               height: 38,
                               width: 38,
@@ -118,8 +120,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ImageCacheR(
-                                widget
-                                    .userReservation!.restDetail.first.coverPic,
+                                widget.userReservation!.restDetail.coverPic,
                                 height: 70,
                                 width: 70,
                               ),
@@ -131,7 +132,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      widget.userReservation!.restDetail.first
+                                      widget.userReservation!.restDetail
                                           .restaurantName,
                                       style: AppTextTheme.h3,
                                       maxLines: 1,
@@ -193,14 +194,12 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                             style: TextStyle(fontSize: 14),
                           ),
                           Text(
-                            RandomFunction.reserveString(widget
-                                .userReservation!.reservationStatus
-                                .toLowerCase()),
+                            RandomFunction.reserveString(
+                                widget.userReservation!.reservationStatus),
                             style: TextStyle(
                                 fontWeight: FontWeight.w500,
-                                color: RandomFunction.reserveColor(widget
-                                    .userReservation!.reservationStatus
-                                    .toLowerCase())),
+                                color: RandomFunction.reserveColor(
+                                    widget.userReservation!.reservationStatus)),
                           )
                         ],
                       ),
@@ -231,7 +230,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                                   ),
                                   const Spacer(),
                                   SelectableText(
-                                    widget.userReservation!.reservId,
+                                    widget.userReservation!.reservId.toString(),
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 14),
@@ -246,7 +245,8 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                                 child: BarcodeWidget(
                                   barcode: Barcode.code128(),
                                   color: Colors.black87,
-                                  data: widget.userReservation!.reservId,
+                                  data: widget.userReservation!.reservId
+                                      .toString(),
                                   style: const TextStyle(fontSize: 0),
                                 ),
                               ),
@@ -267,9 +267,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
   }
 
   Widget getButton(BuildContext context) {
-    if (widget.userReservation!.reservationStatus
-        .toLowerCase()
-        .contains("split")) {
+    if (widget.userReservation!.reservationStatus == 5) {
       return PlatButton(
         title: "View payment Status",
         onTap: () {
@@ -282,13 +280,9 @@ class _ReservationDetailsState extends State<ReservationDetails> {
           });
         },
       );
-    } else if (widget.userReservation!.reservationStatus
-        .toLowerCase()
-        .contains("can")) {
+    } else if (widget.userReservation!.reservationStatus == 0) {
       return const SizedBox();
-    } else if (widget.userReservation!.reservationStatus
-        .toLowerCase()
-        .contains("completed")) {
+    } else if (widget.userReservation!.reservationStatus == 4) {
       return PlatButton(
         title: "View payment Status",
         onTap: () {
@@ -303,12 +297,8 @@ class _ReservationDetailsState extends State<ReservationDetails> {
           });
         },
       );
-    } else if (!widget.userReservation!.reservationStatus
-            .toLowerCase()
-            .contains("inpr") &&
-        !widget.userReservation!.reservationStatus
-            .toLowerCase()
-            .contains("single_bill")) {
+    } else if (widget.userReservation!.reservationStatus == 1 ||
+        widget.userReservation!.reservationStatus == 2) {
       return PlatButton(
           appState: context.watch<RestaurantViewModel>().appState,
           color: Colors.red,
@@ -321,7 +311,8 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                 onTap: () {
                   context
                       .read<RestaurantViewModel>()
-                      .cancelReservation(widget.userReservation!.reservId)
+                      .cancelReservation(
+                          widget.userReservation!.reservId.toString())
                       .then((value) {
                     if (value) {
                       context.read<RestaurantViewModel>().getReservations();
@@ -337,7 +328,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
         onTap: () {
           context
               .read<RestaurantViewModel>()
-              .getReservationBill(widget.userReservation!.reservId)
+              .getReservationBill(widget.userReservation!.reservId.toString())
               .then(
             (value) async {
               if (value != null) {
@@ -379,7 +370,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getDetails();
-      FirebaseFirestore.instance
+      /*  FirebaseFirestore.instance
           .collection('userReservations')
           .doc(widget.id ?? widget.userReservation!.reservId)
           .snapshots()
@@ -387,14 +378,13 @@ class _ReservationDetailsState extends State<ReservationDetails> {
         if (mounted) {
           getDetails();
         }
-      });
+      });*/
     });
   }
 
   getDetails() async {
-    var data = await context
-        .read<RestaurantViewModel>()
-        .getSingleReservation(widget.id ?? widget.userReservation!.reservId);
+    var data = await context.read<RestaurantViewModel>().getSingleReservation(
+        widget.id ?? widget.userReservation!.reservId.toString());
     if (data != null) {
       if (mounted) {
         setState(() {

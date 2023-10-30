@@ -58,7 +58,7 @@ class UserReservations extends StatelessWidget {
                                 color: Colors.grey.shade300,
                                 width: 0.7,
                               ),
-                          borderRadius: BorderRadius.circular(6),
+                              borderRadius: BorderRadius.circular(6),
                             ),
                             child: Row(
                               children: [
@@ -78,9 +78,7 @@ class UserReservations extends StatelessWidget {
                                       bottomLeft: Radius.circular(6),
                                     ),
                                     child: ImageCacheR(
-                                      data.restDetail.isEmpty
-                                          ? ""
-                                          : data.restDetail.first.coverPic,
+                                      data.restDetail.coverPic,
                                       topRadius: 0,
                                       topBottom: 0,
                                     ),
@@ -99,10 +97,7 @@ class UserReservations extends StatelessWidget {
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              data.restDetail.isEmpty
-                                                  ? "https://www.balmoraltanks.com/images/common/video-icon-image.jpg"
-                                                  : data.restDetail.first
-                                                      .restaurantName,
+                                              data.restDetail.restaurantName,
                                               overflow: TextOverflow.clip,
                                               maxLines: 1,
                                               softWrap: true,
@@ -125,23 +120,20 @@ class UserReservations extends StatelessWidget {
                                                 shape: BoxShape.circle,
                                                 color:
                                                     RandomFunction.reserveColor(
-                                                  data.reservationStatus
-                                                      .toLowerCase(),
+                                                  data.reservationStatus,
                                                 )),
                                           ),
                                           const SizedBox(
                                             width: 4,
                                           ),
                                           Text(
-                                            RandomFunction.reserveString(data
-                                                .reservationStatus
-                                                .toLowerCase()),
+                                            RandomFunction.reserveString(
+                                                data.reservationStatus),
                                             style: AppTextTheme.h5.copyWith(
                                               fontSize: 12,
                                               color:
                                                   RandomFunction.reserveColor(
-                                                      data.reservationStatus
-                                                          .toLowerCase()),
+                                                      data.reservationStatus),
                                             ),
                                             softWrap: true,
                                             maxLines: 3,

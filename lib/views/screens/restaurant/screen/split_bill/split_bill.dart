@@ -296,22 +296,23 @@ class _SplitBillState extends State<SplitBill> {
     }
     amountShared = money;
     setState(() {});
-    Future.delayed(const Duration(seconds: 5),(){
+    Future.delayed(const Duration(seconds: 5), () {
       overAmount(index);
     });
-
   }
 
-  overAmount(int index){
-    if(amountShared>grandPrice){
-      var extra = amountShared-grandPrice;
+  overAmount(int index) {
+    if (amountShared > grandPrice) {
+      var extra = amountShared - grandPrice;
       for (var data in widget.guestInfo) {
-       if(widget.guestInfo[index]!=data&&num.parse(data.amount)>extra){
-         var dataIndex = widget.guestInfo.indexOf(data);
-         widget.guestInfo[dataIndex].amount = (num.parse(widget.guestInfo[dataIndex].amount)-extra).toString();
-         setState(() {});
-         break;
-       }
+        if (widget.guestInfo[index] != data && num.parse(data.amount) > extra) {
+          var dataIndex = widget.guestInfo.indexOf(data);
+          widget.guestInfo[dataIndex].amount =
+              (num.parse(widget.guestInfo[dataIndex].amount) - extra)
+                  .toString();
+          setState(() {});
+          break;
+        }
       }
     }
   }
@@ -346,7 +347,7 @@ class _SplitBillState extends State<SplitBill> {
     }
     var split = SplitBillModel(
         firebaseAuthId: FirebaseAuth.instance.currentUser!.uid,
-        reservId: int.parse(widget.userReservation.reservId),
+        reservId: widget.userReservation.reservId,
         ownerBill: num.parse(ownerBill),
         billSplit: billSplit);
     var model = context.read<RestaurantViewModel>();

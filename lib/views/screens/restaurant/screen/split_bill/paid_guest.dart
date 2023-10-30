@@ -195,7 +195,7 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
 
   Future<void> getPaidGuest(BuildContext context) async {
     var model = context.read<RestaurantViewModel>();
-    var value = await model.getPaidGuest(widget.userReservation.reservId);
+    var value = await model.getPaidGuest(widget.userReservation.reservId.toString());
     if (mounted) {
       setState(() {
         paidGuest = value;
@@ -209,7 +209,7 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
 
   Future<void> getMoneyGuest(BuildContext context) async {
     var model = context.read<RestaurantViewModel>();
-    var value = await model.getReservationBill(widget.userReservation.reservId);
+    var value = await model.getReservationBill(widget.userReservation.reservId.toString());
     if (value != null) {
       if (mounted) {
         setState(() {

@@ -52,7 +52,7 @@ class BillScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ImageCacheCircle(
-                              userReservation.restDetail.first.coverPic,
+                              userReservation.restDetail.coverPic,
                               height: 32,
                               width: 32,
                             ),
@@ -60,7 +60,7 @@ class BillScreen extends StatelessWidget {
                               width: 10,
                             ),
                             Text(
-                              userReservation.restDetail.first.restaurantName,
+                              userReservation.restDetail.restaurantName,
                               style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.w500),
                             ),
@@ -156,12 +156,12 @@ class BillScreen extends StatelessWidget {
                           context
                               .read<RestaurantViewModel>()
                               .getTransactionID(
-                                  userReservation.reservId, amount)
+                                  userReservation.reservId.toString(), amount)
                               .then((value) {
                             if (value != null) {
                               PayStackPayment.makePayment(
                                 amount,
-                                userReservation.reservId ?? "",
+                                userReservation.reservId.toString() ?? "",
                                 context,
                                 txnId: value,
                               ).then((value) {
