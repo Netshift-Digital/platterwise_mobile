@@ -69,9 +69,7 @@ class _BottomNavState extends State<BottomNav> {
   Widget build(BuildContext context) {
     var pageViewModel = context.watch<PageViewModel>();
     return Scaffold(
- 
       body: bottomNav[pageViewModel.appIndex].screen,
-    
       bottomNavigationBar: BottomNavigationBar(
         iconSize: 18,
         selectedLabelStyle: AppTextTheme.h5.copyWith(fontSize: 9),
@@ -113,7 +111,7 @@ class _BottomNavState extends State<BottomNav> {
     var resModel = context.read<RestaurantViewModel>();
     setLocation();
     await userModel.getMyProfile();
-    //  await resModel.getTopRestaurant();
+    await resModel.getTopRestaurant();
     await resModel.getRestaurant();
     //  await resModel.getBanner();
     await resModel.getFavouriteRestaurant();

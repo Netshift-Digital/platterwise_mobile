@@ -74,7 +74,7 @@ class RestaurantData {
         state: json["state"] ?? "",
         localGovt: json["local_govt"] ?? "",
         landmark: json["landmark"] ?? "",
-        rating: json["rating"] ?? json["rest_rating"] ?? 0,
+        rating: json["total_rating"] ?? 0,
         banner: json["banner"] ?? "",
         descriptions: json["descriptions"] ?? "",
         coverPic: json["cover_pic"] ?? "",

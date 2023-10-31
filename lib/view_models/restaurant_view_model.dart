@@ -288,11 +288,11 @@ class RestaurantViewModel extends BaseViewModel {
       var data = await restaurantService.singleReservation(id);
       setState(AppState.idle);
       if (data != null) {
-        //  return ReservationList.fromJson(data).userReservation.first;
+        return UserReservation.fromJson(data['data']);
       }
     } catch (e) {
       setState(AppState.idle);
-      //RandomFunction.toast('Something went wrong');
+      RandomFunction.toast('Something went wrong');
     }
     return null;
   }

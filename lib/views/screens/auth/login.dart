@@ -115,7 +115,9 @@ class Login extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SvgPicture.asset("assets/icon/login with.svg"),
+                          Expanded(
+                              child: SvgPicture.asset(
+                                  "assets/icon/login with.svg")),
                         ],
                       ),
                       SizedBox(

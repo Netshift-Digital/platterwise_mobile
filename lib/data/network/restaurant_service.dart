@@ -44,19 +44,19 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> getTopRated() async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-    });
+    var token = LocalStorage.getToken();
+
     try {
-      var response = await client.post(
-          Uri.parse("${baseurl2}top_ratedRest.php"),
-          body: body,
-          headers: {
-            "Content-type": "application/json",
-          }).timeout(const Duration(seconds: 10));
+      var response = await client
+          .get(Uri.parse("${baseurl3}restaurant/top-rated"), headers: {
+        "Content-type": "application/json",
+        "Authorization": "Bearer $token"
+      }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+      if (data['status_code'] == 200 && data['success'] == true) {
         return data;
+      } else {
+        RandomFunction.toast(data["response"]);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -404,21 +404,19 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> singleReservation(String id) async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      'reserv_id': id
-    });
+    var token = LocalStorage.getToken();
+
     try {
-      var response = await client.post(
-          Uri.parse("${baseurl2}user_single_reserv.php"),
-          body: body,
-          headers: {
-            "Content-type": "application/json",
-          }).timeout(const Duration(seconds: 10));
+      var response = await client
+          .get(Uri.parse("${baseurl3}reservation/view/$id"), headers: {
+        "Content-type": "application/json",
+        "Authorization": "Bearer $token"
+      }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
-      //RandomFunction.toast(data['status']);
-      if (response.statusCode == 200) {
+      if (data['status_code'] == 200 && data['success'] == true) {
         return data;
+      } else {
+        RandomFunction.toast(data['response']);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
