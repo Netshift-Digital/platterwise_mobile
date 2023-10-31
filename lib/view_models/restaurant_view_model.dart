@@ -25,7 +25,7 @@ class RestaurantViewModel extends BaseViewModel {
   List<RestaurantData> topRestaurant = [];
   List<RestaurantData> nearByRestaurant = [];
   List<RestaurantData> closeByRestaurant = [];
-  List<AllBannersList> allBannersList = [];
+  List<BannerDetail> allBannersList = [];
   List<UserReservation> userReservation = [];
   //List<RestaurantData> followedRestaurants = [];
 
@@ -174,6 +174,7 @@ class RestaurantViewModel extends BaseViewModel {
     return userReservation;
   }
 
+/*
   Future<List<AllRestReview>> getReview(String resId) async {
     try {
       var data = await restaurantService.getRestaurantReviews(resId);
@@ -185,9 +186,9 @@ class RestaurantViewModel extends BaseViewModel {
       //
     }
     return [];
-  }
+  }*/
 
-  Future<List<AllRestReview>> addReview(
+  addReview(
       {required String resId,
       required String review,
       required String rate}) async {
@@ -196,20 +197,20 @@ class RestaurantViewModel extends BaseViewModel {
       var data = await restaurantService.addReview(
           resId: resId, review: review, rate: rate);
       if (data != null) {
-        return getReview(resId);
+        getRestaurantById(int.parse(resId));
       }
     } catch (e) {
       setReviewState(AppState.idle);
       //
     }
-    return [];
   }
 
-  Future<List<AllBannersList>> getBanner() async {
+  Future<List<BannerDetail>> getBanner() async {
     try {
       var data = await restaurantService.getBanner();
       if (data != null) {
-        allBannersList = Banner.fromJson(data).allBannersList;
+        allBannersList = List<BannerDetail>.from(
+            data["data"].map((x) => BannerDetail.fromJson(x)));
         notifyListeners();
       }
     } catch (e) {

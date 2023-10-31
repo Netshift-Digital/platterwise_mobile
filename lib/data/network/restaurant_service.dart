@@ -163,7 +163,7 @@ class RestaurantService {
     return null;
   }
 
-  Future<Map<String, dynamic>?> getRestaurantReviews(String resId) async {
+  /* Future<Map<String, dynamic>?> getRestaurantReviews(String resId) async {
     var body = jsonEncode({
       "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
       "rest_id": resId
@@ -192,31 +192,30 @@ class RestaurantService {
     }
     return null;
   }
+*/
 
   Future<Map<String, dynamic>?> addReview(
       {required String resId,
       required String review,
       required String rate}) async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      "rate": rate,
-      "review": review,
-      "rest_id": resId
-    });
+    var token = LocalStorage.getToken();
+
+    var body = jsonEncode(
+        {"star_rating": rate, "comment": review, "restaurant_id": resId});
     try {
-      var response = await client.post(
-          Uri.parse("${baseurl2}rate_restaurant.php"),
+      var response = await client.post(Uri.parse("${baseurl3}restaurant/rate"),
           body: body,
           headers: {
             "Content-type": "application/json",
-          }).timeout(const Duration(seconds: 10));
-      FirebaseFirestore.instance
-          .collection('reviews')
-          .doc(resId)
-          .set({'date': DateTime.now().millisecondsSinceEpoch.toString()});
+            "Authorization": "Bearer $token"
+          }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+      print("After rating $data");
+      if (data["status_code"] == 200 && data["success"] == true) {
+        RandomFunction.toast(data['response']);
         return data;
+      } else {
+        RandomFunction.toast(data['response']);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -231,17 +230,20 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> getBanner() async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-    });
+    var token = LocalStorage.getToken();
+
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl2}get_banner.php"), body: body, headers: {
-        "Content-type": "application/json",
-      }).timeout(const Duration(seconds: 10));
+      var response = await client.get(Uri.parse("${baseurl3}restaurant/banner"),
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $token"
+          }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        return data;
+      print("The banner is $data");
+      if (data["status_code"] == 200 && data["success"] == true) {
+        return data["data"];
+      } else {
+        RandomFunction.toast(data['response']);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");

@@ -5,7 +5,7 @@ import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 
 class BannerDetails extends StatelessWidget {
-  final AllBannersList data;
+  final BannerDetail data;
   const BannerDetails({Key? key, required this.data}) : super(key: key);
 
   @override

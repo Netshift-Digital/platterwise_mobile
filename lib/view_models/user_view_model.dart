@@ -170,7 +170,8 @@ class UserViewModel extends BaseViewModel {
       var data = await userService.editProfile(editData);
       setState(AppState.idle);
       if (data != null) {
-        return true;
+        //   getMyProfile();
+        return data["success"];
       }
     } catch (e) {
       RandomFunction.toast("something went wrong");
