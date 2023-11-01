@@ -57,6 +57,7 @@ class UserService {
         print("This is the user token $token");
         LocalStorage.saveToken(token);
         LocalStorage.saveLoginTime();
+        LocalStorage.saveEmail(data["data"]["original"]["email"]);
         LocalStorage.saveUser(data["data"]["original"]);
         return data;
       } else {

@@ -17,6 +17,14 @@ class LocalStorage {
     return Hive.box(token).get("token", defaultValue: "");
   }
 
+  static saveEmail(String email) {
+    Hive.box(token).put("email", email);
+  }
+
+  static String getEmail() {
+    return Hive.box(token).get("email", defaultValue: "");
+  }
+
   static saveLoginTime() {
     DateTime loginTime = DateTime.now();
     String loginTimeString = loginTime.toIso8601String();
