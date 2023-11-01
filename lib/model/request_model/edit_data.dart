@@ -20,7 +20,7 @@ class EditData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['bio'] = this.bio;
-    data['img_url'] = this.profileURL;
+    data['profileUrl'] = this.profileURL;
     data['phone'] = this.number;
     data['email'] = this.email;
     data['username'] = this.username;

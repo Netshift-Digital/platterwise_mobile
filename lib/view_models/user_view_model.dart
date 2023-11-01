@@ -123,6 +123,7 @@ class UserViewModel extends BaseViewModel {
       var url = await data.ref.getDownloadURL();
       return url;
     } on FirebaseException catch (e) {
+      print(e.toString());
       setState(AppState.idle);
     }
     return null;

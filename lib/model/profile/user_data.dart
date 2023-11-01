@@ -57,6 +57,7 @@ class UserProfile {
       phone: json["phone"] ?? "",
       bio: json["bio"] ?? "",
       profileUrl: json["img_url"] ??
+          json["profileUrl"] ??
           "'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png'",
       location: json["location"] ?? "",
       firebaseAuthID: "");

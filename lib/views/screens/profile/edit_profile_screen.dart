@@ -204,11 +204,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     controller: _bio,
                     hintText: "Add a brief introduction about you.",
                     maxLines: 6,
-                    validator: FieldValidator.minLength(10,
+                    validator: FieldValidator.minLength(8,
                         message: "minimum length of bio is 10 letters "),
                   ),
                   SizedBox(
-                    height: 50.h,
+                    height: 40.h,
                   ),
                   PlatButton(
                       appState: model.appState,
