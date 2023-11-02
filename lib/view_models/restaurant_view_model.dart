@@ -150,11 +150,13 @@ class RestaurantViewModel extends BaseViewModel {
     try {
       var data = await restaurantService.searchRestaurant(text, latLong);
       if (data != null) {
-        var list = SearchRestaurantModel.fromJson(data).searchResult;
+        var list = List<RestaurantData>.from(
+            data["data"].map((x) => RestaurantData.fromJson(x)));
         return list;
       }
     } catch (e) {
-      //
+      RandomFunction.toast("Something went wrong");
+      print(e.toString());
     }
     return [];
   }

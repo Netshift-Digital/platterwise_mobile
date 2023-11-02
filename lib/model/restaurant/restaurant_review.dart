@@ -46,8 +46,9 @@ class AllRestReview {
   factory AllRestReview.fromJson(Map<String, dynamic> json) => AllRestReview(
         restId: json["restaurant_id"] ?? 0,
         reviewId: json["id"] ?? 0,
-        fullName: json["user"]["full_name"] ?? "",
-        profileUrl: json["user"]["profileUrl"] ?? "",
+        fullName: json["user"] != null ? json["user"]["full_name"] ?? "" : "",
+        profileUrl:
+            json["user"] != null ? json["user"]["profileUrl"] ?? "" : "",
         rating: json["star_rating"] ?? 0,
         review: json["comment"] ?? "",
         timestamp: json["created_at"] ?? "",

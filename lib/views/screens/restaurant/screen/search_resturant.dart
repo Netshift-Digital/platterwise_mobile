@@ -49,6 +49,9 @@ class _RestaurantSearchScreenState extends State<RestaurantSearchScreen> {
                   if (e.length > 2) {
                     model.searchRestaurant(e).then((value) {
                       if (mounted) {
+                        print("The query is $e");
+                        print("mounted");
+                        print("${value.length}");
                         setState(() {
                           allRestDetail = value;
                         });
