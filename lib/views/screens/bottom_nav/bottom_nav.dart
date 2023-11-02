@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +94,6 @@ class _BottomNavState extends State<BottomNav> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.delayed(const Duration(milliseconds: 50), () {
       getData();
@@ -114,7 +112,7 @@ class _BottomNavState extends State<BottomNav> {
     await userModel.getMyProfile();
     await resModel.getTopRestaurant();
     await resModel.getRestaurant();
-  //  await resModel.getBanner();
+    //  await resModel.getBanner();
     await resModel.getFavouriteRestaurant();
     await resModel.getReservations();
     await resModel.getFollowedRestaurant();
@@ -168,12 +166,10 @@ class _BottomNavState extends State<BottomNav> {
     }
   }
 
-  void setNotification() {
+  void setNotification() async {
     var email = LocalStorage.getEmail();
-    print("The user email is $email");
     var topic = (email).replaceAll("@", "");
     FirebaseMessaging.instance.getToken().then((value) {
-      print("The firebase token is $value");
       FirebaseMessaging.instance.subscribeToTopic(topic);
     });
     /* var user = FirebaseAuth.instance.currentUser;
@@ -200,6 +196,7 @@ class _BottomNavState extends State<BottomNav> {
     FlutterLocalNotificationsPlugin()
         .getNotificationAppLaunchDetails()
         .then((value) {
+      print("I got a notification");
       if (value != null && value.notificationResponse != null) {
         if (value.notificationResponse != null) {
           var data = jsonDecode(value.notificationResponse!.payload ?? "");

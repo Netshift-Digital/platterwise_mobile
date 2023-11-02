@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,6 @@ import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
-import 'package:platterwave/views/screens/auth/login.dart';
 import 'package:platterwave/views/screens/auth/splash.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/restaurant/screen/reservation_details.dart';
@@ -113,8 +111,7 @@ class _MyAppState extends State<MyApp> {
     try {
       if (notificationResponse.payload != null) {
         var data = jsonDecode(notificationResponse.payload ?? "");
-        if (data['reserv_id'] != null &&
-            FirebaseAuth.instance.currentUser != null) {
+        if (data['reserv_id'] != null) {
           nav(
               navigatorKey.currentState?.context ?? context,
               ReservationDetails(

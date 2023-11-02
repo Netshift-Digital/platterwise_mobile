@@ -144,7 +144,7 @@ class RestaurantHeader extends StatelessWidget {
               child: Text(
                 restaurantData.days.isEmpty
                     ? "Opens (${restaurantData.openingHour} daily)"
-                    : "Opens (${restaurantData.days.capitalizeFirstChar()} (${restaurantData.openingHour} daily)",
+                    : "Opens (${restaurantData.days.capitalizeFirstChar()}, ${restaurantData.openingHour} daily)",
                 style: const TextStyle(
                   color: AppColor.g800,
                   fontSize: 13,
