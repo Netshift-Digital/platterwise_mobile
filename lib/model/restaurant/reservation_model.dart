@@ -11,6 +11,7 @@ class UserReservation {
       required this.reservationDate,
       required this.reservationStatus,
       required this.guestInfo,
+      required this.allGuestInfo,
       required this.restDetail,
       required this.bill});
 
@@ -23,6 +24,7 @@ class UserReservation {
   String reservationDate;
   int reservationStatus;
   List<GuestInfo> guestInfo;
+  List<GuestInfo> allGuestInfo;
   RestDetail restDetail;
   ReservationBill? bill;
 
@@ -42,6 +44,13 @@ class UserReservation {
                       .map((x) => GuestInfo.fromJson(x)),
                 )
               : <GuestInfo>[],
+          allGuestInfo:
+              (json["all_guests"] != null && json["all_guests"] != "null")
+                  ? List<GuestInfo>.from(
+                      (jsonDecode(json["all_guests"]) as List)
+                          .map((x) => GuestInfo.fromJson(x)),
+                    )
+                  : <GuestInfo>[],
           restDetail: RestDetail.fromJson(json["restaurant"]),
           bill: json["reservation_bill"] == null
               ? null

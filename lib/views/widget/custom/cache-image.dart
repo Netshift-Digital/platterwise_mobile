@@ -79,7 +79,7 @@ class ImageCacheR extends StatelessWidget {
     return ClipRRect(
         borderRadius: radius,
         child: CachedNetworkImage(
-          imageUrl: image,
+          imageUrl: "image",
           cacheManager: CustomCacheManager.instance,
           placeholder: (context, url) => Container(
             height: height,

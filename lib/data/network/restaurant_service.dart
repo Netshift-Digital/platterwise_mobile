@@ -209,10 +209,11 @@ class RestaurantService {
             "Content-type": "application/json",
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
-      FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('reviews')
           .doc(resId)
-          .set({'date': DateTime.now().millisecondsSinceEpoch.toString()});
+          .set({'date': DateTime.now().millisecondsSinceEpoch.toString()}).then(
+              (value) => print("It worked"));
       var data = jsonDecode(response.body);
       print("After rating $data");
       if (data["status_code"] == 200 && data["success"] == true) {
@@ -305,12 +306,13 @@ class RestaurantService {
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body);
-      print("The response for make reservation is $data");
+      print("This is the reser date ${reservationData.reservationDate}");
       if (data['status_code'] == 200 && data['success'] == true) {
-        FirebaseFirestore.instance
+        await FirebaseFirestore.instance
             .collection('reservations')
             .doc(reservationData.restId)
-            .set({"name": reservationData.reservationDate});
+            .set({"name": reservationData.reservationDate}).then(
+                (value) => print("It has finished creating"));
         return data;
       } else {
         RandomFunction.toast(data['response']);
@@ -322,7 +324,7 @@ class RestaurantService {
     } on TimeoutException catch (_) {
       throw Failure("Poor internet connection");
     } catch (e) {
-      print(e);
+      print(e.toString);
       throw Failure("Something went wrong. Try again");
     }
     return null;
