@@ -307,44 +307,22 @@ class _ReservationDetailsState extends State<ReservationDetails> {
           });
     } else {
       return PlatButton(
-        title: "Make payment",
-        appState: context.watch<RestaurantViewModel>().appState,
-        onTap: () {
-          context
-              .read<RestaurantViewModel>()
-              .getReservationBill(widget.userReservation!.reservId.toString())
-              .then(
-            (value) async {
-              if (value != null) {
-                Navigator.push(
+          title: "Make payment",
+          appState: context.watch<RestaurantViewModel>().appState,
+          onTap: () {
+            if (widget.userReservation?.bill == null) {
+              RandomFunction.toast("Bill Not sent");
+            } else {
+              Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => BillScreen(
                       userReservation: widget.userReservation!,
-                      reservationBill: value,
                     ),
                     settings: const RouteSettings(name: "userReservation"),
-                  ),
-                ).then((data) {
-                  getDetails();
-                  if (data == true) {
-                    Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PaidGuestScreen(
-                                    userReservation: widget.userReservation!)))
-                        .then((value) {
-                      getDetails();
-                    });
-                  }
-                });
-              } else {
-                RandomFunction.toast("Bill not ready");
-              }
-            },
-          );
-        },
-      );
+                  ));
+            }
+          });
     }
   }
 

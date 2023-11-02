@@ -170,19 +170,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   const SizedBox(
                     height: twenty,
                   ),
-                  Align(alignment: Alignment.topLeft, child: Text("Email")),
-                  SizedBox(
-                    height: 8.h,
-                  ),
-                  AppTextField(
-                    controller: _email,
-                    maxLines: 1,
-                    keyboardType: TextInputType.emailAddress,
-                    validator: FieldValidator.email(),
-                  ),
-                  const SizedBox(
-                    height: twenty,
-                  ),
 
                   // const Align(
                   //   alignment: Alignment.topLeft,

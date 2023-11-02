@@ -10,12 +10,10 @@ import 'package:platterwave/views/widget/button/custom-button.dart';
 
 class SelectSplit extends StatefulWidget {
   final UserReservation userReservation;
-  final ReservationBill reservationBill;
   final Function() getPaidGuest;
   const SelectSplit({
     Key? key,
     required this.userReservation,
-    required this.reservationBill,
     required this.getPaidGuest,
   }) : super(key: key);
 
@@ -141,7 +139,7 @@ class _SelectSplitState extends State<SelectSplit> {
                         MaterialPageRoute(
                           builder: (context) => SplitBill(
                             userReservation: widget.userReservation,
-                            reservationBill: widget.reservationBill,
+                            //  reservationBill: widget.reservationBill,
                             guestInfo: guest,
                           ),
                         ),

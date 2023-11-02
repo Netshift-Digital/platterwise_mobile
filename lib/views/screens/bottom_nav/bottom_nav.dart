@@ -114,7 +114,7 @@ class _BottomNavState extends State<BottomNav> {
     await userModel.getMyProfile();
     await resModel.getTopRestaurant();
     await resModel.getRestaurant();
-    await resModel.getBanner();
+  //  await resModel.getBanner();
     await resModel.getFavouriteRestaurant();
     await resModel.getReservations();
     await resModel.getFollowedRestaurant();
@@ -170,8 +170,12 @@ class _BottomNavState extends State<BottomNav> {
 
   void setNotification() {
     var email = LocalStorage.getEmail();
+    print("The user email is $email");
     var topic = (email).replaceAll("@", "");
-    FirebaseMessaging.instance.subscribeToTopic(topic);
+    FirebaseMessaging.instance.getToken().then((value) {
+      print("The firebase token is $value");
+      FirebaseMessaging.instance.subscribeToTopic(topic);
+    });
     /* var user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       FirebaseMessaging.instance.getToken().then((value) {
@@ -199,8 +203,8 @@ class _BottomNavState extends State<BottomNav> {
       if (value != null && value.notificationResponse != null) {
         if (value.notificationResponse != null) {
           var data = jsonDecode(value.notificationResponse!.payload ?? "");
-          if (data['reserv_id'] != null ){
-          //&&
+          if (data['reserv_id'] != null) {
+            //&&
             //  FirebaseAuth.instance.currentUser != null) {
             nav(
               context,

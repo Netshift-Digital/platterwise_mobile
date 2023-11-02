@@ -22,13 +22,8 @@ import 'package:provider/provider.dart';
 // ignore: must_be_immutable
 class SplitBill extends StatefulWidget {
   UserReservation userReservation;
-  final ReservationBill reservationBill;
   List<GuestInfo> guestInfo;
-  SplitBill(
-      {Key? key,
-      required this.userReservation,
-      required this.reservationBill,
-      required this.guestInfo})
+  SplitBill({Key? key, required this.userReservation, required this.guestInfo})
       : super(key: key);
 
   @override
@@ -73,7 +68,7 @@ class _SplitBillState extends State<SplitBill> {
                       height: 8,
                     ),
                     Text(
-                      (widget.reservationBill.grandPrice ?? '0').toCurrency(),
+                      (widget.userReservation.bill!.grandPrice).toCurrency(),
                       style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
@@ -167,7 +162,7 @@ class _SplitBillState extends State<SplitBill> {
                               context,
                               PercentageSplit(
                                 gradPrice: num.parse(
-                                    widget.reservationBill.grandPrice ?? "0"),
+                                    widget.userReservation.bill!.grandPrice),
                                 guestInfo: data,
                                 onDone: (e) {
                                   cal(e, index);
@@ -283,7 +278,7 @@ class _SplitBillState extends State<SplitBill> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      grandPrice = num.parse(widget.reservationBill.grandPrice ?? '0');
+      grandPrice = num.parse(widget.userReservation.bill!.grandPrice);
       shareEqually();
     });
   }

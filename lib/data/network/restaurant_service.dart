@@ -209,6 +209,10 @@ class RestaurantService {
             "Content-type": "application/json",
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 15));
+      FirebaseFirestore.instance
+          .collection('reviews')
+          .doc(resId)
+          .set({'date': DateTime.now().millisecondsSinceEpoch.toString()});
       var data = jsonDecode(response.body);
       print("After rating $data");
       if (data["status_code"] == 200 && data["success"] == true) {
@@ -266,7 +270,6 @@ class RestaurantService {
             "Authorization": "Bearer $token"
           }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
-      print("These are all the reservations $data");
       if (data["status_code"] == 200 && data["success"] == true) {
         return data["data"];
       } else {
@@ -304,6 +307,10 @@ class RestaurantService {
       var data = jsonDecode(response.body);
       print("The response for make reservation is $data");
       if (data['status_code'] == 200 && data['success'] == true) {
+        FirebaseFirestore.instance
+            .collection('reservations')
+            .doc(reservationData.restId)
+            .set({"name": reservationData.reservationDate});
         return data;
       } else {
         RandomFunction.toast(data['response']);
@@ -338,32 +345,6 @@ class RestaurantService {
         return data;
       } else {
         RandomFunction.toast(data['response']);
-      }
-    } on SocketException catch (_) {
-      throw Failure("No internet connection");
-    } on HttpException catch (_) {
-      throw Failure("Service not currently available");
-    } on TimeoutException catch (_) {
-      throw Failure("Poor internet connection");
-    } catch (e) {
-      throw Failure("Something went wrong. Try again");
-    }
-    return null;
-  }
-
-  Future<Map<String, dynamic>?> getBill(String id) async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      'reserv_id': id
-    });
-    try {
-      var response = await client
-          .post(Uri.parse("${baseurl2}get_bill.php"), body: body, headers: {
-        "Content-type": "application/json",
-      }).timeout(const Duration(seconds: 10));
-      var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        return data;
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -415,6 +396,7 @@ class RestaurantService {
         "Authorization": "Bearer $token"
       }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
+      print("This is the single reservation $data");
       if (data['status_code'] == 200 && data['success'] == true) {
         return data;
       } else {

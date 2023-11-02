@@ -188,14 +188,15 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
         getPaidGuest(context);
-        getMoneyGuest(context);
+        //   getMoneyGuest(context);
       },
     );
   }
 
   Future<void> getPaidGuest(BuildContext context) async {
     var model = context.read<RestaurantViewModel>();
-    var value = await model.getPaidGuest(widget.userReservation.reservId.toString());
+    var value =
+        await model.getPaidGuest(widget.userReservation.reservId.toString());
     if (mounted) {
       setState(() {
         paidGuest = value;
@@ -207,7 +208,7 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
     }
   }
 
-  Future<void> getMoneyGuest(BuildContext context) async {
+  /*Future<void> getMoneyGuest(BuildContext context) async {
     var model = context.read<RestaurantViewModel>();
     var value = await model.getReservationBill(widget.userReservation.reservId.toString());
     if (value != null) {
@@ -217,5 +218,5 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
         });
       }
     }
-  }
+  }*/
 }

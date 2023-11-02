@@ -253,7 +253,7 @@ class RestaurantViewModel extends BaseViewModel {
     return false;
   }
 
-  Future<ReservationBill?> getReservationBill(String id) async {
+/*  Future<ReservationBill?> getReservationBill(String id) async {
     try {
       setState(AppState.busy);
       var data = await restaurantService.getBill(id);
@@ -270,7 +270,7 @@ class RestaurantViewModel extends BaseViewModel {
     }
     return null;
   }
-
+*/
   Future<String?> getTransactionID(String id, num bill) async {
     try {
       setState(AppState.busy);

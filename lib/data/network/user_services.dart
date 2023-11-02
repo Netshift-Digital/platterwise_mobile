@@ -25,7 +25,11 @@ class UserService {
       if (response.statusCode == 200 && data["status"] == true) {
         return data;
       } else {
-        RandomFunction.toast(data['response'] ?? "");
+        if ((data["response"] as String).contains("validat")) {
+          RandomFunction.toast((data['data'] as List).join(","));
+        } else {
+          RandomFunction.toast(data['response'] ?? "");
+        }
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -61,7 +65,11 @@ class UserService {
         LocalStorage.saveUser(data["data"]["original"]);
         return data;
       } else {
-        RandomFunction.toast(data['response'] ?? "");
+        if ((data["response"] as String).contains("validat")) {
+          RandomFunction.toast((data['data'] as List).join(","));
+        } else {
+          RandomFunction.toast(data['response'] ?? "");
+        }
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");

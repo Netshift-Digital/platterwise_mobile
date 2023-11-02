@@ -16,11 +16,9 @@ import 'package:provider/provider.dart';
 
 class BillScreen extends StatelessWidget {
   final UserReservation userReservation;
-  final ReservationBill reservationBill;
   const BillScreen({
     Key? key,
     required this.userReservation,
-    required this.reservationBill,
   }) : super(key: key);
 
   @override
@@ -82,14 +80,14 @@ class BillScreen extends StatelessWidget {
                           height: 20,
                         ),
                         Expanded(
-                          child: reservationBill.billPix == null
+                          child: userReservation.bill?.billPix == null
                               ? const SizedBox()
                               : GestureDetector(
                                   onTap: () {
                                     showImageViewer(
                                         context,
                                         CachedNetworkImageProvider(
-                                          reservationBill.billPix ?? "",
+                                          userReservation.bill!.billPix,
                                         ),
                                         onViewerDismissed: () {},
                                         useSafeArea: true,
@@ -97,7 +95,7 @@ class BillScreen extends StatelessWidget {
                                         immersive: true);
                                   },
                                   child: ImageCacheR(
-                                      reservationBill.billPix ?? ''),
+                                      userReservation.bill!.billPix),
                                 ),
                         ),
                         const Divider(),
@@ -113,9 +111,9 @@ class BillScreen extends StatelessWidget {
                             ),
                             const Spacer(),
                             Text(
-                              reservationBill.grandPrice!.isEmpty
+                              userReservation.bill!.grandPrice.isEmpty
                                   ? "0"
-                                  : (reservationBill.grandPrice ?? '0')
+                                  : (userReservation.bill!.grandPrice)
                                       .toCurrency(),
                               style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w500),
@@ -151,7 +149,7 @@ class BillScreen extends StatelessWidget {
                         title: "Pay Entire Bill",
                         onTap: () {
                           var amount =
-                              num.parse(reservationBill.grandPrice ?? '0')
+                              num.parse(userReservation.bill!.grandPrice)
                                   .toInt();
                           context
                               .read<RestaurantViewModel>()
@@ -161,7 +159,7 @@ class BillScreen extends StatelessWidget {
                             if (value != null) {
                               PayStackPayment.makePayment(
                                 amount,
-                                userReservation.reservId.toString() ?? "",
+                                userReservation.reservId.toString(),
                                 context,
                                 txnId: value,
                               ).then((value) {
@@ -188,7 +186,6 @@ class BillScreen extends StatelessWidget {
                                 Navigator.pop(context, true);
                               },
                               userReservation: userReservation,
-                              reservationBill: reservationBill,
                             ));
                       },
                     ),
