@@ -52,6 +52,8 @@ class BillSplit {
 
   Map<String, dynamic> toJson() => {
         "guest_email": guestEmail,
-        "insert_bill": insertBill,
+        "bill": insertBill,
+        "type": type,
+        "guest_name": guestName
       };
 }

@@ -14,8 +14,8 @@ extension StringExtension on String {
   String toCurrency({String sign = "₦"}) {
     CurrencyFormatter cf = CurrencyFormatter();
     CurrencyFormatterSettings nairaSettings = CurrencyFormatterSettings(
-      symbol: "NGN",
-      symbolSide: SymbolSide.right,
+      symbol: "N",
+      symbolSide: SymbolSide.left,
       thousandSeparator: ',',
       decimalSeparator: '.',
     );
