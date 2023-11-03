@@ -456,21 +456,24 @@ class RestaurantService {
   Future<Map<String, dynamic>?> splitBill(SplitBillModel splitBillModel) async {
     var body = jsonEncode(splitBillModel.toJson());
     print(body);
+    var token = LocalStorage.getToken();
+
     try {
       var response = await client.post(
-        Uri.parse("${baseurl2}split_bill.php"),
+        Uri.parse("${baseurl3}reservation/split-bills"),
         body: body,
         headers: {
           "Content-type": "application/json",
+          "Authorization": "Bearer $token"
         },
       ).timeout(const Duration(seconds: 10));
-      var data = jsonDecode(
-          response.body.replaceAll("Message sent!Message sent!", ""));
-      if (response.statusCode == 200) {
-        RandomFunction.toast('Success');
+      var data = jsonDecode(response.body);
+      print("This is the result after spliting bills $data");
+      if (data["status_code"] == 200 && data["success"] == true) {
+        RandomFunction.toast(data["response"]);
         return data;
       } else {
-        RandomFunction.toast('Something went wrong');
+        RandomFunction.toast(data["response"]);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");

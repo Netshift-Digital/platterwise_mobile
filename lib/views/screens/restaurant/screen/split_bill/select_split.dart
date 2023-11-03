@@ -88,9 +88,9 @@ class _SelectSplitState extends State<SelectSplit> {
                 padding: EdgeInsets.zero,
                 physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: widget.userReservation.guestInfo.length,
+                itemCount: widget.userReservation.allGuestInfo.length,
                 itemBuilder: (context, index) {
-                  var data = widget.userReservation.guestInfo[index];
+                  var data = widget.userReservation.allGuestInfo[index];
                   var value = guest
                       .any((element) => element.guestName == data.guestName);
                   return Padding(

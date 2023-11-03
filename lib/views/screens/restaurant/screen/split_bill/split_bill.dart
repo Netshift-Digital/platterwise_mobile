@@ -337,13 +337,14 @@ class _SplitBillState extends State<SplitBill> {
       // }
       billSplit.add(BillSplit(
         guestEmail: e.guestEmail,
-        insertBill: num.parse(e.amount),
+        guestName: e.guestName,
+        type: e.type,
+        insertBill: e.amount,
       ));
     }
     var split = SplitBillModel(
-        firebaseAuthId: FirebaseAuth.instance.currentUser!.uid,
-        reservId: widget.userReservation.reservId,
-        ownerBill: num.parse(ownerBill),
+        reservId: widget.userReservation.reservId.toString(),
+        totalBill: widget.userReservation.bill!.grandPrice,
         billSplit: billSplit);
     var model = context.read<RestaurantViewModel>();
     model.splitBill(split).then((value) {

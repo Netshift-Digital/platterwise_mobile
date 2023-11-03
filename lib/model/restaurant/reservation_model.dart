@@ -59,21 +59,23 @@ class UserReservation {
 
 class GuestInfo {
   GuestInfo(
-      {required this.guestName, required this.guestEmail, this.amount = '0'});
+      {required this.guestName,
+      required this.guestEmail,
+      this.amount = '0',
+      required this.type});
 
   String guestName;
   String guestEmail;
   String amount;
+  String type;
 
   factory GuestInfo.fromJson(Map<String, dynamic> json) => GuestInfo(
-        guestName: json["name"] ?? "",
-        guestEmail: json["email"] ?? "",
-      );
+      guestName: json["name"] ?? "",
+      guestEmail: json["email"] ?? "",
+      type: json["type"] ?? "");
 
-  Map<String, dynamic> toJson() => {
-        "name": guestName,
-        "email": guestEmail,
-      };
+  Map<String, dynamic> toJson() =>
+      {"name": guestName, "email": guestEmail, "type": type};
 }
 
 class RestDetail {
