@@ -258,19 +258,23 @@ class VBlogService {
 
   Future<dynamic> fellowUser(String uId) async {
     var body = jsonEncode({
-      "follower_AuthID": FirebaseAuth.instance.currentUser!.uid,
-      "followed_AuthID": uId
+      "user": uId
     });
+        var token = LocalStorage.getToken();
+
     try {
       var response = await client
-          .post(Uri.parse("${baseurl}follow_user.php"), body: body, headers: {
+          .post(Uri.parse("${baseurl3}user/follow"), body: body, headers: {
         "Content-type": "application/json",
+                  "Authorization": "Bearer $token"
+
       });
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+      if (data["status_code"] == 200 && data["success"] == true) {
+                RandomFunction.toast(data['response']??"");
         return data;
       } else {
-        //RandomFunction.toast(data['status']??"");
+        RandomFunction.toast(data['response']??"");
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -286,19 +290,23 @@ class VBlogService {
 
   Future<dynamic> unFellowUser(String uId) async {
     var body = jsonEncode({
-      "follower_AuthID": FirebaseAuth.instance.currentUser!.uid,
-      "followed_AuthID": uId
+      "user": uId
     });
+    var token = LocalStorage.getToken();
+
     try {
       var response = await client
-          .post(Uri.parse("${baseurl}unfollow_user.php"), body: body, headers: {
+          .post(Uri.parse("${baseurl3}user/unfollow"), body: body, headers: {
         "Content-type": "application/json",
+                  "Authorization": "Bearer $token"
+
       });
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+     if (data["status_code"] == 200 && data["success"] == true) {
+        RandomFunction.toast(data['response']??"");
         return data;
       } else {
-        //RandomFunction.toast(data['status']??"");
+        RandomFunction.toast(data['response']??"");
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
