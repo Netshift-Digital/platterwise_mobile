@@ -348,7 +348,9 @@ class _SplitBillState extends State<SplitBill> {
         billSplit: billSplit);
     var model = context.read<RestaurantViewModel>();
     model.splitBill(split).then((value) {
-      Navigator.pop(context, true);
+      if (value == true) {
+        Navigator.pop(context, true);
+      }
       //  Navigator.popUntil(context, (route) => route.settings.name=="userReservation")
     });
   }
