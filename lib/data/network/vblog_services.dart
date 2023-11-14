@@ -16,7 +16,7 @@ class VBlogService {
   Future<Map<String, dynamic>?> getPost(int pageIndex) async {
     var token = LocalStorage.getToken();
     try {
-      var response = await client.get(Uri.parse("${baseurl3}post/all_posts"),
+      var response = await client.get(Uri.parse("${baseurl3}post/all-posts"),
           headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer $token"
