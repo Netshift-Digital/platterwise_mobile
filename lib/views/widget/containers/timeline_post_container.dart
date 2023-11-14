@@ -168,8 +168,8 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                         ));
                       },
                       // row has two child icon and text
-                      child: Row(
-                        children: const [
+                      child: const Row(
+                        children: [
                           Icon(Icons.bookmark),
                           SizedBox(
                             // sized box with width 10
@@ -179,13 +179,13 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                         ],
                       ),
                     ),
-                    LocalStorage.getUserId() == widget.post.userId
+                    LocalStorage.getUserId() == widget.post.userId.toString()
                         ? PopupMenuItem(
                             value: 3,
                             onTap: () {},
                             // row has two child icon and text
-                            child: Row(
-                              children: const [
+                            child: const Row(
+                              children: [
                                 Icon(Icons.delete),
                                 SizedBox(
                                   // sized box with width 10
@@ -272,8 +272,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                         blogModel.likePost(
                             widget.post, context.read<UserViewModel>().user!);
                         setState(() {
-                          widget.post.likeCount =
-                              (int.parse(widget.post.likeCount) + 1).toString();
+                          widget.post.likeCount = widget.post.likeCount + 1;
                           widget.post.liked = ['yes'];
                         });
                       } else {}
@@ -288,7 +287,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                           post: widget.post,
                         ));
                   },
-                  count: widget.post.likeCount,
+                  count: widget.post.likeCount.toString(),
                 ),
                 const Spacer(
                   flex: 1,
@@ -300,7 +299,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                     }
                   },
                   icon: "assets/icon/comment.svg",
-                  count: widget.post.commentCount,
+                  count: widget.post.commentCount.toString(),
                 ),
                 const Spacer(
                   flex: 1,
@@ -422,7 +421,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
     // TODO: implement initState
     super.initState();
     setState(() {
-      like = num.parse(widget.post.likeCount).toInt();
+      like = widget.post.likeCount;
     });
   }
 

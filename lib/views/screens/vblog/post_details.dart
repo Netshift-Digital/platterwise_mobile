@@ -363,8 +363,7 @@ class _PostDetailsState extends State<PostDetails> {
         .then((value) {
       getComment();
       if (value != null) {
-        widget.post.commentCount =
-            (int.parse(widget.post.commentCount) + 1).toString();
+        widget.post.commentCount = widget.post.commentCount + 1;
         setState(() {});
       }
     });

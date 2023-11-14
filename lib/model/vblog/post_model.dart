@@ -55,8 +55,8 @@ class Post {
   String username;
   int userId;
   DateTime timestamp;
-  dynamic commentCount;
-  dynamic likeCount;
+  int commentCount;
+  int likeCount;
   List tags;
   List liked;
   dynamic fullName;
@@ -66,7 +66,7 @@ class Post {
       contentPost: json["content_post"] ?? "",
       postId: json["id"] ?? 20,
       contentType: json["content_type"] ?? "image",
-      profileUrl: json["user"]["profileURL"] ??
+      profileUrl: json["user"]["profileUrl"] ??
           'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png',
       contentUrl: json["contentUrl"] ??
           "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
@@ -75,8 +75,8 @@ class Post {
       timestamp: json["created_at"] == null
           ? DateTime.now()
           : DateTime.parse(json["created_at"]),
-      commentCount: json["comment_count"] ?? "0",
-      likeCount: json['total_likes'] ?? "0",
+      commentCount: json["comment_count"] ?? 0,
+      likeCount: json['total_likes'] ?? 0,
       tags: json['taggs'] ?? [],
       fullName: json["user"]['full_name'] ?? "",
       commentReply: json['comment_reply'] ?? "",
