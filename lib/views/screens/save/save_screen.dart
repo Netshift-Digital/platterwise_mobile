@@ -47,7 +47,7 @@ class SaveScreen extends StatelessWidget {
                               nav(
                                   context,
                                   SharedPost(
-                                    id: postData.postId,
+                                    id: postData.postId.toString(),
                                   ));
                             },
                           );

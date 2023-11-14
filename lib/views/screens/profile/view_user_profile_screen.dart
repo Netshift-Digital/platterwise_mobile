@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 import 'package:linkfy_text/linkfy_text.dart';
 import 'package:platterwave/data/local/local_storage.dart';
@@ -27,10 +26,8 @@ import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../utils/nav.dart';
 import '../../widget/tiles/settings_tile.dart';
-import '../vblog/create_post/create_post.dart';
 import 'edit_profile_screen.dart';
 
 class ViewUserProfileScreen extends StatefulWidget {
@@ -243,14 +240,14 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            /*  StreamBuilder<QuerySnapshot>(
+                                            StreamBuilder<QuerySnapshot>(
                                                 stream: FirebaseFirestore
                                                     .instance
                                                     .collection("following")
                                                     .doc("users")
                                                     .collection(widget.id ??
-                                                        FirebaseAuth.instance
-                                                            .currentUser!.uid)
+                                                        LocalStorage
+                                                            .getUserId())
                                                     .snapshots(),
                                                 builder: (context, snapshot) {
                                                   return Text(
@@ -261,12 +258,12 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                                         : "0",
                                                     style: AppTextTheme.h3,
                                                   );
-                                                }),*/
-                                            /*     Text(
+                                                }),
+                                            Text(
                                               "Following",
                                               style: AppTextTheme.h4.copyWith(
                                                   color: AppColor.g300),
-                                            )*/
+                                            )
                                           ],
                                         ),
                                       ),
@@ -278,8 +275,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                             FollowersList(
                                               index: 1,
                                               id: widget.id ??
-                                                  FirebaseAuth.instance
-                                                      .currentUser!.uid,
+                                                  LocalStorage.getUserId(),
                                             ));
                                       },
                                       child: Container(
@@ -288,14 +284,14 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            /*StreamBuilder<QuerySnapshot>(
+                                            StreamBuilder<QuerySnapshot>(
                                                 stream: FirebaseFirestore
                                                     .instance
                                                     .collection("followers")
                                                     .doc("users")
                                                     .collection(widget.id ??
-                                                        FirebaseAuth.instance
-                                                            .currentUser!.uid)
+                                                        LocalStorage
+                                                            .getUserId())
                                                     .snapshots(),
                                                 builder: (context, snapshot) {
                                                   return Text(
@@ -311,12 +307,12 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                               "Followers",
                                               style: AppTextTheme.h4.copyWith(
                                                   color: AppColor.g300),
-                                            )*/
+                                            )
                                           ],
                                         ),
                                       ),
                                     ),
-                                    /*   showFollow()
+                                    showFollow()
                                         ? StreamBuilder<DocumentSnapshot>(
                                             stream: FirebaseFirestore.instance
                                                 .collection('followButton')
@@ -335,38 +331,32 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                                 return PlatButton(
                                                   title:
                                                       blogModel.getIsFollowed(
-                                                              userData!
-                                                                  .userProfile
-                                                                  .email)
+                                                              userData!.email)
                                                           ? "Unfollow"
                                                           : "Follow",
                                                   padding: 0,
                                                   textSize: 14,
                                                   color:
                                                       blogModel.getIsFollowed(
-                                                              userData!
-                                                                  .userProfile
-                                                                  .email)
+                                                              userData!.email)
                                                           ? AppColor.g700
                                                           : AppColor.p200,
                                                   onTap: () {
                                                     var user = context
                                                         .read<UserViewModel>()
                                                         .user;
-                                                    //blogModel.following.add(userData!.userProfile);
+                                                    blogModel.following
+                                                        .add(userData!);
                                                     if (blogModel.getIsFollowed(
-                                                        userData!.userProfile
-                                                            .email)) {
+                                                        userData!.email)) {
                                                       blogModel.unFollowUser(
                                                           widget.id!,
-                                                          userData!
-                                                              .userProfile);
+                                                          userData!);
                                                     } else {
                                                       blogModel.followUser(
                                                           widget.id!,
-                                                          user!.userProfile,
-                                                          userData!
-                                                              .userProfile);
+                                                          user!,
+                                                          userData!);
                                                     }
                                                   },
                                                   width: 95.w,
@@ -376,17 +366,16 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                                 return const SizedBox();
                                               }
                                             })
-                                        : */
-                                    PlatButton(
-                                      title: "Edit Profile",
-                                      padding: 0,
-                                      textSize: 14,
-                                      onTap: () {
-                                        settings(context);
-                                      },
-                                      width: 95.w,
-                                      height: 38.h,
-                                    )
+                                        : PlatButton(
+                                            title: "Edit Profile",
+                                            padding: 0,
+                                            textSize: 14,
+                                            onTap: () {
+                                              settings(context);
+                                            },
+                                            width: 95.w,
+                                            height: 38.h,
+                                          )
                                   ],
                                 ),
                                 SizedBox(
@@ -440,12 +429,12 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                   },
                   body: TabBarView(
                     children: [
-                      //   ViewPostsPage(
-                      //   post: myPost,
-                      // ),
-                      // ViewLikesPage(
-                      // id: widget.id,
-                      // ),
+                      ViewPostsPage(
+                        post: myPost,
+                      ),
+                      ViewLikesPage(
+                        id: widget.id,
+                      ),
                     ],
                   )),
             ),
@@ -492,7 +481,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
     }
 
     // await blogModel.getFollowers();
-    // await  blogModel.getFollowing();
+    //await  blogModel.getFollowing();
   }
 
   void getPost() {

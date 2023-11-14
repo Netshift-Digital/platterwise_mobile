@@ -17,6 +17,14 @@ class LocalStorage {
     return Hive.box(token).get("token", defaultValue: "");
   }
 
+  static saveUserId(int id) {
+    Hive.box(token).put("id", "$id");
+  }
+
+  static String getUserId() {
+    return Hive.box(token).get("id", defaultValue: "");
+  }
+
   static saveEmail(String email) {
     Hive.box(token).put("email", email);
   }

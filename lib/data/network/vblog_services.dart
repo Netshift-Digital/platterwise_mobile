@@ -13,21 +13,19 @@ import 'package:platterwave/utils/random_functions.dart';
 class VBlogService {
   var client = http.Client();
 
-  Future<dynamic> getPost(int pageIndex) async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      "pageindex": pageIndex
-    });
+  Future<Map<String, dynamic>?> getPost(int pageIndex) async {
+    var token = LocalStorage.getToken();
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl}get_all_post.php"), body: body, headers: {
-        "Content-type": "application/json",
-      });
+      var response = await client.get(Uri.parse("${baseurl3}post/all_posts"),
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $token"
+          });
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        return data;
+      if (data["status_code"] == 200 && data["success"] == true) {
+        return data["data"];
       } else {
-        RandomFunction.toast(data['status'] ?? "");
+        RandomFunction.toast(data["response"]);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -68,18 +66,20 @@ class VBlogService {
     return null;
   }
 
-  Future<dynamic> getUserPost(String id) async {
-    var body = jsonEncode({"firebaseAuthID": id});
+  Future<Map<String, dynamic>?> getUserPost(String? id) async {
+    String url = "${baseurl3}post/my-posts";
+    var token = LocalStorage.getToken();
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl}get_post.php"), body: body, headers: {
+      var response = await client.get(Uri.parse(url), headers: {
         "Content-type": "application/json",
+        "Authorization": "Bearer $token"
       });
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        return data;
+      print("This are my posts $data");
+      if (data["status_code"] == 200 && data["success"] == true) {
+        return data["data"];
       } else {
-        RandomFunction.toast(data['status'] ?? "");
+        RandomFunction.toast(data["response"]);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -120,19 +120,24 @@ class VBlogService {
     return null;
   }
 
-  Future<dynamic> createPost(PostData postData) async {
+  Future<Map<String, dynamic>?> createPost(PostData postData) async {
     var body = jsonEncode(postData.toJson());
+    var token = LocalStorage.getToken();
+
     print("This is the post $body");
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl}create_post.php"), body: body, headers: {
-        "Content-type": "application/json",
-      });
+      var response = await client.post(Uri.parse("${baseurl3}post/create"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $token"
+          });
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+      print("This is the res for creating post $data");
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       } else {
-        RandomFunction.toast(data['status'] ?? "");
+        RandomFunction.toast(data["response"]);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -257,24 +262,22 @@ class VBlogService {
   }
 
   Future<dynamic> fellowUser(String uId) async {
-    var body = jsonEncode({
-      "user": uId
-    });
-        var token = LocalStorage.getToken();
+    var body = jsonEncode({"user": uId});
+    var token = LocalStorage.getToken();
 
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl3}user/follow"), body: body, headers: {
-        "Content-type": "application/json",
-                  "Authorization": "Bearer $token"
-
-      });
+      var response = await client.post(Uri.parse("${baseurl3}user/follow"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $token"
+          });
       var data = jsonDecode(response.body);
       if (data["status_code"] == 200 && data["success"] == true) {
-                RandomFunction.toast(data['response']??"");
+        RandomFunction.toast(data['response'] ?? "");
         return data;
       } else {
-        RandomFunction.toast(data['response']??"");
+        RandomFunction.toast(data['response'] ?? "");
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -289,24 +292,22 @@ class VBlogService {
   }
 
   Future<dynamic> unFellowUser(String uId) async {
-    var body = jsonEncode({
-      "user": uId
-    });
+    var body = jsonEncode({"user": uId});
     var token = LocalStorage.getToken();
 
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl3}user/unfollow"), body: body, headers: {
-        "Content-type": "application/json",
-                  "Authorization": "Bearer $token"
-
-      });
+      var response = await client.post(Uri.parse("${baseurl3}user/unfollow"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $token"
+          });
       var data = jsonDecode(response.body);
-     if (data["status_code"] == 200 && data["success"] == true) {
-        RandomFunction.toast(data['response']??"");
+      if (data["status_code"] == 200 && data["success"] == true) {
+        RandomFunction.toast(data['response'] ?? "");
         return data;
       } else {
-        RandomFunction.toast(data['response']??"");
+        RandomFunction.toast(data['response'] ?? "");
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");

@@ -339,7 +339,7 @@ class _PostDetailsState extends State<PostDetails> {
 
   void getComment() {
     var model = context.read<VBlogViewModel>();
-    model.getComment(int.parse(widget.post.postId)).then((value) {
+    model.getComment(widget.post.postId).then((value) {
       if (mounted) {
         setState(() {
           comments = value;
@@ -354,11 +354,11 @@ class _PostDetailsState extends State<PostDetails> {
     var uid = context.read<UserViewModel>().user!.userId;
     model
         .commentOnPost(
-      int.parse(widget.post.postId),
+      widget.post.postId,
       uid.toString(),
       e,
       userData: context.read<UserViewModel>().user!,
-      id: widget.post.firebaseAuthId,
+      id: widget.post.userId.toString(),
     )
         .then((value) {
       getComment();

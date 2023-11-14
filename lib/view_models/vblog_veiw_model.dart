@@ -2,9 +2,10 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:platterwave/common/base_view_model.dart';
+import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/data/network/vblog_services.dart';
 import 'package:platterwave/model/profile/user_data.dart';
 import 'package:platterwave/model/request_model/post_data.dart';
@@ -31,7 +32,7 @@ class VBlogViewModel extends BaseViewModel {
   List<UserProfile> following = [];
   List<Post> myLikes = [];
   String baseOn = "baselike";
-  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+//  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   List<AllTagRank> topTags = [];
   AppState reportAppState = AppState.idle;
@@ -60,15 +61,12 @@ class VBlogViewModel extends BaseViewModel {
         postAppState = AppState.idle;
         notifyListeners();
         if (data != null) {
-          var post = PostModel.fromJson(data as Map);
-          //posts=[];
+          var post = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
+          posts = post;
           if (restart) {
             posts = [];
           }
-          for (var element in post.allUsersPosts) {
-            posts.add(element);
-          }
-          if (post.allUsersPosts.length < 10) {
+          if (data["per_page"] > data["total"]) {
             postEnd = true;
           }
           notifyListeners();
@@ -98,15 +96,13 @@ class VBlogViewModel extends BaseViewModel {
 
   Future<List<Post>?> getMyPost() async {
     try {
-      var data = await vBlogService
-          .getUserPost(FirebaseAuth.instance.currentUser!.uid);
+      var data = await vBlogService.getUserPost(null);
       if (data != null) {
-        var p = PostModel.fromJson(data as Map);
-        myPosts = [];
-        for (var element in p.allUsersPosts) {
-          myPosts.add(element);
-        }
+        myPosts = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
         notifyListeners();
+        print("This is a single post ${myPosts[0].fullName}");
+        print("This is a single post ${myPosts.length}");
+
         return myPosts;
       }
     } catch (e) {
@@ -205,19 +201,19 @@ class VBlogViewModel extends BaseViewModel {
       FirebaseFirestore.instance
           .collection("likes")
           .doc("users")
-          .collection(FirebaseAuth.instance.currentUser!.uid)
+          .collection(LocalStorage.getUserId())
           .doc(p.postId.toString())
           .set(p.toJson());
-      var data = await vBlogService.likePost(
-          int.parse(p.postId), FirebaseAuth.instance.currentUser!.uid);
+      var data =
+          await vBlogService.likePost(p.postId, LocalStorage.getUserId());
       if (data != null) {
         addActivity(
-            p.firebaseAuthId,
+            p.userId.toString(),
             UserActivity(
-              id: p.postId,
+              id: p.postId.toString(),
               type: NotificationType.post.toString(),
               message: " liked your post",
-              firebaseAuthId: FirebaseAuth.instance.currentUser!.uid,
+              firebaseAuthId: LocalStorage.getUserId(),
               userName: userData.username,
               profilePic: userData.profileUrl,
             ));
@@ -239,7 +235,7 @@ class VBlogViewModel extends BaseViewModel {
                 id: postId.toString(),
                 type: NotificationType.post.toString(),
                 message: " commented on your post",
-                firebaseAuthId: FirebaseAuth.instance.currentUser!.uid,
+                firebaseAuthId: LocalStorage.getUserId(),
                 userName: userData.username,
                 profilePic: userData.profileUrl));
       }
@@ -251,7 +247,7 @@ class VBlogViewModel extends BaseViewModel {
 
   Future<dynamic> deletePost(Post post) async {
     try {
-      var data = await vBlogService.deletePost(int.parse(post.postId));
+      var data = await vBlogService.deletePost(post.postId);
       if (data != null) {
         posts.remove(post);
         myPosts.remove(post);
@@ -270,7 +266,7 @@ class VBlogViewModel extends BaseViewModel {
       required String postId}) async {
     try {
       var data = await vBlogService.replyToComment(
-          commentId, FirebaseAuth.instance.currentUser!.uid, comment);
+          commentId, LocalStorage.getUserId(), comment);
       if (data != null) {
         addActivity(
             id,
@@ -278,7 +274,7 @@ class VBlogViewModel extends BaseViewModel {
                 message: " replied to a comment on your post",
                 id: postId,
                 type: NotificationType.post.toString(),
-                firebaseAuthId: FirebaseAuth.instance.currentUser!.uid,
+                firebaseAuthId: LocalStorage.getUserId(),
                 userName: userData.username,
                 profilePic: userData.profileUrl));
       }
@@ -311,8 +307,7 @@ class VBlogViewModel extends BaseViewModel {
   }
 
   Future<String> uploadFile(String image) async {
-    var id = FirebaseAuth.instance.currentUser!.uid;
-    //var imageName = DateTime.now().millisecondsSinceEpoch;
+    var id = DateTime.now().toString();
     var imageName = RandomFunction.generateRandomStringWithRepetition();
     print("This is the date time image name $imageName");
     var storageReference =
@@ -376,10 +371,13 @@ class VBlogViewModel extends BaseViewModel {
           type = uploadedThumbnail!;
         }
       }
-      var post = postData.copyWith(contentUrl: contentUrl, contentType: type);
+      var post = postData.copyWith(
+          contentUrl: contentUrl,
+          contentType: type,
+          userId: LocalStorage.getUserId());
       var data = await vBlogService.createPost(post);
       if (data != null) {
-        handelTags(postData.contentPost, data["post_id"].toString());
+        //  handelTags(postData.contentPost, data["post_id"].toString());
       }
       postAppState = AppState.idle;
       notifyListeners();
@@ -396,8 +394,9 @@ class VBlogViewModel extends BaseViewModel {
       var data = await FirebaseFirestore.instance
           .collection("followers")
           .doc("users")
-          .collection(FirebaseAuth.instance.currentUser!.uid)
+          .collection(LocalStorage.getUserId())
           .get();
+
       myFellows = [];
       for (var v in data.docs) {
         myFellows.add(UserProfile.fromJson(v.data()));
@@ -414,8 +413,9 @@ class VBlogViewModel extends BaseViewModel {
       var data = await FirebaseFirestore.instance
           .collection("following")
           .doc("users")
-          .collection(FirebaseAuth.instance.currentUser!.uid)
+          .collection(LocalStorage.getUserId())
           .get();
+
       following = [];
       for (var v in data.docs) {
         following.add(UserProfile.fromJson(v.data()));
@@ -432,9 +432,10 @@ class VBlogViewModel extends BaseViewModel {
       var data = await FirebaseFirestore.instance
           .collection("likes")
           .doc("users")
-          .collection(FirebaseAuth.instance.currentUser!.uid)
+          .collection(LocalStorage.getUserId())
           .get();
       myLikes = [];
+
       for (var v in data.docs) {
         myLikes.add(Post.fromJson(v.data()));
         return myLikes;
@@ -451,7 +452,7 @@ class VBlogViewModel extends BaseViewModel {
       var data = await FirebaseFirestore.instance
           .collection("likes")
           .doc("users")
-          .collection(FirebaseAuth.instance.currentUser!.uid)
+          .collection(LocalStorage.getUserId())
           .get();
       List<Post> likes = [];
       for (var v in data.docs) {
@@ -475,15 +476,16 @@ class VBlogViewModel extends BaseViewModel {
           .collection("followers")
           .doc('users')
           .collection(uid)
-          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .doc(LocalStorage.getUserId())
           .set(users.toJson());
 
       FirebaseFirestore.instance
           .collection("following")
           .doc("users")
-          .collection(FirebaseAuth.instance.currentUser!.uid)
+          .collection(LocalStorage.getUserId())
           .doc(uid)
           .set(userToBeFollowed.toJson());
+
       following.add(users);
       notifyListeners();
       getFollowing();
@@ -493,7 +495,7 @@ class VBlogViewModel extends BaseViewModel {
           UserActivity(
               message: " started following you ",
               firebaseAuthId: uid,
-              id: FirebaseAuth.instance.currentUser!.uid,
+              id: LocalStorage.getUserId(),
               type: NotificationType.user.toString(),
               userName: users.username,
               profilePic: users.profileUrl));
@@ -513,14 +515,15 @@ class VBlogViewModel extends BaseViewModel {
           .collection("followers")
           .doc('users')
           .collection(uid)
-          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .doc(LocalStorage.getUserId())
           .delete();
       FirebaseFirestore.instance
           .collection("following")
           .doc("users")
-          .collection(FirebaseAuth.instance.currentUser!.uid)
+          .collection(LocalStorage.getUserId())
           .doc(uid)
           .delete();
+
       following.remove(users);
       notifyListeners();
       getFollowing();
@@ -534,7 +537,7 @@ class VBlogViewModel extends BaseViewModel {
     return d.isNotEmpty;
   }
 
-  bool checkIsLiked(String id) {
+  bool checkIsLiked(int id) {
     var d = myLikes.where((element) => element.postId == id);
     return d.isNotEmpty;
   }
@@ -620,7 +623,7 @@ class VBlogViewModel extends BaseViewModel {
   }
 
   addActivity(String id, UserActivity userActivity) {
-    if (id != FirebaseAuth.instance.currentUser!.uid) {
+    if (id != LocalStorage.getUserId()) {
       FirebaseFirestore.instance
           .collection("activity")
           .doc("users")
@@ -640,8 +643,8 @@ class VBlogViewModel extends BaseViewModel {
     FirebaseFirestore.instance
         .collection("savedPost")
         .doc("users")
-        .collection(FirebaseAuth.instance.currentUser!.uid)
-        .doc(post.postId)
+        .collection(LocalStorage.getUserId())
+        .doc(post.postId.toString())
         .set(post.toJson());
   }
 
@@ -649,7 +652,7 @@ class VBlogViewModel extends BaseViewModel {
     FirebaseFirestore.instance
         .collection("savedPost")
         .doc("users")
-        .collection(FirebaseAuth.instance.currentUser!.uid)
+        .collection(LocalStorage.getUserId())
         .doc(postId)
         .delete();
   }
@@ -714,8 +717,7 @@ class VBlogViewModel extends BaseViewModel {
         }
       }
       if (jsonTag.isNotEmpty) {
-        vBlogService.createTags(
-            jsonTag, postId, FirebaseAuth.instance.currentUser!.uid);
+        vBlogService.createTags(jsonTag, postId, LocalStorage.getUserId());
       }
     }
   }

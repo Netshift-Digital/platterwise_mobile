@@ -17,11 +17,9 @@ class SavedPostTile extends StatelessWidget {
   final void Function()? onTap;
   final void Function()? onOptionsTap;
   final Post post;
-  const SavedPostTile({
-    Key? key,
-    this.onTap,
-    this.onOptionsTap, required this.post
-  }) : super(key: key);
+  const SavedPostTile(
+      {Key? key, this.onTap, this.onOptionsTap, required this.post})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,67 +29,67 @@ class SavedPostTile extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 20.w),
         width: double.infinity,
         decoration: BoxDecoration(
-          color: AppColor.g20,
-          borderRadius: BorderRadius.circular(10)
-        ),
+            color: AppColor.g20, borderRadius: BorderRadius.circular(10)),
         child: Padding(
           padding: const EdgeInsets.all(2.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-          post.contentType==PostType.text?
-           const SizedBox():post.contentType==PostType.image? Padding(
-            padding: EdgeInsets.only(
-                top: 20.h,
-                left: 20.w,
-                bottom: 20.h
-            ),
-            child: ImageCacheR(
-                topBottom: 4,
-                topRadius: 4,
-                height: 64.h,
-                chachedImage: true,
-                width: 113.w,
-                post.contentUrl
-            ),
-          ): Padding(
-            padding: EdgeInsets.only(
-                top: 20.h,
-                left: 20.w,
-                bottom: 20.h
-            ),
-            child: videoWid(),
-          ),
-              const SizedBox(width:12 ,),
+              post.contentType == PostType.text
+                  ? const SizedBox()
+                  : post.contentType == PostType.image
+                      ? Padding(
+                          padding: EdgeInsets.only(
+                              top: 20.h, left: 20.w, bottom: 20.h),
+                          child: ImageCacheR(
+                              topBottom: 4,
+                              topRadius: 4,
+                              height: 64.h,
+                              chachedImage: true,
+                              width: 113.w,
+                              post.contentUrl),
+                        )
+                      : Padding(
+                          padding: EdgeInsets.only(
+                              top: 20.h, left: 20.w, bottom: 20.h),
+                          child: videoWid(),
+                        ),
+              const SizedBox(
+                width: 12,
+              ),
               Expanded(
                 child: SizedBox(
-
                   child: Padding(
-                    padding:const EdgeInsets.symmetric(vertical: 20.0),
+                    padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children:  [
+                      children: [
                         Text(
                           post.contentPost,
                           overflow: TextOverflow.ellipsis,
                           softWrap: true,
                           maxLines: 2,
                         ),
-                       const SizedBox(height: 8,),
-                        Text(post.username,style: AppTextTheme.h4.copyWith(
-                          fontSize: 12,
-                          color: AppColor.g900
-                        ),)
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          post.username,
+                          style: AppTextTheme.h4
+                              .copyWith(fontSize: 12, color: AppColor.g900),
+                        )
                       ],
                     ),
                   ),
                 ),
               ),
-              SizedBox(width: 21.w,),
+              SizedBox(
+                width: 21.w,
+              ),
               Padding(
-                padding:const EdgeInsets.only(),
+                padding: const EdgeInsets.only(),
                 child: InkWell(
                   onTap: onOptionsTap,
                   child: Column(
@@ -101,19 +99,19 @@ class SavedPostTile extends StatelessWidget {
                         itemBuilder: (context) => [
                           PopupMenuItem(
                             value: 2,
-                            onTap: (){
-                              context.read<VBlogViewModel>()
-                                  .deleteSavePost(post.postId);
+                            onTap: () {
+                              context
+                                  .read<VBlogViewModel>()
+                                  .deleteSavePost(post.postId.toString());
                             },
                             // row has two child icon and text
-                            child:  const Text("Delete"),
+                            child: const Text("Delete"),
                           )
                         ],
                         // offset:const Offset(0, 100),
                         // color: Colors.grey,
                         //elevation: 2,
                       ),
-
                     ],
                   ),
                 ),
@@ -125,28 +123,39 @@ class SavedPostTile extends StatelessWidget {
     );
   }
 
-
-  Widget  videoWid() {
+  Widget videoWid() {
     return Container(
       height: 64.h,
       width: 100.w,
       decoration: BoxDecoration(
           color: AppColor.p300,
           borderRadius: BorderRadius.circular(15),
-          shape: BoxShape.rectangle
-      ),
-      child:Stack(
+          shape: BoxShape.rectangle),
+      child: Stack(
         children: [
-          TextValidator.isValidUrl(post.contentType)?ImageCacheR(post.contentType,fit: true,chachedImage: true,)
-              :const ImageCacheR("https://www.balmoraltanks.com/images/common/video-icon-image.jpg",chachedImage: true,),
-          TextValidator.isValidUrl(post.contentType)?SizedBox(
-              height: 239.h,
-              width: 343.w,
-              child: const Center(child:  Icon(Icons.play_circle_outline_rounded,color: Colors.white,size: 50,)))
-              :const SizedBox()
+          TextValidator.isValidUrl(post.contentType)
+              ? ImageCacheR(
+                  post.contentType,
+                  fit: true,
+                  chachedImage: true,
+                )
+              : const ImageCacheR(
+                  "https://www.balmoraltanks.com/images/common/video-icon-image.jpg",
+                  chachedImage: true,
+                ),
+          TextValidator.isValidUrl(post.contentType)
+              ? SizedBox(
+                  height: 239.h,
+                  width: 343.w,
+                  child: const Center(
+                      child: Icon(
+                    Icons.play_circle_outline_rounded,
+                    color: Colors.white,
+                    size: 50,
+                  )))
+              : const SizedBox()
         ],
       ),
     );
   }
 }
-

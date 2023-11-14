@@ -62,6 +62,7 @@ class UserService {
         LocalStorage.saveToken(token);
         LocalStorage.saveLoginTime();
         LocalStorage.saveEmail(data["data"]["original"]["email"]);
+        LocalStorage.saveUserId(data["data"]["original"]["id"]);
         LocalStorage.saveUser(data["data"]["original"]);
         return data;
       } else {

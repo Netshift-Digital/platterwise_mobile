@@ -79,11 +79,11 @@ class _PostLikeState extends State<PostLike> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         nav(
                           context,
                           ViewUserProfileScreen(
-                            id: data.firebaseAuthID??"",
+                            id: data.firebaseAuthID ?? "",
                           ),
                         );
                       },
@@ -105,8 +105,8 @@ class _PostLikeState extends State<PostLike> {
                                     height: 52,
                                   ),
                             const SizedBox(width: 8),
-                             Text(
-                              data.fullName??'',
+                            Text(
+                              data.fullName ?? '',
                               style: const TextStyle(
                                 color: Color(0xFF5C5C5C),
                                 fontSize: 14,
@@ -133,7 +133,7 @@ class _PostLikeState extends State<PostLike> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context
           .read<VBlogViewModel>()
-          .getLikeUser(int.parse(widget.post.postId))
+          .getLikeUser(widget.post.postId)
           .then((value) {
         if (mounted) {
           setState(() {

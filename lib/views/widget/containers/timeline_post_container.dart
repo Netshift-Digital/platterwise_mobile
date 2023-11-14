@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 import 'package:like_button/like_button.dart';
 import 'package:platterwave/constant/post_type.dart';
+import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
@@ -73,7 +74,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                     nav(
                       context,
                       ViewUserProfileScreen(
-                        id: widget.post.firebaseAuthId,
+                        id: widget.post.userId.toString(),
                       ),
                     );
                   },
@@ -95,7 +96,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                         nav(
                           context,
                           ViewUserProfileScreen(
-                            id: widget.post.firebaseAuthId,
+                            id: widget.post.userId.toString(),
                           ),
                         );
                       },
@@ -144,7 +145,8 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                 PopupMenuButton<int>(
                   onSelected: (e) {
                     if (e == 1) {
-                      nav(context, ReportPost(postId: widget.post.postId));
+                      nav(context,
+                          ReportPost(postId: widget.post.postId.toString()));
                     } else if (e == 3) {
                       CustomAlert(
                           context: context,
@@ -177,8 +179,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                         ],
                       ),
                     ),
-                    FirebaseAuth.instance.currentUser!.uid ==
-                            widget.post.firebaseAuthID
+                    LocalStorage.getUserId() == widget.post.userId
                         ? PopupMenuItem(
                             value: 3,
                             onTap: () {},

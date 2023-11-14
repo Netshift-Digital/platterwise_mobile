@@ -11,20 +11,19 @@ String postDataToJson(PostData data) => json.encode(data.toJson());
 
 class PostData {
   PostData({
-   required this.userId,
+    required this.userId,
     required this.contentPost,
     required this.contentType,
     required this.contentUrl,
   });
 
-  int userId;
+  String userId;
   String contentPost;
   String contentType;
   String contentUrl;
 
-
   PostData copyWith({
-    int? userId,
+    String? userId,
     String? contentPost,
     String? contentType,
     String? contentUrl,
@@ -37,16 +36,16 @@ class PostData {
       );
 
   factory PostData.fromJson(Map<String, dynamic> json) => PostData(
-    userId: json["user_id"],
-    contentPost: json["content_post"],
-    contentType: json["content_type"],
-    contentUrl: json["contentUrl"],
-  );
+        userId: json["user_id"],
+        contentPost: json["content_post"],
+        contentType: json["content_type"],
+        contentUrl: json["contentUrl"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "user_id": userId,
-    "content_post": contentPost,
-    "content_type": contentType,
-    "contentUrl": contentUrl,
-  };
+        "user_id": userId,
+        "content_post": contentPost,
+        "content_type": contentType,
+        "contentUrl": contentUrl,
+      };
 }

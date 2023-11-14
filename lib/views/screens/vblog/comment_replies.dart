@@ -273,8 +273,8 @@ class _CommentReplyState extends State<CommentReply> {
     model
         .replyToComment(int.parse(widget.usersComment.commentId), e,
             userData: context.read<UserViewModel>().user!,
-            id: widget.post.firebaseAuthId,
-            postId: widget.post.postId)
+            id: widget.post.userId.toString(),
+            postId: widget.post.postId.toString())
         .then((value) {
       getComment();
     });
