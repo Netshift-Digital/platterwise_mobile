@@ -488,21 +488,23 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> getPaidGuest(String id) async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      'reserv_id': id
-    });
+    var body = jsonEncode({'reservation_id': "$id"});
+    var token = LocalStorage.getToken();
+
     try {
       var response = await client.post(
-          Uri.parse("${baseurl2}get_paid_guests.php"),
+          Uri.parse("${baseurl3}transactions/reservation"),
           body: body,
           headers: {
             "Content-type": "application/json",
-          }).timeout(const Duration(seconds: 10));
+            "Authorization": "Bearer $token"
+          }).timeout(const Duration(seconds: 15));
       var data = jsonDecode(response.body);
-      //RandomFunction.toast(data['status']);
-      if (response.statusCode == 200) {
-        return data;
+      print("This is the paid guest $data");
+      if (data["status_code"] == 200 && data["success"] == true) {
+        return data["data"];
+      } else {
+        RandomFunction.toast(data["response"]);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");

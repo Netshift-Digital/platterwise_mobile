@@ -276,7 +276,7 @@ class RestaurantViewModel extends BaseViewModel {
   Future<String?> getTransactionID(String id, num bill) async {
     try {
       setState(AppState.busy);
-   //   var data = await restaurantService.getTransactionID(id, bill);
+      //   var data = await restaurantService.getTransactionID(id, bill);
       setState(AppState.idle);
       return "";
     } catch (e) {
@@ -295,6 +295,7 @@ class RestaurantViewModel extends BaseViewModel {
       }
     } catch (e) {
       setState(AppState.idle);
+      print(e.toString());
       RandomFunction.toast('Something went wrong');
     }
     return null;
@@ -320,7 +321,8 @@ class RestaurantViewModel extends BaseViewModel {
       var data = await restaurantService.getPaidGuest(id);
       setState(AppState.idle);
       if (data != null) {
-        return PaidGuest.fromJson(data).allPaidList;
+        return List<AllPaidList>.from(
+            data["data"].map((x) => AllPaidList.fromJson(x)));
       }
     } catch (e) {
       setState(AppState.idle);

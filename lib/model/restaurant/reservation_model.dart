@@ -112,7 +112,8 @@ class ReservationBill {
       {required this.grandPrice, required this.billPix, this.status});
 
   ReservationBill.fromJson(Map<String, dynamic> json) {
-    grandPrice = json['total_bill'] ?? "0";
+    grandPrice =
+        json['total_bill'] == null ? "0" : json['total_bill'].toString();
     billPix = json['set_picture'] ?? "";
     status = json['status'] ?? 0;
   }

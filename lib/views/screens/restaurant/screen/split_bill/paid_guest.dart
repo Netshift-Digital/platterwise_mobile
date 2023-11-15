@@ -140,7 +140,9 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(6.0),
                                           child: Text(
-                                            data.totalBill.toCurrency(),
+                                            data.totalBill
+                                                .toString()
+                                                .toCurrency(),
                                           ),
                                         ),
                                       ),
@@ -183,7 +185,6 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
@@ -201,7 +202,7 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
       setState(() {
         paidGuest = value;
         for (var e in value) {
-          amountPaid = amountPaid + (num.tryParse(e.totalBill) ?? 0);
+          amountPaid = amountPaid + ((e.totalBill));
         }
         print(amountPaid);
       });
