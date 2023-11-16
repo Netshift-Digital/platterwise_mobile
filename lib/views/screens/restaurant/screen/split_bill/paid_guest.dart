@@ -74,7 +74,7 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
                     height: 8,
                   ),
                   Text(
-                    amount.toString().toCurrency(),
+                    widget.userReservation.bill!.grandPrice.toCurrency(),
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
@@ -115,6 +115,9 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
                             ),
                             itemBuilder: (context, index) {
                               var data = paidGuest![index];
+                              print("This is the data ${data.guestEmail}");
+                              print("This is the data ${data.totalBill}");
+                              print("This is the data ${data.guestName}");
                               return Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 10),
@@ -150,10 +153,12 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
                                       leading: SvgPicture.asset(
                                         'assets/images/avater.svg',
                                       ),
-                                      subtitle: Text(data.guestEmail
-                                          .capitalizeFirstChar()),
+                                      subtitle: Text(data.guestEmail),
                                       title: Text(
-                                        data.guestName.capitalizeFirstChar(),
+                                        data.guestName.isEmpty
+                                            ? data.guestName
+                                            : data.guestName
+                                                .capitalizeFirstChar(),
                                       ),
                                     ),
                                   ),
@@ -189,7 +194,6 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
         getPaidGuest(context);
-        //   getMoneyGuest(context);
       },
     );
   }
@@ -204,20 +208,7 @@ class _PaidGuestScreenState extends State<PaidGuestScreen> {
         for (var e in value) {
           amountPaid = amountPaid + ((e.totalBill));
         }
-        print(amountPaid);
       });
     }
   }
-
-  /*Future<void> getMoneyGuest(BuildContext context) async {
-    var model = context.read<RestaurantViewModel>();
-    var value = await model.getReservationBill(widget.userReservation.reservId.toString());
-    if (value != null) {
-      if (mounted) {
-        setState(() {
-          amount = num.parse((value.grandPrice ?? "0"));
-        });
-      }
-    }
-  }*/
 }

@@ -488,7 +488,7 @@ class RestaurantService {
   }
 
   Future<Map<String, dynamic>?> getPaidGuest(String id) async {
-    var body = jsonEncode({'reservation_id': "$id"});
+    var body = jsonEncode({'reservation_id': id});
     var token = LocalStorage.getToken();
 
     try {

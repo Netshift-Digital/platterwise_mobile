@@ -321,12 +321,16 @@ class RestaurantViewModel extends BaseViewModel {
       var data = await restaurantService.getPaidGuest(id);
       setState(AppState.idle);
       if (data != null) {
-        return List<AllPaidList>.from(
+        final res = List<AllPaidList>.from(
             data["data"].map((x) => AllPaidList.fromJson(x)));
+
+        print(res.length);
+        return res;
       }
     } catch (e) {
       setState(AppState.idle);
-      //RandomFunction.toast('Something went wrong');
+      print(e.toString());
+      RandomFunction.toast('Something went wrong');
     }
     return [];
   }

@@ -105,16 +105,22 @@ class RestDetail {
 
 class ReservationBill {
   String grandPrice = "";
+  String amountPaid = "";
   String billPix = "";
   int? status;
 
   ReservationBill(
-      {required this.grandPrice, required this.billPix, this.status});
+      {required this.grandPrice,
+      required this.billPix,
+      this.status,
+      required this.amountPaid});
 
   ReservationBill.fromJson(Map<String, dynamic> json) {
     grandPrice =
         json['total_bill'] == null ? "0" : json['total_bill'].toString();
     billPix = json['set_picture'] ?? "";
     status = json['status'] ?? 0;
+    amountPaid =
+        json['amount_paid'] == null ? "0" : json['amount_paid'].toString();
   }
 }

@@ -54,7 +54,7 @@ class AllPaidList {
         transactionId: json["payment_ref"] ?? "",
         reservId: json["reservation_id"] ?? 0,
         guestName: json["guest_name"] ?? "",
-        guestEmail: json["guest_email"] ?? "",
+        guestEmail: json["email"] ?? "",
         totalBill: json["amount_paid"] != null ? json["amount_paid"] / 100 : 0,
         modeOfPayment: json["payment_type"] ?? "",
         channel: json["channel"] ?? "",

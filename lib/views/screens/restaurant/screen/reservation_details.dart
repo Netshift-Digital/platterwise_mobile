@@ -266,7 +266,11 @@ class _ReservationDetailsState extends State<ReservationDetails> {
   }
 
   Widget getButton(BuildContext context) {
-    if (widget.userReservation!.reservationStatus == 4) {
+    num amountPaid = 0;
+    if (widget.userReservation!.bill != null) {
+      amountPaid = num.parse(widget.userReservation!.bill!.amountPaid);
+    }
+    if (widget.userReservation!.reservationStatus == 4 || amountPaid > 0) {
       return PlatButton(
         title: "View payment Status",
         onTap: () {
