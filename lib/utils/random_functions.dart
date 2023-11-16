@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:platterwave/utils/working_days_parser.dart';
 
 class RandomFunction {
   static toast(String msg, {bool isError = false}) {
@@ -114,12 +115,14 @@ class RandomFunction {
     return (whole * percent) / 100;
   }
 
-  static Future<DateTime?> showDateTimePicker({
-    required BuildContext context,
-    DateTime? initialDate,
-    DateTime? firstDate,
-    DateTime? lastDate,
-  }) async {
+  static Future<DateTime?> showDateTimePicker(
+      {required BuildContext context,
+      DateTime? initialDate,
+      DateTime? firstDate,
+      DateTime? lastDate,
+      required String workingDays,
+      required String openingTime,
+      required String closingTime}) async {
     initialDate ??= DateTime.now();
     firstDate ??= initialDate.subtract(const Duration(days: 365 * 100));
     lastDate ??= firstDate.add(const Duration(days: 365 * 200));
@@ -130,9 +133,14 @@ class RandomFunction {
       firstDate: firstDate,
       lastDate: lastDate,
     );
-
+    print("These are the working days $workingDays");
+    final days = WorkingDaysParser.getDaysOfWeek(workingDays);
     if (selectedDate == null ||
         selectedDate.isBefore(DateTime.now().subtract(Duration(days: 1)))) {
+      return null;
+    }
+    if (!days.contains(selectedDate.weekday)) {
+      toast("Wrong Working Day selected");
       return null;
     }
     if (!context.mounted) return selectedDate;
@@ -141,6 +149,21 @@ class RandomFunction {
       context: context,
       initialTime: TimeOfDay.fromDateTime(selectedDate),
     );
+
+    var openingHour = convertStringToTimeOfDay(openingTime);
+    var closingHour = convertStringToTimeOfDay(closingTime);
+
+    if (selectedTime!.period == DayPeriod.pm) {
+      if (selectedTime.hour > closingHour!.hour + 12) {
+        toast("Wrong Working Time selected");
+        return null;
+      }
+    } else {
+      if (selectedTime.hour < openingHour!.hour) {
+        toast("Wrong Working Time selected");
+        return null;
+      }
+    }
 
     return selectedTime == null
         ? selectedDate
@@ -152,4 +175,17 @@ class RandomFunction {
             selectedTime.minute,
           );
   }
+}
+
+TimeOfDay? convertStringToTimeOfDay(String timeString) {
+  List<String> parts = timeString.split(':');
+
+  // Ensure that the string has three parts (hours, minutes, seconds)
+  if (parts.length == 3) {
+    int hours = int.parse(parts[0]);
+    int minutes = int.parse(parts[1]);
+
+    return TimeOfDay(hour: hours, minute: minutes);
+  }
+  return null;
 }

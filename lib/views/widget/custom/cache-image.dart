@@ -80,7 +80,7 @@ class ImageCacheR extends StatelessWidget {
         borderRadius: radius,
         child: CachedNetworkImage(
           imageUrl: "image",
-          //  cacheManager: CustomCacheManager.instance,
+          cacheManager: CustomCacheManager.instance,
           placeholder: (context, url) => Container(
             height: height,
             width: width,
@@ -92,6 +92,10 @@ class ImageCacheR extends StatelessWidget {
           ),
           height: height,
           width: width,
+          memCacheWidth: width.toInt(),
+          memCacheHeight: height.toInt(),
+          maxHeightDiskCache: height.toInt(),
+          maxWidthDiskCache: width.toInt(),
           key: UniqueKey(),
           filterQuality: FilterQuality.none,
           fadeInDuration: Duration.zero,
@@ -99,6 +103,15 @@ class ImageCacheR extends StatelessWidget {
           repeat: ImageRepeat.repeat,
           colorBlendMode: BlendMode.darken,
           color: blend > 0 ? Colors.black.withOpacity(blend) : null,
+          /* imageBuilder: (context, provider) => Container(
+            width: width,
+            height: height,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: provider, fit: fit ? BoxFit.cover : BoxFit.scaleDown),
+              borderRadius: radius,
+            ),
+          ),*/
           errorWidget: (context, url, error) => Container(
             width: width,
             height: height,

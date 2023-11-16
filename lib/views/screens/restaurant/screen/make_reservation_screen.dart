@@ -66,7 +66,12 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    RandomFunction.showDateTimePicker(context: context).then(
+                    RandomFunction.showDateTimePicker(
+                            context: context,
+                            workingDays: widget.restaurantData.days,
+                            openingTime: widget.restaurantData.openingHour,
+                            closingTime: widget.restaurantData.closingHour)
+                        .then(
                       (value) {
                         if (value != null) {
                           dateTime = value;

@@ -34,6 +34,7 @@ class RestaurantData {
       required this.localGovt,
       required this.landmark,
       required this.rating,
+      required this.closingHour,
       required this.banner,
       required this.descriptions,
       required this.coverPic,
@@ -58,6 +59,7 @@ class RestaurantData {
   String descriptions;
   String coverPic;
   String openingHour;
+  String closingHour;
   String days;
   String email;
   String phone;
@@ -79,6 +81,7 @@ class RestaurantData {
         descriptions: json["descriptions"] ?? "",
         coverPic: json["cover_pic"] ?? "",
         openingHour: json["opening_hour"] ?? "",
+        closingHour: json["closing_hour"] ?? "",
         days: json["working_days"] ?? "",
         email: json["email"] ?? "",
         phone: json["phone"] ?? "",
