@@ -179,9 +179,6 @@ class _RateExperienceScreenState extends State<RateExperienceScreen> {
                           appState = AppState.idle;
                         });
                       });
-                      // if(controller.text.isNotEmpty){
-                      //
-                      // }
                     },
                   ),
                   SizedBox(

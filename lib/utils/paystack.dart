@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
-import 'package:pay_with_paystack/pay_with_paystack.dart';
+//import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
+//import 'package:pay_with_paystack/pay_with_paystack.dart';
 import 'package:platterwave/utils/random_functions.dart';
 
 import '../data/local/local_storage.dart';
 
+/*
 class PayStackPayment {
 //pk_test_4df123d7c9cbf1c84bf49dfb96c1892e74aa649e
 //pk_live_e24730c309b966bf9964887f7d83381ea3d559a0
@@ -71,3 +72,4 @@ class PayStackPayment {
     return null;
   }
 }
+*/

@@ -67,13 +67,14 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   omni_datetime_picker:
   barcode_widget: ^2.0.3
+  webview_flutter: ^4.2.2
   currency_formatter: ^1.2.0
   liquid_pull_to_refresh: ^3.0.1
   carousel_slider: ^4.2.1
   location_picker_flutter_map:
   geolocator: ^9.0.2
   geocoding: ^2.0.5
-  flutter_paystack_payment_plus:
+  #flutter_paystack_payment_plus:
   http:
   number_inc_dec: ^0.8.0
   awesome_place_search: ^1.0.7
@@ -84,7 +85,7 @@ dependencies:
   google_maps_webservice_ex: ^0.0.1+2
   date_time_picker: ^2.1.0
   photo_view: ^0.14.0
-  pay_with_paystack: 1.0.2
+  #pay_with_paystack: 1.0.2
   dio: ^5.2.1+1
   firebase_cached_image: ^0.4.4
   #disposable_cached_images: ^1.2.1

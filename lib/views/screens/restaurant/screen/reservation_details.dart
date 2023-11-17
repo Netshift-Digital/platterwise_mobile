@@ -1,6 +1,7 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
@@ -93,7 +94,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                             ),
                             title: Text(widget.userReservation!.username),
                             subtitle: Text(
-                              'Host ID: ',
+                              'Host ID: ${widget.userReservation!.restId}',
                             ),
                           ),
                         ),

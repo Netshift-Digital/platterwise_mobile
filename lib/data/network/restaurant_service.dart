@@ -10,6 +10,7 @@ import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';
 import 'package:platterwave/constant/endpoint.dart';
 import 'package:platterwave/model/failure.dart';
 import 'package:platterwave/model/request_model/split_bill_model.dart';
+import 'package:platterwave/model/restaurant/reservation_model.dart';
 import 'package:platterwave/model/restaurant/reservation_param.dart';
 import 'package:platterwave/utils/random_functions.dart';
 
@@ -360,21 +361,37 @@ class RestaurantService {
     return null;
   }
 
-  Future<String?> getTransactionID(String id, num bill) async {
+  Future<Map<String, dynamic>?> getTransactionID(UserReservation res) async {
     var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      'reserv_id': id,
-      "owner_bill": bill.toString()
+      "reservation_id": "${res.reservId}",
+      "total_amount": "${res.bill?.grandPrice}",
+      "guests": [
+        {
+          "guest_email": "${res.allGuestInfo[0].guestEmail}",
+          "bill": "${res.bill?.grandPrice}",
+          "type": "owner",
+          "guest_name": "${res.allGuestInfo[0].guestName}"
+        }
+      ]
     });
+    print("This is the body $body");
+    var token = LocalStorage.getToken();
+
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl2}single_bill.php"), body: body, headers: {
-        "Content-type": "application/json",
-      }).timeout(const Duration(seconds: 10));
+      var response = await client.post(
+        Uri.parse("${baseurl3}reservation/split-bills"),
+        body: body,
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+      ).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
-      print(data);
-      if (response.statusCode == 200) {
-        return data['transactionId'];
+      print("This is the result after getting ref bills $data");
+      if (data["status_code"] == 200 && data["success"] == true) {
+        return data;
+      } else {
+        RandomFunction.toast(data["response"]);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");

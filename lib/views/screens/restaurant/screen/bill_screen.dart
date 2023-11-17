@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_image_viewer/gallery_image_viewer.dart';
-import 'package:platterwave/model/restaurant/reservation_bill.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
 import 'package:platterwave/res/color.dart';
+import 'package:platterwave/utils/enum/app_state.dart';
 import 'package:platterwave/utils/extension.dart';
-import 'package:platterwave/utils/paystack.dart';
+import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/select_split.dart';
@@ -13,6 +13,8 @@ import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:provider/provider.dart';
+
+import 'single_payment_screen.dart';
 
 class BillScreen extends StatelessWidget {
   final UserReservation userReservation;
@@ -141,57 +143,93 @@ class BillScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: PlatButton(
-                        appState: context.watch<RestaurantViewModel>().appState,
-                        title: "Pay Entire Bill",
-                        onTap: () {
-                          var amount =
-                              num.parse(userReservation.bill!.grandPrice)
-                                  .toInt();
-                          context
-                              .read<RestaurantViewModel>()
-                              .getTransactionID(
-                                  userReservation.reservId.toString(), amount)
-                              .then((value) {
-                            if (value != null) {
-                              PayStackPayment.makePayment(
-                                amount,
-                                userReservation.reservId.toString(),
-                                context,
-                                txnId: value,
-                              ).then((value) {
-                                if (value == true) {
-                                  Navigator.pop(context);
-                                }
-                              });
-                            }
-                          });
-                        }),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                    child: PlatButton(
-                      title: "Split Bill",
-                      color: AppColor.g100,
+              userReservation.allGuestInfo.length == 1
+                  ? PlatButton(
+                      appState: context.watch<RestaurantViewModel>().appState,
+                      title: "Pay Entire Bill",
                       onTap: () {
-                        RandomFunction.sheet(
-                            context,
-                            SelectSplit(
-                              getPaidGuest: () {
-                                Navigator.pop(context, true);
-                              },
-                              userReservation: userReservation,
-                            ));
-                      },
+                        context
+                            .read<RestaurantViewModel>()
+                            .getTransactionID(userReservation)
+                            .then((value) {
+                          if (value != null) {
+                            context
+                                .read<RestaurantViewModel>()
+                                .setState(AppState.idle);
+                            nav(
+                                context,
+                                SinglePaymentScreen(
+                                  txn: value,
+                                ));
+                            /*  PayStackPayment.makePayment(
+                              amount,
+                              userReservation.reservId.toString(),
+                              context,
+                              txnId: value.ref,
+                            ).then((value) {
+                              if (value == true) {
+                                Navigator.pop(context);
+                              }
+                            });*/
+                          }
+                        });
+                      })
+                  : Row(
+                      children: [
+                        Expanded(
+                          child: PlatButton(
+                              appState:
+                                  context.watch<RestaurantViewModel>().appState,
+                              title: "Pay Entire Bill",
+                              onTap: () {
+                                context
+                                    .read<RestaurantViewModel>()
+                                    .getTransactionID(userReservation)
+                                    .then((value) {
+                                  if (value != null) {
+                                    context
+                                        .read<RestaurantViewModel>()
+                                        .setState(AppState.idle);
+                                    nav(
+                                        context,
+                                        SinglePaymentScreen(
+                                          txn: value,
+                                        ));
+                                    /* PayStackPayment.makePayment(
+                                      amount,
+                                      userReservation.reservId.toString(),
+                                      context,
+                                      txnId: value.ref,
+                                    ).then((value) {
+                                      if (value == true) {
+                                        Navigator.pop(context);
+                                      }
+                                    });*/
+                                  }
+                                });
+                              }),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                          child: PlatButton(
+                            title: "Split Bill",
+                            color: AppColor.g100,
+                            onTap: () {
+                              RandomFunction.sheet(
+                                  context,
+                                  SelectSplit(
+                                    getPaidGuest: () {
+                                      Navigator.pop(context, true);
+                                    },
+                                    userReservation: userReservation,
+                                  ));
+                            },
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
               const SizedBox(
                 height: 40,
               ),

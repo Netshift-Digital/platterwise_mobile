@@ -170,7 +170,6 @@ class RestaurantViewModel extends BaseViewModel {
         notifyListeners();
       }
     } catch (e) {
-      print("Error parsing data,");
       print(e.toString());
     }
     return userReservation;
@@ -199,7 +198,7 @@ class RestaurantViewModel extends BaseViewModel {
       var data = await restaurantService.addReview(
           resId: resId, review: review, rate: rate);
       if (data != null) {
-        getRestaurantById(int.parse(resId));
+        //  getRestaurantById(int.parse(resId));
       }
     } catch (e) {
       setReviewState(AppState.idle);
@@ -255,30 +254,14 @@ class RestaurantViewModel extends BaseViewModel {
     return false;
   }
 
-/*  Future<ReservationBill?> getReservationBill(String id) async {
+  Future<SingleTransactionId?> getTransactionID(UserReservation id) async {
     try {
       setState(AppState.busy);
-      var data = await restaurantService.getBill(id);
-      setState(AppState.idle);
+      var data = await restaurantService.getTransactionID(id);
       if (data != null) {
-        var bill = ReservationBillElement.fromJson(data).reservationBill?.first;
-        if (bill?.grandPrice != null) {
-          return bill;
-        }
+        return SingleTransactionId.fromJson(data["data"]);
       }
-    } catch (e) {
       setState(AppState.idle);
-      // RandomFunction.toast('Something went wrong');
-    }
-    return null;
-  }
-*/
-  Future<String?> getTransactionID(String id, num bill) async {
-    try {
-      setState(AppState.busy);
-      //   var data = await restaurantService.getTransactionID(id, bill);
-      setState(AppState.idle);
-      return "";
     } catch (e) {
       setState(AppState.idle);
       RandomFunction.toast('Something went wrong');

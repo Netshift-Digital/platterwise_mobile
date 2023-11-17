@@ -124,3 +124,18 @@ class ReservationBill {
         json['amount_paid'] == null ? "0" : json['amount_paid'].toString();
   }
 }
+
+class SingleTransactionId {
+  String authUrl = "";
+  String accessCode = "";
+  String ref = "";
+
+  SingleTransactionId(
+      {required this.authUrl, required this.accessCode, required this.ref});
+
+  SingleTransactionId.fromJson(Map<String, dynamic> json) {
+    authUrl = json['authorization_url'] ?? "";
+    accessCode = json['access_code'] ?? "";
+    ref = json['reference'] ?? "";
+  }
+}
