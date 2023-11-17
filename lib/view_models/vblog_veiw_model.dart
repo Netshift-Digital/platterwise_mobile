@@ -83,12 +83,13 @@ class VBlogViewModel extends BaseViewModel {
 
   Future<List<Post>?> getLikedPost(String id) async {
     try {
-      var data = await vBlogService.getLikedPost(id);
+      var data = await vBlogService.getLikedPost(1);
       if (data != null) {
-        var post = PostModel.fromJson(data as Map);
-        return post.allUsersPosts;
+        var post = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
+        return post;
       }
     } catch (e) {
+      print(e.toString());
       setState(AppState.idle);
     }
     return null;
@@ -204,8 +205,7 @@ class VBlogViewModel extends BaseViewModel {
           .collection(LocalStorage.getUserId())
           .doc(p.postId.toString())
           .set(p.toJson());
-      var data =
-          await vBlogService.likePost(p.postId, LocalStorage.getUserId());
+      var data = await vBlogService.likePost(p.postId);
       if (data != null) {
         addActivity(
             p.userId.toString(),
@@ -223,7 +223,6 @@ class VBlogViewModel extends BaseViewModel {
     }
   }
 
-  // ignore: non_constant_identifier_names
   Future<dynamic> commentOnPost(int postId, String uid, String comment,
       {required UserProfile userData, required String id}) async {
     try {

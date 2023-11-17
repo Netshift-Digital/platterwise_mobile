@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/widget/containers/empty_content_container.dart';
@@ -47,22 +47,21 @@ class _ViewLikesPageState extends State<ViewLikesPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.delayed(const Duration(milliseconds: 10), () async {
-      var id = widget.id ?? FirebaseAuth.instance.currentUser!.uid;
+      var id = widget.id ?? LocalStorage.getUserId();
       if (lastId != id) {
         setState(() {
           postList = [];
         });
         var blogModel = context.read<VBlogViewModel>();
-        var data = await blogModel
-            .getLikedPost(widget.id ?? FirebaseAuth.instance.currentUser!.uid);
+        var data =
+            await blogModel.getLikedPost(widget.id ?? LocalStorage.getUserId());
         if (data != null) {
           if (mounted) {
             setState(() {
               postList = data;
-              lastId = widget.id ?? FirebaseAuth.instance.currentUser!.uid;
+              lastId = widget.id ?? LocalStorage.getUserId();
             });
           }
         }

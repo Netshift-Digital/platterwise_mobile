@@ -16,7 +16,8 @@ class VBlogService {
   Future<Map<String, dynamic>?> getPost(int pageIndex) async {
     var token = LocalStorage.getToken();
     try {
-      var response = await client.get(Uri.parse("${baseurl3}post/all-posts"),
+      var response = await client.get(
+          Uri.parse("${baseurl3}post/all-posts?page=${pageIndex}"),
           headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer $token"
@@ -39,20 +40,20 @@ class VBlogService {
     return null;
   }
 
-  Future<dynamic> getLikedPost(String id) async {
-    var body = jsonEncode({"firebaseAuthID": id});
+  Future<dynamic> getLikedPost(int pageIndex) async {
+    var token = LocalStorage.getToken();
     try {
-      var response = await client.post(
-          Uri.parse("${baseurl}posts_likedbyUser.php"),
-          body: body,
+      var response = await client.get(
+          Uri.parse("${baseurl3}post/my-liked-posts?page=${pageIndex}"),
           headers: {
             "Content-type": "application/json",
+            "Authorization": "Bearer $token"
           });
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        return data;
+      if (data["status_code"] == 200 && data["success"] == true) {
+        return data["data"];
       } else {
-        RandomFunction.toast(data['status'] ?? "");
+        RandomFunction.toast(data["response"]);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -151,18 +152,51 @@ class VBlogService {
     return null;
   }
 
-  Future<dynamic> likePost(int postId, String uid) async {
-    var body = jsonEncode({"firebaseAuthID": uid, "post_id": postId});
+  Future<Map<String, dynamic>?> likePost(int postId) async {
+    var body = jsonEncode({"post_id": "$postId"});
+    var token = LocalStorage.getToken();
+
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl}like.php"), body: body, headers: {
-        "Content-type": "application/json",
-      });
+      var response = await client.post(Uri.parse("${baseurl3}post/like"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $token"
+          });
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       } else {
-        //RandomFunction.toast(data['status']??"");
+        RandomFunction.toast(data["response"]);
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> unlikePost(int postId) async {
+    var body = jsonEncode({"post_id": "$postId"});
+    var token = LocalStorage.getToken();
+
+    try {
+      var response = await client.post(Uri.parse("${baseurl3}post/unlike"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $token"
+          });
+      var data = jsonDecode(response.body);
+      if (data["status_code"] == 200 && data["success"] == true) {
+        return data;
+      } else {
+        RandomFunction.toast(data["response"]);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
@@ -552,24 +586,27 @@ class VBlogService {
     return null;
   }
 
-  Future<dynamic> deletePost(int postId) async {
+  Future<Map<String, dynamic>?> deletePost(int postId) async {
     var data = {
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      "post_id": postId,
+      "post_id": "$postId",
     };
     var body = jsonEncode(data);
+    var token = LocalStorage.getToken();
+
     try {
-      var response = await client.post(
-          Uri.parse("https://api.platterwise.com/jhome/delete_post.php"),
+      var response = await client.post(Uri.parse("${baseurl3}post/delete"),
           body: body,
           headers: {
             "Content-type": "application/json",
+            "Authorization": "Bearer $token"
           });
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        RandomFunction.toast("Post deleted");
+      if (data["status_code"] == 200 && data["success"] == true) {
+        RandomFunction.toast(data["response"]);
         return data;
-      } else {}
+      } else {
+        RandomFunction.toast(data["response"]);
+      }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
     } on HttpException catch (_) {
