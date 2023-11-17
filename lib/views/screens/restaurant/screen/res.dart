@@ -42,7 +42,7 @@ class _ResState extends State<Res> {
           index: index,
           onReview: (e) {
             setState(() {
-              widget.restaurantData!.review = e;
+              widget.restaurantData = e;
             });
           }),
       body: CustomScrollView(

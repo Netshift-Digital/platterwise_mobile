@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 class RestaurantBottom extends StatelessWidget {
   final int index;
   final RestaurantData restaurantData;
-  final Function(List<AllRestReview> review) onReview;
+  final Function(RestaurantData review) onReview;
   const RestaurantBottom({
     Key? key,
     required this.restaurantData,

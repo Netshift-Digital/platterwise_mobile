@@ -189,7 +189,7 @@ class RestaurantViewModel extends BaseViewModel {
     return [];
   }*/
 
-  addReview(
+  Future<RestaurantData?> addReview(
       {required String resId,
       required String review,
       required String rate}) async {
@@ -198,12 +198,13 @@ class RestaurantViewModel extends BaseViewModel {
       var data = await restaurantService.addReview(
           resId: resId, review: review, rate: rate);
       if (data != null) {
-        //  getRestaurantById(int.parse(resId));
+        final resc = await getRestaurantById(int.parse(resId));
+        return resc;
       }
     } catch (e) {
       setReviewState(AppState.idle);
-      //
     }
+    return null;
   }
 
   Future<List<BannerDetail>> getBanner() async {

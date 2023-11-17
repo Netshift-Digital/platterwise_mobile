@@ -22,9 +22,8 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RestaurantDetails extends StatefulWidget {
-  final RestaurantData restaurantData;
-  const RestaurantDetails({Key? key, required this.restaurantData})
-      : super(key: key);
+  RestaurantData restaurantData;
+  RestaurantDetails({Key? key, required this.restaurantData}) : super(key: key);
 
   @override
   State<RestaurantDetails> createState() => _RestaurantDetailsState();
@@ -33,7 +32,6 @@ class RestaurantDetails extends StatefulWidget {
 class _RestaurantDetailsState extends State<RestaurantDetails> {
   int index = 0;
   PageController pageController = PageController();
-  List<AllRestReview> review = [];
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -64,7 +62,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                             restaurantData: widget.restaurantData)));
                 if (data != null) {
                   setState(() {
-                    review = data;
+                    widget.restaurantData = data;
                   });
                 }
               },
@@ -158,7 +156,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                       width: 8,
                     ),
                     Text(
-                      '(${review.length} reviews)',
+                      '(${widget.restaurantData.review.length} reviews)',
                       style: const TextStyle(color: AppColor.g100),
                     ),
                   ],
@@ -330,7 +328,7 @@ class _RestaurantDetailsState extends State<RestaurantDetails> {
                       ),
                     ),
                     RestaurantsReviews(
-                      review: review,
+                      review: widget.restaurantData.review,
                       restaurantData: widget.restaurantData,
                     ),
                   ],

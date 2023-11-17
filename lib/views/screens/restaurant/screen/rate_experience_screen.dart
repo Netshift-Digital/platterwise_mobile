@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:platterwave/model/restaurant/restaurant.dart';
+import 'package:platterwave/model/restaurant/restaurant_review.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/enum/app_state.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
