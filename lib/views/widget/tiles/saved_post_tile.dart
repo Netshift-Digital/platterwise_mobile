@@ -76,7 +76,7 @@ class SavedPostTile extends StatelessWidget {
                           height: 8,
                         ),
                         Text(
-                          post.username,
+                          post.user.username,
                           style: AppTextTheme.h4
                               .copyWith(fontSize: 12, color: AppColor.g900),
                         )

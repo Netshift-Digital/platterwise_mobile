@@ -63,7 +63,7 @@ class _BottomNavState extends State<BottomNav> {
     BottomNavigationModel(
       title: "Profile",
       icon: "assets/icon/user_profile.svg",
-      screen: const ViewUserProfileScreen(),
+      screen: ViewUserProfileScreen(),
     )
   ];
   @override

@@ -28,11 +28,10 @@ class VBlogViewModel extends BaseViewModel {
   List<Post> myPosts = [];
   List<Post> trendingPostBaseLike = [];
   List<Post> trendingPostBaseComment = [];
-  List<UserProfile> myFellows = [];
-  List<UserProfile> following = [];
+  // List<UserProfile> myFellows = [];
+  //List<String> followingSaved = [];
   List<Post> myLikes = [];
   String baseOn = "baselike";
-//  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   List<AllTagRank> topTags = [];
   AppState reportAppState = AppState.idle;
@@ -83,11 +82,13 @@ class VBlogViewModel extends BaseViewModel {
 
   Future<List<Post>?> getLikedPost(String id) async {
     try {
-      var data = await vBlogService.getLikedPost(1);
-      if (data != null) {
-        var post = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
-        return post;
-      }
+      if (id == LocalStorage.getUserId()) {
+        var data = await vBlogService.getLikedPost(1);
+        if (data != null) {
+          var post = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
+          return post;
+        }
+      } else {}
     } catch (e) {
       print(e.toString());
       setState(AppState.idle);
@@ -101,7 +102,6 @@ class VBlogViewModel extends BaseViewModel {
       if (data != null) {
         myPosts = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
         notifyListeners();
-        print("This is a single post ${myPosts[0].fullName}");
         print("This is a single post ${myPosts.length}");
 
         return myPosts;
@@ -208,7 +208,7 @@ class VBlogViewModel extends BaseViewModel {
       var data = await vBlogService.likePost(p.postId);
       if (data != null) {
         addActivity(
-            p.userId.toString(),
+            p.user.userId.toString(),
             UserActivity(
               id: p.postId.toString(),
               type: NotificationType.post.toString(),
@@ -389,7 +389,7 @@ class VBlogViewModel extends BaseViewModel {
   }
 
   Future<List<UserProfile>?> getFollowers() async {
-    try {
+    /*   try {
       var data = await FirebaseFirestore.instance
           .collection("followers")
           .doc("users")
@@ -403,12 +403,12 @@ class VBlogViewModel extends BaseViewModel {
       notifyListeners();
     } catch (e) {
       //
-    }
+    }*/
     return null;
   }
 
   Future<List<UserProfile>?> getFollowing() async {
-    try {
+    /* try {
       var data = await FirebaseFirestore.instance
           .collection("following")
           .doc("users")
@@ -422,7 +422,7 @@ class VBlogViewModel extends BaseViewModel {
       notifyListeners();
     } catch (e) {
       //
-    }
+    }*/
     return null;
   }
 
@@ -465,30 +465,28 @@ class VBlogViewModel extends BaseViewModel {
     return null;
   }
 
-  Future<dynamic> followUser(
+  Future<bool> followUser(
       String uid, UserProfile users, UserProfile userToBeFollowed) async {
     try {
-      following.add(users);
       notifyListeners();
-      await vBlogService.fellowUser(uid);
-      FirebaseFirestore.instance
-          .collection("followers")
-          .doc('users')
-          .collection(uid)
-          .doc(LocalStorage.getUserId())
-          .set(users.toJson());
+      var value = await vBlogService.fellowUser(uid);
+      if (value != null) {
+        FirebaseFirestore.instance
+            .collection("followers")
+            .doc('users')
+            .collection(uid)
+            .doc(LocalStorage.getUserId())
+            .set(users.toJson());
 
-      FirebaseFirestore.instance
-          .collection("following")
-          .doc("users")
-          .collection(LocalStorage.getUserId())
-          .doc(uid)
-          .set(userToBeFollowed.toJson());
-
-      following.add(users);
+        FirebaseFirestore.instance
+            .collection("following")
+            .doc("users")
+            .collection(LocalStorage.getUserId())
+            .doc(uid)
+            .set(userToBeFollowed.toJson());
+        return true;
+      }
       notifyListeners();
-      getFollowing();
-
       addActivity(
           uid,
           UserActivity(
@@ -503,37 +501,47 @@ class VBlogViewModel extends BaseViewModel {
     } catch (e) {
       setState(AppState.idle);
     }
+    return false;
   }
 
-  Future<dynamic> unFollowUser(String uid, UserProfile users) async {
+  Future<bool> unFollowUser(String uid) async {
     try {
-      following.remove(users);
       notifyListeners();
-      await vBlogService.unFellowUser(uid);
-      FirebaseFirestore.instance
-          .collection("followers")
-          .doc('users')
-          .collection(uid)
-          .doc(LocalStorage.getUserId())
-          .delete();
-      FirebaseFirestore.instance
-          .collection("following")
-          .doc("users")
-          .collection(LocalStorage.getUserId())
-          .doc(uid)
-          .delete();
+      var value = await vBlogService.unFellowUser(uid);
+      if (value != null) {
+        FirebaseFirestore.instance
+            .collection("followers")
+            .doc('users')
+            .collection(uid)
+            .doc(LocalStorage.getUserId())
+            .delete();
+        FirebaseFirestore.instance
+            .collection("following")
+            .doc("users")
+            .collection(LocalStorage.getUserId())
+            .doc(uid)
+            .delete();
 
-      following.remove(users);
-      notifyListeners();
-      getFollowing();
+        return true;
+      }
     } catch (e) {
       setState(AppState.idle);
     }
+    return false;
   }
 
-  bool getIsFollowed(String id) {
-    var d = following.where((element) => element.email == id);
-    return d.isNotEmpty;
+  Future<bool> getIsFollowed(String id) async {
+    CollectionReference collection = FirebaseFirestore.instance
+        .collection("following")
+        .doc("users")
+        .collection(LocalStorage.getUserId());
+    try {
+      final res = await collection.doc(id).get();
+      return res.exists;
+    } catch (e) {
+      print('Error checking document existence: $e');
+    }
+    return false;
   }
 
   bool checkIsLiked(int id) {

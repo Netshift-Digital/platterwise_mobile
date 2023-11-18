@@ -74,12 +74,13 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                     nav(
                       context,
                       ViewUserProfileScreen(
-                        id: widget.post.userId.toString(),
+                        id: widget.post.user.userId.toString(),
+                        userData: widget.post.user,
                       ),
                     );
                   },
                   child: ImageCacheCircle(
-                    widget.post.profileUrl,
+                    widget.post.user.profileUrl,
                     height: 68,
                     width: 68,
                   ),
@@ -96,18 +97,19 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                         nav(
                           context,
                           ViewUserProfileScreen(
-                            id: widget.post.userId.toString(),
+                            id: widget.post.user.userId.toString(),
+                            userData: widget.post.user,
                           ),
                         );
                       },
                       child: Text(
-                        widget.post.fullName,
+                        widget.post.user.fullName,
                         maxLines: 1,
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         style: AppTextTheme.h3.copyWith(
                             fontSize:
-                                widget.post.fullName.toString().length > 23
+                                widget.post.user.fullName.toString().length > 23
                                     ? 15
                                     : 18,
                             fontWeight: FontWeight.w700),
@@ -121,7 +123,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
-                          "@${widget.post.username}",
+                          "@${widget.post.user.username}",
                           style: AppTextTheme.h6
                               .copyWith(fontSize: 12, color: AppColor.g600),
                         ),
@@ -179,7 +181,8 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                         ],
                       ),
                     ),
-                    LocalStorage.getUserId() == widget.post.userId.toString()
+                    LocalStorage.getUserId() ==
+                            widget.post.user.userId.toString()
                         ? PopupMenuItem(
                             value: 3,
                             onTap: () {},

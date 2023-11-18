@@ -31,8 +31,10 @@ import '../../widget/tiles/settings_tile.dart';
 import 'edit_profile_screen.dart';
 
 class ViewUserProfileScreen extends StatefulWidget {
-  final String? id;
-  const ViewUserProfileScreen({Key? key, this.id}) : super(key: key);
+  String? id;
+  UserProfile? userData;
+
+  ViewUserProfileScreen({Key? key, this.id, this.userData}) : super(key: key);
 
   @override
   State<ViewUserProfileScreen> createState() => _ViewUserProfileScreenState();
@@ -40,14 +42,15 @@ class ViewUserProfileScreen extends StatefulWidget {
 
 class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
   List<Post> myPost = [];
-  UserProfile? userData;
+  var isFollowing = false;
   @override
   Widget build(BuildContext context) {
     var blogModel = context.watch<VBlogViewModel>();
+
     SizeConfig.init(context);
     return Scaffold(
       appBar: CustomAppBar(
-        showMenuB: widget.id == null,
+        showMenuB: widget.id == LocalStorage.getUserId(),
         onTap: () {
           showModalBottomSheet(
               context: context,
@@ -140,7 +143,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
         },
         trailing: "assets/icon/option.svg",
       ),
-      body: userData == null
+      body: widget.userData == null
           ? const Center(
               child: CircularProgressIndicator(
               color: AppColor.p300,
@@ -166,13 +169,13 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                         showImageViewer(
                                             context,
                                             CachedNetworkImageProvider(
-                                                userData!.profileUrl),
+                                                widget.userData!.profileUrl),
                                             onViewerDismissed: () {},
                                             useSafeArea: true,
                                             swipeDismissible: true);
                                       },
                                       child: ImageCacheCircle(
-                                        userData!.profileUrl,
+                                        widget.userData!.profileUrl,
                                         height: 80,
                                         width: 80,
                                       ),
@@ -185,14 +188,14 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          userData!.username,
+                                          widget.userData!.username,
                                           style: AppTextTheme.h1,
                                         ),
                                         SizedBox(
                                           height: 4.h,
                                         ),
                                         Text(
-                                          userData!.fullName,
+                                          widget.userData!.fullName,
                                           style: AppTextTheme.h4,
                                         )
                                       ],
@@ -203,7 +206,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                   height: 30.h,
                                 ),
                                 LinkifyText(
-                                  userData!.bio,
+                                  widget.userData!.bio,
                                   textStyle: AppTextTheme.h3,
                                   linkStyle: AppTextTheme.h3.copyWith(
                                       color: Colors.blue[900],
@@ -230,8 +233,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                             FollowersList(
                                               index: 0,
                                               id: widget.id ??
-                                                  FirebaseAuth.instance
-                                                      .currentUser!.uid,
+                                                  LocalStorage.getUserId(),
                                             ));
                                       },
                                       child: Container(
@@ -240,25 +242,11 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            StreamBuilder<QuerySnapshot>(
-                                                stream: FirebaseFirestore
-                                                    .instance
-                                                    .collection("following")
-                                                    .doc("users")
-                                                    .collection(widget.id ??
-                                                        LocalStorage
-                                                            .getUserId())
-                                                    .snapshots(),
-                                                builder: (context, snapshot) {
-                                                  return Text(
-                                                    snapshot.hasData
-                                                        ? snapshot
-                                                            .data!.docs.length
-                                                            .toString()
-                                                        : "0",
-                                                    style: AppTextTheme.h3,
-                                                  );
-                                                }),
+                                            Text(
+                                              widget.userData!.following
+                                                  .toString(),
+                                              style: AppTextTheme.h3,
+                                            ),
                                             Text(
                                               "Following",
                                               style: AppTextTheme.h4.copyWith(
@@ -284,25 +272,11 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            StreamBuilder<QuerySnapshot>(
-                                                stream: FirebaseFirestore
-                                                    .instance
-                                                    .collection("followers")
-                                                    .doc("users")
-                                                    .collection(widget.id ??
-                                                        LocalStorage
-                                                            .getUserId())
-                                                    .snapshots(),
-                                                builder: (context, snapshot) {
-                                                  return Text(
-                                                    snapshot.hasData
-                                                        ? snapshot
-                                                            .data!.docs.length
-                                                            .toString()
-                                                        : "0",
-                                                    style: AppTextTheme.h3,
-                                                  );
-                                                }),
+                                            Text(
+                                              widget.userData!.followers
+                                                  .toString(),
+                                              style: AppTextTheme.h3,
+                                            ),
                                             Text(
                                               "Followers",
                                               style: AppTextTheme.h4.copyWith(
@@ -313,59 +287,49 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                       ),
                                     ),
                                     showFollow()
-                                        ? StreamBuilder<DocumentSnapshot>(
-                                            stream: FirebaseFirestore.instance
-                                                .collection('followButton')
-                                                .doc(widget.id)
-                                                .snapshots(),
-                                            builder: (context, snapshot) {
-                                              bool disable = false;
-                                              if (snapshot.data != null) {
-                                                if (snapshot.data!.exists) {
-                                                  var data = snapshot.data!
-                                                      .data()! as Map;
-                                                  disable = data['disable'];
-                                                }
-                                              }
-                                              if (disable == false) {
-                                                return PlatButton(
-                                                  title:
-                                                      blogModel.getIsFollowed(
-                                                              userData!.email)
-                                                          ? "Unfollow"
-                                                          : "Follow",
-                                                  padding: 0,
-                                                  textSize: 14,
-                                                  color:
-                                                      blogModel.getIsFollowed(
-                                                              userData!.email)
-                                                          ? AppColor.g700
-                                                          : AppColor.p200,
-                                                  onTap: () {
-                                                    var user = context
-                                                        .read<UserViewModel>()
-                                                        .user;
-                                                    blogModel.following
-                                                        .add(userData!);
-                                                    if (blogModel.getIsFollowed(
-                                                        userData!.email)) {
-                                                      blogModel.unFollowUser(
-                                                          widget.id!,
-                                                          userData!);
-                                                    } else {
-                                                      blogModel.followUser(
-                                                          widget.id!,
-                                                          user!,
-                                                          userData!);
-                                                    }
-                                                  },
-                                                  width: 95.w,
-                                                  height: 38.h,
-                                                );
+                                        ? PlatButton(
+                                            title: isFollowing
+                                                ? "Unfollow"
+                                                : "Follow",
+                                            padding: 0,
+                                            textSize: 14,
+                                            color: isFollowing
+                                                ? AppColor.g700
+                                                : AppColor.p200,
+                                            onTap: () {
+                                              var user = context
+                                                  .read<UserViewModel>()
+                                                  .user;
+                                              if (isFollowing) {
+                                                blogModel
+                                                    .unFollowUser(widget.id!)
+                                                    .then((value) {
+                                                  if (value) {
+                                                    setState(() {
+                                                      isFollowing = false;
+                                                      widget.userData!
+                                                          .followers -= 1;
+                                                    });
+                                                  }
+                                                });
                                               } else {
-                                                return const SizedBox();
+                                                blogModel
+                                                    .followUser(widget.id!,
+                                                        user!, widget.userData!)
+                                                    .then((value) {
+                                                  if (value) {
+                                                    setState(() {
+                                                      isFollowing = true;
+                                                      widget.userData!
+                                                          .followers += 1;
+                                                    });
+                                                  }
+                                                });
                                               }
-                                            })
+                                            },
+                                            width: 95.w,
+                                            height: 38.h,
+                                          )
                                         : PlatButton(
                                             title: "Edit Profile",
                                             padding: 0,
@@ -408,7 +372,6 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                     text: "Likes",
                                   )
                                 ],
-                                // padding: EdgeInsets.only(right: 100.w),
                                 labelStyle:
                                     AppTextTheme.h6.copyWith(fontSize: 18),
                                 unselectedLabelStyle:
@@ -447,46 +410,43 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
     Future.delayed(const Duration(milliseconds: 20), () {
       getData();
       getPost();
+      checkIsFollowing();
     });
   }
 
   void getData() async {
     var userModel = context.read<UserViewModel>();
-    if (widget.id == null) {
-      if (userModel.user != null) {
+    if (widget.id == null || widget.id == LocalStorage.getUserId()) {
+      userModel.getMyProfile().then((value) {
         if (mounted) {
           setState(() {
-            userData = userModel.user;
+            widget.userData = value;
+            widget.id = value?.userId.toString();
+            userModel.user = value;
           });
         }
-      } else {
-        userModel.getMyProfile().then((value) {
-          if (mounted) {
-            setState(() {
-              userData = value;
-            });
+      });
+    } else {
+      if (widget.userData == null) {
+        userModel.getUserProfile(widget.id!).then((value) {
+          if (value != null) {
+            if (mounted) {
+              setState(() {
+                widget.userData = value;
+                widget.id = value.userId.toString();
+              });
+            }
           }
         });
+      } else {
+        widget.id = widget.userData?.userId.toString();
       }
-    } else {
-      userModel.getUserProfile().then((value) {
-        if (value != null) {
-          if (mounted) {
-            setState(() {
-              userData = value;
-            });
-          }
-        }
-      });
     }
-
-    // await blogModel.getFollowers();
-    //await  blogModel.getFollowing();
   }
 
   void getPost() {
     var blogModel = context.read<VBlogViewModel>();
-    if (widget.id == null) {
+    if (widget.id == null || widget.id == LocalStorage.getUserId()) {
       if (blogModel.myPosts.isEmpty) {
         blogModel.getMyPost().then((value) {
           if (value != null) {
@@ -518,14 +478,14 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
     var data =
         await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return EditProfileScreen(
-        userData: userData!,
+        userData: widget.userData!,
       );
     }));
     if (data != null) {
       userModel.getMyProfile().then((value) {
         if (mounted) {
           setState(() {
-            userData = value;
+            widget.userData = value;
           });
         }
       });
@@ -539,10 +499,15 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
   }
 
   bool showFollow() {
-    if (widget.id != null) {
-      return true;
-    } else {
+    if (widget.id == LocalStorage.getUserId()) {
       return false;
+    } else {
+      return true;
     }
+  }
+
+  checkIsFollowing() async {
+    var blogModel = context.read<VBlogViewModel>();
+    isFollowing = await blogModel.getIsFollowed(widget.id!);
   }
 }

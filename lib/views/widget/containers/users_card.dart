@@ -22,7 +22,7 @@ class UserCard extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig.init(context);
     var blogModel = context.watch<VBlogViewModel>();
-    var isFollower = blogModel.getIsFollowed(data.email);
+    var isFollower = blogModel.getIsFollowed(data.userId.toString());
     return ListTile(
       onTap: () {
         nav(
@@ -50,22 +50,28 @@ class UserCard extends StatelessWidget {
             fontWeight: FontWeight.w400,
             color: const Color(0xffB1B1B1)),
       ),
-      trailing: PlatButton(
-        title: isFollower ? "Remove" : "Follow",
-        padding: 0,
-        color: isFollower ? AppColor.g700 : AppColor.p200,
-        textSize: 14,
-        onTap: () {
-          if (isFollower) {
-            blogModel.unFollowUser(data.firebaseAuthID, data);
-          } else {
-            var user = context.read<UserViewModel>().user;
-            blogModel.followUser(data.firebaseAuthID, user!, data);
-          }
-        },
-        width: 103.w,
-        height: 37.h,
-      ),
+      trailing: FutureBuilder<bool?>(
+          future: isFollower,
+          builder: (BuildContext context, AsyncSnapshot<bool?> snapshot) {
+            return PlatButton(
+              title: snapshot.data! ? "Remove" : "Follow",
+              padding: 0,
+              color: snapshot.data! ? AppColor.g700 : AppColor.p200,
+              textSize: 14,
+              onTap: () {
+                if (snapshot.data!) {
+                  blogModel.unFollowUser(
+                    data.userId.toString(),
+                  );
+                } else {
+                  var user = context.read<UserViewModel>().user;
+                  blogModel.followUser(data.userId.toString(), user!, data);
+                }
+              },
+              width: 103.w,
+              height: 37.h,
+            );
+          }),
     );
   }
 }

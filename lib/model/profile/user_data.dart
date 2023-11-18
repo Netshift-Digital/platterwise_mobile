@@ -10,6 +10,8 @@ class UserProfile {
       required this.email,
       required this.phone,
       required this.bio,
+      required this.followers,
+      required this.following,
       required this.profileUrl,
       required this.location,
       required this.firebaseAuthID});
@@ -19,6 +21,8 @@ class UserProfile {
   String username;
   String email;
   String phone;
+  dynamic followers;
+  dynamic following;
   dynamic bio;
   String profileUrl;
   String firebaseAuthID;
@@ -41,6 +45,8 @@ class UserProfile {
         fullName: fullName ?? this.fullName,
         username: username ?? this.username,
         email: email ?? this.email,
+        followers: followers ?? this.followers,
+        following: following ?? this.following,
         phone: phone ?? this.phone,
         bio: bio ?? this.bio,
         profileUrl: profileUrl ?? this.profileUrl,
@@ -52,6 +58,8 @@ class UserProfile {
       fullName: json["full_name"] ?? "",
       username: json["username"] ?? "",
       email: json["email"] ?? "",
+      followers: json["followers"] ?? 0,
+      following: json["following"] ?? 0,
       phone: json["phone"] ?? "",
       bio: json["bio"] ?? "",
       profileUrl: json["img_url"] ??

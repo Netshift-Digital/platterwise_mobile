@@ -107,7 +107,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               var data = searchUserResult[index];
                               return ListTile(
                                 onTap: () {
-                                  nav(context, const ViewUserProfileScreen());
+                                  nav(context, ViewUserProfileScreen());
                                 },
                                 contentPadding: EdgeInsets.zero,
                                 leading: ImageCacheCircle(

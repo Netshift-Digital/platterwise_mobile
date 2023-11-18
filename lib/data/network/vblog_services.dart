@@ -295,7 +295,7 @@ class VBlogService {
     return null;
   }
 
-  Future<dynamic> fellowUser(String uId) async {
+  Future<Map<String, dynamic>?> fellowUser(String uId) async {
     var body = jsonEncode({"user": uId});
     var token = LocalStorage.getToken();
 
@@ -325,7 +325,7 @@ class VBlogService {
     return null;
   }
 
-  Future<dynamic> unFellowUser(String uId) async {
+  Future<Map<String, dynamic>?> unFellowUser(String uId) async {
     var body = jsonEncode({"user": uId});
     var token = LocalStorage.getToken();
 

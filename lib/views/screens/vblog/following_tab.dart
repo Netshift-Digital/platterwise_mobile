@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_parsed_text_field/flutter_parsed_text_field.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/utils/enum/app_state.dart';
-import 'package:platterwave/utils/nav.dart';
-import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
-import 'package:platterwave/views/screens/vblog/trending_page.dart';
-import 'package:platterwave/views/widget/button/custom-button.dart';
-import 'package:platterwave/views/widget/containers/sub_categories_container.dart';
 import 'package:platterwave/views/widget/containers/timeline_post_container.dart';
 
 class FollowingTab extends StatefulWidget {

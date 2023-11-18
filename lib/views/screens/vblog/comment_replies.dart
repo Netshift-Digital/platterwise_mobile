@@ -273,7 +273,7 @@ class _CommentReplyState extends State<CommentReply> {
     model
         .replyToComment(int.parse(widget.usersComment.commentId), e,
             userData: context.read<UserViewModel>().user!,
-            id: widget.post.userId.toString(),
+            id: widget.post.user.userId.toString(),
             postId: widget.post.postId.toString())
         .then((value) {
       getComment();
@@ -371,7 +371,7 @@ class _CommentReplyState extends State<CommentReply> {
                   fontWeight: FontWeight.w700),
             ),
             Text(
-              "@${widget.post.username}",
+              "@${widget.post.user.username}",
               style: AppTextTheme.h4.copyWith(
                   fontSize: 14,
                   color: AppColor.p200,

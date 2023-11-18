@@ -181,19 +181,6 @@ class UserViewModel extends BaseViewModel {
     return null;
   }
 
-  /*Future<UserData?> getUserCacheData() async {
-    try {
-      user = LocalStorage.getUser();
-      if (user == null) {
-        getMyProfile();
-      }
-      return user;
-    } catch (e) {
-      //
-    }
-    return null;
-  }*/
-
   Future<UserProfile?> getMyProfile() async {
     try {
       var data = await userService.getMyProfile();
@@ -214,7 +201,7 @@ class UserViewModel extends BaseViewModel {
   }
 
 //This can be for getting another user profile
-  Future<UserProfile?> getUserProfile() async {
+  Future<UserProfile?> getUserProfile(String id) async {
     try {
       var data = await userService.getMyProfile();
       if (data != null) {

@@ -202,7 +202,7 @@ class _PostDetailsState extends State<PostDetails> {
                                                 fontWeight: FontWeight.w700),
                                           ),
                                           Text(
-                                            "@${widget.post.username}",
+                                            "@${widget.post.user.username}",
                                             style: AppTextTheme.h4.copyWith(
                                                 fontSize: 14,
                                                 color: AppColor.p200,
@@ -358,7 +358,7 @@ class _PostDetailsState extends State<PostDetails> {
       uid.toString(),
       e,
       userData: context.read<UserViewModel>().user!,
-      id: widget.post.userId.toString(),
+      id: widget.post.user.userId.toString(),
     )
         .then((value) {
       getComment();
