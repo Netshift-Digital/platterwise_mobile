@@ -42,10 +42,7 @@ class VBlogViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<bool> getPost(
-      {bool restart = false,
-      required int postIndex,
-      required bool postEnd}) async {
+  Future<bool> getPost({bool restart = false, required int postIndex}) async {
     try {
       notifyListeners();
       var data = await vBlogService.getPost(postIndex);
@@ -54,7 +51,6 @@ class VBlogViewModel extends BaseViewModel {
       if (data != null) {
         var post = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
         if (restart) {
-          print("It actually restarted");
           posts = [];
         }
         posts.addAll(post);

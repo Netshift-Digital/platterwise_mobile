@@ -146,8 +146,7 @@ class _FollowingTabState extends State<FollowingTab> {
     }
     if (postEnd == false) {
       _postIndex = _postIndex + 1;
-      postEnd = await model.getPost(
-          restart: restart, postIndex: _postIndex, postEnd: postEnd);
+      postEnd = await model.getPost(restart: restart, postIndex: _postIndex);
     }
   }
 }

@@ -81,8 +81,8 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                   },
                   child: ImageCacheCircle(
                     widget.post.user.profileUrl,
-                    height: 68,
-                    width: 68,
+                    height: 55,
+                    width: 55,
                   ),
                 ),
                 const SizedBox(
