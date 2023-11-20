@@ -17,7 +17,7 @@ class VBlogService {
     var token = LocalStorage.getToken();
     try {
       var response = await client.get(
-          Uri.parse("${baseurl3}post/all-posts?page=${pageIndex}"),
+          Uri.parse("${baseurl3}post/all-posts?page=$pageIndex"),
           headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer $token"

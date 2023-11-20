@@ -28,16 +28,12 @@ class VBlogViewModel extends BaseViewModel {
   List<Post> myPosts = [];
   List<Post> trendingPostBaseLike = [];
   List<Post> trendingPostBaseComment = [];
-  // List<UserProfile> myFellows = [];
-  //List<String> followingSaved = [];
   List<Post> myLikes = [];
   String baseOn = "baselike";
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   List<AllTagRank> topTags = [];
   AppState reportAppState = AppState.idle;
   AppState postAppState = AppState.idle;
-  int _postIndex = 0;
-  bool postEnd = false;
   List<SearchResultElement> searchUserResult = [];
   SearchType searchType = SearchType.user;
 
@@ -46,38 +42,35 @@ class VBlogViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<List<Post>?> getPost({bool restart = false}) async {
+  Future<bool> getPost(
+      {bool restart = false,
+      required int postIndex,
+      required bool postEnd}) async {
     try {
-      if (restart) {
-        _postIndex = 0;
-        postEnd = false;
-      }
-      if (!postEnd) {
-        _postIndex = _postIndex + 1;
-        postAppState = AppState.busy;
-        notifyListeners();
-        var data = await vBlogService.getPost(_postIndex);
-        postAppState = AppState.idle;
-        notifyListeners();
-        if (data != null) {
-          var post = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
-          posts = post;
-          if (restart) {
-            posts = [];
-          }
-          if (data["per_page"] > data["total"]) {
-            postEnd = true;
-          }
-          notifyListeners();
-          return posts;
+      notifyListeners();
+      var data = await vBlogService.getPost(postIndex);
+      postAppState = AppState.idle;
+      notifyListeners();
+      if (data != null) {
+        var post = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
+        if (restart) {
+          print("It actually restarted");
+          posts = [];
         }
+        posts.addAll(post);
+        if (data["per_page"] > post.length) {
+          return true;
+        }
+        notifyListeners();
       }
     } catch (e) {
       postAppState = AppState.idle;
       notifyListeners();
       setState(AppState.idle);
+      print("The error is ${e.toString()}");
+      RandomFunction.toast("Something went wrong");
     }
-    return null;
+    return false;
   }
 
   Future<List<Post>?> getLikedPost(String id) async {
@@ -102,7 +95,6 @@ class VBlogViewModel extends BaseViewModel {
       if (data != null) {
         myPosts = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
         notifyListeners();
-        print("This is a single post ${myPosts.length}");
 
         return myPosts;
       }

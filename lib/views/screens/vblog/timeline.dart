@@ -84,7 +84,7 @@ class _TimelineState extends State<Timeline> {
       body: DefaultTabController(
         length: 2,
         child: NestedScrollView(
-          physics: const BouncingScrollPhysics(),
+          //  controller: scrollController,
           headerSliverBuilder: (context, scroll) {
             return [
               const SliverToBoxAdapter(
@@ -130,17 +130,16 @@ class _TimelineState extends State<Timeline> {
               )
             ];
           },
-          body: const TabBarView(
+          body: TabBarView(
             children: [FollowingTab(), RecommendedTab()],
           ),
         ),
       ),
     );
   }
-
+/*
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getPost(restart: true);
@@ -155,6 +154,7 @@ class _TimelineState extends State<Timeline> {
       }
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
+        print("You are at the bottom");
         getPost(restart: false);
       }
     });
@@ -163,5 +163,5 @@ class _TimelineState extends State<Timeline> {
   void getPost({bool restart = false}) {
     var model = context.read<VBlogViewModel>();
     model.getPost(restart: false);
-  }
+  }*/
 }

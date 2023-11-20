@@ -67,8 +67,10 @@ class Post {
       timestamp: json["created_at"] == null
           ? DateTime.now()
           : DateTime.parse(json["created_at"]),
-      commentCount: json["comment_count"] ?? 0,
-      user: UserProfile.fromJson(json["user"]),
+      commentCount: json["total_comments"] ?? 0,
+      user: json["user"] != null
+          ? UserProfile.fromJson(json["user"])
+          : UserProfile.empty(),
       likeCount: json['total_likes'] ?? 0,
       tags: json['taggs'] ?? [],
       commentReply: json['comment_reply'] ?? "",

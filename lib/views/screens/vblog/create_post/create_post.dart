@@ -399,7 +399,7 @@ class _CreatePostState extends State<CreatePost> {
         videoPath: path?.path,
       )
           .then((value) {
-        model.getPost(restart: true);
+        //    model.getPost(restart: true);
         Navigator.pop(context);
       });
     } else {

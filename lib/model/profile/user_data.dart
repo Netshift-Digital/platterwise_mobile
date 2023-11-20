@@ -68,6 +68,20 @@ class UserProfile {
       location: json["location"] ?? "",
       firebaseAuthID: "");
 
+  factory UserProfile.empty() => UserProfile(
+      userId: 0,
+      fullName: "",
+      username: "",
+      email: "",
+      followers: 0,
+      following: 0,
+      phone: "",
+      bio: "",
+      profileUrl:
+          "'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png'",
+      location: "",
+      firebaseAuthID: "");
+
   Map<String, dynamic> toJson() => {
         "user_id": userId,
         "full_name": fullName,
