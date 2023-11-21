@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:platterwave/constant/post_type.dart';
+import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/model/request_model/post_data.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/spacing.dart';
@@ -384,10 +385,10 @@ class _CreatePostState extends State<CreatePost> {
 
   void createPost(BuildContext context) {
     var model = context.read<VBlogViewModel>();
-    var uid = context.read<UserViewModel>().user!.userId;
+    var uid = LocalStorage.getUserId();
     if (commentController.text.isNotEmpty) {
       PostData postData = PostData(
-          userId: uid.toString(),
+          userId: uid,
           contentPost: commentController.text,
           contentType: type,
           contentUrl: '');

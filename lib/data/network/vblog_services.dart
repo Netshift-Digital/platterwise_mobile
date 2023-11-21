@@ -210,7 +210,8 @@ class VBlogService {
     return null;
   }
 
-  Future<Map<String, dynamic>?> commentToPost(int postId, String comment) async {
+  Future<Map<String, dynamic>?> commentToPost(
+      int postId, String comment) async {
     var body = jsonEncode({"post_id": "$postId", "comment": comment});
     var token = LocalStorage.getToken();
 
@@ -222,7 +223,7 @@ class VBlogService {
             "Content-type": "application/json",
             "Authorization": "Bearer $token"
           });
-     var data = jsonDecode(response.body);
+      var data = jsonDecode(response.body);
       if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       } else {
@@ -475,6 +476,7 @@ class VBlogService {
       Map tag, String postId, String firebaseAuthID) async {
     tag.addAll({"firebaseAuthID": firebaseAuthID, "post_id": postId});
     var body = jsonEncode(tag);
+    print("The create tag body is $body");
     try {
       var response = await client
           .post(Uri.parse("${baseurl}create_tags.php"), body: body, headers: {

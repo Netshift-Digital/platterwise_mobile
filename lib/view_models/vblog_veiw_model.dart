@@ -365,7 +365,7 @@ class VBlogViewModel extends BaseViewModel {
           userId: LocalStorage.getUserId());
       var data = await vBlogService.createPost(post);
       if (data != null) {
-        //  handelTags(postData.contentPost, data["post_id"].toString());
+        handelTags(postData.contentPost, "data['post_id'].toString()");
       }
       postAppState = AppState.idle;
       notifyListeners();
