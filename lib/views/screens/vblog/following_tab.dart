@@ -8,8 +8,6 @@ import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/widget/containers/timeline_post_container.dart';
 
 class FollowingTab extends StatefulWidget {
-  ScrollController scrollController = ScrollController();
-
   FollowingTab({super.key});
 
   @override
@@ -17,6 +15,8 @@ class FollowingTab extends StatefulWidget {
 }
 
 class _FollowingTabState extends State<FollowingTab> {
+  ScrollController scrollController = ScrollController();
+
   int _postIndex = 0;
   bool postEnd = false;
 
@@ -31,7 +31,7 @@ class _FollowingTabState extends State<FollowingTab> {
           return;
         },
         child: SingleChildScrollView(
-          controller: widget.scrollController,
+          controller: scrollController,
           //physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
@@ -126,16 +126,16 @@ class _FollowingTabState extends State<FollowingTab> {
       }
     });
     if (mounted) {
-      widget.scrollController.addListener(() {
+      scrollController.addListener(() {
         var model = context.read<PageViewModel>();
-        if (widget.scrollController.position.userScrollDirection ==
+        if (scrollController.position.userScrollDirection ==
             ScrollDirection.forward) {
           model.hideBottomNavigator();
         } else {
           model.showBottomNavigator();
         }
-        if (widget.scrollController.position.pixels ==
-            widget.scrollController.position.maxScrollExtent) {
+        if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent) {
           getPost(restart: false);
         }
       });

@@ -8,11 +8,7 @@ import 'package:platterwave/views/widget/containers/empty_content_container.dart
 import 'package:platterwave/views/widget/containers/timeline_post_container.dart';
 import 'package:provider/provider.dart';
 
-List<Post> postList = [];
-
 class ViewLikesPage extends StatefulWidget {
-  final ScrollController scrollController = ScrollController();
-
   final String? id;
   ViewLikesPage({Key? key, this.id}) : super(key: key);
 
@@ -22,6 +18,9 @@ class ViewLikesPage extends StatefulWidget {
 
 class _ViewLikesPageState extends State<ViewLikesPage> {
   final searchTextController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
+  List<Post> postList = [];
+
   int _postIndex = 0;
   bool postEnd = false;
   @override
@@ -42,7 +41,7 @@ class _ViewLikesPageState extends State<ViewLikesPage> {
                 padding: EdgeInsets.zero,
                 physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
-                controller: widget.scrollController,
+                controller: scrollController,
                 itemCount: postList.length,
                 itemBuilder: (context, index) {
                   var post = postList[index];
@@ -61,16 +60,16 @@ class _ViewLikesPageState extends State<ViewLikesPage> {
         }
       });
       if (mounted) {
-        widget.scrollController.addListener(() {
+        scrollController.addListener(() {
           var model = context.read<PageViewModel>();
-          if (widget.scrollController.position.userScrollDirection ==
+          if (scrollController.position.userScrollDirection ==
               ScrollDirection.forward) {
             model.hideBottomNavigator();
           } else {
             model.showBottomNavigator();
           }
-          if (widget.scrollController.position.pixels ==
-              widget.scrollController.position.maxScrollExtent) {
+          if (scrollController.position.pixels ==
+              scrollController.position.maxScrollExtent) {
             getLikedPost(restart: false);
           }
         });
@@ -88,11 +87,12 @@ class _ViewLikesPageState extends State<ViewLikesPage> {
       _postIndex = _postIndex + 1;
       var res = await model.getLikedPost(widget.id ?? LocalStorage.getUserId(),
           restart: restart, postIndex: _postIndex);
-      if (res != null) {
+      print("This is size ${res!.length}");
+      if (res.isNotEmpty) {
         setState(() {
           postList.addAll(res);
         });
-        if (res.isEmpty) {
+        if (res.isEmpty || res.length < 20) {
           postEnd = true;
         }
       }

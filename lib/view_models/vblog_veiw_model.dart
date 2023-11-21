@@ -25,6 +25,7 @@ import 'package:platterwave/utils/random_functions.dart';
 class VBlogViewModel extends BaseViewModel {
   VBlogService vBlogService = locator<VBlogService>();
   List<Post> allposts = [];
+  List<Post> recposts = [];
   List<Post> myPosts = [];
   List<Post> trendingPostBaseLike = [];
   List<Post> trendingPostBaseComment = [];
@@ -74,15 +75,15 @@ class VBlogViewModel extends BaseViewModel {
     try {
       notifyListeners();
       //I have not yet implemented the get recommended post api
-      var data = await vBlogService.getLikedPost(postIndex);
+      var data = await vBlogService.getPost(postIndex);
       postAppState = AppState.idle;
       notifyListeners();
       if (data != null) {
         var post = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
         if (restart) {
-          allposts = [];
+          recposts = [];
         }
-        allposts.addAll(post);
+        recposts.addAll(post);
         if (data["per_page"] > post.length) {
           return true;
         }
@@ -102,7 +103,6 @@ class VBlogViewModel extends BaseViewModel {
       {bool restart = false, required int postIndex}) async {
     try {
       notifyListeners();
-      //I have not yet implemented the get recommended post api
       var data = await vBlogService.getLikedPost(postIndex);
       postAppState = AppState.idle;
       notifyListeners();
@@ -117,7 +117,6 @@ class VBlogViewModel extends BaseViewModel {
       print("The error is ${e.toString()}");
       RandomFunction.toast("Something went wrong");
     }
-
     return null;
   }
 
@@ -127,7 +126,6 @@ class VBlogViewModel extends BaseViewModel {
       if (data != null) {
         myPosts = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
         notifyListeners();
-
         return myPosts;
       }
     } catch (e) {

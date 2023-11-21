@@ -8,8 +8,6 @@ import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/widget/containers/timeline_post_container.dart';
 
 class RecommendedTab extends StatefulWidget {
-  ScrollController scrollController = ScrollController();
-
   RecommendedTab({super.key});
 
   @override
@@ -19,6 +17,8 @@ class RecommendedTab extends StatefulWidget {
 class _RecommendedTabState extends State<RecommendedTab> {
   int _postIndex = 0;
   bool postEnd = false;
+  ScrollController scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     var model = context.read<VBlogViewModel>();
@@ -31,7 +31,7 @@ class _RecommendedTabState extends State<RecommendedTab> {
         },
         child: SingleChildScrollView(
           //physics: const BouncingScrollPhysics(),
-          controller: widget.scrollController,
+          controller: scrollController,
           child: Column(
             children: [
               // Padding(
@@ -86,7 +86,7 @@ class _RecommendedTabState extends State<RecommendedTab> {
               // ),
               Consumer<VBlogViewModel>(
                 builder: (context, vBlogModel, child) {
-                  final posts = vBlogModel.allposts;
+                  final posts = vBlogModel.recposts;
                   return ListView.builder(
                     padding: EdgeInsets.zero,
                     primary: false,
@@ -126,16 +126,16 @@ class _RecommendedTabState extends State<RecommendedTab> {
       }
     });
     if (mounted) {
-      widget.scrollController.addListener(() {
+      scrollController.addListener(() {
         var model = context.read<PageViewModel>();
-        if (widget.scrollController.position.userScrollDirection ==
+        if (scrollController.position.userScrollDirection ==
             ScrollDirection.forward) {
           model.hideBottomNavigator();
         } else {
           model.showBottomNavigator();
         }
-        if (widget.scrollController.position.pixels ==
-            widget.scrollController.position.maxScrollExtent) {
+        if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent) {
           getPost(restart: false);
         }
       });
