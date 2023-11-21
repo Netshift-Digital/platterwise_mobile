@@ -25,7 +25,7 @@ class SaveScreen extends StatelessWidget {
           stream: FirebaseFirestore.instance
               .collection("savedPost")
               .doc("users")
-              .collection(FirebaseAuth.instance.currentUser!.uid)
+              .collection(LocalStorage.getUserId())
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
