@@ -44,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         isLoginValid().then((value) {
           print("The value is $value");
-          if (value == true) {
+          if (value == true && LocalStorage.getUserId().isNotEmpty && LocalStorage.getToken().isNotEmpty) {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const BottomNav()));
           } else {

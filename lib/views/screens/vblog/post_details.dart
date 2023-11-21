@@ -351,17 +351,15 @@ class _PostDetailsState extends State<PostDetails> {
   void postComment(String e) {
     commentController.clear();
     var model = context.read<VBlogViewModel>();
-    var uid = context.read<UserViewModel>().user!.userId;
     model
         .commentOnPost(
       widget.post.postId,
-      uid.toString(),
       e,
       userData: context.read<UserViewModel>().user!,
       id: widget.post.user.userId.toString(),
     )
         .then((value) {
-      getComment();
+    //  getComment();
       if (value != null) {
         widget.post.commentCount = widget.post.commentCount + 1;
         setState(() {});

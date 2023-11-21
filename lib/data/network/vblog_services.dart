@@ -210,19 +210,23 @@ class VBlogService {
     return null;
   }
 
-  Future<dynamic> commentToPost(int postId, String uid, String comment) async {
-    var body = jsonEncode(
-        {"user_id": uid, "post_id": postId, "comment_post": comment});
+  Future<Map<String, dynamic>?> commentToPost(int postId, String comment) async {
+    var body = jsonEncode({"post_id": "$postId", "comment": comment});
+    var token = LocalStorage.getToken();
+
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl}post_comment.php"), body: body, headers: {
-        "Content-type": "application/json",
-      });
-      var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+      var response = await client.post(
+          Uri.parse("${baseurl3}post-comment/create"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $token"
+          });
+     var data = jsonDecode(response.body);
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       } else {
-        RandomFunction.toast(data['status'] ?? "");
+        RandomFunction.toast(data["response"]);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");

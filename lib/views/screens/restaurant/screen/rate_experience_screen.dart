@@ -169,12 +169,14 @@ class _RateExperienceScreenState extends State<RateExperienceScreen> {
                           .addReview(
                               resId: widget.restaurantData.restId.toString(),
                               review: controller.text,
-                              rate: rate.toString())
+                              rate: rate.toInt().toString())
                           .then((value) {
+                        if (value != null) {
+                          Navigator.pop(context, value);
+                        }
                         setState(() {
                           appState = AppState.idle;
                         });
-                        Navigator.pop(context, value);
                       }).catchError((e) {
                         setState(() {
                           appState = AppState.idle;

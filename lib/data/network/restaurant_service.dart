@@ -200,9 +200,9 @@ class RestaurantService {
       required String review,
       required String rate}) async {
     var token = LocalStorage.getToken();
-
     var body = jsonEncode(
         {"star_rating": rate, "comment": review, "restaurant_id": resId});
+    print("This is the body for rating $body");
     try {
       var response = await client.post(Uri.parse("${baseurl3}restaurant/rate"),
           body: body,

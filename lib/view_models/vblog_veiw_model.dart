@@ -211,10 +211,10 @@ class VBlogViewModel extends BaseViewModel {
     }
   }
 
-  Future<dynamic> commentOnPost(int postId, String uid, String comment,
+  Future<bool> commentOnPost(int postId, String comment,
       {required UserProfile userData, required String id}) async {
     try {
-      var data = await vBlogService.commentToPost(postId, uid, comment);
+      var data = await vBlogService.commentToPost(postId, comment);
       if (data != null) {
         addActivity(
             id,
@@ -225,11 +225,12 @@ class VBlogViewModel extends BaseViewModel {
                 firebaseAuthId: LocalStorage.getUserId(),
                 userName: userData.username,
                 profilePic: userData.profileUrl));
+                return true;
       }
-      return data;
     } catch (e) {
       setState(AppState.idle);
     }
+    return false;
   }
 
   Future<dynamic> deletePost(Post post) async {

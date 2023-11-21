@@ -121,7 +121,7 @@ class RestaurantHeader extends StatelessWidget {
                 width: 8,
               ),
               Text(
-                restaurantData.rating?.toString() ?? "4.2",
+                getAverageRating(),
                 style: const TextStyle(fontSize: 12, color: AppColor.g700),
               ),
               const SizedBox(
@@ -182,5 +182,13 @@ class RestaurantHeader extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String getAverageRating() {
+  if (restaurantData.rating == null || restaurantData.rating is! num || review.isEmpty) {
+    return '0';
+  }
+  double averageRating = restaurantData.rating / review.length;
+  return averageRating.toStringAsFixed(1);
   }
 }
