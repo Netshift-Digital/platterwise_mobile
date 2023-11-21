@@ -87,7 +87,7 @@ class _FollowingTabState extends State<FollowingTab> {
               // ),
               Consumer<VBlogViewModel>(
                 builder: (context, vBlogModel, child) {
-                  final posts = vBlogModel.posts;
+                  final posts = vBlogModel.allposts;
                   return ListView.builder(
                     padding: EdgeInsets.zero,
                     primary: false,
@@ -121,21 +121,25 @@ class _FollowingTabState extends State<FollowingTab> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      getPost(restart: true);
-    });
-    widget.scrollController.addListener(() {
-      var model = context.read<PageViewModel>();
-      if (widget.scrollController.position.userScrollDirection ==
-          ScrollDirection.forward) {
-        model.hideBottomNavigator();
-      } else {
-        model.showBottomNavigator();
-      }
-      if (widget.scrollController.position.pixels ==
-          widget.scrollController.position.maxScrollExtent) {
-        getPost(restart: false);
+      if (mounted) {
+        getPost(restart: true);
       }
     });
+    if (mounted) {
+      widget.scrollController.addListener(() {
+        var model = context.read<PageViewModel>();
+        if (widget.scrollController.position.userScrollDirection ==
+            ScrollDirection.forward) {
+          model.hideBottomNavigator();
+        } else {
+          model.showBottomNavigator();
+        }
+        if (widget.scrollController.position.pixels ==
+            widget.scrollController.position.maxScrollExtent) {
+          getPost(restart: false);
+        }
+      });
+    }
   }
 
   void getPost({bool restart = false}) async {

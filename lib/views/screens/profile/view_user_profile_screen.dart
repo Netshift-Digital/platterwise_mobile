@@ -131,7 +131,6 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                   //FirebaseAuth.instance.signOut();
                                   LocalStorage.clear();
                                   blogModel.myPosts.clear();
-                                  blogModel.myLikes.clear();
                                 });
                               },
                             ),

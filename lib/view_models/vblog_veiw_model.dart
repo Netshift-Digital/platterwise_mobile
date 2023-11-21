@@ -24,11 +24,11 @@ import 'package:platterwave/utils/random_functions.dart';
 
 class VBlogViewModel extends BaseViewModel {
   VBlogService vBlogService = locator<VBlogService>();
-  List<Post> posts = [];
+  List<Post> allposts = [];
   List<Post> myPosts = [];
   List<Post> trendingPostBaseLike = [];
   List<Post> trendingPostBaseComment = [];
-  List<Post> myLikes = [];
+  // List<Post> myLikes = [];
   String baseOn = "baselike";
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   List<AllTagRank> topTags = [];
@@ -51,9 +51,9 @@ class VBlogViewModel extends BaseViewModel {
       if (data != null) {
         var post = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
         if (restart) {
-          posts = [];
+          allposts = [];
         }
-        posts.addAll(post);
+        allposts.addAll(post);
         if (data["per_page"] > post.length) {
           return true;
         }
@@ -69,19 +69,55 @@ class VBlogViewModel extends BaseViewModel {
     return false;
   }
 
-  Future<List<Post>?> getLikedPost(String id) async {
+  Future<bool> getRecPost(
+      {bool restart = false, required int postIndex}) async {
     try {
-      if (id == LocalStorage.getUserId()) {
-        var data = await vBlogService.getLikedPost(1);
-        if (data != null) {
-          var post = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
-          return post;
+      notifyListeners();
+      //I have not yet implemented the get recommended post api
+      var data = await vBlogService.getLikedPost(postIndex);
+      postAppState = AppState.idle;
+      notifyListeners();
+      if (data != null) {
+        var post = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
+        if (restart) {
+          allposts = [];
         }
-      } else {}
+        allposts.addAll(post);
+        if (data["per_page"] > post.length) {
+          return true;
+        }
+        notifyListeners();
+      }
     } catch (e) {
-      print(e.toString());
+      postAppState = AppState.idle;
+      notifyListeners();
       setState(AppState.idle);
+      print("The error is ${e.toString()}");
+      RandomFunction.toast("Something went wrong");
     }
+    return false;
+  }
+
+  Future<List<Post>?> getLikedPost(String id,
+      {bool restart = false, required int postIndex}) async {
+    try {
+      notifyListeners();
+      //I have not yet implemented the get recommended post api
+      var data = await vBlogService.getLikedPost(postIndex);
+      postAppState = AppState.idle;
+      notifyListeners();
+      if (data != null) {
+        var post = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
+        return post;
+      }
+    } catch (e) {
+      postAppState = AppState.idle;
+      notifyListeners();
+      setState(AppState.idle);
+      print("The error is ${e.toString()}");
+      RandomFunction.toast("Something went wrong");
+    }
+
     return null;
   }
 
@@ -186,7 +222,7 @@ class VBlogViewModel extends BaseViewModel {
 
   Future<dynamic> likePost(Post p, UserProfile userData) async {
     try {
-      myLikes.add(p);
+      // myLikes.add(p);
       FirebaseFirestore.instance
           .collection("likes")
           .doc("users")
@@ -237,9 +273,9 @@ class VBlogViewModel extends BaseViewModel {
     try {
       var data = await vBlogService.deletePost(post.postId);
       if (data != null) {
-        posts.remove(post);
+        allposts.remove(post);
         myPosts.remove(post);
-        myLikes.remove(post);
+        //  myLikes.remove(post);
         notifyListeners();
       }
       return data;
@@ -384,11 +420,11 @@ class VBlogViewModel extends BaseViewModel {
           .doc("users")
           .collection(LocalStorage.getUserId())
           .get();
-      myLikes = [];
+      //myLikes = [];
 
       for (var v in data.docs) {
-        myLikes.add(Post.fromJson(v.data()));
-        return myLikes;
+        //   myLikes.add(Post.fromJson(v.data()));
+        //   return myLikes;
       }
       notifyListeners();
     } catch (e) {
@@ -496,8 +532,9 @@ class VBlogViewModel extends BaseViewModel {
   }
 
   bool checkIsLiked(int id) {
-    var d = myLikes.where((element) => element.postId == id);
-    return d.isNotEmpty;
+    // var d = myLikes.where((element) => element.postId == id);
+    // return d.isNotEmpty;
+    return true;
   }
 
   Future<List<Post>?> searchPost(String search) async {

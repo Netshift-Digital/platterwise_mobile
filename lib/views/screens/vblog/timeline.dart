@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
+import 'package:platterwave/utils/enum/app_state.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
@@ -14,10 +15,13 @@ import 'package:platterwave/views/screens/vblog/create_post/create_post.dart';
 import 'package:platterwave/views/screens/vblog/following_tab.dart';
 import 'package:platterwave/views/screens/vblog/notification.dart';
 import 'package:platterwave/views/screens/vblog/recommended_tab.dart';
+import 'package:platterwave/views/widget/containers/empty_content_container.dart';
+import 'package:platterwave/views/widget/containers/timeline_post_container.dart';
 import 'package:provider/provider.dart';
 
 class Timeline extends StatefulWidget {
-  const Timeline({Key? key}) : super(key: key);
+  final ScrollController scrollController = ScrollController();
+  Timeline({Key? key}) : super(key: key);
 
   @override
   State<Timeline> createState() => _TimelineState();
@@ -25,7 +29,9 @@ class Timeline extends StatefulWidget {
 
 class _TimelineState extends State<Timeline> {
   final searchTextController = TextEditingController();
-  final ScrollController scrollController = ScrollController();
+  int _postIndex = 0;
+  int tabIndex = 0;
+  bool postEnd = false;
   bool hideFab = false;
   @override
   Widget build(BuildContext context) {
@@ -105,6 +111,15 @@ class _TimelineState extends State<Timeline> {
                     Padding(
                       padding: EdgeInsets.only(right: 20.w),
                       child: TabBar(
+                        onTap: (index) {
+                          if (mounted) {
+                            widget.scrollController.jumpTo(0);
+                            setState(() {
+                              tabIndex = index;
+                            });
+                            getPost(restart: true);
+                          }
+                        },
                         tabs: const [
                           Tab(
                             text: "Following",
@@ -124,44 +139,92 @@ class _TimelineState extends State<Timeline> {
                         indicatorWeight: 1.w,
                         indicatorPadding: EdgeInsets.symmetric(horizontal: 7.w),
                       ),
-                    )
+                    ),
+                    model.postAppState == AppState.busy
+                        ? Padding(
+                            padding: const EdgeInsets.only(bottom: 100),
+                            child: LinearProgressIndicator(
+                              backgroundColor: Colors.grey[200]!,
+                              valueColor:
+                                  const AlwaysStoppedAnimation(AppColor.p200),
+                            ),
+                          )
+                        : const SizedBox()
                   ],
                 ),
               )
             ];
           },
-          body: TabBarView(
-            children: [FollowingTab(), RecommendedTab()],
+          body: Consumer<VBlogViewModel>(
+            builder: (context, vBlogModel, child) {
+              final posts = vBlogModel.allposts;
+              return posts.isEmpty
+                  ? const Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 20, right: 20),
+                        child: EmptyContentContainer(
+                          errorText: "No Posts here yet",
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: EdgeInsets.zero,
+                      primary: false,
+                      shrinkWrap: true,
+                      controller: widget.scrollController,
+                      physics: BouncingScrollPhysics(),
+                      itemCount: posts.length,
+                      itemBuilder: (context, index) {
+                        var data = posts[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: TimelinePostContainer(data),
+                        );
+                      },
+                    );
+            },
           ),
         ),
       ),
     );
   }
-/*
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      getPost(restart: true);
-    });
-    scrollController.addListener(() {
-      var model = context.read<PageViewModel>();
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.forward) {
-        model.hideBottomNavigator();
-      } else {
-        model.showBottomNavigator();
-      }
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        print("You are at the bottom");
-        getPost(restart: false);
+      if (mounted) {
+        getPost(restart: true);
       }
     });
+    if (mounted) {
+      widget.scrollController.addListener(() {
+        var model = context.read<PageViewModel>();
+        if (widget.scrollController.position.userScrollDirection ==
+            ScrollDirection.forward) {
+          model.hideBottomNavigator();
+        } else {
+          model.showBottomNavigator();
+        }
+        if (widget.scrollController.position.pixels ==
+            widget.scrollController.position.maxScrollExtent) {
+          getPost(restart: false);
+        }
+      });
+    }
   }
 
-  void getPost({bool restart = false}) {
+  void getPost({bool restart = false}) async {
     var model = context.read<VBlogViewModel>();
-    model.getPost(restart: false);
-  }*/
+    if (restart) {
+      _postIndex = 0;
+      postEnd = false;
+    }
+    if (postEnd == false) {
+      _postIndex = _postIndex + 1;
+      postEnd = tabIndex == 0
+          ? await model.getPost(restart: restart, postIndex: _postIndex)
+          : await model.getRecPost(restart: restart, postIndex: _postIndex);
+    }
+  }
 }
