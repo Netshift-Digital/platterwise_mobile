@@ -225,7 +225,7 @@ class VBlogViewModel extends BaseViewModel {
                 firebaseAuthId: LocalStorage.getUserId(),
                 userName: userData.username,
                 profilePic: userData.profileUrl));
-                return true;
+        return true;
       }
     } catch (e) {
       setState(AppState.idle);
@@ -374,44 +374,6 @@ class VBlogViewModel extends BaseViewModel {
       postAppState = AppState.idle;
       notifyListeners();
     }
-    return null;
-  }
-
-  Future<List<UserProfile>?> getFollowers() async {
-    /*   try {
-      var data = await FirebaseFirestore.instance
-          .collection("followers")
-          .doc("users")
-          .collection(LocalStorage.getUserId())
-          .get();
-
-      myFellows = [];
-      for (var v in data.docs) {
-        myFellows.add(UserProfile.fromJson(v.data()));
-      }
-      notifyListeners();
-    } catch (e) {
-      //
-    }*/
-    return null;
-  }
-
-  Future<List<UserProfile>?> getFollowing() async {
-    /* try {
-      var data = await FirebaseFirestore.instance
-          .collection("following")
-          .doc("users")
-          .collection(LocalStorage.getUserId())
-          .get();
-
-      following = [];
-      for (var v in data.docs) {
-        following.add(UserProfile.fromJson(v.data()));
-      }
-      notifyListeners();
-    } catch (e) {
-      //
-    }*/
     return null;
   }
 

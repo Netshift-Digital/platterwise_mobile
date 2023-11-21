@@ -125,10 +125,10 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                 nav(context, Login(), remove: true);
                                 context.read<PageViewModel>().setIndex(0);
                                 FirebaseMessaging.instance.unsubscribeFromTopic(
-                                    FirebaseAuth.instance.currentUser!.uid);
+                                    LocalStorage.getUserId());
                                 Future.delayed(
                                     const Duration(milliseconds: 500), () {
-                                  FirebaseAuth.instance.signOut();
+                                  //FirebaseAuth.instance.signOut();
                                   LocalStorage.clear();
                                   blogModel.myPosts.clear();
                                   blogModel.myLikes.clear();

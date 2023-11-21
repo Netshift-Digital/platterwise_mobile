@@ -117,8 +117,6 @@ class _BottomNavState extends State<BottomNav> {
     await resModel.getFavouriteRestaurant();
     await resModel.getReservations();
     await resModel.getFollowedRestaurant();
-    await blogModel.getFollowers();
-    await blogModel.getFollowing();
     // await blogModel.getTopTag();
   }
 
@@ -169,9 +167,11 @@ class _BottomNavState extends State<BottomNav> {
 
   void setNotification() async {
     var email = LocalStorage.getEmail();
+    var uid = LocalStorage.getUserId();
     var topic = (email).replaceAll("@", "");
     FirebaseMessaging.instance.getToken().then((value) {
       FirebaseMessaging.instance.subscribeToTopic(topic);
+      FirebaseMessaging.instance.subscribeToTopic(uid);
     });
     /* var user = FirebaseAuth.instance.currentUser;
     if (user != null) {
