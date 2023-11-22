@@ -41,8 +41,11 @@ class ViewUserProfileScreen extends StatefulWidget {
 }
 
 class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
-  List<Post> myPost = [];
   var isFollowing = false;
+  int _postIndex = 0;
+  bool postEnd = false;
+  ScrollController scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     var blogModel = context.watch<VBlogViewModel>();
@@ -392,7 +395,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                   body: TabBarView(
                     children: [
                       ViewPostsPage(
-                        post: myPost,
+                        id: widget.id!,
                       ),
                       ViewLikesPage(
                         id: widget.id,
@@ -408,7 +411,6 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
     super.initState();
     Future.delayed(const Duration(milliseconds: 20), () {
       getData();
-      getPost();
       checkIsFollowing();
     });
   }
@@ -440,35 +442,6 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
       } else {
         widget.id = widget.userData?.userId.toString();
       }
-    }
-  }
-
-  void getPost() {
-    var blogModel = context.read<VBlogViewModel>();
-    if (widget.id == null || widget.id == LocalStorage.getUserId()) {
-      if (blogModel.myPosts.isEmpty) {
-        blogModel.getMyPost().then((value) {
-          if (value != null) {
-            if (mounted) {
-              setState(() {
-                myPost = value;
-              });
-            }
-          }
-        });
-      } else {
-        myPost = blogModel.myPosts;
-      }
-    } else {
-      blogModel.getUserPost(widget.id!).then((value) {
-        if (value != null) {
-          if (mounted) {
-            setState(() {
-              myPost = value;
-            });
-          }
-        }
-      });
     }
   }
 

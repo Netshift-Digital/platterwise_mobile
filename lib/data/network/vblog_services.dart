@@ -67,8 +67,8 @@ class VBlogService {
     return null;
   }
 
-  Future<Map<String, dynamic>?> getUserPost(String? id) async {
-    String url = "${baseurl3}post/my-posts";
+  Future<Map<String, dynamic>?> getUserPost(int index) async {
+    String url = "${baseurl3}post/my-posts?page=$index";
     var token = LocalStorage.getToken();
     try {
       var response = await client.get(Uri.parse(url), headers: {

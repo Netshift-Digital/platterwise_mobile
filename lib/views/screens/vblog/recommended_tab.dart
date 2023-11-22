@@ -90,6 +90,7 @@ class _RecommendedTabState extends State<RecommendedTab> {
                   return ListView.builder(
                     padding: EdgeInsets.zero,
                     primary: false,
+                    physics: BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: posts.length,
                     itemBuilder: (context, index) {

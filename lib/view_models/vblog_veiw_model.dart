@@ -114,22 +114,25 @@ class VBlogViewModel extends BaseViewModel {
       postAppState = AppState.idle;
       notifyListeners();
       setState(AppState.idle);
-      print("The error is ${e.toString()}");
       RandomFunction.toast("Something went wrong");
     }
     return null;
   }
 
-  Future<List<Post>?> getMyPost() async {
+  Future<List<Post>?> getMyPost({required int postIndex}) async {
     try {
-      var data = await vBlogService.getUserPost(null);
+      var data = await vBlogService.getUserPost(postIndex);
+      postAppState = AppState.idle;
       if (data != null) {
-        myPosts = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
+        var res = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
         notifyListeners();
-        return myPosts;
+        return res;
       }
     } catch (e) {
+      postAppState = AppState.idle;
+      notifyListeners();
       setState(AppState.idle);
+      RandomFunction.toast("Something went wrong");
     }
     return null;
   }
@@ -183,9 +186,10 @@ class VBlogViewModel extends BaseViewModel {
     return null;
   }
 
-  Future<List<Post>?> getUserPost(String id) async {
+  Future<List<Post>?> getUserPost(String id,
+      {bool restart = false, required int postIndex}) async {
     try {
-      var data = await vBlogService.getUserPost(id);
+      var data = await vBlogService.getUserPost(postIndex);
       if (data != null) {
         var p = PostModel.fromJson(data as Map);
         notifyListeners();

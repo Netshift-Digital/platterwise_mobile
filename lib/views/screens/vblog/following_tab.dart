@@ -92,6 +92,7 @@ class _FollowingTabState extends State<FollowingTab> {
                     padding: EdgeInsets.zero,
                     primary: false,
                     shrinkWrap: true,
+                    physics: BouncingScrollPhysics(),
                     itemCount: posts.length,
                     itemBuilder: (context, index) {
                       var data = posts[index];

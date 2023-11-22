@@ -81,14 +81,14 @@ class _ViewLikesPageState extends State<ViewLikesPage> {
     var model = context.read<VBlogViewModel>();
     if (restart) {
       _postIndex = 0;
+      postList = [];
       postEnd = false;
     }
     if (postEnd == false) {
       _postIndex = _postIndex + 1;
       var res = await model.getLikedPost(widget.id ?? LocalStorage.getUserId(),
           restart: restart, postIndex: _postIndex);
-      print("This is size ${res!.length}");
-      if (res.isNotEmpty) {
+      if (res!.isNotEmpty) {
         setState(() {
           postList.addAll(res);
         });
