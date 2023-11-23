@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:platterwave/common/base_view_model.dart';
 import 'package:platterwave/data/local/local_storage.dart';
@@ -27,8 +26,6 @@ class VBlogViewModel extends BaseViewModel {
   List<Post> allposts = [];
   List<Post> recposts = [];
   List<Post> myPosts = [];
-  List<Post> trendingPostBaseLike = [];
-  List<Post> trendingPostBaseComment = [];
   // List<Post> myLikes = [];
   String baseOn = "baselike";
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
@@ -107,7 +104,8 @@ class VBlogViewModel extends BaseViewModel {
       postAppState = AppState.idle;
       notifyListeners();
       if (data != null) {
-        var post = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
+        var post =
+            List<Post>.from(data["data"].map((x) => Post.fromJsonPost(x)));
         return post;
       }
     } catch (e) {
@@ -201,22 +199,18 @@ class VBlogViewModel extends BaseViewModel {
     return null;
   }
 
-  Future<List<UsersComment>> getComment(int postId) async {
+  Future<List<UsersComment>> getComment(String postId) async {
     List<UsersComment> comments = [];
     try {
       var data = await vBlogService.getComment(postId);
       if (data != null) {
-        var comment = CommentModel.fromJson(data as Map);
-        for (var element in comment.allUsersComments) {
-          if (element.comment.toString().isNotEmpty) {
-            comments.add(element);
-          }
-        }
+        var comments = List<UsersComment>.from(
+            data["comments"].map((x) => UsersComment.fromJson(x)));
         notifyListeners();
         return comments;
       }
     } catch (e) {
-      // print(e);
+      print(e);
       setState(AppState.idle);
     }
     return comments;
@@ -544,17 +538,14 @@ class VBlogViewModel extends BaseViewModel {
       var data = await vBlogService.searchPost(search);
       //print(data);
       if (data != null) {
-        List<Post> searchResult = [];
-        for (var e in data['search_result']) {
-          var result = Post.fromJson(e);
-          searchResult.add(result);
-        }
-        return searchResult;
+        var res = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
+        notifyListeners();
+        return res;
       }
       setState(AppState.idle);
     } catch (e) {
       print(e);
-      // RandomFunction.toast("something went wrong");
+      RandomFunction.toast("something went wrong");
       setState(AppState.idle);
     }
     return null;
@@ -580,15 +571,16 @@ class VBlogViewModel extends BaseViewModel {
     return null;
   }
 
-  Future<List<SearchResultElement>?> searchUser(String search) async {
+  Future<List<UserProfile>?> searchUser(String search) async {
     try {
       var data = await vBlogService.searchUser(search);
-      //print(data);
       if (data != null) {
-        var search = SearchResult.fromJson(data);
-        searchUserResult = search.searchResult;
+        var search = List<UserProfile>.from(
+            data["data"].map((x) => UserProfile.fromJson(x)));
         notifyListeners();
-        return searchUserResult;
+        print("The user name is ${search[0].username}");
+
+        return search;
       }
       setState(AppState.idle);
     } catch (e) {
@@ -654,45 +646,36 @@ class VBlogViewModel extends BaseViewModel {
         .delete();
   }
 
-  Future<List<Post>?> getTrendingLikes({String base = "baselike"}) async {
+  Future<List<Post>?> getTrendingLikes() async {
     try {
-      baseOn = base;
-      var data = await vBlogService.getTrending(baseOn);
+      var data = await vBlogService.getTrendingLikes();
       //print(data);
       if (data != null) {
-        trendingPostBaseLike = [];
-        for (var e in data['trending']) {
-          var p = Post.fromJson(e as Map);
-          trendingPostBaseLike.add(p);
-        }
-        return trendingPostBaseLike;
+        var res = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
+        notifyListeners();
+        return res;
       }
       setState(AppState.idle);
     } catch (e) {
       print(e);
-      // RandomFunction.toast("something went wrong");
+      RandomFunction.toast("something went wrong");
       setState(AppState.idle);
     }
     return null;
   }
 
-  Future<List<Post>?> getTrendingOnComment(
-      {String base = "basecomment"}) async {
+  Future<List<Post>?> getTrendingOnComment() async {
     try {
-      baseOn = base;
-      var data = await vBlogService.getTrending(baseOn);
+      var data = await vBlogService.getTrendingComments();
       //print(data);
       if (data != null) {
-        trendingPostBaseComment = [];
-        for (var e in data['trending']) {
-          var p = Post.fromJson(e as Map);
-          trendingPostBaseComment.add(p);
-        }
-        return trendingPostBaseComment;
+        var res = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
+        notifyListeners();
+        return res;
       }
       setState(AppState.idle);
     } catch (e) {
-      // RandomFunction.toast("something went wrong");
+      RandomFunction.toast("something went wrong");
       setState(AppState.idle);
     }
     return null;

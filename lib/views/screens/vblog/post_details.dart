@@ -98,11 +98,11 @@ class _PostDetailsState extends State<PostDetails> {
                               UsersComment data = comments[index];
                               return GestureDetector(
                                 onTap: () {
-                                  nav(
+                                  /*  nav(
                                       context,
                                       CommentReply(
                                           usersComment: data,
-                                          post: widget.post));
+                                          post: widget.post));*/
                                 },
                                 child: Container(
                                   color: Colors.transparent,
@@ -117,21 +117,18 @@ class _PostDetailsState extends State<PostDetails> {
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              if (data.firebaseAuthID
-                                                  .toString()
-                                                  .isNotEmpty) {
-                                                nav(
-                                                    context,
-                                                    ViewUserProfileScreen(
-                                                      id: data.firebaseAuthID,
-                                                    ));
-                                              }
+                                              nav(
+                                                  context,
+                                                  ViewUserProfileScreen(
+                                                    id: data.user.userId
+                                                        .toString(),
+                                                  ));
                                             },
                                             child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(34),
                                               child: ImageCacheR(
-                                                data.profileUrl,
+                                                data.user.profileUrl,
                                                 height: 35,
                                                 width: 35,
                                                 chachedImage: true,
@@ -148,7 +145,7 @@ class _PostDetailsState extends State<PostDetails> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                data.fullName,
+                                                data.user.fullName,
                                                 style: AppTextTheme.h3.copyWith(
                                                     fontSize: 18,
                                                     fontWeight:
@@ -160,7 +157,7 @@ class _PostDetailsState extends State<PostDetails> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    "@${data.username}",
+                                                    "@${data.user.username}",
                                                     style: AppTextTheme.h6
                                                         .copyWith(
                                                             fontSize: 12,
@@ -189,7 +186,6 @@ class _PostDetailsState extends State<PostDetails> {
                                             ],
                                           ),
                                           const Spacer(),
-                                          //SvgPicture.asset("assets/icon/option.svg")
                                         ],
                                       ),
                                       Row(
@@ -227,11 +223,11 @@ class _PostDetailsState extends State<PostDetails> {
                                         children: [
                                           CustomAppIcon(
                                             onTap: () {
-                                              nav(
+                                              /*     nav(
                                                   context,
                                                   CommentReply(
                                                       usersComment: data,
-                                                      post: widget.post));
+                                                      post: widget.post));*/
                                             },
                                             icon: "assets/icon/comment.svg",
                                             count: data.commentReply,
@@ -328,9 +324,7 @@ class _PostDetailsState extends State<PostDetails> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
     getComment();
     Future.delayed(const Duration(milliseconds: 40), () {
       getComment();
@@ -339,7 +333,7 @@ class _PostDetailsState extends State<PostDetails> {
 
   void getComment() {
     var model = context.read<VBlogViewModel>();
-    model.getComment(widget.post.postId).then((value) {
+    model.getComment(widget.post.postId.toString()).then((value) {
       if (mounted) {
         setState(() {
           comments = value;
@@ -359,10 +353,11 @@ class _PostDetailsState extends State<PostDetails> {
       id: widget.post.user.userId.toString(),
     )
         .then((value) {
-    //  getComment();
+      getComment();
       if (value != null) {
-        widget.post.commentCount = widget.post.commentCount + 1;
-        setState(() {});
+        setState(() {
+          widget.post.commentCount = widget.post.commentCount + 1;
+        });
       }
     });
   }

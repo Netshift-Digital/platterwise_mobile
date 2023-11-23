@@ -203,9 +203,9 @@ class UserViewModel extends BaseViewModel {
 //This can be for getting another user profile
   Future<UserProfile?> getUserProfile(String id) async {
     try {
-      var data = await userService.getMyProfile();
+      var data = await userService.getOtherUserProfile(id);
       if (data != null) {
-        var user = UserProfile.fromJson(data);
+        var user = UserProfile.fromJson(data["profile"]);
         return user;
       }
       setState(AppState.idle);

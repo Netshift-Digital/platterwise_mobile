@@ -15,7 +15,7 @@ import 'package:platterwave/views/widget/containers/empty_content_container.dart
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:platterwave/views/widget/icon/custom_app_icon.dart';
 import 'package:provider/provider.dart';
-
+/*
 class CommentReply extends StatefulWidget {
   final UsersComment usersComment;
   final Post post;
@@ -428,3 +428,4 @@ class _CommentReplyState extends State<CommentReply> {
     );
   }
 }
+*/

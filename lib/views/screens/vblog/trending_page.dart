@@ -17,81 +17,75 @@ class TrendingPage extends StatefulWidget {
 
 class _TrendingPageState extends State<TrendingPage> {
   bool loading = false;
-  List<Post>? trendingPost ;
+  List<Post>? trendingPost;
   @override
   Widget build(BuildContext context) {
     var model = context.watch<VBlogViewModel>();
     return Scaffold(
       appBar: appBar(context),
-      body:trendingPost==null?const Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation(AppColor.p200),
-        ),
-      ):
-      trendingPost!.isEmpty?
-         const  Center(child:  EmptyContentContainer())
-          :Padding(
-            padding: const EdgeInsets.only(left: 16,right: 16),
-            child: ListView.builder(
-            padding: EdgeInsets.zero,
-            physics: const BouncingScrollPhysics(),
-            shrinkWrap: true,
-        itemCount: trendingPost!.length,
-        itemBuilder: (context,index) {
-              var data = trendingPost![index];
-            return  TimelinePostContainer(data);
-        }
-      ),
-          ),
+      body: trendingPost == null
+          ? const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(AppColor.p200),
+              ),
+            )
+          : trendingPost!.isEmpty
+              ? const Center(child: EmptyContentContainer())
+              : Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: trendingPost!.length,
+                      itemBuilder: (context, index) {
+                        var data = trendingPost![index];
+                        return TimelinePostContainer(data);
+                      }),
+                ),
     );
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(milliseconds: 50),(){
-     if(widget.basedOn=="baselike"){
-       setBasedOnLikes();
-     }else{
-      setBasedOnComment();
-     }
+    Future.delayed(const Duration(milliseconds: 50), () {
+      if (widget.basedOn == "baselike") {
+        setBasedOnLikes();
+      } else {
+        setBasedOnComment();
+      }
     });
   }
 
-  setBasedOnLikes(){
+  setBasedOnLikes() {
     var model = context.read<VBlogViewModel>();
-    if(model.trendingPostBaseLike.isEmpty){
-      model.getTrendingLikes().then((value){
-        trendingPost=model.trendingPostBaseLike;
-        setState(() {});
-      });
-    }else{
-      trendingPost=model.trendingPostBaseLike;
+    model.getTrendingLikes().then((value) {
+      if (value != null) {
+        trendingPost = value;
+      }
       setState(() {});
-    }
-
-  }
-  setBasedOnComment(){
-    var model = context.read<VBlogViewModel>();
-    if(model.trendingPostBaseComment.isEmpty){
-      model.getTrendingOnComment().then((value){
-        trendingPost=model.trendingPostBaseComment;
-        setState(() {});
-      });
-    }else{
-      trendingPost=model.trendingPostBaseComment;
-      setState(() {});
-    }
-
+    });
   }
 
+  setBasedOnComment() {
+    var model = context.read<VBlogViewModel>();
+    model.getTrendingOnComment().then((value) {
+      if (value != null) {
+        trendingPost = value;
+      }
+      setState(() {});
+    });
+  }
 
-  stop(){
+  stop() {
     setState(() {
       loading = false;
     });
   }
-  start(){
+
+  start() {
     setState(() {
       loading = true;
     });

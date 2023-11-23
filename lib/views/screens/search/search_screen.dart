@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:platterwave/model/profile/user_data.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/model/vblog/user_search.dart';
 import 'package:platterwave/res/text-theme.dart';
@@ -27,7 +28,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   List<Post> searchResult = [];
-  List<SearchResultElement> searchUserResult = [];
+  List<UserProfile> searchUserResult = [];
   TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -107,7 +108,12 @@ class _SearchScreenState extends State<SearchScreen> {
                               var data = searchUserResult[index];
                               return ListTile(
                                 onTap: () {
-                                  nav(context, ViewUserProfileScreen());
+                                  nav(
+                                      context,
+                                      ViewUserProfileScreen(
+                                        id: data.userId.toString(),
+                                        //  userData: data,
+                                      ));
                                 },
                                 contentPadding: EdgeInsets.zero,
                                 leading: ImageCacheCircle(

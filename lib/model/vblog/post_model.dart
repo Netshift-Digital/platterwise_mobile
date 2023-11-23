@@ -58,6 +58,26 @@ class Post {
   List liked;
   dynamic commentReply;
 
+  factory Post.fromJsonPost(Map<dynamic, dynamic> json) => Post(
+      contentPost: json["post"]["content_post"] ?? "",
+      postId: json["post"]["id"] ?? 20,
+      contentType: json["post"]["content_type"] ?? "image",
+      contentUrl: json["post"]["contentUrl"] ??
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
+      timestamp: json["post"]["created_at"] == null
+          ? DateTime.now()
+          : DateTime.parse(json["post"]["created_at"]),
+      commentCount: json["post"]["total_comments"] ?? 0,
+      user: json["user"] != null
+          ? UserProfile.fromJson(json["user"])
+          : UserProfile.empty(),
+      likeCount: json["post"]['total_likes'] ?? 0,
+      tags: json["post"]['taggs'] ?? [],
+      commentReply: json["post"]['comment_reply'] ?? "",
+      liked: json["post"]['liked'].runtimeType == String
+          ? ['yes']
+          : json['liked'] ?? []);
+
   factory Post.fromJson(Map<dynamic, dynamic> json) => Post(
       contentPost: json["content_post"] ?? "",
       postId: json["id"] ?? 20,

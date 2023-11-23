@@ -2,77 +2,33 @@
 //
 //     final commentModel = commentModelFromJson(jsonString);
 
-import 'dart:convert';
-
-CommentModel commentModelFromJson(String str) => CommentModel.fromJson(json.decode(str));
-
-String commentModelToJson(CommentModel data) => json.encode(data.toJson());
-
-class CommentModel {
-  CommentModel({
-    required this.status,
-    required this.allUsersComments,
-  });
-
-  dynamic status;
-  List<UsersComment> allUsersComments;
-
-  factory CommentModel.fromJson(Map<dynamic, dynamic> json) => CommentModel(
-    status: json["status"]??"",
-    allUsersComments: List<UsersComment>.from(json["all_users_comments"].map((x) => UsersComment.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "status": status,
-    "all_users_comments": List<dynamic>.from(allUsersComments.map((x) => x.toJson())),
-  };
-}
+import 'package:platterwave/model/profile/user_data.dart';
 
 class UsersComment {
-  UsersComment({
-    required this.contentPost,
-    required this.postType,
-    required this.username,
-    required this.comment,
-    required this.profileUrl,
-    required  this.timestamp,
-    this.commentId,
-    required this.firebaseAuthID,
-    required this.fullName,
-    required this.commentReply
-  });
+  UsersComment(
+      {required this.user,
+      required this.comment,
+      required this.postId,
+      required this.timestamp,
+      required this.commentId,
+      required this.commentReply});
 
-  dynamic contentPost;
-  dynamic postType;
-  dynamic username;
-  dynamic comment;
-  dynamic profileUrl;
-  dynamic commentId;
+  String comment;
+  UserProfile user;
+  num postId;
+  num commentId;
   DateTime timestamp;
-  dynamic firebaseAuthID;
-  dynamic fullName;
   dynamic commentReply;
 
   factory UsersComment.fromJson(Map<String, dynamic> json) => UsersComment(
-    contentPost: json["content_post"]??"",
-    postType: json["post_type"]??"",
-    username: json["username"]??"User",
-    comment: json["comment"]??"",
-    profileUrl: json["profileURL"] ??"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-    timestamp:json["timestamp"]==null?DateTime.now():DateTime.parse(json["timestamp"]),
-    commentId: json['comment_id']??"0",
-      firebaseAuthID:  json['firebaseAuthID']??"",
-    fullName: json['full_name']??"",
-    commentReply:json['comment_reply']??""
-  );
-
-  Map<String, dynamic> toJson() => {
-    "content_post": contentPost,
-    "post_type": postType,
-    "username": username,
-    "comment": comment,
-    "profileURL": profileUrl == null ? null : profileUrl,
-    "timestamp": timestamp.toIso8601String(),
-    "comment_id":commentId
-  };
+      user: json["user"] != null
+          ? UserProfile.fromJson(json["user"])
+          : UserProfile.empty(),
+      postId: json["post_id"] ?? 0,
+      comment: json["comment"] ?? "",
+      timestamp: json["created_at"] == null
+          ? DateTime.now()
+          : DateTime.parse(json["created_at"]),
+      commentId: json['comment_id'] ?? 0,
+      commentReply: json['comment_reply'] ?? "");
 }

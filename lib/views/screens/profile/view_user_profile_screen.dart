@@ -480,6 +480,8 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
 
   checkIsFollowing() async {
     var blogModel = context.read<VBlogViewModel>();
-    isFollowing = await blogModel.getIsFollowed(widget.id!);
+    if (widget.id != null) {
+      isFollowing = await blogModel.getIsFollowed(widget.id!);
+    }
   }
 }
