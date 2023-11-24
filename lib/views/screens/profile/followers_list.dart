@@ -8,10 +8,8 @@ import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
-import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/containers/empty_content_container.dart';
 import 'package:platterwave/views/widget/containers/users_card.dart';
-import 'package:platterwave/views/widget/custom/cache-image.dart';
 
 class FollowersList extends StatefulWidget {
   final int index;
@@ -136,8 +134,8 @@ class _FollowersListState extends State<FollowersList>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    print("This is the id ${widget.id}");
     controller =
         TabController(length: 2, vsync: this, initialIndex: widget.index);
     Future.delayed(const Duration(milliseconds: 50), () {

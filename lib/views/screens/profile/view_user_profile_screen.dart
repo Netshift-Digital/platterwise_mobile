@@ -289,49 +289,73 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                       ),
                                     ),
                                     showFollow()
-                                        ? PlatButton(
-                                            title: isFollowing
-                                                ? "Unfollow"
-                                                : "Follow",
-                                            padding: 0,
-                                            textSize: 14,
-                                            color: isFollowing
-                                                ? AppColor.g700
-                                                : AppColor.p200,
-                                            onTap: () {
-                                              var user = context
-                                                  .read<UserViewModel>()
-                                                  .user;
-                                              if (isFollowing) {
-                                                blogModel
-                                                    .unFollowUser(widget.id!)
-                                                    .then((value) {
-                                                  if (value) {
-                                                    setState(() {
-                                                      isFollowing = false;
-                                                      widget.userData!
-                                                          .followers -= 1;
-                                                    });
-                                                  }
-                                                });
-                                              } else {
-                                                blogModel
-                                                    .followUser(widget.id!,
-                                                        user!, widget.userData!)
-                                                    .then((value) {
-                                                  if (value) {
-                                                    setState(() {
-                                                      isFollowing = true;
-                                                      widget.userData!
-                                                          .followers += 1;
-                                                    });
-                                                  }
-                                                });
+                                        ? StreamBuilder<DocumentSnapshot>(
+                                            stream: FirebaseFirestore.instance
+                                                .collection('followButton')
+                                                .doc(widget.id)
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              bool disable = false;
+                                              if (snapshot.data != null) {
+                                                if (snapshot.data!.exists) {
+                                                  var data = snapshot.data!
+                                                      .data()! as Map;
+                                                  disable = data['disable'];
+                                                  print(
+                                                      "Is it disabled $disable");
+                                                }
                                               }
-                                            },
-                                            width: 95.w,
-                                            height: 38.h,
-                                          )
+                                              if (disable == false) {
+                                                return PlatButton(
+                                                  title: isFollowing
+                                                      ? "Unfollow"
+                                                      : "Follow",
+                                                  padding: 0,
+                                                  textSize: 14,
+                                                  color: isFollowing
+                                                      ? AppColor.g700
+                                                      : AppColor.p200,
+                                                  onTap: () {
+                                                    var user = context
+                                                        .read<UserViewModel>()
+                                                        .user;
+                                                    if (isFollowing) {
+                                                      blogModel
+                                                          .unFollowUser(
+                                                              widget.id!)
+                                                          .then((value) {
+                                                        if (value) {
+                                                          setState(() {
+                                                            isFollowing = false;
+                                                            widget.userData!
+                                                                .followers -= 1;
+                                                          });
+                                                        }
+                                                      });
+                                                    } else {
+                                                      blogModel
+                                                          .followUser(
+                                                              widget.id!,
+                                                              user!,
+                                                              widget.userData!)
+                                                          .then((value) {
+                                                        if (value) {
+                                                          setState(() {
+                                                            isFollowing = true;
+                                                            widget.userData!
+                                                                .followers += 1;
+                                                          });
+                                                        }
+                                                      });
+                                                    }
+                                                  },
+                                                  width: 95.w,
+                                                  height: 38.h,
+                                                );
+                                              } else {
+                                                return SizedBox();
+                                              }
+                                            })
                                         : PlatButton(
                                             title: "Edit Profile",
                                             padding: 0,
