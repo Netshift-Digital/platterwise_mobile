@@ -55,7 +55,7 @@ class Post {
   int likeCount;
   List tags;
   UserProfile user;
-  List liked;
+  bool liked;
   dynamic commentReply;
 
   factory Post.fromJsonPost(Map<dynamic, dynamic> json) => Post(
@@ -74,9 +74,7 @@ class Post {
       likeCount: json["post"]['total_likes'] ?? 0,
       tags: json["post"]['taggs'] ?? [],
       commentReply: json["post"]['comment_reply'] ?? "",
-      liked: json["post"]['liked'].runtimeType == String
-          ? ['yes']
-          : json['liked'] ?? []);
+      liked: json["post"]['is_liked'] ?? false);
 
   factory Post.fromJson(Map<dynamic, dynamic> json) => Post(
       contentPost: json["content_post"] ?? "",
@@ -94,8 +92,7 @@ class Post {
       likeCount: json['total_likes'] ?? 0,
       tags: json['taggs'] ?? [],
       commentReply: json['comment_reply'] ?? "",
-      liked:
-          json['liked'].runtimeType == String ? ['yes'] : json['liked'] ?? []);
+      liked: json['is_liked'] ?? false);
 
   Map<String, dynamic> toJson() => {
         "content_post": contentPost,

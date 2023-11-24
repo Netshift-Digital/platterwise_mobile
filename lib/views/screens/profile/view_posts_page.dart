@@ -89,7 +89,7 @@ class _ViewPostsPageState extends State<ViewPostsPage> {
       } else {
         var res = await model.getUserPost(widget.id!, postIndex: _postIndex);
         if (res != null) {
-          if (res.length < 20) {
+          if (res.length < 15) {
             postEnd = true;
           }
           setState(() {

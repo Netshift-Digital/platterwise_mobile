@@ -92,7 +92,7 @@ class _ViewLikesPageState extends State<ViewLikesPage> {
         setState(() {
           postList.addAll(res);
         });
-        if (res.isEmpty || res.length < 20) {
+        if (res.isEmpty || res.length < 30) {
           postEnd = true;
         }
       }

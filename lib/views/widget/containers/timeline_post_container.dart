@@ -269,16 +269,33 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                 CustomAppIcon(
                   icon: "assets/icon/like.svg",
                   like: LikeButton(
-                    isLiked: widget.post.liked.isNotEmpty,
+                    isLiked: widget.post.liked,
                     onTap: (v) async {
-                      if (blogModel.checkIsLiked(widget.post.postId) == false) {
-                        blogModel.likePost(
-                            widget.post, context.read<UserViewModel>().user!);
-                        setState(() {
-                          widget.post.likeCount = widget.post.likeCount + 1;
-                          widget.post.liked = ['yes'];
+                      if (widget.post.liked == false) {
+                        blogModel
+                            .likePost(widget.post,
+                                context.read<UserViewModel>().user!)
+                            .then((value) {
+                          if (value) {
+                            setState(() {
+                              widget.post.likeCount = widget.post.likeCount + 1;
+                              widget.post.liked = true;
+                            });
+                          }
                         });
-                      } else {}
+                      } else {
+                        blogModel
+                            .unlikePost(widget.post,
+                                context.read<UserViewModel>().user!)
+                            .then((value) {
+                          if (value) {
+                            setState(() {
+                              widget.post.likeCount = widget.post.likeCount - 1;
+                              widget.post.liked = false;
+                            });
+                          }
+                        });
+                      }
                       setState(() {});
                       return null;
                     },

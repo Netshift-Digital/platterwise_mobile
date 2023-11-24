@@ -40,11 +40,13 @@ class VBlogService {
     return null;
   }
 
-  Future<dynamic> getLikedPost(int pageIndex) async {
+  Future<Map<String, dynamic>?> getLikedPost(int pageIndex, String id) async {
     var token = LocalStorage.getToken();
+    var body = jsonEncode({"user_id": id});
     try {
-      var response = await client.get(
-          Uri.parse("${baseurl3}post/my-liked-posts?page=${pageIndex}"),
+      var response = await client.post(
+          Uri.parse("${baseurl3}user/other-user-liked-posts?page=${pageIndex}"),
+          body: body,
           headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer $token"
@@ -72,6 +74,35 @@ class VBlogService {
     var token = LocalStorage.getToken();
     try {
       var response = await client.get(Uri.parse(url), headers: {
+        "Content-type": "application/json",
+        "Authorization": "Bearer $token"
+      });
+      var data = jsonDecode(response.body);
+      print("This are my posts $data");
+      if (data["status_code"] == 200 && data["success"] == true) {
+        return data["data"];
+      } else {
+        RandomFunction.toast(data["response"]);
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> getOtherUserPost(int index, String id) async {
+    var body = jsonEncode({"user_id": id});
+
+    String url = "${baseurl3}user/other-user-posts?page=$index";
+    var token = LocalStorage.getToken();
+    try {
+      var response = await client.post(Uri.parse(url), body: body, headers: {
         "Content-type": "application/json",
         "Authorization": "Bearer $token"
       });

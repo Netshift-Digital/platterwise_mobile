@@ -100,7 +100,7 @@ class VBlogViewModel extends BaseViewModel {
       {bool restart = false, required int postIndex}) async {
     try {
       notifyListeners();
-      var data = await vBlogService.getLikedPost(postIndex);
+      var data = await vBlogService.getLikedPost(postIndex, id);
       postAppState = AppState.idle;
       notifyListeners();
       if (data != null) {
@@ -135,6 +135,7 @@ class VBlogViewModel extends BaseViewModel {
     return null;
   }
 
+//Get users that liked a post
   Future<List<AllLikerDetails>> getLikeUser(int postId) async {
     try {
       var data = await vBlogService.getPostLikes(postId);
@@ -187,14 +188,18 @@ class VBlogViewModel extends BaseViewModel {
   Future<List<Post>?> getUserPost(String id,
       {bool restart = false, required int postIndex}) async {
     try {
-      var data = await vBlogService.getUserPost(postIndex);
+      var data = await vBlogService.getOtherUserPost(postIndex, id);
+      postAppState = AppState.idle;
       if (data != null) {
-        var p = PostModel.fromJson(data as Map);
+        var res = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
         notifyListeners();
-        return p.allUsersPosts;
+        return res;
       }
     } catch (e) {
+      postAppState = AppState.idle;
+      notifyListeners();
       setState(AppState.idle);
+      RandomFunction.toast("Something went wrong");
     }
     return null;
   }
@@ -216,7 +221,7 @@ class VBlogViewModel extends BaseViewModel {
     return comments;
   }
 
-  Future<dynamic> likePost(Post p, UserProfile userData) async {
+  Future<bool> likePost(Post p, UserProfile userData) async {
     try {
       // myLikes.add(p);
       FirebaseFirestore.instance
@@ -237,10 +242,30 @@ class VBlogViewModel extends BaseViewModel {
               userName: userData.username,
               profilePic: userData.profileUrl,
             ));
+        return true;
       }
     } catch (e) {
       setState(AppState.idle);
     }
+    return false;
+  }
+
+  Future<bool> unlikePost(Post p, UserProfile userData) async {
+    try {
+      FirebaseFirestore.instance
+          .collection("likes")
+          .doc("users")
+          .collection(LocalStorage.getUserId())
+          .doc(p.postId.toString())
+          .set(p.toJson());
+      var data = await vBlogService.unlikePost(p.postId);
+      if (data != null) {
+        return true;
+      }
+    } catch (e) {
+      setState(AppState.idle);
+    }
+    return false;
   }
 
   Future<bool> commentOnPost(int postId, String comment,
@@ -525,12 +550,6 @@ class VBlogViewModel extends BaseViewModel {
       print('Error checking document existence: $e');
     }
     return false;
-  }
-
-  bool checkIsLiked(int id) {
-    // var d = myLikes.where((element) => element.postId == id);
-    // return d.isNotEmpty;
-    return true;
   }
 
   Future<List<Post>?> searchPost(String search) async {
