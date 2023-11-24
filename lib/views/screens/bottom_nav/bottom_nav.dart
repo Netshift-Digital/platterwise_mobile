@@ -46,7 +46,7 @@ class _BottomNavState extends State<BottomNav> {
     BottomNavigationModel(
       title: "Reservations",
       icon: "assets/icon/reserve.svg",
-      screen: const UserReservations(),
+      screen: UserReservations(),
       // screen: const SaveScreen()
     ),
     BottomNavigationModel(
@@ -115,13 +115,15 @@ class _BottomNavState extends State<BottomNav> {
     await resModel.getRestaurant();
     //  await resModel.getBanner();
     await resModel.getFavouriteRestaurant();
-    await resModel.getReservations();
+    await resModel.getReservations(postIndex: 1, restart: true);
     await resModel.getFollowedRestaurant();
     // await blogModel.getTopTag();
   }
 
   getReservation() {
-    context.read<RestaurantViewModel>().getReservations();
+    context
+        .read<RestaurantViewModel>()
+        .getReservations(postIndex: 1, restart: true);
   }
 
   setLocation() {

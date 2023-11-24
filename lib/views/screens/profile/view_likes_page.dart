@@ -87,7 +87,7 @@ class _ViewLikesPageState extends State<ViewLikesPage> {
     if (postEnd == false) {
       _postIndex = _postIndex + 1;
       var res = await model.getLikedPost(widget.id ?? LocalStorage.getUserId(),
-          restart: restart, postIndex: _postIndex);
+          postIndex: _postIndex);
       if (res!.isNotEmpty) {
         setState(() {
           postList.addAll(res);

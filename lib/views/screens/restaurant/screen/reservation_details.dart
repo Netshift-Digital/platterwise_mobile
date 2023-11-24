@@ -304,7 +304,9 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                           widget.userReservation!.reservId.toString())
                       .then((value) {
                     if (value) {
-                      context.read<RestaurantViewModel>().getReservations();
+                      context
+                          .read<RestaurantViewModel>()
+                          .getReservations(postIndex: 1, restart: true);
                       Navigator.pop(context);
                     }
                   });

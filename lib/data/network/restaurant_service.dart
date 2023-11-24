@@ -263,14 +263,14 @@ class RestaurantService {
     return null;
   }
 
-  Future<Map<String, dynamic>?> getReservation() async {
+  Future<Map<String, dynamic>?> getReservation(int page) async {
     var token = LocalStorage.getToken();
     try {
-      var response = await client.get(Uri.parse("${baseurl3}reservation/all"),
-          headers: {
-            "Content-type": "application/json",
-            "Authorization": "Bearer $token"
-          }).timeout(const Duration(seconds: 10));
+      var response = await client
+          .get(Uri.parse("${baseurl3}reservation/all?page=$page"), headers: {
+        "Content-type": "application/json",
+        "Authorization": "Bearer $token"
+      }).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
       if (data["status_code"] == 200 && data["success"] == true) {
         return data["data"];

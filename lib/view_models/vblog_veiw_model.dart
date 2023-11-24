@@ -97,7 +97,7 @@ class VBlogViewModel extends BaseViewModel {
   }
 
   Future<List<Post>?> getLikedPost(String id,
-      {bool restart = false, required int postIndex}) async {
+      {required int postIndex}) async {
     try {
       notifyListeners();
       var data = await vBlogService.getLikedPost(postIndex, id);

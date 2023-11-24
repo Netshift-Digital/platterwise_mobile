@@ -161,33 +161,28 @@ class RestaurantViewModel extends BaseViewModel {
     return [];
   }
 
-  Future<List<UserReservation>> getReservations() async {
+  Future<bool> getReservations(
+      {required int postIndex, required bool restart}) async {
     try {
-      var data = await restaurantService.getReservation();
+      notifyListeners();
+      var data = await restaurantService.getReservation(postIndex);
       if (data != null) {
-        userReservation = List<UserReservation>.from(
+        var res = List<UserReservation>.from(
             data["data"].map((x) => UserReservation.fromJson(x)));
+        if (restart) {
+          userReservation = [];
+        }
+        userReservation.addAll(res);
+        if (data["per_page"] > userReservation.length) {
+          return true;
+        }
         notifyListeners();
       }
     } catch (e) {
       print(e.toString());
     }
-    return userReservation;
+    return false;
   }
-
-/*
-  Future<List<AllRestReview>> getReview(String resId) async {
-    try {
-      var data = await restaurantService.getRestaurantReviews(resId);
-      setReviewState(AppState.idle);
-      if (data != null) {
-        return RestaurantReview.fromJson(data).allRestReview;
-      }
-    } catch (e) {
-      //
-    }
-    return [];
-  }*/
 
   Future<RestaurantData?> addReview(
       {required String resId,
@@ -227,7 +222,7 @@ class RestaurantViewModel extends BaseViewModel {
       var data = await restaurantService.makeReservation(reservationData);
       setState(AppState.idle);
       if (data != null) {
-        getReservations();
+        getReservations(postIndex: 1, restart: true);
         return true;
       }
     } catch (e) {
@@ -244,7 +239,7 @@ class RestaurantViewModel extends BaseViewModel {
       print("Reservation Id is $id");
       var data = await restaurantService.cancelReservation(id);
       setState(AppState.idle);
-      getReservations();
+      getReservations(postIndex: 1, restart: true);
       if (data != null) {
         return true;
       }

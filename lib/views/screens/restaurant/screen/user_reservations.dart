@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/extension.dart';
@@ -6,6 +7,7 @@ import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/reservation_details.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
@@ -13,9 +15,17 @@ import 'package:platterwave/views/widget/containers/empty_content_container.dart
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:provider/provider.dart';
 
-class UserReservations extends StatelessWidget {
-  const UserReservations({Key? key}) : super(key: key);
+class UserReservations extends StatefulWidget {
+  UserReservations({super.key});
 
+  @override
+  State<UserReservations> createState() => _UserReservationsState();
+}
+
+class _UserReservationsState extends State<UserReservations> {
+  ScrollController scrollController = ScrollController();
+  int _postIndex = 0;
+  bool postEnd = false;
   @override
   Widget build(BuildContext context) {
     var model = context.watch<RestaurantViewModel>();
@@ -32,13 +42,14 @@ class UserReservations extends StatelessWidget {
               )
             : RefreshIndicator(
                 onRefresh: () async {
-                  await model.getReservations();
+                  getReserv(restart: true);
                   return;
                 },
                 child: ListView.builder(
                     physics: const BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics()),
                     itemCount: model.userReservation.length,
+                    controller: scrollController,
                     itemBuilder: (context, index) {
                       var data = model.userReservation[index];
                       return Padding(
@@ -152,5 +163,38 @@ class UserReservations extends StatelessWidget {
               ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (mounted) {
+      scrollController.addListener(() {
+        var model = context.read<PageViewModel>();
+        if (scrollController.position.userScrollDirection ==
+            ScrollDirection.forward) {
+          model.hideBottomNavigator();
+        } else {
+          model.showBottomNavigator();
+        }
+        if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent) {
+          getReserv(restart: false);
+        }
+      });
+    }
+  }
+
+  void getReserv({bool restart = false}) async {
+    var model = context.read<RestaurantViewModel>();
+    if (restart) {
+      _postIndex = 0;
+      postEnd = false;
+    }
+    if (postEnd == false) {
+      _postIndex = _postIndex + 1;
+      postEnd =
+          await model.getReservations(restart: restart, postIndex: _postIndex);
+    }
   }
 }
