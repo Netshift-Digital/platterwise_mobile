@@ -301,8 +301,6 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                                   var data = snapshot.data!
                                                       .data()! as Map;
                                                   disable = data['disable'];
-                                                  print(
-                                                      "Is it disabled $disable");
                                                 }
                                               }
                                               if (disable == false) {
