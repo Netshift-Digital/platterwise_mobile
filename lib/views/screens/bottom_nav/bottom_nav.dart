@@ -50,9 +50,7 @@ class _BottomNavState extends State<BottomNav> {
       // screen: const SaveScreen()
     ),
     BottomNavigationModel(
-        title: "Favorites",
-        icon: "assets/icon/love.svg",
-        screen: const Favourite()
+        title: "Favorites", icon: "assets/icon/love.svg", screen: Favourite()
         // screen: const RestaurantSearchScreen(),
         ),
     BottomNavigationModel(
@@ -114,7 +112,7 @@ class _BottomNavState extends State<BottomNav> {
     await resModel.getTopRestaurant();
     await resModel.getRestaurant();
     //  await resModel.getBanner();
-    await resModel.getFavouriteRestaurant();
+    await resModel.getFavouriteRestaurant(postIndex: 1, restart: true);
     await resModel.getReservations(postIndex: 1, restart: true);
     await resModel.getFollowedRestaurant();
     // await blogModel.getTopTag();

@@ -333,20 +333,26 @@ class RestaurantViewModel extends BaseViewModel {
     }
   }
 
-  Future<List<RestaurantData>> getFavouriteRestaurant() async {
+  Future<bool> getFavouriteRestaurant(
+      {required int postIndex, required bool restart}) async {
     try {
       var data = await restaurantService.getFavouriteRestaurant();
       if (data != null) {
-        favouriteRestaurant = [];
+        if (restart) {
+          favouriteRestaurant = [];
+        }
         for (var e in data['data']) {
           favouriteRestaurant.add(RestaurantData.fromJson(e['restaurant'][0]));
+        }
+        if (data["per_page"] > favouriteRestaurant.length) {
+          return true;
         }
         notifyListeners();
       }
     } catch (e) {
-      //
+      print(e.toString());
     }
-    return favouriteRestaurant;
+    return false;
   }
 
   Future<List<RestaurantData>> getFollowedRestaurant() async {
@@ -355,7 +361,6 @@ class RestaurantViewModel extends BaseViewModel {
       if (data != null) {
         followedRestaurant = [];
         for (var e in data['data']) {
-          print("A single e is $e");
           followedRestaurant.add(RestaurantData.fromJson(e['restaurant']));
         }
         notifyListeners();
@@ -363,6 +368,6 @@ class RestaurantViewModel extends BaseViewModel {
     } catch (e) {
       //
     }
-    return favouriteRestaurant;
+    return followedRestaurant;
   }
 }
