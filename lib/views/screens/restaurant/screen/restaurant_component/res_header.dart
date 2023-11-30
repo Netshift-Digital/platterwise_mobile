@@ -18,20 +18,25 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class RestaurantHeader extends StatelessWidget {
+class RestaurantHeader extends StatefulWidget {
   final RestaurantData restaurantData;
   final List<AllRestReview> review;
 
-  const RestaurantHeader({
+  RestaurantHeader({
     Key? key,
     required this.restaurantData,
     required this.review,
   }) : super(key: key);
 
   @override
+  State<RestaurantHeader> createState() => _RestaurantHeaderState();
+}
+
+class _RestaurantHeaderState extends State<RestaurantHeader> {
+  @override
   Widget build(BuildContext context) {
     var resModel = context.watch<RestaurantViewModel>();
-    print("The data is ${restaurantData.days}");
+    print("The data is ${widget.restaurantData.days}");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -42,7 +47,7 @@ class RestaurantHeader extends StatelessWidget {
           Row(
             children: [
               Text(
-                restaurantData.restuarantName.capitalizeFirstChar(),
+                widget.restaurantData.restuarantName.capitalizeFirstChar(),
                 style: AppTextTheme.h3.copyWith(
                   fontWeight: FontWeight.w700,
                   fontSize: 18,
@@ -51,7 +56,7 @@ class RestaurantHeader extends StatelessWidget {
               const Spacer(),
               GestureDetector(
                 onTap: () {
-                  DynamicLink.createLinkRestaurant(restaurantData)
+                  DynamicLink.createLinkRestaurant(widget.restaurantData)
                       .then((value) {
                     if (value != null) {
                       Share.share(value);
@@ -69,7 +74,7 @@ class RestaurantHeader extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   launchUrl(
-                    Uri.parse("tel:${restaurantData.phone}"),
+                    Uri.parse("tel:${widget.restaurantData.phone}"),
                   );
                 },
                 child: SvgPicture.asset(
@@ -82,7 +87,7 @@ class RestaurantHeader extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  MapsLauncher.launchQuery(restaurantData.address);
+                  MapsLauncher.launchQuery(widget.restaurantData.address);
                 },
                 child: SvgPicture.asset(
                   'assets/icon/route2.svg',
@@ -102,7 +107,7 @@ class RestaurantHeader extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  restaurantData.address,
+                  widget.restaurantData.address,
                   style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
@@ -128,7 +133,7 @@ class RestaurantHeader extends StatelessWidget {
                 width: 8,
               ),
               Text(
-                '(${review.length} reviews)',
+                '(${widget.review.length} reviews)',
                 style: const TextStyle(
                   color: AppColor.g100,
                   fontSize: 12,
@@ -142,9 +147,9 @@ class RestaurantHeader extends StatelessWidget {
           Align(
               alignment: Alignment.topLeft,
               child: Text(
-                restaurantData.days.isEmpty
-                    ? "Opens: ${restaurantData.openingHour}am - ${restaurantData.closingHour}pm"
-                    : "Opens: ${restaurantData.days.capitalizeFirstChar()}, ${restaurantData.openingHour}am - ${restaurantData.closingHour}pm",
+                widget.restaurantData.days.isEmpty
+                    ? "Opens: ${widget.restaurantData.openingHour}am - ${widget.restaurantData.closingHour}pm"
+                    : "Opens: ${widget.restaurantData.days.capitalizeFirstChar()}, ${widget.restaurantData.openingHour}am - ${widget.restaurantData.closingHour}pm",
                 style: const TextStyle(
                   color: AppColor.g800,
                   fontSize: 13,
@@ -155,13 +160,21 @@ class RestaurantHeader extends StatelessWidget {
           ),
           Consumer<RestaurantViewModel>(
             builder: (context, restaurantViewModel, child) {
-              final isFollowed = restaurantViewModel
-                  .isFollowed(restaurantData.restId.toString());
               return GestureDetector(
                 onTap: () {
-                  resModel.followRestaurant(restaurantData);
+                  if (widget.restaurantData.isFollowed == true) {
+                    resModel.unfollowRestaurant(widget.restaurantData);
+                    setState(() {
+                      widget.restaurantData.isFollowed = false;
+                    });
+                  } else {
+                    resModel.followRestaurant(widget.restaurantData);
+                    setState(() {
+                      widget.restaurantData.isFollowed = false;
+                    });
+                  }
                 },
-                child: isFollowed
+                child: widget.restaurantData.isFollowed == true
                     ? PlatButtonBorder(
                         title: "Followed",
                         padding: 0,
@@ -185,10 +198,12 @@ class RestaurantHeader extends StatelessWidget {
   }
 
   String getAverageRating() {
-  if (restaurantData.rating == null || restaurantData.rating is! num || review.isEmpty) {
-    return '0';
-  }
-  double averageRating = restaurantData.rating / review.length;
-  return averageRating.toStringAsFixed(1);
+    if (widget.restaurantData.rating == null ||
+        widget.restaurantData.rating is! num ||
+        widget.review.isEmpty) {
+      return '0';
+    }
+    double averageRating = widget.restaurantData.rating / widget.review.length;
+    return averageRating.toStringAsFixed(1);
   }
 }

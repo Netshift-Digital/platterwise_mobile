@@ -40,6 +40,7 @@ class Post {
       required this.contentUrl,
       required this.timestamp,
       required this.commentCount,
+      required this.type,
       required this.likeCount,
       required this.tags,
       required this.user,
@@ -53,6 +54,7 @@ class Post {
   DateTime timestamp;
   int commentCount;
   int likeCount;
+  String type = "user";
   List tags;
   UserProfile user;
   bool liked;
@@ -68,9 +70,12 @@ class Post {
           ? DateTime.now()
           : DateTime.parse(json["post"]["created_at"]),
       commentCount: json["post"]["total_comments"] ?? 0,
+      type: json["type"] ?? "user",
       user: json["user"] != null
           ? UserProfile.fromJson(json["user"])
-          : UserProfile.empty(),
+          : json["admin"] != null
+              ? UserProfile.fromJson(json["admin"])
+              : UserProfile.empty(),
       likeCount: json["post"]['total_likes'] ?? 0,
       tags: json["post"]['taggs'] ?? [],
       commentReply: json["post"]['comment_reply'] ?? "",
@@ -86,9 +91,12 @@ class Post {
           ? DateTime.now()
           : DateTime.parse(json["created_at"]),
       commentCount: json["total_comments"] ?? 0,
+      type: json["type"] ?? "user",
       user: json["user"] != null
           ? UserProfile.fromJson(json["user"])
-          : UserProfile.empty(),
+          : json["admin"] != null
+              ? UserProfile.fromJson(json["admin"])
+              : UserProfile.empty(),
       likeCount: json['total_likes'] ?? 0,
       tags: json['taggs'] ?? [],
       commentReply: json['comment_reply'] ?? "",

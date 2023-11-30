@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:platterwave/utils/cache_manager.dart';
+import 'package:shimmer/shimmer.dart';
 
 const kPlaceHolder =
     'https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt67a59125151d76ef/625e7dffceb10b47dfaba4dc/GettyImages-1348618431.jpg';
@@ -12,7 +13,7 @@ class ImageCacheR extends StatelessWidget {
   final bool chachedImage;
   final String? errorPlaceHolder;
 
-  const ImageCacheR(
+  ImageCacheR(
     this.image, {
     this.height = double.maxFinite,
     this.topRadius = 10,
@@ -24,49 +25,6 @@ class ImageCacheR extends StatelessWidget {
     Key? key,
     this.chachedImage = false,
   }) : super(key: key);
-
-/*
-  getCachedImagePath() async {
-    var dir = kDir;
-    final url = "${widget.image}.png";
-    var path = '${dir.path}$url';
-    if (File(path).existsSync()) {
-      if (mounted) {
-        setState(() {
-          image = path;
-        });
-      }
-    } else {
-      downloadAndCacheImage(widget.image, path);
-    }
-  }
-
-  Future<void> downloadAndCacheImage(
-      String imageUrl, String cachedImagePath) async {
-    try {
-      var res = await Dio().download(imageUrl, cachedImagePath);
-      if (mounted) {
-        setState(() {
-          image = cachedImagePath;
-        });
-      }
-    } catch (e) {
-      downloadAndCacheImage(
-          'https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg',
-          cachedImagePath);
-    }
-  }
-*/
-/*
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (!widget.chachedImage) {
-        //getCachedImagePath();
-      }
-    });
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -82,47 +40,34 @@ class ImageCacheR extends StatelessWidget {
           imageUrl: "image",
           cacheManager: CustomCacheManager.instance,
           placeholder: (context, url) => Container(
-            height: height,
-            width: width,
-            decoration:
-                BoxDecoration(color: Colors.grey[300]!, borderRadius: radius),
-            child: const Center(
-              child: CircularProgressIndicator(),
-            ),
-          ),
+              height: height,
+              width: width,
+              decoration: BoxDecoration(borderRadius: radius),
+              child: Shimmer.fromColors(
+                  baseColor: Colors.grey.shade400,
+                  highlightColor: Colors.grey.shade300,
+                  child: Container(
+                    height: height,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                    ),
+                  ))),
           height: height,
           width: width,
-          memCacheWidth: width.toInt(),
-          memCacheHeight: height.toInt(),
-          maxHeightDiskCache: height.toInt(),
-          maxWidthDiskCache: width.toInt(),
-          key: UniqueKey(),
-          filterQuality: FilterQuality.none,
-          fadeInDuration: Duration.zero,
           fit: fit ? BoxFit.cover : BoxFit.scaleDown,
-          repeat: ImageRepeat.repeat,
-          colorBlendMode: BlendMode.darken,
-          color: blend > 0 ? Colors.black.withOpacity(blend) : null,
-          /* imageBuilder: (context, provider) => Container(
-            width: width,
-            height: height,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: provider, fit: fit ? BoxFit.cover : BoxFit.scaleDown),
-              borderRadius: radius,
-            ),
-          ),*/
-          errorWidget: (context, url, error) => Container(
-            width: width,
-            height: height,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: NetworkImage(errorPlaceHolder ??
-                      'https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg'),
-                  fit: fit ? BoxFit.cover : BoxFit.scaleDown),
-              borderRadius: radius,
-            ),
-          ),
+          errorWidget: (context, url, error) {
+            return Container(
+              width: width,
+              height: height,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(errorPlaceHolder ??
+                        'https://www.pulsecarshalton.co.uk/wp-content/uploads/2016/08/jk-placeholder-image.jpg'),
+                    fit: fit ? BoxFit.cover : BoxFit.scaleDown),
+                borderRadius: radius,
+              ),
+            );
+          },
         ));
   }
 }

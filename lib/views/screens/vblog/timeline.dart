@@ -7,29 +7,19 @@ import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
-import 'package:platterwave/view_models/pageview_model.dart';
-import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/search/search_screen.dart';
 import 'package:platterwave/views/screens/vblog/create_post/create_post.dart';
 import 'package:platterwave/views/screens/vblog/following_tab.dart';
 import 'package:platterwave/views/screens/vblog/notification.dart';
 import 'package:platterwave/views/screens/vblog/recommended_tab.dart';
-import 'package:provider/provider.dart';
 
-class Timeline extends StatefulWidget {
-  const Timeline({Key? key}) : super(key: key);
+// ignore: must_be_immutable
+class Timeline extends StatelessWidget {
+  Timeline({Key? key}) : super(key: key);
 
-  @override
-  State<Timeline> createState() => _TimelineState();
-}
-
-class _TimelineState extends State<Timeline> {
-  final searchTextController = TextEditingController();
-  final ScrollController scrollController = ScrollController();
   bool hideFab = false;
   @override
   Widget build(BuildContext context) {
-    var model = context.read<VBlogViewModel>();
     SizeConfig.init(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -137,31 +127,4 @@ class _TimelineState extends State<Timeline> {
       ),
     );
   }
-/*
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      getPost(restart: true);
-    });
-    scrollController.addListener(() {
-      var model = context.read<PageViewModel>();
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.forward) {
-        model.hideBottomNavigator();
-      } else {
-        model.showBottomNavigator();
-      }
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        print("You are at the bottom");
-        getPost(restart: false);
-      }
-    });
-  }
-
-  void getPost({bool restart = false}) {
-    var model = context.read<VBlogViewModel>();
-    model.getPost(restart: false);
-  }*/
 }

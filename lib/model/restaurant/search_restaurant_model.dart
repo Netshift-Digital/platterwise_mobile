@@ -1,14 +1,9 @@
-// To parse this JSON data, do
-//
-//     final searchRestaurantModel = searchRestaurantModelFromJson(jsonString);
-
 import 'dart:convert';
 
 import 'package:platterwave/model/restaurant/restaurant.dart';
 
 SearchRestaurantModel searchRestaurantModelFromJson(String str) =>
     SearchRestaurantModel.fromJson(json.decode(str));
-
 
 class SearchRestaurantModel {
   SearchRestaurantModel({

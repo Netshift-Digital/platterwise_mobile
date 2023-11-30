@@ -28,155 +28,166 @@ class _UserReservationsState extends State<UserReservations> {
   bool postEnd = false;
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<RestaurantViewModel>();
     SizeConfig.init(context);
     return Scaffold(
-      appBar: appBar(context),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        child: model.userReservation.isEmpty
-            ? const Center(
-                child: EmptyContentContainer(
-                  errorText: "Now reservation has been made",
-                ),
-              )
-            : RefreshIndicator(
-                onRefresh: () async {
-                  getReserv(restart: true);
-                  return;
-                },
-                child: ListView.builder(
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
-                    itemCount: model.userReservation.length,
-                    controller: scrollController,
-                    itemBuilder: (context, index) {
-                      var data = model.userReservation[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: GestureDetector(
-                          onTap: () {
-                            nav(
-                                context,
-                                ReservationDetails(
-                                  userReservation: data,
-                                ));
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                                width: 0.7,
-                              ),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 99.w,
-                                  height: 100.h,
+        appBar: appBar(context),
+        body: Consumer<RestaurantViewModel>(builder: (context, model, child) {
+          return Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: model.userReservation.isEmpty
+                  ? const Center(
+                      child: EmptyContentContainer(
+                        errorText: "Now reservation has been made",
+                      ),
+                    )
+                  : RefreshIndicator(
+                      onRefresh: () async {
+                        getReserv(restart: true);
+                        return;
+                      },
+                      child: ListView.builder(
+                          physics: const BouncingScrollPhysics(
+                              parent: AlwaysScrollableScrollPhysics()),
+                          itemCount: model.userReservation.length,
+                          controller: scrollController,
+                          itemBuilder: (context, index) {
+                            var data = model.userReservation[index];
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: GestureDetector(
+                                onTap: () {
+                                  nav(
+                                      context,
+                                      ReservationDetails(
+                                        userReservation: data,
+                                      ));
+                                },
+                                child: Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.grey.shade200,
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(6),
-                                      bottomLeft: Radius.circular(6),
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                      width: 0.7,
                                     ),
+                                    borderRadius: BorderRadius.circular(6),
                                   ),
-                                  child: ClipRRect(
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(6),
-                                      bottomLeft: Radius.circular(6),
-                                    ),
-                                    child: ImageCacheR(
-                                      data.restDetail.coverPic,
-                                      topRadius: 0,
-                                      topBottom: 0,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 12.w,
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    //mainAxisAlignment: MainAxisAlignment.center,
+                                  child: Row(
                                     children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              data.restDetail.restaurantName,
-                                              overflow: TextOverflow.clip,
-                                              maxLines: 1,
-                                              softWrap: true,
-                                              style: AppTextTheme.h3.copyWith(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
+                                      Container(
+                                        width: 99.w,
+                                        height: 100.h,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.shade200,
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(6),
+                                            bottomLeft: Radius.circular(6),
                                           ),
-                                        ],
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(6),
+                                            bottomLeft: Radius.circular(6),
+                                          ),
+                                          child: ImageCacheR(
+                                            data.restDetail.coverPic,
+                                            topRadius: 0,
+                                            topBottom: 0,
+                                          ),
+                                        ),
                                       ),
                                       SizedBox(
-                                        height: 15.h,
+                                        width: 12.w,
                                       ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            height: 8,
-                                            width: 8,
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color:
-                                                    RandomFunction.reserveColor(
-                                                  data.reservationStatus,
-                                                )),
-                                          ),
-                                          const SizedBox(
-                                            width: 4,
-                                          ),
-                                          Text(
-                                            RandomFunction.reserveString(
-                                                data.reservationStatus),
-                                            style: AppTextTheme.h5.copyWith(
-                                              fontSize: 12,
-                                              color:
-                                                  RandomFunction.reserveColor(
-                                                      data.reservationStatus),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          //mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    data.restDetail
+                                                        .restaurantName,
+                                                    overflow: TextOverflow.clip,
+                                                    maxLines: 1,
+                                                    softWrap: true,
+                                                    style: AppTextTheme.h3
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            softWrap: true,
-                                            maxLines: 3,
-                                          )
-                                        ],
+                                            SizedBox(
+                                              height: 15.h,
+                                            ),
+                                            Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                  height: 8,
+                                                  width: 8,
+                                                  decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: RandomFunction
+                                                          .reserveColor(
+                                                        data.reservationStatus,
+                                                      )),
+                                                ),
+                                                const SizedBox(
+                                                  width: 4,
+                                                ),
+                                                Text(
+                                                  RandomFunction.reserveString(
+                                                      data.reservationStatus),
+                                                  style:
+                                                      AppTextTheme.h5.copyWith(
+                                                    fontSize: 12,
+                                                    color: RandomFunction
+                                                        .reserveColor(data
+                                                            .reservationStatus),
+                                                  ),
+                                                  softWrap: true,
+                                                  maxLines: 3,
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       )
                                     ],
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-              ),
-      ),
-    );
+                                ),
+                              ),
+                            );
+                          }),
+                    ));
+        }));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController.dispose();
   }
 
   @override
   void initState() {
     super.initState();
     if (mounted) {
+      getReserv(restart: true);
       scrollController.addListener(() {
-        var model = context.read<PageViewModel>();
+        /*  var model = context.watch<PageViewModel>();
         if (scrollController.position.userScrollDirection ==
             ScrollDirection.forward) {
           model.hideBottomNavigator();
         } else {
           model.showBottomNavigator();
-        }
+        }*/
         if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent) {
           getReserv(restart: false);

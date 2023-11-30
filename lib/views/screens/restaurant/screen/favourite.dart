@@ -32,44 +32,54 @@ class _FavouriteState extends State<Favourite> {
             ),
           ),
         ),
-        body: resModel.favouriteRestaurant.isEmpty
-            ? const Center(
-                child: EmptyContentContainer(
-                  errorText: "You do not have any favourite restaurant",
-                ),
-              )
-            : RefreshIndicator(
-                onRefresh: () async {
-                  getFav(restart: true);
-                  return;
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: resModel.favouriteRestaurant.length,
-                    controller: scrollController,
-                    itemBuilder: (BuildContext context, int index) {
-                      var data = resModel.favouriteRestaurant[index];
-                      return LargeRestaurantContainer(
-                        restaurantData: data,
-                        id: data.restId,
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const SizedBox(
-                        height: 20,
-                      );
-                    },
+        body:
+            Consumer<RestaurantViewModel>(builder: (context, resModel, child) {
+          return resModel.favouriteRestaurant.isEmpty
+              ? const Center(
+                  child: EmptyContentContainer(
+                    errorText: "You do not have any favourite restaurant",
                   ),
-                ),
-              ));
+                )
+              : RefreshIndicator(
+                  onRefresh: () async {
+                    getFav(restart: true);
+                    return;
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: resModel.favouriteRestaurant.length,
+                      controller: scrollController,
+                      itemBuilder: (BuildContext context, int index) {
+                        var data = resModel.favouriteRestaurant[index];
+                        return LargeRestaurantContainer(
+                          restaurantData: data,
+                          id: data.restId,
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const SizedBox(
+                          height: 20,
+                        );
+                      },
+                    ),
+                  ),
+                );
+        }));
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
     if (mounted) {
+      getFav(restart: true);
       scrollController.addListener(() {
         var model = context.read<PageViewModel>();
         if (scrollController.position.userScrollDirection ==

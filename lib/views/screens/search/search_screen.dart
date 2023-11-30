@@ -146,11 +146,9 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    searchController.addListener(() {});
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   void filterSheet(VBlogViewModel vBlogViewModel) {

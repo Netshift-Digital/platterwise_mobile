@@ -35,7 +35,6 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
   final TextEditingController _date = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    print("This is the data ${widget.restaurantData}");
     SizeConfig.init(context);
     return GestureDetector(
       onTap: () {

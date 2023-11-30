@@ -14,7 +14,6 @@ import 'package:platterwave/view_models/location_view_model.dart';
 import 'package:platterwave/view_models/pageview_model.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
-import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/restaurant/screen/favourite.dart';
 import 'package:platterwave/views/screens/restaurant/screen/res.dart';
@@ -26,7 +25,6 @@ import 'package:platterwave/views/screens/vblog/timeline.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_icon/svg_icon.dart';
 import '../../../res/text-theme.dart';
-import '../../../utils/working_days_parser.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({Key? key}) : super(key: key);
@@ -40,19 +38,15 @@ class _BottomNavState extends State<BottomNav> {
     BottomNavigationModel(
       title: "Home",
       icon: "assets/icon/home-2.svg",
-      //screen: const Timeline()
       screen: const RestaurantHomeScreen(),
     ),
     BottomNavigationModel(
       title: "Reservations",
       icon: "assets/icon/reserve.svg",
       screen: UserReservations(),
-      // screen: const SaveScreen()
     ),
     BottomNavigationModel(
-        title: "Favorites", icon: "assets/icon/love.svg", screen: Favourite()
-        // screen: const RestaurantSearchScreen(),
-        ),
+        title: "Favorites", icon: "assets/icon/love.svg", screen: Favourite()),
     BottomNavigationModel(
       title: "Community",
       icon: "assets/icon/people.svg",
@@ -104,18 +98,10 @@ class _BottomNavState extends State<BottomNav> {
   }
 
   void getData() async {
-    var userModel = context.read<UserViewModel>();
-    var blogModel = context.read<VBlogViewModel>();
     var resModel = context.read<RestaurantViewModel>();
     setLocation();
-    await userModel.getMyProfile();
-    await resModel.getTopRestaurant();
-    await resModel.getRestaurant();
-    //  await resModel.getBanner();
-    await resModel.getFavouriteRestaurant(postIndex: 1, restart: true);
-    await resModel.getReservations(postIndex: 1, restart: true);
-    await resModel.getFollowedRestaurant();
-    // await blogModel.getTopTag();
+    resModel.getTopRestaurant();
+    resModel.getRestaurant();
   }
 
   getReservation() {

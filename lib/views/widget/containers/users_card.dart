@@ -12,66 +12,90 @@ import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:provider/provider.dart';
 
-class UserCard extends StatelessWidget {
+class UserCard extends StatefulWidget {
   final UserProfile data;
   final String id;
-  const UserCard({Key? key, required this.data, required this.id})
-      : super(key: key);
+
+  UserCard({Key? key, required this.data, required this.id}) : super(key: key);
+
+  @override
+  _UserCardState createState() => _UserCardState();
+}
+
+class _UserCardState extends State<UserCard> {
+  bool isFollowing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    checkIsFollowing();
+  }
+
+  checkIsFollowing() async {
+    var blogModel = context.read<VBlogViewModel>();
+    isFollowing = await blogModel.getIsFollowed(widget.id);
+    if (mounted) {
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
-    var blogModel = context.watch<VBlogViewModel>();
-    var isFollower = blogModel.getIsFollowed(data.userId.toString());
     return ListTile(
       onTap: () {
         nav(
-            context,
-            ViewUserProfileScreen(
-              id: data.firebaseAuthID,
-            ));
+          context,
+          ViewUserProfileScreen(
+            id: widget.data.userId.toString(),
+          ),
+        );
       },
       leading: ImageCacheCircle(
-        data.profileUrl,
+        widget.data.profileUrl,
         height: 42,
         width: 42,
       ),
       title: Text(
-        data.fullName,
+        widget.data.fullName,
         style: AppTextTheme.h3.copyWith(
           fontSize: 16,
           fontWeight: FontWeight.w700,
         ),
       ),
       subtitle: Text(
-        "@${data.username}",
+        "@${widget.data.username}",
         style: AppTextTheme.h3.copyWith(
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-            color: const Color(0xffB1B1B1)),
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          color: const Color(0xffB1B1B1),
+        ),
       ),
-      trailing: FutureBuilder<bool?>(
-          future: isFollower,
-          builder: (BuildContext context, AsyncSnapshot<bool?> snapshot) {
-            return PlatButton(
-              title: snapshot.data! ? "Remove" : "Follow",
+      trailing: isFollowing == false
+          ? PlatButton(
+              title: "Follow",
               padding: 0,
-              color: snapshot.data! ? AppColor.g700 : AppColor.p200,
               textSize: 14,
+              color: isFollowing ? AppColor.g700 : AppColor.p200,
               onTap: () {
-                if (snapshot.data!) {
-                  blogModel.unFollowUser(
-                    data.userId.toString(),
-                  );
-                } else {
-                  var user = context.read<UserViewModel>().user;
-                  blogModel.followUser(data.userId.toString(), user!, data);
-                }
+                var main_user = context.read<UserViewModel>().user;
+                var blogModel = context.read<VBlogViewModel>();
+                blogModel
+                    .followUser(widget.id, main_user!, widget.data)
+                    .then((value) {
+                  if (value) {
+                    if (mounted) {
+                      setState(() {
+                        isFollowing = true;
+                      });
+                    }
+                  }
+                });
               },
-              width: 103.w,
-              height: 37.h,
-            );
-          }),
+              width: 95.w,
+              height: 38.h,
+            )
+          : SizedBox(),
     );
   }
 }

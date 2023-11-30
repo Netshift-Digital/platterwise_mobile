@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:platterwave/common/base_view_model.dart';
 import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/data/network/vblog_services.dart';
@@ -96,8 +97,7 @@ class VBlogViewModel extends BaseViewModel {
     return false;
   }
 
-  Future<List<Post>?> getLikedPost(String id,
-      {required int postIndex}) async {
+  Future<List<Post>?> getLikedPost(String id, {required int postIndex}) async {
     try {
       notifyListeners();
       var data = await vBlogService.getLikedPost(postIndex, id);
@@ -199,6 +199,48 @@ class VBlogViewModel extends BaseViewModel {
       postAppState = AppState.idle;
       notifyListeners();
       setState(AppState.idle);
+      RandomFunction.toast("Something went wrong");
+    }
+    return null;
+  }
+
+  Future<List<UserProfile>?> getUserFollowers(String userId,
+      {required int postIndex}) async {
+    try {
+      var data = await vBlogService.getUserFollowers(userId, postIndex);
+      postAppState = AppState.idle;
+      if (data != null) {
+        var res = List<UserProfile>.from(
+            data["data"].map((x) => UserProfile.fromJson(x["follower"])));
+        notifyListeners();
+        return res;
+      }
+    } catch (e) {
+      postAppState = AppState.idle;
+      notifyListeners();
+      setState(AppState.idle);
+      print(e.toString);
+      RandomFunction.toast("Something went wrong");
+    }
+    return null;
+  }
+
+  Future<List<UserProfile>?> getUserFollowing(String userId,
+      {required int postIndex}) async {
+    try {
+      var data = await vBlogService.getUserFollowing(userId, postIndex);
+      postAppState = AppState.idle;
+      if (data != null) {
+        var res = List<UserProfile>.from(
+            data["data"].map((x) => UserProfile.fromJson(x["user"])));
+        notifyListeners();
+        return res;
+      }
+    } catch (e) {
+      postAppState = AppState.idle;
+      notifyListeners();
+      setState(AppState.idle);
+      print(e.toString);
       RandomFunction.toast("Something went wrong");
     }
     return null;
@@ -354,12 +396,10 @@ class VBlogViewModel extends BaseViewModel {
   Future<String> uploadFile(String image) async {
     var id = DateTime.now().toString();
     var imageName = RandomFunction.generateRandomStringWithRepetition();
-    print("This is the date time image name $imageName");
     var storageReference =
         FirebaseStorage.instance.ref().child("post/" "$id/$imageName.jpg");
-    var uploadTask = await storageReference.putFile(File(image));
+    var uploadTask = await storageReference.putFile(await File(image));
     var url = await uploadTask.ref.getDownloadURL();
-    print("This is an image url $url");
     return url;
   }
 
@@ -378,7 +418,6 @@ class VBlogViewModel extends BaseViewModel {
             .child(file.path)
             .putData(file.readAsBytesSync());
         var url = await data.ref.getDownloadURL();
-        print("An image url is $url");
         return url;
       }
     } on FirebaseException catch (e) {
@@ -422,7 +461,7 @@ class VBlogViewModel extends BaseViewModel {
           userId: LocalStorage.getUserId());
       var data = await vBlogService.createPost(post);
       if (data != null) {
-        handelTags(postData.contentPost, "data['post_id'].toString()");
+        // handelTags(postData.contentPost, "data['post_id'].toString()");
       }
       postAppState = AppState.idle;
       notifyListeners();
@@ -492,18 +531,18 @@ class VBlogViewModel extends BaseViewModel {
             .collection(LocalStorage.getUserId())
             .doc(uid)
             .set(userToBeFollowed.toJson());
+        notifyListeners();
+        addActivity(
+            uid,
+            UserActivity(
+                message: " started following you ",
+                firebaseAuthId: uid,
+                id: LocalStorage.getUserId(),
+                type: NotificationType.user.toString(),
+                userName: users.username,
+                profilePic: users.profileUrl));
         return true;
       }
-      notifyListeners();
-      addActivity(
-          uid,
-          UserActivity(
-              message: " started following you ",
-              firebaseAuthId: uid,
-              id: LocalStorage.getUserId(),
-              type: NotificationType.user.toString(),
-              userName: users.username,
-              profilePic: users.profileUrl));
     } on FirebaseException catch (e) {
       print(e);
     } catch (e) {
@@ -597,7 +636,6 @@ class VBlogViewModel extends BaseViewModel {
         var search = List<UserProfile>.from(
             data["data"].map((x) => UserProfile.fromJson(x)));
         notifyListeners();
-        print("The user name is ${search[0].username}");
 
         return search;
       }

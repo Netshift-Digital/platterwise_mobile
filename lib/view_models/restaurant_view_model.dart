@@ -89,20 +89,21 @@ class RestaurantViewModel extends BaseViewModel {
 
   Future<void> followRestaurant(RestaurantData restaurantData) async {
     try {
-      if (!isFollowed(restaurantData.restId.toString())) {
-        followedRestaurant.add(restaurantData);
-        notifyListeners();
-        await restaurantService
-            .followRestaurant(restaurantData.restId.toString());
-      } else {
-        followedRestaurant.removeWhere(
-            (r) => r.restId.toString() == restaurantData.restId.toString());
-        notifyListeners();
-        await restaurantService
-            .unfollowRestaurant(restaurantData.restId.toString());
-      }
+      await restaurantService
+          .followRestaurant(restaurantData.restId.toString());
+      notifyListeners();
     } catch (e) {
-      //
+      print(e.toString());
+    }
+  }
+
+  Future<void> unfollowRestaurant(RestaurantData restaurantData) async {
+    try {
+      await restaurantService
+          .unfollowRestaurant(restaurantData.restId.toString());
+      notifyListeners();
+    } catch (e) {
+      print(e.toString());
     }
   }
 

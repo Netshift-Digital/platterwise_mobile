@@ -16,19 +16,12 @@ import 'package:platterwave/views/widget/containers/large_restaurant_container.d
 import 'package:platterwave/views/widget/containers/small_restaurant_container.dart';
 import 'package:provider/provider.dart';
 
-class RestaurantHomeScreen extends StatefulWidget {
+class RestaurantHomeScreen extends StatelessWidget {
   const RestaurantHomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<RestaurantHomeScreen> createState() => _RestaurantHomeScreenState();
-}
-
-class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
-  @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
-    var resModel = context.watch<RestaurantViewModel>();
-    var locationProvider = context.watch<LocationProvider>();
     return AnnotatedRegion(
       value: kOverlay,
       child: Scaffold(
@@ -45,15 +38,6 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                       Expanded(
                         child: GestureDetector(
                           onTap: () async {
-                            // AwesomePlaceSearch(
-                            //   context: context,
-                            //   key: "AIzaSyC44N6yERgjg8AM_UOznKlflcEZWYE8tro",
-                            //   onTap: (value) async {
-                            //     PredictionModel? prediction = await value;
-                            //   },
-                            // ).show();
-                            // nav(context, LocationSearchScreen());
-
                             PlacesAutocomplete.show(
                               context: context,
                               apiKey: "AIzaSyC44N6yERgjg8AM_UOznKlflcEZWYE8tro",
@@ -61,6 +45,9 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                               language: 'en',
                             ).then((value) {
                               if (value != null) {
+                                var locationProvider =
+                                    context.watch<LocationProvider>();
+
                                 locationProvider.myAddress =
                                     value.structuredFormatting?.mainText ?? "";
                                 locationProvider
@@ -68,6 +55,8 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                                         value.structuredFormatting?.mainText ??
                                             "")
                                     .then((e) {
+                                  var resModel =
+                                      context.watch<RestaurantViewModel>();
                                   resModel.setLocationState(e);
                                 });
                               }
@@ -85,7 +74,9 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    Text(locationProvider.address),
+                                    Text(context
+                                        .watch<LocationProvider>()
+                                        .address),
                                     const SizedBox(
                                       width: 4,
                                     ),
@@ -112,10 +103,10 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
           body: SafeArea(
             child: RefreshIndicator(
               onRefresh: () async {
-                await resModel.closeBy();
-                  await resModel.getTopRestaurant();
-                await resModel.getRestaurant();
-                return;
+                var resModel = context.watch<RestaurantViewModel>();
+                resModel.closeBy();
+                resModel.getTopRestaurant();
+                resModel.getRestaurant();
               },
               child: SingleChildScrollView(
                 // physics: const BouncingScrollPhysics(),
@@ -159,7 +150,9 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                               nav(
                                 context,
                                 MoreRestaurant(
-                                  closeByRestaurant: resModel.closeByRestaurant,
+                                  closeByRestaurant: context
+                                      .read<RestaurantViewModel>()
+                                      .closeByRestaurant,
                                 ),
                               );
                             },
@@ -186,24 +179,28 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                       SizedBox(
                         height: 32.h,
                       ),
-                      SizedBox(
-                        height: 178.h,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: resModel.closeByRestaurant.length,
-                          itemBuilder: (context, index) {
-                            if (index > 2) {
-                              return const SizedBox();
-                            }
-                            var data = resModel.closeByRestaurant[index];
-                            return SmallRestaurantContainer(
-                              restaurantData: data,
-                              id: data.restId,
-                            );
-                          },
-                        ),
+                      Consumer<RestaurantViewModel>(
+                        builder: (context, resModel, child) {
+                          return SizedBox(
+                            height: 178.h,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              itemCount: resModel.closeByRestaurant.length,
+                              itemBuilder: (context, index) {
+                                if (index > 2) {
+                                  return const SizedBox();
+                                }
+                                var data = resModel.closeByRestaurant[index];
+                                return SmallRestaurantContainer(
+                                  restaurantData: data,
+                                  id: data.restId,
+                                );
+                              },
+                            ),
+                          );
+                        },
                       ),
                       SizedBox(
                         height: 42.h,
@@ -221,7 +218,9 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                               nav(
                                   context,
                                   MoreRestaurant(
-                                    closeByRestaurant: resModel.topRestaurant,
+                                    closeByRestaurant: context
+                                        .read<RestaurantViewModel>()
+                                        .topRestaurant,
                                   ));
                             },
                             child: const Text(
@@ -246,25 +245,33 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                       SizedBox(
                         height: 32.h,
                       ),
-                      SizedBox(
-                        height: 178.h,
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            itemCount: resModel.topRestaurant.length,
-                            itemBuilder: (context, index) {
-                              if (index > 2) {
-                                return const SizedBox();
-                              }
-                              var data = resModel.topRestaurant[index];
-                              return SmallRestaurantContainer(
-                                restaurantData: data,
-                                id: data.restId,
-                              );
-                            }),
+                      Consumer<RestaurantViewModel>(
+                        builder: (context, resModel, child) {
+                          return SizedBox(
+                            height: 178.h,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              itemCount: resModel.topRestaurant.length,
+                              itemBuilder: (context, index) {
+                                if (index > 2) {
+                                  return const SizedBox();
+                                }
+                                var data = resModel.topRestaurant[index];
+                                return SmallRestaurantContainer(
+                                  restaurantData: data,
+                                  id: data.restId,
+                                );
+                              },
+                            ),
+                          );
+                        },
                       ),
-                      resModel.allBannersList.isEmpty
+                      context
+                              .watch<RestaurantViewModel>()
+                              .allBannersList
+                              .isEmpty
                           ? const SizedBox()
                           : const BannerWidget(),
                       SizedBox(
@@ -284,7 +291,9 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                               nav(
                                   context,
                                   MoreRestaurant(
-                                    closeByRestaurant: resModel.allRestDetail,
+                                    closeByRestaurant: context
+                                        .read<RestaurantViewModel>()
+                                        .allRestDetail,
                                   ));
                             },
                             child: const Text(
@@ -297,26 +306,31 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                       SizedBox(
                         height: 28.h,
                       ),
-                      ListView.separated(
-                        shrinkWrap: true,
-                        itemCount: resModel.allRestDetail.length,
-                        primary: false,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (index > 2) {
-                            return const SizedBox();
-                          }
-                          var data = resModel.allRestDetail[index];
-                          return LargeRestaurantContainer(
-                            restaurantData: data,
-                            id: data.restId,
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          if (index > 4) {
-                            return const SizedBox();
-                          }
-                          return SizedBox(
-                            height: 20.h,
+                      Consumer<RestaurantViewModel>(
+                        builder: (context, resModel, child) {
+                          return ListView.separated(
+                            shrinkWrap: true,
+                            itemCount: resModel.allRestDetail.length,
+                            primary: false,
+                            itemBuilder: (BuildContext context, int index) {
+                              if (index > 2) {
+                                return const SizedBox();
+                              }
+                              var data = resModel.allRestDetail[index];
+                              return LargeRestaurantContainer(
+                                restaurantData: data,
+                                id: data.restId,
+                              );
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              if (index > 4) {
+                                return const SizedBox();
+                              }
+                              return SizedBox(
+                                height: 20.h,
+                              );
+                            },
                           );
                         },
                       ),

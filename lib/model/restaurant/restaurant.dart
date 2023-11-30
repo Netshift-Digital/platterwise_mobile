@@ -43,6 +43,7 @@ class RestaurantData {
       required this.email,
       required this.phone,
       required this.website,
+      required this.isFollowed,
       required this.socialHandle,
       required this.menuPix,
       required this.review,
@@ -57,6 +58,7 @@ class RestaurantData {
   dynamic rating;
   String banner;
   String descriptions;
+  bool isFollowed;
   String coverPic;
   String openingHour;
   String closingHour;
@@ -79,6 +81,7 @@ class RestaurantData {
         rating: json["total_rating"] ?? 0,
         banner: json["banner"] ?? "",
         descriptions: json["descriptions"] ?? "",
+        isFollowed: json["following"] ?? false,
         coverPic: json["cover_pic"] ?? "",
         openingHour: json["opening_hour"] ?? "",
         closingHour: json["closing_hour"] ?? "",

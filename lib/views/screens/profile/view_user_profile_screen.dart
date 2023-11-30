@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:gallery_image_viewer/gallery_image_viewer.dart';
 import 'package:linkfy_text/linkfy_text.dart';
 import 'package:platterwave/data/local/local_storage.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:platterwave/model/profile/user_data.dart';
 import 'package:platterwave/model/vblog/post_model.dart';
 import 'package:platterwave/res/color.dart';
@@ -42,14 +43,9 @@ class ViewUserProfileScreen extends StatefulWidget {
 
 class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
   var isFollowing = false;
-  int _postIndex = 0;
-  bool postEnd = false;
-  ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    var blogModel = context.watch<VBlogViewModel>();
-
     SizeConfig.init(context);
     return Scaffold(
       appBar: CustomAppBar(
@@ -127,13 +123,13 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                               onTap: () {
                                 nav(context, Login(), remove: true);
                                 context.read<PageViewModel>().setIndex(0);
+                                DefaultCacheManager().emptyCache();
                                 FirebaseMessaging.instance.unsubscribeFromTopic(
                                     LocalStorage.getUserId());
                                 Future.delayed(
                                     const Duration(milliseconds: 500), () {
-                                  //FirebaseAuth.instance.signOut();
                                   LocalStorage.clear();
-                                  blogModel.myPosts.clear();
+                                  clearAllData();
                                 });
                               },
                             ),
@@ -317,6 +313,8 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                                                     var user = context
                                                         .read<UserViewModel>()
                                                         .user;
+                                                    var blogModel = context
+                                                        .read<VBlogViewModel>();
                                                     if (isFollowing) {
                                                       blogModel
                                                           .unFollowUser(
@@ -436,6 +434,8 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
       checkIsFollowing();
     });
   }
+
+  clearAllData() {}
 
   void getData() async {
     var userModel = context.read<UserViewModel>();

@@ -17,10 +17,8 @@ class ViewLikesPage extends StatefulWidget {
 }
 
 class _ViewLikesPageState extends State<ViewLikesPage> {
-  final searchTextController = TextEditingController();
   final ScrollController scrollController = ScrollController();
   List<Post> postList = [];
-
   int _postIndex = 0;
   bool postEnd = false;
   @override
@@ -48,6 +46,12 @@ class _ViewLikesPageState extends State<ViewLikesPage> {
                   return TimelinePostContainer(post);
                 }),
           );
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override

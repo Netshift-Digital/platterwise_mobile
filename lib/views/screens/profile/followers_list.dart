@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_parsed_text_field/flutter_parsed_text_field.dart';
 import 'package:platterwave/model/profile/user_data.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
+import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/containers/empty_content_container.dart';
 import 'package:platterwave/views/widget/containers/users_card.dart';
@@ -43,7 +45,6 @@ class _FollowersListState extends State<FollowersList>
                 text: "Followers",
               )
             ],
-            // padding: EdgeInsets.only(right: 100.w),
             labelStyle: AppTextTheme.h6.copyWith(fontSize: 18),
             unselectedLabelStyle: AppTextTheme.h6.copyWith(fontSize: 18),
             labelColor: AppColor.textColor,
@@ -60,70 +61,32 @@ class _FollowersListState extends State<FollowersList>
             child: TabBarView(
               controller: controller,
               children: [
-                StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("following")
-                        .doc("users")
-                        .collection(widget.id)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return snapshot.data!.docs.isEmpty
-                            ? const Padding(
-                                padding: EdgeInsets.only(left: 30, right: 30),
-                                child: EmptyContentContainer(),
-                              )
-                            : ListView.builder(
-                                itemCount: snapshot.data!.docs.length,
-                                itemBuilder: (context, index) {
-                                  var encode = json.encode(
-                                      snapshot.data!.docs[index].data());
-                                  Map<String, dynamic> user =
-                                      jsonDecode(encode);
-                                  var data = UserProfile.fromJson(user);
-                                  return UserCard(
-                                    data: data,
-                                    id: widget.id,
-                                  );
-                                });
-                      }
-                      return const Padding(
+                following.isEmpty
+                    ? const Padding(
                         padding: EdgeInsets.only(left: 30, right: 30),
                         child: EmptyContentContainer(),
-                      );
-                    }),
-                StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("followers")
-                        .doc("users")
-                        .collection(widget.id)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return snapshot.data!.docs.isEmpty
-                            ? const Padding(
-                                padding: EdgeInsets.only(left: 30, right: 30),
-                                child: EmptyContentContainer(),
-                              )
-                            : ListView.builder(
-                                itemCount: snapshot.data!.docs.length,
-                                itemBuilder: (context, index) {
-                                  var encode = json.encode(
-                                      snapshot.data!.docs[index].data());
-                                  Map<String, dynamic> user =
-                                      jsonDecode(encode);
-                                  var data = UserProfile.fromJson(user);
-                                  return UserCard(
-                                    data: data,
-                                    id: widget.id,
-                                  );
-                                });
-                      }
-                      return const Padding(
+                      )
+                    : ListView.builder(
+                        itemCount: following.length,
+                        itemBuilder: (context, index) {
+                          return UserCard(
+                            data: following[index],
+                            id: widget.id,
+                          );
+                        }),
+                followers.isEmpty
+                    ? const Padding(
                         padding: EdgeInsets.only(left: 30, right: 30),
                         child: EmptyContentContainer(),
-                      );
-                    }),
+                      )
+                    : ListView.builder(
+                        itemCount: followers.length,
+                        itemBuilder: (context, index) {
+                          return UserCard(
+                            data: followers[index],
+                            id: widget.id,
+                          );
+                        })
               ],
             ),
           ),
@@ -135,27 +98,32 @@ class _FollowersListState extends State<FollowersList>
   @override
   void initState() {
     super.initState();
-    print("This is the id ${widget.id}");
     controller =
         TabController(length: 2, vsync: this, initialIndex: widget.index);
     Future.delayed(const Duration(milliseconds: 50), () {
-      //getData();
+      getData();
     });
   }
 
-  void getData() {
-    FirebaseFirestore.instance
-        .collection("following")
-        .doc("users")
-        .collection(widget.id)
-        .get()
-        .then((value) {});
+  @override
+  void dispose() {
+    super.dispose();
+    controller = null;
+  }
 
-    FirebaseFirestore.instance
-        .collection("following")
-        .doc("users")
-        .collection(widget.id)
-        .get()
-        .then((value) {});
+  getData() async {
+    var model = context.read<VBlogViewModel>();
+    var res = await model.getUserFollowers(widget.id, postIndex: 1);
+    var res2 = await model.getUserFollowing(widget.id, postIndex: 1);
+    if (res != null) {
+      setState(() {
+        followers = res;
+      });
+    }
+    if (res2 != null) {
+      setState(() {
+        following = res2;
+      });
+    }
   }
 }

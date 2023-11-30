@@ -21,6 +21,7 @@ import 'package:platterwave/utils/text_validation.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
+import 'package:platterwave/views/screens/restaurant/screen/res.dart';
 import 'package:platterwave/views/screens/vblog/post_by_tag.dart';
 import 'package:platterwave/views/screens/vblog/post_details.dart';
 import 'package:platterwave/views/screens/vblog/post_like.dart';
@@ -73,10 +74,14 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                   onTap: () {
                     nav(
                       context,
-                      ViewUserProfileScreen(
-                        id: widget.post.user.userId.toString(),
-                        userData: widget.post.user,
-                      ),
+                      widget.post.type == "user"
+                          ? ViewUserProfileScreen(
+                              id: widget.post.user.userId.toString(),
+                              userData: widget.post.user,
+                            )
+                          : Res(
+                              id: widget.post.user.userId,
+                            ),
                     );
                   },
                   child: ImageCacheCircle(
@@ -96,10 +101,14 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                       onTap: () {
                         nav(
                           context,
-                          ViewUserProfileScreen(
-                            id: widget.post.user.userId.toString(),
-                            userData: widget.post.user,
-                          ),
+                          widget.post.type == "user"
+                              ? ViewUserProfileScreen(
+                                  id: widget.post.user.userId.toString(),
+                                  userData: widget.post.user,
+                                )
+                              : Res(
+                                  id: widget.post.user.userId,
+                                ),
                         );
                       },
                       child: Text(
@@ -418,7 +427,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                     blend: 0.5,
                     chachedImage: true,
                   )
-                : const ImageCacheR(
+                : ImageCacheR(
                     "https://www.balmoraltanks.com/images/common/video-icon-image.jpg",
                     chachedImage: true,
                   ),

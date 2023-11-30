@@ -96,6 +96,63 @@ class VBlogService {
     return null;
   }
 
+  Future<Map<String, dynamic>?> getUserFollowers(
+      String userId, int index) async {
+    String url = "${baseurl3}user/user-followers?page=$index";
+    var token = LocalStorage.getToken();
+    try {
+      var response = await client.get(Uri.parse(url), headers: {
+        "Content-type": "application/json",
+        "Authorization": "Bearer $token"
+      });
+      var data = jsonDecode(response.body);
+      print("This are my posts $data");
+      if (data["status_code"] == 200 && data["success"] == true) {
+        return data["data"];
+      } else {
+        RandomFunction.toast(data["response"]);
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      print(e.toString);
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> getUserFollowing(
+      String userId, int index) async {
+    String url = "${baseurl3}user/user-following?page=$index";
+    var token = LocalStorage.getToken();
+    try {
+      var response = await client.get(Uri.parse(url), headers: {
+        "Content-type": "application/json",
+        "Authorization": "Bearer $token"
+      });
+      var data = jsonDecode(response.body);
+      if (data["status_code"] == 200 && data["success"] == true) {
+        return data["data"];
+      } else {
+        RandomFunction.toast(data["response"]);
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      print(e.toString);
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
   Future<Map<String, dynamic>?> getOtherUserPost(int index, String id) async {
     var body = jsonEncode({"user_id": id});
 
