@@ -72,8 +72,7 @@ class VBlogViewModel extends BaseViewModel {
       {bool restart = false, required int postIndex}) async {
     try {
       notifyListeners();
-      //I have not yet implemented the get recommended post api
-      var data = await vBlogService.getPost(postIndex);
+      var data = await vBlogService.getTrendingLikes(postIndex);
       postAppState = AppState.idle;
       notifyListeners();
       if (data != null) {
@@ -91,7 +90,6 @@ class VBlogViewModel extends BaseViewModel {
       postAppState = AppState.idle;
       notifyListeners();
       setState(AppState.idle);
-      print("The error is ${e.toString()}");
       RandomFunction.toast("Something went wrong");
     }
     return false;
@@ -591,9 +589,9 @@ class VBlogViewModel extends BaseViewModel {
     return false;
   }
 
-  Future<List<Post>?> searchPost(String search) async {
+  Future<List<Post>?> searchPost(String search, int page) async {
     try {
-      var data = await vBlogService.searchPost(search);
+      var data = await vBlogService.searchPost(search, page);
       //print(data);
       if (data != null) {
         var res = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
@@ -703,9 +701,9 @@ class VBlogViewModel extends BaseViewModel {
         .delete();
   }
 
-  Future<List<Post>?> getTrendingLikes() async {
+  Future<List<Post>?> getTrendingLikes(int page) async {
     try {
-      var data = await vBlogService.getTrendingLikes();
+      var data = await vBlogService.getTrendingLikes(page);
       //print(data);
       if (data != null) {
         var res = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
@@ -721,10 +719,9 @@ class VBlogViewModel extends BaseViewModel {
     return null;
   }
 
-  Future<List<Post>?> getTrendingOnComment() async {
+  Future<List<Post>?> getTrendingOnComment(int page) async {
     try {
-      var data = await vBlogService.getTrendingComments();
-      //print(data);
+      var data = await vBlogService.getTrendingComments(page);
       if (data != null) {
         var res = List<Post>.from(data["data"].map((x) => Post.fromJson(x)));
         notifyListeners();

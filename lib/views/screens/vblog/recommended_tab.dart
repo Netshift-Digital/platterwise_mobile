@@ -120,8 +120,8 @@ class _RecommendedTabState extends State<RecommendedTab> {
 
   @override
   void dispose() {
-    scrollController.dispose();
     super.dispose();
+    scrollController.dispose();
   }
 
   @override

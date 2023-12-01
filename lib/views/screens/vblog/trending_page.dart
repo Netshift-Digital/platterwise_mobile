@@ -17,10 +17,12 @@ class TrendingPage extends StatefulWidget {
 
 class _TrendingPageState extends State<TrendingPage> {
   bool loading = false;
+  final ScrollController scrollController = ScrollController();
+  int _postIndex = 0;
+  bool postEnd = false;
   List<Post>? trendingPost;
   @override
   Widget build(BuildContext context) {
-    var model = context.watch<VBlogViewModel>();
     return Scaffold(
       appBar: appBar(context),
       body: trendingPost == null
@@ -37,6 +39,7 @@ class _TrendingPageState extends State<TrendingPage> {
                       padding: EdgeInsets.zero,
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
+                      controller: scrollController,
                       itemCount: trendingPost!.length,
                       itemBuilder: (context, index) {
                         var data = trendingPost![index];
@@ -47,47 +50,75 @@ class _TrendingPageState extends State<TrendingPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    scrollController.dispose();
+  }
+
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        if (widget.basedOn == "baselike") {
+          setBasedOnLikes(restart: false);
+        } else {
+          setBasedOnComment(restart: false);
+        }
+      }
+    });
     Future.delayed(const Duration(milliseconds: 50), () {
       if (widget.basedOn == "baselike") {
-        setBasedOnLikes();
+        setBasedOnLikes(restart: true);
       } else {
-        setBasedOnComment();
+        setBasedOnComment(restart: true);
       }
     });
   }
 
-  setBasedOnLikes() {
-    var model = context.read<VBlogViewModel>();
-    model.getTrendingLikes().then((value) {
-      if (value != null) {
-        trendingPost = value;
-      }
-      setState(() {});
-    });
+  setBasedOnLikes({bool restart = false}) {
+    if (restart) {
+      _postIndex = 0;
+      trendingPost = [];
+      postEnd = false;
+    }
+    if (postEnd == false) {
+      _postIndex = _postIndex + 1;
+      var model = context.read<VBlogViewModel>();
+      model.getTrendingLikes(_postIndex).then((value) {
+        if (value != null) {
+          setState(() {
+            trendingPost?.addAll(value);
+          });
+          if (value.isEmpty || value.length < 30) {
+            postEnd = true;
+          }
+        }
+      });
+    }
   }
 
-  setBasedOnComment() {
-    var model = context.read<VBlogViewModel>();
-    model.getTrendingOnComment().then((value) {
-      if (value != null) {
-        trendingPost = value;
-      }
-      setState(() {});
-    });
-  }
+  setBasedOnComment({bool restart = false}) {
+    if (restart) {
+      _postIndex = 0;
+      trendingPost = [];
+      postEnd = false;
+    }
+    if (postEnd == false) {
+      _postIndex = _postIndex + 1;
 
-  stop() {
-    setState(() {
-      loading = false;
-    });
-  }
-
-  start() {
-    setState(() {
-      loading = true;
-    });
+      var model = context.read<VBlogViewModel>();
+      model.getTrendingOnComment(_postIndex).then((value) {
+        if (value != null) {
+          setState(() {
+            trendingPost?.addAll(value);
+          });
+          if (value.isEmpty || value.length < 30) {
+            postEnd = true;
+          }
+        }
+      });
+    }
   }
 }

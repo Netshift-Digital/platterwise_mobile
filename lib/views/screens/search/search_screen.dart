@@ -28,7 +28,10 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   List<Post> searchResult = [];
+  int _postIndex = 0;
+  bool postEnd = false;
   List<UserProfile> searchUserResult = [];
+  ScrollController scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -64,18 +67,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       }
                     });
                   } else {
-                    context
-                        .read<VBlogViewModel>()
-                        .searchPost(searchController.text)
-                        .then((value) {
-                      if (value != null) {
-                        if (mounted) {
-                          setState(() {
-                            searchResult = value;
-                          });
-                        }
-                      }
-                    });
+                    searchPost(restart: true);
                   }
                 }
               },
@@ -134,6 +126,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             padding: EdgeInsets.zero,
                             physics: const BouncingScrollPhysics(),
                             shrinkWrap: true,
+                            controller: scrollController,
                             itemCount: searchResult.length,
                             itemBuilder: (context, index) {
                               var data = searchResult[index];
@@ -146,9 +139,43 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        searchPost(restart: false);
+      }
+    });
+  }
+
+  searchPost({bool restart = false}) {
+    if (restart) {
+      _postIndex = 0;
+      searchResult = [];
+      postEnd = false;
+    }
+    if (postEnd == false) {
+      _postIndex = _postIndex + 1;
+      var model = context.read<VBlogViewModel>();
+      model.searchPost(searchController.text, _postIndex).then((value) {
+        if (value != null) {
+          setState(() {
+            searchResult.addAll(value);
+          });
+          if (value.isEmpty || value.length < 30) {
+            postEnd = true;
+          }
+        }
+      });
+    }
+  }
+
+  @override
   void dispose() {
-    searchController.dispose();
     super.dispose();
+    searchController.dispose();
+    scrollController.dispose();
   }
 
   void filterSheet(VBlogViewModel vBlogViewModel) {

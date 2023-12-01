@@ -151,7 +151,6 @@ class VBlogService {
     } on TimeoutException catch (_) {
       throw Failure("Poor internet connection");
     } catch (e) {
-      print(e.toString);
       throw Failure("Something went wrong. Try again");
     }
     return null;
@@ -455,14 +454,15 @@ class VBlogService {
     return null;
   }
 
-  Future<Map<String, dynamic>?> searchPost(String search) async {
+  Future<Map<String, dynamic>?> searchPost(String search, int page) async {
     var body = jsonEncode({
       "search": search,
     });
     var token = LocalStorage.getToken();
 
     try {
-      var response = await client.post(Uri.parse("${baseurl3}post/search-post"),
+      var response = await client.post(
+          Uri.parse("${baseurl3}post/search-post?page=$page"),
           body: body,
           headers: {
             "Content-type": "application/json",
@@ -470,7 +470,7 @@ class VBlogService {
           });
       var data = jsonDecode(response.body);
       if (data["status_code"] == 200 && data["success"] == true) {
-        return data;
+        return data["data"];
       } else {
         RandomFunction.toast(data['response'] ?? "");
       }
@@ -486,46 +486,45 @@ class VBlogService {
     return null;
   }
 
-  Future<Map<String, dynamic>?> getTrendingLikes() async {
-    var token = LocalStorage.getToken();
-
-    try {
-      var response = await client.get(Uri.parse("${baseurl3}post/top-liked"),
-          headers: {
-            "Content-type": "application/json",
-            "Authorization": "Bearer $token"
-          });
-      var data = jsonDecode(response.body);
-      if (data["status_code"] == 200 && data["success"] == true) {
-        return data;
-      } else {
-        RandomFunction.toast(data['response'] ?? "");
-      }
-    } on SocketException catch (_) {
-      throw Failure("No internet connection");
-    } on HttpException catch (_) {
-      throw Failure("Service not currently available");
-    } on TimeoutException catch (_) {
-      throw Failure("Poor internet connection");
-    } catch (e) {
-      throw Failure("Something went wrong. Try again");
-    }
-    return null;
-  }
-
-  Future<Map<String, dynamic>?> getTrendingComments() async {
+  Future<Map<String, dynamic>?> getTrendingLikes(int page) async {
     var token = LocalStorage.getToken();
 
     try {
       var response = await client
-          .get(Uri.parse("${baseurl3}post/top-commented"), headers: {
+          .get(Uri.parse("${baseurl3}post/top-liked?page=$page"), headers: {
         "Content-type": "application/json",
         "Authorization": "Bearer $token"
       });
       var data = jsonDecode(response.body);
-      print("This is the result $data");
       if (data["status_code"] == 200 && data["success"] == true) {
-        return data;
+        return data["data"];
+      } else {
+        RandomFunction.toast(data['response'] ?? "");
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> getTrendingComments(int page) async {
+    var token = LocalStorage.getToken();
+
+    try {
+      var response = await client
+          .get(Uri.parse("${baseurl3}post/top-commented?page=$page"), headers: {
+        "Content-type": "application/json",
+        "Authorization": "Bearer $token"
+      });
+      var data = jsonDecode(response.body);
+      if (data["status_code"] == 200 && data["success"] == true) {
+        return data["data"];
       } else {
         RandomFunction.toast(data['response'] ?? "");
       }
