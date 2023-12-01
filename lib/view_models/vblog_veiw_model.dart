@@ -232,7 +232,7 @@ class VBlogViewModel extends BaseViewModel {
       postAppState = AppState.idle;
       if (data != null) {
         var res = List<UserProfile>.from(
-            data["data"].map((x) => UserProfile.fromJson(x["user"])));
+            data["data"].map((x) => UserProfile.fromJson(x["owner"])));
         notifyListeners();
         return res;
       }

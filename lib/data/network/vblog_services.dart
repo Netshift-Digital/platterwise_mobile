@@ -99,9 +99,11 @@ class VBlogService {
   Future<Map<String, dynamic>?> getUserFollowers(
       String userId, int index) async {
     String url = "${baseurl3}user/user-followers?page=$index";
+    var body = jsonEncode({"user_id": userId});
+
     var token = LocalStorage.getToken();
     try {
-      var response = await client.get(Uri.parse(url), headers: {
+      var response = await client.post(Uri.parse(url), body: body, headers: {
         "Content-type": "application/json",
         "Authorization": "Bearer $token"
       });
@@ -127,10 +129,12 @@ class VBlogService {
 
   Future<Map<String, dynamic>?> getUserFollowing(
       String userId, int index) async {
+    var body = jsonEncode({"user_id": userId});
+
     String url = "${baseurl3}user/user-following?page=$index";
     var token = LocalStorage.getToken();
     try {
-      var response = await client.get(Uri.parse(url), headers: {
+      var response = await client.post(Uri.parse(url), body: body, headers: {
         "Content-type": "application/json",
         "Authorization": "Bearer $token"
       });
