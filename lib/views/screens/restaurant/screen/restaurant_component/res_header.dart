@@ -170,7 +170,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                   } else {
                     resModel.followRestaurant(widget.restaurantData);
                     setState(() {
-                      widget.restaurantData.isFollowed = false;
+                      widget.restaurantData.isFollowed = true;
                     });
                   }
                 },

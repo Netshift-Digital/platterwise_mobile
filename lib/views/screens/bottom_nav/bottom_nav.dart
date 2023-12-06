@@ -99,9 +99,12 @@ class _BottomNavState extends State<BottomNav> {
 
   void getData() async {
     var resModel = context.read<RestaurantViewModel>();
+    var userModel = context.read<UserViewModel>();
+
     setLocation();
     resModel.getTopRestaurant();
     resModel.getRestaurant();
+    userModel.getMyProfile();
   }
 
   getReservation() {
