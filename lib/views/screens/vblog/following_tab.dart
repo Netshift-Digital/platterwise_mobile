@@ -32,59 +32,8 @@ class _FollowingTabState extends State<FollowingTab> {
         },
         child: SingleChildScrollView(
           controller: scrollController,
-          //physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 16),
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.end,
-              //     crossAxisAlignment: CrossAxisAlignment.start,
-              //     children: [
-              //       SizedBox(
-              //         height: 10.h,
-              //       ),
-              //       PlatButton(
-              //           title: "Trending",
-              //           height: 39,
-              //           width: 84,
-              //           textSize: 15,
-              //           padding: 4,
-              //           textColor: AppColor.g800,
-              //           color: AppColor.g30,
-              //           onTap: () {}),
-              //       SizedBox(
-              //         height: 20.h,
-              //       ),
-              //       Row(
-              //         children: [
-              //           SubCategoriesContainer(
-              //             onTap: () {
-              //               nav(context,
-              //                   const TrendingPage(basedOn: 'baselike'));
-              //             },
-              //             title: 'Most Liked',
-              //             image: "assets/images/likes.png",
-              //           ),
-              //           const SizedBox(
-              //             width: 15,
-              //           ),
-              //           SubCategoriesContainer(
-              //             onTap: () {
-              //               nav(context,
-              //                   const TrendingPage(basedOn: 'basecomment'));
-              //             },
-              //             title: 'Most Commented ',
-              //             image: "assets/images/comments.png",
-              //           )
-              //         ],
-              //       ),
-              //       SizedBox(
-              //         height: 20.h,
-              //       ),
-              //     ],
-              //   ),
-              // ),
               Consumer<VBlogViewModel>(
                 builder: (context, vBlogModel, child) {
                   final posts = vBlogModel.allposts;
