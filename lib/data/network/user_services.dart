@@ -19,7 +19,7 @@ class UserService {
           body: jsonEncode(registerModel.toJson()),
           headers: {
             "Content-type": "application/json",
-          });
+          }).timeout(const Duration(seconds: 60));
       var data = jsonDecode(response.body);
       print("The data is $data");
       if (response.statusCode == 200 && data["status"] == true) {
@@ -50,7 +50,7 @@ class UserService {
           body: jsonEncode(boDy),
           headers: {
             "Content-type": "application/json",
-          });
+          }).timeout(const Duration(seconds: 60));
 
       var data = jsonDecode(response.body);
       print("This is the data $data");
@@ -95,7 +95,7 @@ class UserService {
           headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer $token"
-          });
+          }).timeout(const Duration(seconds: 60));
       var data = jsonDecode(response.body);
       print("The edit profile result is $data");
       RandomFunction.toast(data["response"]);
@@ -122,7 +122,7 @@ class UserService {
           headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer $token"
-          }).timeout(const Duration(seconds: 20));
+          }).timeout(const Duration(seconds: 60));
       var data = jsonDecode(response.body);
 
       print("This user profile is $data");

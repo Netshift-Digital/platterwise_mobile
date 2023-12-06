@@ -137,7 +137,7 @@ class VBlogService {
       var response = await client.post(Uri.parse(url), body: body, headers: {
         "Content-type": "application/json",
         "Authorization": "Bearer $token"
-      });
+      }).timeout(const Duration(seconds: 60));
       var data = jsonDecode(response.body);
       if (data["status_code"] == 200 && data["success"] == true) {
         return data["data"];

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
-import 'package:platterwave/views/widget/appbar/appbar.dart';
-import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:platterwave/utils/enum/app_state.dart';
-import 'package:platterwave/view_models/restaurant_view_model.dart';
 
 class SinglePaymentScreen extends StatelessWidget {
   final SingleTransactionId txn;
@@ -35,11 +31,10 @@ class SinglePaymentScreen extends StatelessWidget {
       );
 
     return Scaffold(
-        appBar: appBar(context),
+        // appBar: appBar(context),
         body: SafeArea(
-            child: Expanded(
-                child: WebViewWidget(
-          controller: controller,
-        ))));
+            child: WebViewWidget(
+      controller: controller,
+    )));
   }
 }

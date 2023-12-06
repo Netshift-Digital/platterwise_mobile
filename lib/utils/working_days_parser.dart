@@ -10,10 +10,10 @@ class WorkingDaysParser {
   };
 
   static List<int> getDaysOfWeek(String workingDaysString) {
-    final List<String> workingDaysList = workingDaysString.split(' - ');
+    final List<String> workingDaysList = workingDaysString.split('-');
 
-    final start = dayMap[workingDaysList[0].toLowerCase()];
-    final end = dayMap[workingDaysList[1].toLowerCase()];
+    final start = dayMap[workingDaysList[0].trim().toLowerCase()];
+    final end = dayMap[workingDaysList[1].trim().toLowerCase()];
     List<int> result = [];
 
     if (start! <= end!) {

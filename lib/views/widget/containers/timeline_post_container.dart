@@ -1,7 +1,5 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_text/custom_text.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gallery_image_viewer/gallery_image_viewer.dart';
@@ -225,8 +223,6 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                             ),
                           ),
                   ],
-                  // offset:const Offset(0, 100),
-                  // color: Colors.grey,
                   elevation: 2,
                 ),
               ],
@@ -258,18 +254,6 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                 : widget.post.contentType == PostType.image
                     ? imageWid(context)
                     : videoWid(),
-
-            // Container(
-            //   height: 239.h,
-            //   width: 343.w,
-            //   decoration: BoxDecoration(
-            //       color: AppColor.p300,
-            //       borderRadius: BorderRadius.circular(15),
-            //       shape: BoxShape.rectangle),
-            //   child: const ImageCacheR(
-            //     "https://www.balmoraltanks.com/images/common/video-icon-image.jpg",
-            //   ),
-            // )
             SizedBox(
               height: 18.h,
             ),
@@ -362,46 +346,6 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
     );
   }
 
-  // Widget videoWid() {
-  //   return GestureDetector(
-  //     onTap: () {
-  //       nav(
-  //           context,
-  //           VideoPlay(
-  //             url: widget.post.contentUrl,
-  //           ));
-  //     },
-  //     child: Container(
-  //       height: 239.h,
-  //       width: double.maxFinite,
-  //       decoration: BoxDecoration(
-  //           color: Colors.black,
-  //           borderRadius: BorderRadius.circular(15),
-  //           shape: BoxShape.rectangle),
-  //       child: Stack(
-  //         children: [
-  //           TextValidator.isValidUrl(widget.post.contentType)
-  //               ? ImageCacheR(
-  //                   widget.post.contentType,
-  //                   fit: true,
-  //                   blend: 0.5,
-  //                 )
-  //               : const ImageCacheR(
-  //                   "https://www.balmoraltanks.com/images/common/video-icon-image.jpg",
-  //                 ),
-  //           TextValidator.isValidUrl(widget.post.contentType)
-  //               ? SizedBox(
-  //                   height: 239.h,
-  //                   width: 343.w,
-  //                   child: Center(
-  //                       child:
-  //                           SvgPicture.asset("assets/images/play-circle.svg")))
-  //               : const SizedBox()
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
   Widget videoWid() {
     return GestureDetector(
       onTap: () {
