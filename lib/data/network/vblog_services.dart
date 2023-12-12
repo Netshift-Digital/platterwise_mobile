@@ -568,21 +568,24 @@ class VBlogService {
     return null;
   }
 
-  Future<dynamic> getPostById(String postId) async {
+  Future<Map<String, dynamic>?> getPostById(String postId) async {
     var body = jsonEncode({
       "post_id": postId,
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid
     });
+    var token = LocalStorage.getToken();
+
     try {
-      var response = await client
-          .post(Uri.parse("${baseurl}get_post_byID.php"), body: body, headers: {
-        "Content-type": "application/json",
-      });
+      var response = await client.post(Uri.parse("${baseurl3}post/get-post"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $token"
+          });
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       } else {
-        //RandomFunction.toast(data['status']??"");
+        RandomFunction.toast(data['response'] ?? "");
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");

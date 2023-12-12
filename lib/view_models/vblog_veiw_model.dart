@@ -169,13 +169,8 @@ class VBlogViewModel extends BaseViewModel {
       var data = await vBlogService.getPostById(postId);
       setState(AppState.idle);
       if (data != null) {
-        var p = PostModel.fromJson(data as Map);
-        List<Post> posts = [];
-        for (var element in p.allUsersPosts) {
-          posts.add(element);
-        }
-        notifyListeners();
-        return posts.first;
+        var p = Post.fromJson(data["data"]);
+        return p;
       }
     } catch (e) {
       setState(AppState.idle);

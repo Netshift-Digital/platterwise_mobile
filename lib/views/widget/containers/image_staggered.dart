@@ -20,7 +20,6 @@ class ImageStag extends StatelessWidget {
           mainAxisCellCount: 2,
           child: GestureDetector(
             onTap: () {
-              print("These are the images $images");
               nav(context, PhotoViewPage(photos: images, index: 0));
             },
             child: ImageCacheR(
@@ -60,11 +59,11 @@ class ImageStag extends StatelessWidget {
                         width: double.maxFinite,
                         blend: 0.2,
                       ),
-                      const Positioned.fill(
+                      Positioned.fill(
                         child: Center(
                           child: Text(
-                            '+1',
-                            style: TextStyle(
+                            '+${images.length - 2}',
+                            style: const TextStyle(
                                 fontWeight: FontWeight.w500,
                                 color: Colors.white,
                                 fontSize: 20),
