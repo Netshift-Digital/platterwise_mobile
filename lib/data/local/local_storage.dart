@@ -63,8 +63,9 @@ class LocalStorage {
     return null;
   }
 
-  static void clear() {
-    Hive.box(authKey).clear();
+  static void clear() async{
+    await Hive.box(authKey).clear();
+    await Hive.box(token).clear();
   }
 
   List<dynamic> getPost() {

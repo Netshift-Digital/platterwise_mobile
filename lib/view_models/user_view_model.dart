@@ -142,6 +142,52 @@ class UserViewModel extends BaseViewModel {
     return null;
   }
 
+  Future<bool> validateEmail(String email) async {
+    try {
+      setState(AppState.busy);
+      var res = await userService.validateEmail(email);
+      setState(AppState.idle);
+      if (res != null) {
+        return true;
+      }
+    } catch (e) {
+      print(e.toString());
+      setState(AppState.idle);
+    }
+    return false;
+  }
+
+  Future<bool> resetPassword(
+      String email, String password, String token) async {
+    try {
+      setState(AppState.busy);
+      var res = await userService.resetPassword(email, password, token);
+      setState(AppState.idle);
+      if (res != null) {
+        return true;
+      }
+    } catch (e) {
+      print(e.toString());
+      setState(AppState.idle);
+    }
+    return false;
+  }
+
+  Future<bool> logout() async {
+    try {
+      setState(AppState.busy);
+      var res = await userService.logout();
+      setState(AppState.idle);
+      if (res != null) {
+        return true;
+      }
+    } catch (e) {
+      print("The error is ${e.toString()}");
+      setState(AppState.idle);
+    }
+    return false;
+  }
+
   Future<bool> changePassword(
       String newPassword, String currentPassword) async {
     final user = FirebaseAuth.instance.currentUser!;

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/spacing.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
-import 'package:platterwave/views/screens/auth/reset_password.dart';
+import 'package:platterwave/views/screens/auth/login.dart';
 import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/text_feild/text_field.dart';
@@ -14,15 +13,17 @@ import 'package:the_validator/the_validator.dart';
 
 import '../../../view_models/user_view_model.dart';
 
-class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({Key? key}) : super(key: key);
+class ResetPassword extends StatefulWidget {
+  const ResetPassword({Key? key}) : super(key: key);
 
   @override
-  State<ForgotPassword> createState() => _ForgotPasswordState();
+  State<ResetPassword> createState() => _ForgotPasswordState();
 }
 
-class _ForgotPasswordState extends State<ForgotPassword> {
+class _ForgotPasswordState extends State<ResetPassword> {
   final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  final TextEditingController _token = TextEditingController();
 
   bool isLoading = false;
 
@@ -53,7 +54,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         height: twenty,
                       ),
                       Text(
-                        "Forgot Password",
+                        "Reset Password",
                         style: AppTextTheme.h4.copyWith(
                             fontSize: twentyFour, fontWeight: FontWeight.w700),
                       ),
@@ -72,12 +73,29 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Text(
-                        "We will send you a message to reset your new password",
-                        style: AppTextTheme.h6.copyWith(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: AppColor.g100),
+                      Text("Password", style: AppTextTheme.hint),
+                      const SizedBox(
+                        height: hintSpacing,
+                      ),
+                      Field(
+                        controller: _password,
+                        hint: "Enter your new password",
+                        validate: FieldValidator.password(),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text("Token", style: AppTextTheme.hint),
+                      const SizedBox(
+                        height: hintSpacing,
+                      ),
+                      Field(
+                        controller: _token,
+                        hint: "Enter the token sent to your mail",
+                        validate: FieldValidator.number(),
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                       SizedBox(
                         height: size.height * 0.07,
@@ -85,7 +103,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       PlatButton(
                           appState: context.watch<UserViewModel>().appState,
                           // color: _formKey.currentState!.validate()?null :AppColor.g500,
-                          title: "Send Mail",
+                          title: "Reset Password",
                           onTap: () {
                             if (_formKey.currentState!.validate()) {
                               sendMail();
@@ -107,10 +125,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   void sendMail() {
     var viewModel = context.read<UserViewModel>();
-    viewModel.validateEmail(_email.text).then((value) {
+    viewModel
+        .resetPassword(_email.text, _password.text, _token.text)
+        .then((value) {
       if (value == true) {
-        RandomFunction.toast("We have sent a restore link to your mail");
-        nav(context, const ResetPassword(), remove: false);
+        RandomFunction.toast("You have successfully reset your password");
+        nav(context, Login(), remove: true);
       }
     });
   }

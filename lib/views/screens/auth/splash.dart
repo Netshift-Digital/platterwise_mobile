@@ -36,6 +36,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     permission();
+    print("These are initial data");
+    print(LocalStorage.getToken());
+    print(LocalStorage.getUserId());
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       FlutterNativeSplash.remove();
       if (LocalStorage.isFirstTime() == true) {
@@ -43,8 +46,9 @@ class _SplashScreenState extends State<SplashScreen> {
         LocalStorage.changeIsFirstTime(false);
       } else {
         isLoginValid().then((value) {
-          print("The value is $value");
-          if (value == true && LocalStorage.getUserId().isNotEmpty && LocalStorage.getToken().isNotEmpty) {
+          if (value == true &&
+              LocalStorage.getUserId().isNotEmpty &&
+              LocalStorage.getToken().isNotEmpty) {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const BottomNav()));
           } else {
@@ -63,7 +67,6 @@ class _SplashScreenState extends State<SplashScreen> {
     DateTime loginTime = DateTime.parse(loginTimeString);
     DateTime currentTime = DateTime.now();
     Duration difference = currentTime.difference(loginTime);
-    print("The difference is $difference");
     return difference.inSeconds <= AppStrings.loginTime;
   }
 

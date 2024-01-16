@@ -56,6 +56,8 @@ class _SharedPostState extends State<SharedPost> {
     model.getMyPostById(widget.id).then((value) {
       if (value != null) {
         setState(() {
+          print("This is the post $value");
+          print("This is the post id ${widget.id}");
           post = value;
           message = "Post not Found";
         });

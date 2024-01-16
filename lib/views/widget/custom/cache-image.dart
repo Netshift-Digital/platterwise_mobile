@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:platterwave/utils/cache_manager.dart';
 import 'package:shimmer/shimmer.dart';
 
-const kPlaceHolder =
-    'https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt67a59125151d76ef/625e7dffceb10b47dfaba4dc/GettyImages-1348618431.jpg';
-
 class ImageCacheR extends StatelessWidget {
   final double height, width, topRadius, topBottom, blend;
   final String image;

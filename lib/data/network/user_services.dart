@@ -143,6 +143,106 @@ class UserService {
     return null;
   }
 
+  Future<Map<String, dynamic>?> logout() async {
+    var token = LocalStorage.getToken();
+
+    try {
+      var response = await client.post(
+          Uri.parse(
+            "${baseurl3}user/logout",
+          ),
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $token"
+          }).timeout(const Duration(seconds: 20));
+      var data = jsonDecode(response.body);
+
+      print("This user profile is $data");
+      print("This user profile is ${response.statusCode}");
+      if (response.statusCode == 200) {
+        return data;
+      } else {
+        RandomFunction.toast(data["response"]);
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> validateEmail(String email) async {
+    var token = LocalStorage.getToken();
+    var boDy = {"email": email};
+
+    try {
+      var response = await client.post(
+          Uri.parse(
+            "${baseurl3}auth/validate-email",
+          ),
+          body: jsonEncode(boDy),
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $token"
+          }).timeout(const Duration(seconds: 20));
+      var data = jsonDecode(response.body);
+      print("The body is ------------- $data");
+
+      if (data["status_code"] == 200 && data["success"] == true) {
+        return data;
+      } else {
+        RandomFunction.toast(data["response"]);
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> resetPassword(
+      String email, String password, String token) async {
+    var tokenT = LocalStorage.getToken();
+    var boDy = {"email": email, "password": password, "token": token};
+
+    try {
+      var response = await client.post(
+          Uri.parse(
+            "${baseurl3}auth/reset-password",
+          ),
+          body: jsonEncode(boDy),
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $tokenT"
+          }).timeout(const Duration(seconds: 20));
+      var data = jsonDecode(response.body);
+       if (data["status_code"] == 200 && data["success"] == true) {
+        return data;
+      } else {
+        RandomFunction.toast(data["response"]);
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
   Future<Map<String, dynamic>?> getOtherUserProfile(String id) async {
     var token = LocalStorage.getToken();
     var boDy = {"user_id": id};

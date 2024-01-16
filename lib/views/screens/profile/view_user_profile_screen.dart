@@ -121,15 +121,18 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                               title: "Logout",
                               leading: "assets/icon/logout.svg",
                               onTap: () {
-                                nav(context, Login(), remove: true);
-                                context.read<PageViewModel>().setIndex(0);
-                                DefaultCacheManager().emptyCache();
-                                FirebaseMessaging.instance.unsubscribeFromTopic(
-                                    LocalStorage.getUserId());
-                                Future.delayed(
-                                    const Duration(milliseconds: 500), () {
-                                  LocalStorage.clear();
-                                  clearAllData();
+                                context
+                                    .read<UserViewModel>()
+                                    .logout()
+                                    .then((value) {
+                                  if (value == true) {
+                                    DefaultCacheManager().emptyCache();
+                                    FirebaseMessaging.instance
+                                        .unsubscribeFromTopic(
+                                            LocalStorage.getUserId());
+                                    LocalStorage.clear();
+                                    nav(context, Login(), remove: true);
+                                  }
                                 });
                               },
                             ),
@@ -434,8 +437,6 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
       checkIsFollowing();
     });
   }
-
-  clearAllData() {}
 
   void getData() async {
     var userModel = context.read<UserViewModel>();
