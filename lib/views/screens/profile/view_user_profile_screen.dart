@@ -28,6 +28,7 @@ import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../utils/nav.dart';
+import '../../widget/dialog/alert_dialog.dart';
 import '../../widget/tiles/settings_tile.dart';
 import 'edit_profile_screen.dart';
 
@@ -121,19 +122,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                               title: "Logout",
                               leading: "assets/icon/logout.svg",
                               onTap: () {
-                                context
-                                    .read<UserViewModel>()
-                                    .logout()
-                                    .then((value) {
-                                  if (value == true) {
-                                    DefaultCacheManager().emptyCache();
-                                    FirebaseMessaging.instance
-                                        .unsubscribeFromTopic(
-                                            LocalStorage.getUserId());
-                                    LocalStorage.clear();
-                                    nav(context, Login(), remove: true);
-                                  }
-                                });
+                                logout(context);
                               },
                             ),
                           ],
@@ -436,6 +425,24 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
       getData();
       checkIsFollowing();
     });
+  }
+
+  void logout(BuildContext context) {
+    CustomAlert(
+        context: context,
+        title: "Confirm to Logout ",
+        body: "Are you sure you want to Logout from Platterwise??.",
+        onTap: () {
+          context.read<UserViewModel>().logout().then((value) {
+            if (value == true) {
+              DefaultCacheManager().emptyCache();
+              FirebaseMessaging.instance
+                  .unsubscribeFromTopic(LocalStorage.getUserId());
+              LocalStorage.clear();
+              nav(context, Login(), remove: true);
+            }
+          });
+        }).show();
   }
 
   void getData() async {

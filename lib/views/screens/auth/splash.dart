@@ -36,9 +36,6 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     permission();
-    print("These are initial data");
-    print(LocalStorage.getToken());
-    print(LocalStorage.getUserId());
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       FlutterNativeSplash.remove();
       if (LocalStorage.isFirstTime() == true) {

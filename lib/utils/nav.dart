@@ -9,3 +9,4 @@ nav(BuildContext context,Widget screen,{bool remove = false}){
     Navigator.push(context, MaterialPageRoute(builder: (context)=>screen));
   }
 }
+
