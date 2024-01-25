@@ -186,13 +186,10 @@ class _BottomNavState extends State<BottomNav> {
     FlutterLocalNotificationsPlugin()
         .getNotificationAppLaunchDetails()
         .then((value) {
-      print("I got a notification");
       if (value != null && value.notificationResponse != null) {
         if (value.notificationResponse != null) {
           var data = jsonDecode(value.notificationResponse!.payload ?? "");
           if (data['reserv_id'] != null) {
-            //&&
-            //  FirebaseAuth.instance.currentUser != null) {
             nav(
               context,
               ReservationDetails(

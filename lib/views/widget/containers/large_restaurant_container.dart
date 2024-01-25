@@ -5,7 +5,6 @@ import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/views/screens/restaurant/screen/res.dart';
-import 'package:platterwave/views/screens/restaurant/screen/restaurant_details.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 
 import '../../../res/color.dart';
@@ -31,7 +30,7 @@ class LargeRestaurantContainer extends StatelessWidget {
       },
       child: Container(
         width: 343.w,
-        height: 106.h,
+        height: 126.h,
         decoration: ShapeDecoration(
           color: Colors.white,
           shape: RoundedRectangleBorder(

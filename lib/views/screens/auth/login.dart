@@ -64,7 +64,7 @@ class Login extends StatelessWidget {
                       ),
                       Field(
                         controller: _email,
-                        hint: "gsswuw@gmail.com",
+                        hint: "Input Email",
                         textInputType: TextInputType.emailAddress,
                         validate: FieldValidator.email(),
                       ),
@@ -77,7 +77,7 @@ class Login extends StatelessWidget {
                       ),
                       Field(
                         controller: _password,
-                        hint: "",
+                        hint: "Input Password",
                         isPassword: true,
                         validate: FieldValidator.minLength(3),
                       ),

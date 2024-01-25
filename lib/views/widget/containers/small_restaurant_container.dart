@@ -34,8 +34,8 @@ class SmallRestaurantContainer extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(right: 21),
         child: Container(
-          height: 218.h,
-          width: 185.w,
+          height: 248.h,
+          width: 205.w,
           decoration: ShapeDecoration(
             color: Colors.white,
             shape: RoundedRectangleBorder(
