@@ -71,7 +71,7 @@ class RestaurantViewModel extends BaseViewModel {
 
   Future<List<RestaurantData>> closeBy() async {
     try {
-      var data = await restaurantService.nearBy(latLong);
+      var data = await restaurantService.nearBy(latLong, state);
       if (data != null) {
         closeByRestaurant = [];
         closeByRestaurant = SearchRestaurantModel.fromJson(data).searchResult;

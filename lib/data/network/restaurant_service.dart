@@ -130,10 +130,11 @@ class RestaurantService {
     return null;
   }
 
-  Future<Map<String, dynamic>?> nearBy(LatLong latLong) async {
+  Future<Map<String, dynamic>?> nearBy(LatLong latLong, String state) async {
     var body = {
       "latitude": "${latLong.latitude}",
-      "longitude": "${latLong.longitude}"
+      "longitude": "${latLong.longitude}",
+      "state": state
     };
 
     var token = LocalStorage.getToken();
