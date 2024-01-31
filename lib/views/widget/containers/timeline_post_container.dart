@@ -84,12 +84,12 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                   },
                   child: ImageCacheCircle(
                     widget.post.user.profileUrl,
-                    height: 55,
-                    width: 55,
+                    height: 50,
+                    width: 50,
                   ),
                 ),
                 const SizedBox(
-                  width: 12,
+                  width: 7,
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -131,20 +131,24 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                       children: [
                         Text(
                           "@${widget.post.user.username}",
+                          overflow: TextOverflow.ellipsis,
                           style: AppTextTheme.h6
                               .copyWith(fontSize: 12, color: AppColor.g600),
                         ),
                         const SizedBox(
                           width: 5,
                         ),
-                        Text(
-                          RandomFunction.timeAgo(
-                              widget.post.timestamp.toString()),
-                          style: AppTextTheme.h6.copyWith(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w500,
-                              color: AppColor.g600),
-                        ),
+                        FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              RandomFunction.timeAgo(
+                                  widget.post.timestamp.toString()),
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextTheme.h6.copyWith(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColor.g600),
+                            )),
                       ],
                     )
                   ],
@@ -152,6 +156,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                 const Spacer(),
                 // SvgPicture.asset("assets/icon/option.svg"),
                 PopupMenuButton<int>(
+                  padding: const EdgeInsets.all(2.0),
                   onSelected: (e) {
                     if (e == 1) {
                       nav(context,
@@ -223,7 +228,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                             ),
                           ),
                   ],
-                  elevation: 2,
+                  elevation: 0,
                 ),
               ],
             ),

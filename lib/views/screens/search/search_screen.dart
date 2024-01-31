@@ -150,9 +150,10 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   searchPost({bool restart = false}) {
-    if (restart) {
+    if (restart == true) {
       _postIndex = 0;
-      searchResult = [];
+      searchResult.clear();
+      print("search res start ${searchResult.length}");
       postEnd = false;
     }
     if (postEnd == false) {
@@ -162,6 +163,7 @@ class _SearchScreenState extends State<SearchScreen> {
         if (value != null) {
           setState(() {
             searchResult.addAll(value);
+            print("search res ${searchResult.length}");
           });
           if (value.isEmpty || value.length < 30) {
             postEnd = true;

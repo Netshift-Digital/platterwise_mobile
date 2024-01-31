@@ -36,7 +36,6 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
   @override
   Widget build(BuildContext context) {
     var resModel = context.watch<RestaurantViewModel>();
-    print("The data is ${widget.restaurantData.days}");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -158,7 +157,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
           const SizedBox(
             height: 12,
           ),
-          Consumer<RestaurantViewModel>(
+          /* Consumer<RestaurantViewModel>(
             builder: (context, restaurantViewModel, child) {
               return GestureDetector(
                 onTap: () {
@@ -191,7 +190,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                       ),
               );
             },
-          ),
+          ),*/
         ],
       ),
     );

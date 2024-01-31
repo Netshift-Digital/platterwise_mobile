@@ -9,6 +9,7 @@ import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/screens/restaurant/screen/rate_experience_screen.dart';
+import 'package:platterwave/views/screens/restaurant/widget/read_more_widget.dart';
 import 'package:platterwave/views/widget/containers/empty_content_container.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:provider/provider.dart';
@@ -104,7 +105,10 @@ class _RestaurantsReviewsState extends State<RestaurantsReviews> {
                         const SizedBox(
                           height: 8,
                         ),
-                        Text(data.review),
+                        ReadMoreText(
+                          data.review,
+                          maxLines: 3,
+                        ),
                       ],
                     ),
                   ),
