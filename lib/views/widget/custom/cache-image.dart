@@ -120,12 +120,18 @@ class ImageCacheCircle extends StatelessWidget {
         return Container(
           width: width,
           height: height,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             shape: BoxShape.circle,
-            image: DecorationImage(
-                image: NetworkImage(
-                    'https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt67a59125151d76ef/625e7dffceb10b47dfaba4dc/GettyImages-1348618431.jpg'),
-                fit: BoxFit.cover),
+            color: Colors.grey.withAlpha(120),
+            //  image: DecorationImage(
+            //    image: NetworkImage(
+            //      'https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt67a59125151d76ef/625e7dffceb10b47dfaba4dc/GettyImages-1348618431.jpg'),
+            //fit: BoxFit.cover),
+          ),
+          child: Icon(
+            Icons.person,
+            size: width,
+            color: Colors.grey.withAlpha(200),
           ),
         );
       },
