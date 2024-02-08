@@ -1,7 +1,6 @@
-
 import 'package:flutter/material.dart';
 
- class AppColor{
+class AppColor {
   static const Color p50 = Color(0xffFBEDEA);
   static const Color p75 = Color(0xffF0B6A9);
   static const Color p100 = Color(0xffEA9886);
@@ -10,7 +9,7 @@ import 'package:flutter/material.dart';
   static const Color p400 = Color(0xff993720);
   static const Color p500 = Color(0xff86301C);
   static const Color disAbleButtonColor = Color(0xff9D9D9D);
-  static const Color textColor  = Color(0xff5C5C5C);
+  static const Color textColor = Color(0xff5C5C5C);
   //042631
   static const Color g0 = Color(0xffFFFFFF);
   static const Color g10 = Color(0xffFCFCFC);
@@ -33,7 +32,4 @@ import 'package:flutter/material.dart';
   static const Color g900 = Color(0xff5C5C5C);
 
   static const Color kAmber = Color(0xFFFFC107);
-
-
-
 }

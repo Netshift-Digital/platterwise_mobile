@@ -104,6 +104,7 @@ class _BottomNavState extends State<BottomNav> {
     setLocation();
     resModel.getTopRestaurant();
     resModel.getRestaurant();
+    resModel.getFavouriteRestaurant(postIndex: 1, restart: true);
     userModel.getMyProfile();
   }
 
