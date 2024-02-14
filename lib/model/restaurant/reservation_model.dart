@@ -6,6 +6,7 @@ class UserReservation {
       required this.profileUrl,
       required this.username,
       required this.restId,
+      required this.code,
       required this.seatType,
       required this.noOfGuest,
       required this.reservationDate,
@@ -23,6 +24,7 @@ class UserReservation {
   int noOfGuest;
   String reservationDate;
   int reservationStatus;
+  String code;
   List<GuestInfo> guestInfo;
   List<GuestInfo> allGuestInfo;
   RestDetail restDetail;
@@ -35,6 +37,7 @@ class UserReservation {
           username: json["owner"]["username"] ?? "",
           restId: json["restaurant_id"] ?? 0,
           seatType: json["seat_type"] ?? "",
+          code: json["code"] ?? "",
           noOfGuest: json["guest_no"] ?? 1,
           reservationDate: json["reservation_date"] ?? "",
           reservationStatus: json["status"] ?? 1,

@@ -230,7 +230,10 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                                   ),
                                   const Spacer(),
                                   SelectableText(
-                                    widget.userReservation!.reservId.toString(),
+                                    widget.userReservation!.code.isEmpty
+                                        ? widget.userReservation!.reservId
+                                            .toString()
+                                        : widget.userReservation!.code,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 14),
