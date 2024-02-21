@@ -486,9 +486,8 @@ class RestaurantService {
         },
       ).timeout(const Duration(seconds: 10));
       var data = jsonDecode(response.body);
-      print("This is the result after spliting bills $data");
       if (data["status_code"] == 200 && data["success"] == true) {
-        RandomFunction.toast(data["response"]);
+        RandomFunction.toast("Bill has been splitted. Kindly Check your Email");
         return data;
       } else {
         RandomFunction.toast(data["response"]);

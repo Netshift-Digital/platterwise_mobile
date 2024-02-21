@@ -127,13 +127,6 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                             color: Colors.grey.shade300,
                             width: 0.7,
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.shade200,
-                              offset: const Offset(0, 3),
-                              blurRadius: 4,
-                            ),
-                          ],
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Center(
@@ -190,13 +183,6 @@ class _MakeReservationScreenState extends State<MakeReservationScreen> {
                       color: Colors.grey.shade300,
                       width: 0.7,
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.shade200,
-                        offset: const Offset(0, 3),
-                        blurRadius: 4,
-                      ),
-                    ],
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Padding(

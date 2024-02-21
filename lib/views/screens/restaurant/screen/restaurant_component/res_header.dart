@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:platterwave/model/restaurant/restaurant.dart';
 import 'package:platterwave/model/restaurant/restaurant_review.dart';
@@ -11,10 +9,6 @@ import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/dynamic_link.dart';
 import 'package:platterwave/utils/extension.dart';
-import 'package:platterwave/utils/size_config/size_extensions.dart';
-import 'package:platterwave/view_models/restaurant_view_model.dart';
-import 'package:platterwave/views/widget/button/custom-button.dart';
-import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -35,7 +29,10 @@ class RestaurantHeader extends StatefulWidget {
 class _RestaurantHeaderState extends State<RestaurantHeader> {
   @override
   Widget build(BuildContext context) {
-    var resModel = context.watch<RestaurantViewModel>();
+    String openingTime = parseTimeString(widget.restaurantData.openingHour);
+    String closingTime = parseTimeString(widget.restaurantData.closingHour);
+    print("This is the closing date $closingTime");
+    print("This is the opening date $openingTime");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -147,8 +144,8 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
               alignment: Alignment.topLeft,
               child: Text(
                 widget.restaurantData.days.isEmpty
-                    ? "Opens: ${widget.restaurantData.openingHour}am - ${widget.restaurantData.closingHour}pm"
-                    : "Opens: ${widget.restaurantData.days.capitalizeFirstChar()}, ${widget.restaurantData.openingHour}am - ${widget.restaurantData.closingHour}pm",
+                    ? "Opens: $openingTime - $closingTime"
+                    : "Opens: ${widget.restaurantData.days.capitalizeFirstChar()}, $openingTime - $closingTime",
                 style: const TextStyle(
                   color: AppColor.g800,
                   fontSize: 13,
@@ -204,5 +201,11 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
     }
     double averageRating = widget.restaurantData.rating / widget.review.length;
     return averageRating.toStringAsFixed(1);
+  }
+
+  String parseTimeString(String dateTimeString) {
+    DateTime dateTime = DateTime.parse(dateTimeString);
+    String formattedTime = DateFormat('hh:mm a').format(dateTime);
+    return formattedTime;
   }
 }
