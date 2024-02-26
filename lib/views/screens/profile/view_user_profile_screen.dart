@@ -428,7 +428,7 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
     CustomAlert(
         context: context,
         title: "Confirm to Logout ",
-        body: "Are you sure you want to Logout from Platterwise??.",
+        body: "Are you sure you want to Logout from Tabilli??.",
         onTap: () {
           context.read<UserViewModel>().logout().then((value) {
             if (value == true) {

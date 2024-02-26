@@ -7,6 +7,7 @@ class UserReservation {
       required this.username,
       required this.restId,
       required this.code,
+      required this.isSplitted,
       required this.seatType,
       required this.noOfGuest,
       required this.reservationDate,
@@ -19,6 +20,7 @@ class UserReservation {
   int reservId;
   String profileUrl;
   String username;
+  int isSplitted;
   int restId;
   String seatType;
   int noOfGuest;
@@ -38,6 +40,7 @@ class UserReservation {
           restId: json["restaurant_id"] ?? 0,
           seatType: json["seat_type"] ?? "",
           code: json["code"] ?? "",
+          isSplitted: json["is_splitted"]??0,
           noOfGuest: json["guest_no"] ?? 1,
           reservationDate: json["reservation_date"] ?? "",
           reservationStatus: json["status"] ?? 1,

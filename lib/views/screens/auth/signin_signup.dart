@@ -23,7 +23,7 @@ class _SignInSignUpState extends State<SignInSignUp> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(),
-            const Text('Welcome\nto Platterwise',style: TextStyle(
+            const Text('Welcome\nto Tabilli',style: TextStyle(
               fontWeight: FontWeight.w900,
               fontSize: 40
             ),),

@@ -204,7 +204,8 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
   }
 
   String parseTimeString(String dateTimeString) {
-    DateTime dateTime = DateTime.parse(dateTimeString);
+    DateFormat inputFormat = DateFormat("h:mm:ssaZZZ");
+    DateTime dateTime = inputFormat.parse(dateTimeString);
     String formattedTime = DateFormat('hh:mm a').format(dateTime);
     return formattedTime;
   }

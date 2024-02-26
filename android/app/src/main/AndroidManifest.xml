@@ -15,7 +15,7 @@
 
 
     <application
-        android:label="Platterwise"
+        android:label="Tabilli"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
 

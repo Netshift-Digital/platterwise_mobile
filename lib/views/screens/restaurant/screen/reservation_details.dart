@@ -275,7 +275,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
       amountPaid = num.parse(widget.userReservation!.bill!.amountPaid);
     }
     if (widget.userReservation!.reservationStatus == 4 ||
-        widget.userReservation!.reservationStatus == 5 ||
+        widget.userReservation!.isSplitted == 1 ||
         amountPaid > 0) {
       return PlatButton(
         title: "View payment Status",

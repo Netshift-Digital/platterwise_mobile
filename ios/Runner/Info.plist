@@ -9,8 +9,8 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
-		<string>Platterwise</string>
-		<key>CFBundleExecutable</key>
+		<string>Tabilli</string>
+		<key>CFBundleExecutable</key>0
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>

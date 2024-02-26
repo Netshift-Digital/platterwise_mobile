@@ -103,7 +103,7 @@ class RandomFunction {
     } else if (e == 3) {
       return "Reservation in progress";
     } else {
-      return "Bill splitted";
+      return "Bill sent";
     }
   }
 

@@ -8,7 +8,7 @@ const kShareRest = 'Rest';
 class DynamicLink {
   static Future<String?> createLink(Post post) async {
     try {
-      String url = "https://platterwiseapp.page.link";
+      String url = "https://tabilliapp.page.link";
       final dynamicLinkParams = DynamicLinkParameters(
         link: Uri.parse('$url/${post.postId}'),
         uriPrefix: url,
@@ -50,7 +50,7 @@ class DynamicLink {
   static Future<String?> createLinkRestaurant(
       RestaurantData restaurantData) async {
     try {
-      String url = "https://platterwiseapp.page.link";
+      String url = "https://tabilliapp.page.link";
       final dynamicLinkParams = DynamicLinkParameters(
         link: Uri.parse('$url/$kShareRest${restaurantData.restId}'),
         uriPrefix: url,
