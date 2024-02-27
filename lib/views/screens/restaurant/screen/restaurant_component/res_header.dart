@@ -9,6 +9,7 @@ import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/dynamic_link.dart';
 import 'package:platterwave/utils/extension.dart';
+import 'package:platterwave/utils/random_functions.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -29,8 +30,8 @@ class RestaurantHeader extends StatefulWidget {
 class _RestaurantHeaderState extends State<RestaurantHeader> {
   @override
   Widget build(BuildContext context) {
-    String openingTime = parseTimeString(widget.restaurantData.openingHour);
-    String closingTime = parseTimeString(widget.restaurantData.closingHour);
+    String openingTime = RandomFunction.parseTimeString(widget.restaurantData.openingHour);
+    String closingTime = RandomFunction.parseTimeString(widget.restaurantData.closingHour);
     print("This is the closing date $closingTime");
     print("This is the opening date $openingTime");
     return Padding(
@@ -203,10 +204,4 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
     return averageRating.toStringAsFixed(1);
   }
 
-  String parseTimeString(String dateTimeString) {
-    DateFormat inputFormat = DateFormat("h:mm:ssaZZZ");
-    DateTime dateTime = inputFormat.parse(dateTimeString);
-    String formattedTime = DateFormat('hh:mm a').format(dateTime);
-    return formattedTime;
-  }
 }

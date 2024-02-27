@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_time_ago/get_time_ago.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:intl/intl.dart';
 import 'package:platterwave/utils/working_days_parser.dart';
 
 class RandomFunction {
@@ -133,7 +134,6 @@ class RandomFunction {
       firstDate: firstDate,
       lastDate: lastDate,
     );
-    print("These are the working days $workingDays");
     final days = WorkingDaysParser.getDaysOfWeek(workingDays);
     if (selectedDate == null ||
         selectedDate.isBefore(DateTime.now().subtract(Duration(days: 1)))) {
@@ -149,43 +149,101 @@ class RandomFunction {
       context: context,
       initialTime: TimeOfDay.fromDateTime(selectedDate),
     );
-
-    var openingHour = convertStringToTimeOfDay(openingTime);
-    var closingHour = convertStringToTimeOfDay(closingTime);
-
-    if (selectedTime!.period == DayPeriod.pm) {
-      if (selectedTime.hour > closingHour!.hour + 12) {
-        toast("Wrong Working Time selected");
+    if (openingTime.contains("AM") && closingTime.contains("PM")) {
+      if (!_isTimeWithinRange(selectedTime, openingTime, closingTime)) {
+        toast("Wrong working time selected");
         return null;
+      }else{
+         return selectedTime == null
+          ? selectedDate
+          : DateTime(
+              selectedDate.year,
+              selectedDate.month,
+              selectedDate.day,
+              selectedTime.hour,
+              selectedTime.minute,
+            );
       }
     } else {
-      if (selectedTime.hour < openingHour!.hour) {
-        toast("Wrong Working Time selected");
-        return null;
-      }
+      return selectedTime == null
+          ? selectedDate
+          : DateTime(
+              selectedDate.year,
+              selectedDate.month,
+              selectedDate.day,
+              selectedTime.hour,
+              selectedTime.minute,
+            );
     }
-
-    return selectedTime == null
-        ? selectedDate
-        : DateTime(
-            selectedDate.year,
-            selectedDate.month,
-            selectedDate.day,
-            selectedTime.hour,
-            selectedTime.minute,
-          );
   }
-}
 
-TimeOfDay? convertStringToTimeOfDay(String timeString) {
-  List<String> parts = timeString.split(':');
+  static bool isAfter(TimeOfDay time1, TimeOfDay time2) {
+    if (time1.hour > time2.hour) {
+      return true;
+    } else if (time1.hour < time2.hour) {
+      return false;
+    } else {
+      return time1.minute > time2.minute;
+    }
+  }
 
-  // Ensure that the string has three parts (hours, minutes, seconds)
-  if (parts.length == 3) {
+  static bool isBefore(TimeOfDay time1, TimeOfDay time2) {
+    if (time1.hour < time2.hour) {
+      return true;
+    } else if (time1.hour > time2.hour) {
+      return false;
+    } else {
+      return time1.minute < time2.minute;
+    }
+  }
+
+  static bool _isTimeWithinRange(
+      TimeOfDay? time, String openingTime, String closingTime) {
+    int pickedHour = time!.hour;
+    int pickedMinute = time.minute;
+    var openingHour = TimeOfDay(hour: 1, minute: 00);
+    var closingHour = TimeOfDay(hour: 24, minute: 00);
+
+    openingHour = convertStringToTimeOfDay(openingTime);
+    closingHour = convertStringToTimeOfDay24(closingTime);
+    // if (openingTime.contains("PM") && closingTime.contains("AM")) {
+    //   openingHour = convertStringToTimeOfDay(openingTime);
+    //  closingHour = convertStringToTimeOfDay24(closingTime);
+    //}
+
+    final TimeOfDay pickedTime = TimeOfDay(
+      hour: pickedHour,
+      minute: pickedMinute,
+    );
+
+    return isAfter(pickedTime, openingHour) &&
+        isBefore(pickedTime, closingHour);
+  }
+
+  static TimeOfDay convertStringToTimeOfDay24(String timeString) {
+    var res = parseTimeString(timeString);
+    List<String> parts = res.replaceAll(":", ' ').split(' ');
+
+    int hours = int.parse(parts[0]);
+    int minutes = int.parse(parts[1]);
+    hours += 12;
+    return TimeOfDay(hour: hours, minute: minutes);
+  }
+
+  static TimeOfDay convertStringToTimeOfDay(String timeString) {
+    var res = parseTimeString(timeString);
+    List<String> parts = res.replaceAll(":", ' ').split(' ');
+
     int hours = int.parse(parts[0]);
     int minutes = int.parse(parts[1]);
 
     return TimeOfDay(hour: hours, minute: minutes);
   }
-  return null;
+
+  static String parseTimeString(String dateTimeString) {
+    DateFormat inputFormat = DateFormat("h:mm:ssaZZZ");
+    DateTime dateTime = inputFormat.parse(dateTimeString);
+    String formattedTime = DateFormat('hh:mm a').format(dateTime);
+    return formattedTime;
+  }
 }
