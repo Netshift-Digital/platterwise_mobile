@@ -149,20 +149,24 @@ class RandomFunction {
       context: context,
       initialTime: TimeOfDay.fromDateTime(selectedDate),
     );
+    if (_isTimeInPast(selectedTime!, selectedDate)) {
+      toast("Past time selected");
+      return null;
+    }
     if (openingTime.contains("AM") && closingTime.contains("PM")) {
       if (!_isTimeWithinRange(selectedTime, openingTime, closingTime)) {
         toast("Wrong working time selected");
         return null;
-      }else{
-         return selectedTime == null
-          ? selectedDate
-          : DateTime(
-              selectedDate.year,
-              selectedDate.month,
-              selectedDate.day,
-              selectedTime.hour,
-              selectedTime.minute,
-            );
+      } else {
+        return selectedTime == null
+            ? selectedDate
+            : DateTime(
+                selectedDate.year,
+                selectedDate.month,
+                selectedDate.day,
+                selectedTime.hour,
+                selectedTime.minute,
+              );
       }
     } else {
       return selectedTime == null
@@ -245,5 +249,18 @@ class RandomFunction {
     DateTime dateTime = inputFormat.parse(dateTimeString);
     String formattedTime = DateFormat('hh:mm a').format(dateTime);
     return formattedTime;
+  }
+
+  static bool _isTimeInPast(TimeOfDay time, DateTime selectedDate) {
+    final DateTime now = DateTime.now();
+    final DateTime selectedDateTime = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      time.hour,
+      time.minute,
+    );
+
+    return selectedDateTime.isBefore(now);
   }
 }
