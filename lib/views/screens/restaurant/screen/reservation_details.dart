@@ -340,19 +340,9 @@ class _ReservationDetailsState extends State<ReservationDetails> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getDetails();
-      /*  FirebaseFirestore.instance
-          .collection('userReservations')
-          .doc(widget.id ?? widget.userReservation!.reservId)
-          .snapshots()
-          .listen((event) {
-        if (mounted) {
-          getDetails();
-        }
-      });*/
     });
   }
 

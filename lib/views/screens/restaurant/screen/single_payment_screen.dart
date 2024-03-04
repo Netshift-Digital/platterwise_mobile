@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';
+import 'package:platterwave/utils/nav.dart';
+import 'package:platterwave/views/screens/restaurant/screen/reservation_details.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SinglePaymentScreen extends StatelessWidget {
   final SingleTransactionId txn;
+  final String reservId;
 
-  SinglePaymentScreen({
-    Key? key,
-    required this.txn,
-  }) : super(key: key);
+  SinglePaymentScreen({Key? key, required this.txn, required this.reservId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -392,7 +392,39 @@ class RestaurantService {
       if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       } else {
-        RandomFunction.toast(data["response"]);
+        //RandomFunction.toast(data["response"]);
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> getReservationPaymentLink(String id) async {
+    var token = LocalStorage.getToken();
+    var body = jsonEncode({
+      "reservation_id": "$id",
+    });
+    try {
+      var response = await client.post(
+          Uri.parse("${baseurl3}transactions/reservation"),
+          body: body,
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $token"
+          }).timeout(const Duration(seconds: 10));
+      var data = jsonDecode(response.body);
+      print("This is the single reservation $data");
+      if (data['status_code'] == 200 && data['success'] == true) {
+        return data["data"];
+      } else {
+        RandomFunction.toast(data['response']);
       }
     } on SocketException catch (_) {
       throw Failure("No internet connection");

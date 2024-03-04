@@ -40,7 +40,7 @@ class UserReservation {
           restId: json["restaurant_id"] ?? 0,
           seatType: json["seat_type"] ?? "",
           code: json["code"] ?? "",
-          isSplitted: json["is_splitted"]??0,
+          isSplitted: json["is_splitted"] ?? 0,
           noOfGuest: json["guest_no"] ?? 1,
           reservationDate: json["reservation_date"] ?? "",
           reservationStatus: json["status"] ?? 1,
@@ -143,5 +143,13 @@ class SingleTransactionId {
     authUrl = json['authorization_url'] ?? "";
     accessCode = json['access_code'] ?? "";
     ref = json['reference'] ?? "";
+  }
+
+  SingleTransactionId.fromString(String? str) {
+    Map<String, dynamic> jsonMap = json.decode(str!);
+
+    authUrl = jsonMap['authorization_url'] ?? "";
+    accessCode = jsonMap['access_code'] ?? "";
+    ref = jsonMap['reference'] ?? "";
   }
 }

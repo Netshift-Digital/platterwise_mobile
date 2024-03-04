@@ -256,12 +256,32 @@ class RestaurantViewModel extends BaseViewModel {
       setState(AppState.busy);
       var data = await restaurantService.getTransactionID(id);
       if (data != null) {
+        print("No data");
         return SingleTransactionId.fromJson(data["data"]);
+      } else {
+        print("There is  data");
+        setState(AppState.idle);
+        return getReservationPaymentLink(id.reservId.toString());
+      }
+    } catch (e) {
+      setState(AppState.idle);
+      RandomFunction.toast(e.toString());
+    }
+    return null;
+  }
+
+  Future<SingleTransactionId?> getReservationPaymentLink(String id) async {
+    try {
+      setState(AppState.busy);
+      var data = await restaurantService.getReservationPaymentLink(id);
+      if (data != null && data["data"].isNotEmpty) {
+        print("There is result here");
+        return SingleTransactionId.fromString(data["data"][0]["init_extra"]);
       }
       setState(AppState.idle);
     } catch (e) {
       setState(AppState.idle);
-      RandomFunction.toast('Something went wrong');
+      RandomFunction.toast(e.toString());
     }
     return null;
   }

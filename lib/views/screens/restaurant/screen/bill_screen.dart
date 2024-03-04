@@ -160,17 +160,8 @@ class BillScreen extends StatelessWidget {
                                 context,
                                 SinglePaymentScreen(
                                   txn: value,
+                                  reservId: userReservation.reservId.toString(),
                                 ));
-                            /*  PayStackPayment.makePayment(
-                              amount,
-                              userReservation.reservId.toString(),
-                              context,
-                              txnId: value.ref,
-                            ).then((value) {
-                              if (value == true) {
-                                Navigator.pop(context);
-                              }
-                            });*/
                           }
                         });
                       })
@@ -194,17 +185,9 @@ class BillScreen extends StatelessWidget {
                                         context,
                                         SinglePaymentScreen(
                                           txn: value,
+                                          reservId: userReservation.reservId
+                                              .toString(),
                                         ));
-                                    /* PayStackPayment.makePayment(
-                                      amount,
-                                      userReservation.reservId.toString(),
-                                      context,
-                                      txnId: value.ref,
-                                    ).then((value) {
-                                      if (value == true) {
-                                        Navigator.pop(context);
-                                      }
-                                    });*/
                                   }
                                 });
                               }),

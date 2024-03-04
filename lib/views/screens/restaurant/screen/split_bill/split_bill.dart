@@ -10,8 +10,10 @@ import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/utils/enum/split_type.dart';
 import 'package:platterwave/utils/extension.dart';
+import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/restaurant_view_model.dart';
+import 'package:platterwave/views/screens/restaurant/screen/reservation_details.dart';
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/custom_amount.dart';
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/percentage_split.dart';
 import 'package:platterwave/views/screens/restaurant/screen/split_bill/split_option.dart';
@@ -349,7 +351,8 @@ class _SplitBillState extends State<SplitBill> {
     var model = context.read<RestaurantViewModel>();
     model.splitBill(split).then((value) {
       if (value == true) {
-        Navigator.pop(context, true);
+        nav(context,
+            ReservationDetails(id: widget.userReservation.reservId.toString()));
       }
       //  Navigator.popUntil(context, (route) => route.settings.name=="userReservation")
     });
