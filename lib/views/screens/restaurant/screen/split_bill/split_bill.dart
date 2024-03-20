@@ -352,7 +352,8 @@ class _SplitBillState extends State<SplitBill> {
     model.splitBill(split).then((value) {
       if (value == true) {
         nav(context,
-            ReservationDetails(id: widget.userReservation.reservId.toString()));
+            ReservationDetails(id: widget.userReservation.reservId.toString()),
+            remove: true);
       }
       //  Navigator.popUntil(context, (route) => route.settings.name=="userReservation")
     });

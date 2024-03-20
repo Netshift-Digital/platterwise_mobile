@@ -516,7 +516,7 @@ class RestaurantService {
           "Content-type": "application/json",
           "Authorization": "Bearer $token"
         },
-      ).timeout(const Duration(seconds: 10));
+      ).timeout(const Duration(seconds: 60));
       var data = jsonDecode(response.body);
       if (data["status_code"] == 200 && data["success"] == true) {
         RandomFunction.toast("Bill has been splitted. Kindly Check your Email");
