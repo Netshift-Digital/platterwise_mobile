@@ -32,10 +32,20 @@ class SinglePaymentScreen extends StatelessWidget {
       );
 
     return Scaffold(
-        // appBar: appBar(context),
+        appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child:
+                      Icon(Icons.arrow_back_ios, size: 20, color: Colors.black),
+                ))),
         body: SafeArea(
             child: WebViewWidget(
-      controller: controller,
-    )));
+          controller: controller,
+        )));
   }
 }

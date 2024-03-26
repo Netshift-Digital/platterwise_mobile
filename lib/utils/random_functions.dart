@@ -137,6 +137,8 @@ class RandomFunction {
     final days = WorkingDaysParser.getDaysOfWeek(workingDays);
     if (selectedDate == null ||
         selectedDate.isBefore(DateTime.now().subtract(Duration(days: 1)))) {
+                toast("Past Working Day selected");
+
       return null;
     }
     if (!days.contains(selectedDate.weekday)) {
