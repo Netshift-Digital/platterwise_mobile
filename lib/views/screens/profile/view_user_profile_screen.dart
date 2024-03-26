@@ -435,6 +435,8 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
               DefaultCacheManager().emptyCache();
               FirebaseMessaging.instance
                   .unsubscribeFromTopic(LocalStorage.getUserId());
+                     FirebaseMessaging.instance
+                  .unsubscribeFromTopic(LocalStorage.getEmail().replaceAll("@", ""));
               LocalStorage.clear();
               nav(context, Login(), remove: true);
             }
