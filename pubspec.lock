@@ -361,30 +361,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+1"
-  firebase_analytics:
-    dependency: "direct main"
-    description:
-      name: firebase_analytics
-      sha256: "56856f45f80d4463841b6c4c1d829ccc78b7c2265858c65b1c45e848868d79e5"
-      url: "https://pub.dev"
-    source: hosted
-    version: "10.9.0"
-  firebase_analytics_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_analytics_platform_interface
-      sha256: "188ae5ffccc9a2fc644179636b132060598f5fd991866c952664704fffdd66e4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.10.0"
-  firebase_analytics_web:
-    dependency: transitive
-    description:
-      name: firebase_analytics_web
-      sha256: e3f0c1aeac9022639388d2bff770d2d56ef7e3b456bd08559aa750f7338e6295
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.6"
   firebase_auth:
     dependency: "direct main"
     description:
@@ -441,22 +417,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.13.0"
-  firebase_crashlytics:
-    dependency: "direct main"
-    description:
-      name: firebase_crashlytics
-      sha256: "7ba408d144ebd2d6426fe9830536db7c94809521956e695f21c6a245fea10a33"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.4.20"
-  firebase_crashlytics_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_crashlytics_platform_interface
-      sha256: "206dde24e1e69250df19d8a3120566581066a862a75ce2ed6a09c822d9ef9228"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.6.27"
   firebase_dynamic_links:
     dependency: "direct main"
     description:
@@ -646,14 +606,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.0"
-  flutter_login_facebook:
-    dependency: "direct main"
-    description:
-      name: flutter_login_facebook
-      sha256: ad38ae738c6d6ff5f9cb5ef4025d90b03045cb8c4e976d470067df2490b5ca30
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.9.0"
   flutter_map:
     dependency: transitive
     description:
@@ -1160,14 +1112,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
-  list_ext:
-    dependency: transitive
-    description:
-      name: list_ext
-      sha256: a38869a6911830f39ace7534972d01e573e17917955b26215e54d5797eb8d5cd
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.6"
   listenable_stream:
     dependency: transitive
     description:
@@ -1488,14 +1432,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
-  quiver:
-    dependency: transitive
-    description:
-      name: quiver
-      sha256: b1c1ac5ce6688d77f65f3375a9abb9319b3cb32486bdc7a1e0fdf004d7ba4e47
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.2.1"
   readmore:
     dependency: "direct main"
     description:

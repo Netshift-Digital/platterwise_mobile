@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -42,8 +41,8 @@ void main() async {
   await Hive.openBox("post");
   await Hive.openBox(authKey);
   await Hive.openBox(token);
-  final FirebaseCrashlytics crashlytics = FirebaseCrashlytics.instance;
-  FlutterError.onError = crashlytics.recordFlutterError;
+  //final FirebaseCrashlytics crashlytics = FirebaseCrashlytics.instance;
+  //FlutterError.onError = crashlytics.recordFlutterError;
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarBrightness: Brightness.light,
