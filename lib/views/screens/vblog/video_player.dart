@@ -5,11 +5,11 @@ import 'package:chewie/chewie.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:video_player/video_player.dart';
 
-
 class VideoPlay extends StatefulWidget {
   final String url;
   final bool isLocal;
-  const VideoPlay({Key? key, required this.url,  this.isLocal=false}) : super(key: key);
+  const VideoPlay({Key? key, required this.url, this.isLocal = false})
+      : super(key: key);
 
   @override
   State<VideoPlay> createState() => _VideoPlayState();
@@ -17,39 +17,37 @@ class VideoPlay extends StatefulWidget {
 
 class _VideoPlayState extends State<VideoPlay> {
   late VideoPlayerController _controller;
-  late  ChewieController chewieController;
+  late ChewieController chewieController;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          iconTheme: const IconThemeData(color: Colors.white),
+        ),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 20,top: 10),
+            padding: const EdgeInsets.only(bottom: 20, top: 10),
             child: _controller.value.isInitialized
                 ? Chewie(
-                  controller: chewieController,
-                ) : const Center(
-                  child:  CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(AppColor.p300),
-            ),
-                ),
+                    controller: chewieController,
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(AppColor.p300),
+                    ),
+                  ),
           ),
-        )
-    );
+        ));
   }
-
 
   @override
   void initState() {
     super.initState();
-    if(widget.isLocal){
-      _controller = VideoPlayerController.file(
-          File(widget.url)
-      )..initialize().then((_) {
+    if (widget.isLocal) {
+      _controller = VideoPlayerController.file(File(widget.url))
+        ..initialize().then((_) {
           chewieController = ChewieController(
             videoPlayerController: _controller,
             autoPlay: true,
@@ -57,10 +55,8 @@ class _VideoPlayState extends State<VideoPlay> {
           );
           setState(() {});
         });
-    }else{
-      _controller = VideoPlayerController.network(
-          widget.url
-      )
+    } else {
+      _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url))
         ..initialize().then((_) {
           chewieController = ChewieController(
             videoPlayerController: _controller,
@@ -71,8 +67,7 @@ class _VideoPlayState extends State<VideoPlay> {
         });
     }
 
-
-   // _controller.initialize();
+    // _controller.initialize();
   }
 
   @override
