@@ -293,10 +293,10 @@ packages:
     dependency: "direct main"
     description:
       name: dio
-      sha256: "50fec96118958b97c727d0d8f67255d3683f16cc1f90d9bc917b5d4fe3abeca9"
+      sha256: "0978e9a3e45305a80a7210dbeaf79d6ee8bee33f70c8e542dc654c952070217f"
       url: "https://pub.dev"
     source: hosted
-    version: "5.4.2"
+    version: "5.4.2+1"
   equatable:
     dependency: transitive
     description:
@@ -361,6 +361,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+1"
+  firebase_analytics:
+    dependency: "direct main"
+    description:
+      name: firebase_analytics
+      sha256: "56856f45f80d4463841b6c4c1d829ccc78b7c2265858c65b1c45e848868d79e5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "10.9.0"
+  firebase_analytics_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_analytics_platform_interface
+      sha256: "188ae5ffccc9a2fc644179636b132060598f5fd991866c952664704fffdd66e4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.10.0"
+  firebase_analytics_web:
+    dependency: transitive
+    description:
+      name: firebase_analytics_web
+      sha256: e3f0c1aeac9022639388d2bff770d2d56ef7e3b456bd08559aa750f7338e6295
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.6"
   firebase_auth:
     dependency: "direct main"
     description:
@@ -417,6 +441,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.13.0"
+  firebase_crashlytics:
+    dependency: "direct main"
+    description:
+      name: firebase_crashlytics
+      sha256: "7ba408d144ebd2d6426fe9830536db7c94809521956e695f21c6a245fea10a33"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.20"
+  firebase_crashlytics_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_crashlytics_platform_interface
+      sha256: "206dde24e1e69250df19d8a3120566581066a862a75ce2ed6a09c822d9ef9228"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.6.27"
   firebase_dynamic_links:
     dependency: "direct main"
     description:
@@ -844,10 +884,10 @@ packages:
     dependency: transitive
     description:
       name: google_sign_in_ios
-      sha256: a7d653803468d30b82ceb47ea00fe86d23c56e63eb2e5c2248bb68e9df203217
+      sha256: "1e0d4fde6cc07a8ff423f6bc931e83a74163d6af702004bacaee752649fdd2e7"
       url: "https://pub.dev"
     source: hosted
-    version: "5.7.4"
+    version: "5.7.5"
   google_sign_in_platform_interface:
     dependency: transitive
     description:
@@ -948,10 +988,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: "39f2bfe497e495450c81abcd44b62f56c2a36a37a175da7d137b4454977b51b1"
+      sha256: "42c098e7fb6334746be37cdc30369ade356ed4f14d48b7a0313f95a9159f4321"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.9+3"
+    version: "0.8.9+5"
   image_picker_for_web:
     dependency: transitive
     description:

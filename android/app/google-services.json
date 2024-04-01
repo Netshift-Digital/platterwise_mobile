@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "487663652425-35rg14lqsjt06u04hrcsef3senojb04r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.platterwise.net",
+            "certificate_hash": "78fcc5c860badff92fa7949fd2c95ffbc351532c"
+          }
+        },
+        {
           "client_id": "487663652425-68ga0o36fthkq9f2ebmdibtl5n28nhtu.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -30,6 +38,51 @@
             {
               "client_id": "487663652425-68ga0o36fthkq9f2ebmdibtl5n28nhtu.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "487663652425-6812n6jqahq60buvh6o9qgd50hfutlfm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.platterwave.net",
+                "app_store_id": "6444336910"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487663652425:android:dfe3544acb12e5f1f2b998",
+        "android_client_info": {
+          "package_name": "com.platterwiserestaurants.net"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487663652425-68ga0o36fthkq9f2ebmdibtl5n28nhtu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLNHyvPmLhsrk6M8Oy9U-38iQfiLD7foo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487663652425-68ga0o36fthkq9f2ebmdibtl5n28nhtu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "487663652425-6812n6jqahq60buvh6o9qgd50hfutlfm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.platterwave.net",
+                "app_store_id": "6444336910"
+              }
             }
           ]
         }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>487663652425-6812n6jqahq60buvh6o9qgd50hfutlfm.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.487663652425-6812n6jqahq60buvh6o9qgd50hfutlfm</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>487663652425-35rg14lqsjt06u04hrcsef3senojb04r.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAJEwxdBa0p-FJgB8Ltu9Mh2rr-KXtG55Y</string>
+	<key>GCM_SENDER_ID</key>
+	<string>487663652425</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.platterwave.net</string>
+	<key>PROJECT_ID</key>
+	<string>platterwise</string>
+	<key>STORAGE_BUCKET</key>
+	<string>platterwise.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:487663652425:ios:d5d3b82611e349f0f2b998</string>
+	<key>DATABASE_URL</key>
+	<string>https://platterwise-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

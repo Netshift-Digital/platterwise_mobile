@@ -12,6 +12,7 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:platterwave/constant/index.dart';
 import 'package:platterwave/constant/keys.dart';
+import 'package:platterwave/firebase_options.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/enum/notification_type.dart';
 import 'package:platterwave/utils/locator.dart';
@@ -32,7 +33,9 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 late Directory kDir;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   Directory tempDir = await getApplicationDocumentsDirectory();

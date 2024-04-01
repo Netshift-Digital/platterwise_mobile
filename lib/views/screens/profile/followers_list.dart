@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_parsed_text_field/flutter_parsed_text_field.dart';
 import 'package:platterwave/model/profile/user_data.dart';
