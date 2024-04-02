@@ -296,8 +296,8 @@ class _CreatePostState extends State<CreatePost> {
               color: Colors.black,
               borderRadius: BorderRadius.circular(15),
               shape: BoxShape.rectangle,
-              image: DecorationImage(
-                  image: imageProvider(), fit: BoxFit.scaleDown)),
+              image:
+                  DecorationImage(image: imageProvider(), fit: BoxFit.contain)),
           child: const Center(
             child: Icon(
               Icons.play_circle_outline_rounded,
