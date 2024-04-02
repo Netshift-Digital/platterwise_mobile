@@ -16,8 +16,10 @@ import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/enum/app_state.dart';
 import 'package:platterwave/utils/nav.dart';
 import 'package:platterwave/utils/random_functions.dart';
+import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
+import 'package:platterwave/views/screens/vblog/create_post/view_preview.dart';
 import 'package:platterwave/views/screens/vblog/video_player.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
@@ -143,8 +145,6 @@ class _CreatePostState extends State<CreatePost> {
                         decoration: const InputDecoration(
                             hintText: 'Share your ideas here!',
                             border: InputBorder.none),
-                        // decoratedStyle: const TextStyle(fontSize: 14, color: AppColor.p300),
-                        // basicStyle: const TextStyle(fontSize: 14, color: Colors.black),
                         matchers: [],
                       ),
                     ),
@@ -157,7 +157,29 @@ class _CreatePostState extends State<CreatePost> {
                     ? const SizedBox()
                     : type == PostType.image
                         ? imageList()
-                        : videoWid()
+                        : videoWid(),
+                SizedBox(
+                  height: 12.h,
+                ),
+                path != null
+                    ? GestureDetector(
+                        onTap: () {
+                          nav(
+                              context,
+                              VideoPreview(
+                                  videoUrl: path!,
+                                  onThumbNailSelected: (nail) {
+                                    setState(() {
+                                      thumbnail = nail;
+                                    });
+                                  }));
+                        },
+                        child: Text(
+                          "Change Thumnail",
+                          style: AppTextTheme.h4
+                              .copyWith(decoration: TextDecoration.underline),
+                        ))
+                    : SizedBox.shrink()
               ],
             ),
           ),
@@ -236,7 +258,6 @@ class _CreatePostState extends State<CreatePost> {
   }
 
   void pickVideo({ImageSource imageSource = ImageSource.gallery}) async {
-    var size = MediaQuery.of(context).size;
     final XFile? selectedVideo = await _picker.pickVideo(
       source: imageSource,
       maxDuration: const Duration(seconds: 40),
@@ -250,12 +271,11 @@ class _CreatePostState extends State<CreatePost> {
       final uint8list = await VideoThumbnail.thumbnailData(
         video: selectedVideo.path,
         imageFormat: ImageFormat.PNG,
-        // maxWidth:size.width.toInt(), // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
         quality: 100,
-        //maxHeight: 239,
       );
-      thumbnail = uint8list;
-      setState(() {});
+      setState(() {
+        thumbnail = uint8list;
+      });
     }
   }
 
@@ -276,8 +296,8 @@ class _CreatePostState extends State<CreatePost> {
               color: Colors.black,
               borderRadius: BorderRadius.circular(15),
               shape: BoxShape.rectangle,
-              image:
-                  DecorationImage(image: imageProvider(), fit: BoxFit.cover)),
+              image: DecorationImage(
+                  image: imageProvider(), fit: BoxFit.scaleDown)),
           child: const Center(
             child: Icon(
               Icons.play_circle_outline_rounded,

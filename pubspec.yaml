@@ -74,6 +74,7 @@ dependencies:
   geocoding: ^2.0.5
   http:
   number_inc_dec: ^0.8.0
+  flutter_ffmpeg: ^0.4.2
   awesome_place_search: ^1.0.7
   flutter_parsed_text_field: ^0.1.10
   custom_text: ^1.0.0
