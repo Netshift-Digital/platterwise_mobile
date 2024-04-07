@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:platterwave/common/base_view_model.dart';
 import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/data/network/vblog_services.dart';

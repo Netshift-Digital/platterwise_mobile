@@ -147,9 +147,9 @@
 				97C146EC1CF9000F007C117D /* Resources */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
-				9F58D2E69173D82EC3131BDC /* [CP] Embed Pods Frameworks */,
-				794B1D1D59167B5220BCD8A7 /* [CP] Copy Pods Resources */,
 				EBE7421C75D9144ADE652E78 /* [firebase_crashlytics] Crashlytics Upload Symbols */,
+				BDAC056914A48874EC387E8C /* [CP] Embed Pods Frameworks */,
+				6F223F6BFBB5031687195479 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -248,7 +248,7 @@
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
 		};
-		794B1D1D59167B5220BCD8A7 /* [CP] Copy Pods Resources */ = {
+		6F223F6BFBB5031687195479 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -280,7 +280,7 @@
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
 		};
-		9F58D2E69173D82EC3131BDC /* [CP] Embed Pods Frameworks */ = {
+		BDAC056914A48874EC387E8C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
