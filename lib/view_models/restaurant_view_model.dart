@@ -234,11 +234,11 @@ class RestaurantViewModel extends BaseViewModel {
     return false;
   }
 
-  Future<bool> cancelReservation(String id) async {
+  Future<bool> cancelReservation(UserReservation reservation) async {
     try {
       setState(AppState.busy);
-      print("Reservation Id is $id");
-      var data = await restaurantService.cancelReservation(id);
+      print("Reservation Id is ${reservation.reservId}");
+      var data = await restaurantService.cancelReservation(reservation);
       setState(AppState.idle);
       getReservations(postIndex: 1, restart: true);
       if (data != null) {

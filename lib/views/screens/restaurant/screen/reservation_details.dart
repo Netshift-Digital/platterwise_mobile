@@ -305,8 +305,7 @@ class _ReservationDetailsState extends State<ReservationDetails> {
                 onTap: () {
                   context
                       .read<RestaurantViewModel>()
-                      .cancelReservation(
-                          widget.userReservation!.reservId.toString())
+                      .cancelReservation(widget.userReservation!)
                       .then((value) {
                     if (value) {
                       context

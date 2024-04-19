@@ -332,8 +332,9 @@ class RestaurantService {
     return null;
   }
 
-  Future<Map<String, dynamic>?> cancelReservation(String id) async {
-    var body = jsonEncode({'reservation_id': id});
+  Future<Map<String, dynamic>?> cancelReservation(
+      UserReservation reservation) async {
+    var body = jsonEncode({'reservation_id': reservation.reservId.toString()});
     var token = LocalStorage.getToken();
     try {
       var response = await client.post(
@@ -346,6 +347,12 @@ class RestaurantService {
       var data = jsonDecode(response.body);
       print("After cancelling reservation i get $data");
       if (data['status_code'] == 200 && data['success'] == true) {
+        await FirebaseFirestore.instance
+            .collection('cancelReservations')
+            .doc(reservation.restId.toString())
+            .set({"name": reservation.reservationDate}).then(
+                (value) => print("It has finished cancelling"));
+        print("This is the id ${reservation.restId}");
         return data;
       } else {
         RandomFunction.toast(data['response']);
