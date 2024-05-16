@@ -10,7 +10,7 @@ import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:provider/provider.dart';
 
 class ReportPost extends StatefulWidget {
- final String postId;
+  final String postId;
   const ReportPost({Key? key, required this.postId}) : super(key: key);
 
   @override
@@ -23,51 +23,56 @@ class _ReportState extends State<ReportPost> {
   Widget build(BuildContext context) {
     var model = context.watch<VBlogViewModel>();
     return Scaffold(
-      appBar: appBar(context,title: Text('Report Post',
-      style: AppTextTheme.h1,)),
-      body:Column(
+      appBar: appBar(context,
+          title: Text(
+            'Report Post',
+            style: AppTextTheme.h1,
+          )),
+      body: Column(
         children: [
-          Expanded(child:ListView(
-            children: reason().map((e){
+          Expanded(
+              child: ListView(
+            children: reason().map((e) {
               return ListTile(
                 title: Text(e),
                 trailing: Radio<String>(
-                  activeColor: AppColor.p200,
+                    activeColor: AppColor.p200,
                     value: e,
                     groupValue: groupValue,
-                    onChanged: (e){
-                  setState(() {
-                    groupValue=e!;
-                  });
+                    onChanged: (e) {
+                      setState(() {
+                        groupValue = e!;
+                      });
                     }),
               );
             }).toList(),
           )),
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 20,
+          ),
           Padding(
-            padding: const EdgeInsets.only(left: 20,right: 20),
+            padding: const EdgeInsets.only(left: 20, right: 20),
             child: PlatButton(
               appState: model.reportAppState,
               title: 'Submit',
               onTap: () {
-                if(groupValue.isNotEmpty){
-                 model.reportPost(int.parse(widget.postId),
-                     FirebaseAuth.instance.currentUser!.uid, groupValue).
-                 then((value){
-                   if(value!=null){
-                     Navigator.pop(context);
-                   }
-                 });
-                }else{
+                if (groupValue.isNotEmpty) {
+                  model.reportPost(widget.postId, groupValue).then((value) {
+                    if (value != null) {
+                      Navigator.pop(context);
+                    }
+                  });
+                } else {
                   RandomFunction.toast("Select a reason");
                 }
               },
-
             ),
           ),
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 20,
+          ),
         ],
-      ) ,
+      ),
     );
   }
 }

@@ -688,25 +688,26 @@ class VBlogService {
     return null;
   }
 
-  Future<dynamic> reportPost(int postId, String uid, String comment) async {
-    var data = {
-      "reporter_firebaseAuthID": uid,
-      "post_id": postId,
-      "reason": comment
-    };
+  ///Need to change this endpoint.
+  Future<dynamic> reportPost(String postId, String comment) async {
+    var data = {"post_id": postId, "report": comment};
     var body = jsonEncode(data);
+    var token = LocalStorage.getToken();
+
     try {
-      var response = await client.post(
-          Uri.parse("https://api.platterwise.com/jhome/report_post.php"),
+      var response = await client.post(Uri.parse("${baseurl3}post/report-post"),
           body: body,
           headers: {
             "Content-type": "application/json",
+            "Authorization": "Bearer $token"
           });
       var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        RandomFunction.toast("Report has been submited");
+      print(data);
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data;
-      } else {}
+      } else {
+        RandomFunction.toast(data['response'] ?? "");
+      }
     } on SocketException catch (_) {
       throw Failure("No internet connection");
     } on HttpException catch (_) {

@@ -756,11 +756,11 @@ class VBlogViewModel extends BaseViewModel {
         title: title, type: type, postId: postId);
   }
 
-  Future<dynamic> reportPost(int postId, String uid, String comment) async {
+  Future<dynamic> reportPost(String postId, String comment) async {
     try {
       reportAppState = AppState.busy;
       notifyListeners();
-      var data = await vBlogService.reportPost(postId, uid, comment);
+      var data = await vBlogService.reportPost(postId, comment);
       reportAppState = AppState.idle;
       notifyListeners();
       return data;
