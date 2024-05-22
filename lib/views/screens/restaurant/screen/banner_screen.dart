@@ -4,9 +4,9 @@ import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 
-class BannerDetails extends StatelessWidget {
-  final BannerDetail data;
-  const BannerDetails({Key? key, required this.data}) : super(key: key);
+class PromotionalAdDetails extends StatelessWidget {
+  final PromotionalAdDetail data;
+  const PromotionalAdDetails({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class BannerDetails extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              data.name,
+              data.title,
               style: const TextStyle(
                 color: Color(0xFF5C5C5C),
                 fontSize: 20,
@@ -37,13 +37,13 @@ class BannerDetails extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            data.banner.isNotEmpty
+            data.imageUrl.isNotEmpty
                 ? Container(
                     height: 120,
                     decoration: BoxDecoration(
                         color: Colors.grey.shade200,
                         borderRadius: BorderRadius.circular(8)),
-                    child: ImageCacheR(data.banner),
+                    child: ImageCacheR(data.imageUrl),
                   )
                 : Image.asset(
                     'assets/images/discount-banner 1.png',
@@ -54,7 +54,7 @@ class BannerDetails extends StatelessWidget {
               height: 40,
             ),
             Text(
-              data.descriptions ?? "",
+              data.message ?? "",
               style: const TextStyle(
                 color: Color(0xFF646464),
                 fontSize: 16,

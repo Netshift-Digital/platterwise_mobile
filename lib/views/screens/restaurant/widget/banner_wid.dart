@@ -7,20 +7,19 @@ import 'package:platterwave/views/screens/restaurant/screen/banner_screen.dart';
 import 'package:platterwave/views/widget/custom/cache-image.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class BannerWidget extends StatefulWidget {
-  const BannerWidget({Key? key}) : super(key: key);
+class PromotionalAdWidget extends StatefulWidget {
+  const PromotionalAdWidget({Key? key}) : super(key: key);
 
   @override
-  State<BannerWidget> createState() => _BannerWidgetState();
+  State<PromotionalAdWidget> createState() => _PromotionalAdWidgetState();
 }
 
 //vWuxAODpiyUnTiai4vg7qIZEEvs2
-class _BannerWidgetState extends State<BannerWidget> {
+class _PromotionalAdWidgetState extends State<PromotionalAdWidget> {
   PageController pageController = PageController(viewportFraction: 1);
   @override
   Widget build(BuildContext context) {
     var resModel = context.watch<RestaurantViewModel>();
-    //resModel.allBannersList
     return Padding(
       padding: const EdgeInsets.only(top: 42, bottom: 24),
       child: Column(
@@ -33,15 +32,15 @@ class _BannerWidgetState extends State<BannerWidget> {
               children: resModel.allBannersList.map((data) {
                 return GestureDetector(
                   onTap: () {
-                    nav(context, BannerDetails(data: data));
+                    nav(context, PromotionalAdDetails(data: data));
                   },
-                  child: data.banner.isNotEmpty
+                  child: data.imageUrl.isNotEmpty
                       ? Container(
                           height: 120,
                           decoration: BoxDecoration(
                               color: Colors.grey.shade200,
                               borderRadius: BorderRadius.circular(8)),
-                          child: ImageCacheR(data.banner),
+                          child: ImageCacheR(data.imageUrl),
                         )
                       : Image.asset(
                           'assets/images/discount-banner 1.png',

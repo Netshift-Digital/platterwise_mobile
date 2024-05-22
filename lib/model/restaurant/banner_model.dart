@@ -26,3 +26,30 @@ class BannerDetail {
         "descriptions": descriptions,
       };
 }
+
+// To parse this JSON data, do
+//
+//     final banner = bannerFromJson(jsonString);
+
+class PromotionalAdDetail {
+  PromotionalAdDetail({
+    required this.id,
+    required this.title,
+    required this.message,
+    required this.imageUrl,
+    required this.views,
+  });
+  int id;
+  String title;
+  String message;
+  String imageUrl;
+  int views;
+
+  factory PromotionalAdDetail.fromJson(Map<String, dynamic> json) =>
+      PromotionalAdDetail(
+          id: json["id"] ?? 0,
+          title: json["title"] ?? "",
+          message: json['message'] ?? "",
+          imageUrl: json['img_url'] ?? "",
+          views: json['total_views'] ?? 0);
+}

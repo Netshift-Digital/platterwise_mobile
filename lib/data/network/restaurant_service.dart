@@ -236,11 +236,12 @@ class RestaurantService {
     return null;
   }
 
-  Future<Map<String, dynamic>?> getBanner() async {
+  Future<Map<String, dynamic>?> getAllPromotionalAds() async {
     var token = LocalStorage.getToken();
 
     try {
-      var response = await client.get(Uri.parse("${baseurl3}restaurant/banner"),
+      var response = await client.get(
+          Uri.parse("${baseurl3}promotional-advert/get-all-promotional-ads"),
           headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer $token"

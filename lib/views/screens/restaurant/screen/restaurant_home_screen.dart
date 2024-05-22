@@ -179,6 +179,7 @@ class RestaurantHomeScreen extends StatelessWidget {
                       SizedBox(
                         height: 32.h,
                       ),
+
                       Consumer<RestaurantViewModel>(
                         builder: (context, resModel, child) {
                           return SizedBox(
@@ -202,8 +203,16 @@ class RestaurantHomeScreen extends StatelessWidget {
                           );
                         },
                       ),
+                      context
+                              .watch<RestaurantViewModel>()
+                              .allBannersList
+                              .isEmpty
+                          ? SizedBox(
+                              height: 25.h,
+                            )
+                          : PromotionalAdWidget(),
                       SizedBox(
-                        height: 42.h,
+                        height: 5.h,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -273,7 +282,7 @@ class RestaurantHomeScreen extends StatelessWidget {
                               .allBannersList
                               .isEmpty
                           ? const SizedBox()
-                          : const BannerWidget(),
+                          : const PromotionalAdWidget(),
                       SizedBox(
                         height: 20.h,
                       ),

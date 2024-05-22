@@ -25,7 +25,7 @@ class RestaurantViewModel extends BaseViewModel {
   List<RestaurantData> topRestaurant = [];
   List<RestaurantData> nearByRestaurant = [];
   List<RestaurantData> closeByRestaurant = [];
-  List<BannerDetail> allBannersList = [];
+  List<PromotionalAdDetail> allBannersList = [];
   List<UserReservation> userReservation = [];
   //List<RestaurantData> followedRestaurants = [];
 
@@ -203,16 +203,18 @@ class RestaurantViewModel extends BaseViewModel {
     return null;
   }
 
-  Future<List<BannerDetail>> getBanner() async {
+  Future<List<PromotionalAdDetail>> getAllPromotionalAds() async {
     try {
-      var data = await restaurantService.getBanner();
+      var data = await restaurantService.getAllPromotionalAds();
       if (data != null) {
-        allBannersList = List<BannerDetail>.from(
-            data["data"].map((x) => BannerDetail.fromJson(x)));
+        allBannersList = List<PromotionalAdDetail>.from(
+            data["data"].map((x) => PromotionalAdDetail.fromJson(x)));
+
         notifyListeners();
       }
     } catch (e) {
-      //
+      print("Error with making reservation ${e.toString()}");
+      setState(AppState.idle);
     }
     return allBannersList;
   }
