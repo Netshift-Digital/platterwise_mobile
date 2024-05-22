@@ -59,7 +59,10 @@ class _ReportState extends State<ReportPost> {
                 if (groupValue.isNotEmpty) {
                   model.reportPost(widget.postId, groupValue).then((value) {
                     if (value != null) {
-                      Navigator.pop(context);
+                      RandomFunction.toast("Post has been reported");
+                      Future.delayed(Duration(seconds: 2), () {
+                        Navigator.pop(context);
+                      });
                     }
                   });
                 } else {
