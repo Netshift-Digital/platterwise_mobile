@@ -208,10 +208,10 @@ class VBlogViewModel extends BaseViewModel {
         return res;
       }
     } catch (e) {
+      print("The error is " + e.toString());
       postAppState = AppState.idle;
       notifyListeners();
       setState(AppState.idle);
-      print(e.toString);
       RandomFunction.toast("Something went wrong");
     }
     return null;
@@ -229,10 +229,10 @@ class VBlogViewModel extends BaseViewModel {
         return res;
       }
     } catch (e) {
+      print("The error is " + e.toString());
       postAppState = AppState.idle;
       notifyListeners();
       setState(AppState.idle);
-      print(e.toString);
       RandomFunction.toast("Something went wrong");
     }
     return null;

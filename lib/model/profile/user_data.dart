@@ -53,34 +53,54 @@ class UserProfile {
         location: location ?? this.location,
       );
 
-  factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
-      userId: json["id"] ?? 0,
-      fullName: json["full_name"] ?? "",
-      username: json["username"] ?? "",
-      email: json["email"] ?? "",
-      followers: json["followers"] ?? 0,
-      following: json["following"] ?? 0,
-      phone: json["phone"] ?? "",
-      bio: json["bio"] ?? "",
-      profileUrl: json["img_url"] ??
-          json["profileUrl"] ??
-          "'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png'",
-      location: json["location"] ?? "",
-      firebaseAuthID: "");
+  factory UserProfile.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return UserProfile(
+        userId: 0,
+        fullName: "",
+        username: "",
+        email: "",
+        followers: 0,
+        following: 0,
+        phone: "",
+        bio: "",
+        profileUrl:
+            "'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png'",
+        location: "",
+        firebaseAuthID: "",
+      );
+    }
+    return UserProfile(
+        userId: json["id"] ?? 0,
+        fullName: json["full_name"] ?? "",
+        username: json["username"] ?? "",
+        email: json["email"] ?? "",
+        followers: json["followers"] ?? 0,
+        following: json["following"] ?? 0,
+        phone: json["phone"] ?? "",
+        bio: json["bio"] ?? "",
+        profileUrl: json["img_url"] ??
+            json["profileUrl"] ??
+            "'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png'",
+        location: json["location"] ?? "",
+        firebaseAuthID: "");
+  }
 
-  factory UserProfile.empty() => UserProfile(
-      userId: 0,
-      fullName: "",
-      username: "",
-      email: "",
-      followers: 0,
-      following: 0,
-      phone: "",
-      bio: "",
-      profileUrl:
-          "'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png'",
-      location: "",
-      firebaseAuthID: "");
+  factory UserProfile.empty() {
+    return UserProfile(
+        userId: 0,
+        fullName: "",
+        username: "",
+        email: "",
+        followers: 0,
+        following: 0,
+        phone: "",
+        bio: "",
+        profileUrl:
+            "'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png'",
+        location: "",
+        firebaseAuthID: "");
+  }
 
   Map<String, dynamic> toJson() => {
         "user_id": userId,
