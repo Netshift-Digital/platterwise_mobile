@@ -42,6 +42,16 @@ class ViewUserProfileScreen extends StatefulWidget {
 class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
   var isFollowing = false;
 
+  void _launchEmail() async {
+    final Uri params =
+        Uri.parse("mailto:help@tabillli.com?subject=Enter Message");
+    if (await canLaunchUrl(params)) {
+      await launchUrl(params);
+    } else {
+      throw 'Could not launch $params';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
@@ -108,9 +118,11 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
                               height: 20.h,
                             ),
                             SettingsTile(
-                              title: "Help Center",
+                              title: "Contact Us",
                               leading: "assets/icon/help-center-icon.svg",
-                              onTap: () {},
+                              onTap: () {
+                                _launchEmail();
+                              },
                             ),
                             SizedBox(
                               height: 20.h,
@@ -435,8 +447,8 @@ class _ViewUserProfileScreenState extends State<ViewUserProfileScreen> {
               DefaultCacheManager().emptyCache();
               FirebaseMessaging.instance
                   .unsubscribeFromTopic(LocalStorage.getUserId());
-                     FirebaseMessaging.instance
-                  .unsubscribeFromTopic(LocalStorage.getEmail().replaceAll("@", ""));
+              FirebaseMessaging.instance.unsubscribeFromTopic(
+                  LocalStorage.getEmail().replaceAll("@", ""));
               LocalStorage.clear();
               nav(context, Login(), remove: true);
             }
