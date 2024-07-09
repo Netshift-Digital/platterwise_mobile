@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
@@ -12,20 +11,20 @@ import '../../widget/button/custom-button.dart';
 import '../../widget/text_feild/app_textfield.dart';
 
 class EditPasswordScreen extends StatefulWidget {
-   EditPasswordScreen({Key? key}) : super(key: key);
+  EditPasswordScreen({Key? key}) : super(key: key);
 
   @override
   State<EditPasswordScreen> createState() => _EditPasswordScreenState();
 }
 
 class _EditPasswordScreenState extends State<EditPasswordScreen> {
- final TextEditingController _password = TextEditingController();
+  final TextEditingController _password = TextEditingController();
 
-   final TextEditingController _confirmPassword = TextEditingController();
+  final TextEditingController _confirmPassword = TextEditingController();
 
-   final TextEditingController _currentPassword = TextEditingController();
+  final TextEditingController _currentPassword = TextEditingController();
 
-   final _forKey = GlobalKey<FormState>();
+  final _forKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -38,45 +37,54 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Form(
-            key:_forKey ,
+            key: _forKey,
             child: SizedBox(
               height: SizeConfig.screenHeight,
               width: SizeConfig.screenWidth,
               child: Column(
                 children: [
-                  SizedBox(height: 100.h,),
+                  SizedBox(
+                    height: 100.h,
+                  ),
                   const Align(
                       alignment: Alignment.topLeft,
-                      child: Text("Current Password")
+                      child: Text("Current Password")),
+                  SizedBox(
+                    height: 8.h,
                   ),
-                  SizedBox(height: 8.h,),
                   AppTextField(
                     obscureText: true,
                     controller: _currentPassword,
                     validator: FieldValidator.password(),
                   ),
-                  SizedBox(height: 20.h,),
-                 const Align(
-                      alignment: Alignment.topLeft,
-                      child: Text("New Password")
+                  SizedBox(
+                    height: 20.h,
                   ),
-                  SizedBox(height: 8.h,),
+                  const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("New Password")),
+                  SizedBox(
+                    height: 8.h,
+                  ),
                   AppTextField(
                     obscureText: true,
                     controller: _password,
                     validator: FieldValidator.password(),
                   ),
-                  SizedBox(height: 20.h,),
-                 const  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text("Confirm New Password")
+                  SizedBox(
+                    height: 20.h,
                   ),
-                  SizedBox(height: 8.h,),
+                  const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("Confirm New Password")),
+                  SizedBox(
+                    height: 8.h,
+                  ),
                   AppTextField(
                     obscureText: true,
                     controller: _confirmPassword,
-                    validator: (e){
-                      if(_confirmPassword.text.trim()!=e){
+                    validator: (e) {
+                      if (_confirmPassword.text.trim() != e) {
                         return "password does not match";
                       }
                     },
@@ -86,19 +94,20 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                   ),
                   Flexible(
                     child: PlatButton(
-                      appState: model.appState,
+                        appState: model.appState,
                         title: "Change Password",
-                        onTap: (){
-                          if(_forKey.currentState!.validate()){
-                            model.changePassword(_password.text,_currentPassword.text).then((value){
-                              if(value){
-                                Navigator.pop(context);
-                              }
-                            });
+                        onTap: () {
+                          if (_forKey.currentState!.validate()) {
+                            // model
+                            //     .changePassword(
+                            //         _password.text, _currentPassword.text)
+                            //     .then((value) {
+                            //   if (value) {
+                            //     Navigator.pop(context);
+                            //   }
+                            // });
                           }
-
-                        }
-                    ),
+                        }),
                   )
                 ],
               ),

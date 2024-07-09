@@ -20,9 +20,7 @@ import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/view_models/vblog_veiw_model.dart';
 import 'package:platterwave/views/screens/profile/view_user_profile_screen.dart';
 import 'package:platterwave/views/screens/restaurant/screen/res.dart';
-import 'package:platterwave/views/screens/vblog/post_by_tag.dart';
 import 'package:platterwave/views/screens/vblog/post_details.dart';
-import 'package:platterwave/views/screens/vblog/post_like.dart';
 import 'package:platterwave/views/screens/vblog/report_screen.dart';
 import 'package:platterwave/views/screens/vblog/video_player.dart';
 import 'package:platterwave/views/widget/containers/image_staggered.dart';
@@ -242,9 +240,7 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                 fontWeight: FontWeight.w500,
               ),
               style: AppTextTheme.h3,
-              onTap: (text) {
-                nav(context, PostByTag(tag: text.toString()));
-              },
+              onTap: (text) {},
               definitions: const [
                 TextDefinition(matcher: UrlMatcher()),
                 TextDefinition(matcher: EmailMatcher()),
@@ -299,11 +295,11 @@ class _TimelinePostContainerState extends State<TimelinePostContainer> {
                     },
                   ),
                   onTextTap: () {
-                    RandomFunction.sheet(
-                        context,
-                        PostLike(
-                          post: widget.post,
-                        ));
+                    // RandomFunction.sheet(
+                    //     context,
+                    //     PostLike(
+                    //       post: widget.post,
+                    //     ));
                   },
                   count: widget.post.likeCount.toString(),
                 ),

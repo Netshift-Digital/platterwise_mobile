@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:platterwave/data/local/local_storage.dart';
 import 'package:location_picker_flutter_map/location_picker_flutter_map.dart';

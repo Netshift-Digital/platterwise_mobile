@@ -1,20 +1,13 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:platterwave/model/request_model/auth_medthod.dart';
 import 'package:platterwave/model/request_model/register_model.dart';
 import 'package:platterwave/res/color.dart';
 import 'package:platterwave/res/spacing.dart';
 import 'package:platterwave/res/text-theme.dart';
 import 'package:platterwave/res/theme.dart';
 import 'package:platterwave/utils/nav.dart';
-import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
 import 'package:platterwave/views/screens/auth/login.dart';
-import 'package:platterwave/views/screens/auth/otp.dart';
-import 'package:platterwave/views/screens/auth/profile_pic.dart';
-import 'package:platterwave/views/screens/bottom_nav/bottom_nav.dart';
-import 'package:platterwave/views/widget/appbar/appbar.dart';
 import 'package:platterwave/views/widget/button/custom-button.dart';
 import 'package:platterwave/views/widget/text_feild/country_field.dart';
 import 'package:platterwave/views/widget/text_feild/text_field.dart';
@@ -22,8 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:the_validator/the_validator.dart';
 
 class Register extends StatefulWidget {
-  final AuthMethod? authMethod;
-  const Register({Key? key, this.authMethod}) : super(key: key);
+  const Register({Key? key}) : super(key: key);
 
   @override
   State<Register> createState() => _RegisterState();
@@ -222,7 +214,6 @@ class _RegisterState extends State<Register> {
 
   void register(BuildContext context) async {
     var model = context.read<UserViewModel>();
-    // var imagePath = await Navigator.push(context, MaterialPageRoute(builder: (context)=>const ProfilePic()));
     model
         .registerUser(
             RegisterModel(
@@ -248,18 +239,5 @@ class _RegisterState extends State<Register> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (widget.authMethod != null) {
-      if (widget.authMethod!.user != null) {
-        var user = widget.authMethod!.user!;
-        _email.text = user.email ?? "";
-        if (user.email != null) {
-          enableEmail = false;
-        }
-        _fullName.text = user.displayName ?? "";
-        authId = user.uid ?? "";
-        _phoneNumber.text = user.phoneNumber ?? "";
-        imageUrl = user.photoURL ?? "";
-      }
-    }
   }
 }

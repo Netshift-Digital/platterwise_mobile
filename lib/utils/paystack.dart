@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 //import 'package:flutter_paystack_payment_plus/flutter_paystack_payment_plus.dart';
 //import 'package:pay_with_paystack/pay_with_paystack.dart';

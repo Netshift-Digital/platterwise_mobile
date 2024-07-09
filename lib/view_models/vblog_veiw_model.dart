@@ -132,36 +132,6 @@ class VBlogViewModel extends BaseViewModel {
     return null;
   }
 
-//Get users that liked a post
-  Future<List<AllLikerDetails>> getLikeUser(int postId) async {
-    try {
-      var data = await vBlogService.getPostLikes(postId);
-      if (data != null) {
-        var p = LikeUsers.fromJson(data);
-        return p.allLikerDetails ?? [];
-      }
-    } catch (e) {
-      setState(AppState.idle);
-    }
-    return [];
-  }
-
-  Future<List<AllTagRank>?> getTopTag() async {
-    try {
-      var data = await vBlogService.getTopTags();
-      if (data != null) {
-        var p = TopTag.fromJson(data as Map);
-        topTags = [];
-        topTags = p.allTagRank;
-        notifyListeners();
-        return topTags;
-      }
-    } catch (e) {
-      setState(AppState.idle);
-    }
-    return null;
-  }
-
   Future<Post?> getMyPostById(String postId) async {
     try {
       setState(AppState.busy);
@@ -337,47 +307,6 @@ class VBlogViewModel extends BaseViewModel {
     } catch (e) {
       setState(AppState.idle);
     }
-  }
-
-  Future<dynamic> replyToComment(int commentId, String comment,
-      {required UserProfile userData,
-      required String id,
-      required String postId}) async {
-    try {
-      var data = await vBlogService.replyToComment(
-          commentId, LocalStorage.getUserId(), comment);
-      if (data != null) {
-        addActivity(
-            id,
-            UserActivity(
-                message: " replied to a comment on your post",
-                id: postId,
-                type: NotificationType.post.toString(),
-                firebaseAuthId: LocalStorage.getUserId(),
-                userName: userData.username,
-                profilePic: userData.profileUrl));
-      }
-    } catch (e) {
-      setState(AppState.idle);
-    }
-  }
-
-  Future<List<UsersReply>?> getCommentReply(int commentId) async {
-    List<UsersReply> comments = [];
-    try {
-      var data = await vBlogService.getToCommentReply(commentId);
-      if (data != null) {
-        for (var element in data['users_reply']) {
-          comments.add(UsersReply.fromJson(element as Map));
-        }
-        notifyListeners();
-        return comments;
-      }
-    } catch (e) {
-      print(e);
-      setState(AppState.idle);
-    }
-    return comments;
   }
 
   Future<List<String>?> uploadFiles(List<String> images) async {
@@ -640,26 +569,6 @@ class VBlogViewModel extends BaseViewModel {
     return null;
   }
 
-  Future<List<Post>> getPostByTag(String tag) async {
-    try {
-      var data = await vBlogService.getByTag(tag);
-      //print(data);
-      if (data != null) {
-        List<Post> searchResult = [];
-        for (var e in data['search_result']) {
-          var result = Post.fromJson(e);
-          searchResult.add(result);
-        }
-        return searchResult;
-      }
-      setState(AppState.idle);
-    } catch (e) {
-      // RandomFunction.toast("something went wrong");
-      setState(AppState.idle);
-    }
-    return [];
-  }
-
   addActivity(String id, UserActivity userActivity) {
     if (id != LocalStorage.getUserId()) {
       FirebaseFirestore.instance
@@ -727,27 +636,6 @@ class VBlogViewModel extends BaseViewModel {
       setState(AppState.idle);
     }
     return null;
-  }
-
-  void handelTags(String contentPost, String postId) {
-    List tag = [];
-    Map jsonTag = {};
-    if (contentPost.isNotEmpty) {
-      var list = contentPost.split(" ");
-      for (var e in list) {
-        if (e.startsWith("#")) {
-          tag.add(e);
-          if (jsonTag.isEmpty) {
-            jsonTag["tag_post"] = e;
-          } else {
-            jsonTag["tag_post${jsonTag.length + 1}"] = e;
-          }
-        }
-      }
-      if (jsonTag.isNotEmpty) {
-        vBlogService.createTags(jsonTag, postId, LocalStorage.getUserId());
-      }
-    }
   }
 
   sendNotification(String message, String topic,

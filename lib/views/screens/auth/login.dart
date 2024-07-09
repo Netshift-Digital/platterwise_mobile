@@ -210,36 +210,4 @@ class Login extends StatelessWidget {
       });
     }
   }
-
-  Future<void> google(BuildContext context) async {
-    context.read<UserViewModel>().google().then((value) {
-      if (value != null) {
-        if (value.newUser) {
-          nav(
-              context,
-              Register(
-                authMethod: value,
-              ));
-        } else {
-          nav(context, const BottomNav(), remove: true);
-        }
-      }
-    });
-  }
-
-  Future<void> facebook(BuildContext context) async {
-    context.read<UserViewModel>().signInWithFacebook().then((value) {
-      if (value != null) {
-        if (value.newUser) {
-          nav(
-              context,
-              Register(
-                authMethod: value,
-              ));
-        } else {
-          nav(context, const BottomNav(), remove: true);
-        }
-      }
-    });
-  }
 }

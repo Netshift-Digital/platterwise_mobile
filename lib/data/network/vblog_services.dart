@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:platterwave/constant/endpoint.dart';
 import 'package:platterwave/data/local/local_storage.dart';
@@ -335,65 +334,6 @@ class VBlogService {
     return null;
   }
 
-  Future<dynamic> replyToComment(
-      int commentId, String uid, String comment) async {
-    var body = jsonEncode({
-      "firebaseAuthID": uid,
-      "comment_id": commentId,
-      "reply_post": comment
-    });
-    try {
-      var response = await client
-          .post(Uri.parse("${baseurl}reply_comment.php"), body: body, headers: {
-        "Content-type": "application/json",
-      });
-      var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        return data;
-      } else {
-        RandomFunction.toast(data['status'] ?? "");
-      }
-    } on SocketException catch (_) {
-      throw Failure("No internet connection");
-    } on HttpException catch (_) {
-      throw Failure("Service not currently available");
-    } on TimeoutException catch (_) {
-      throw Failure("Poor internet connection");
-    } catch (e) {
-      throw Failure("Something went wrong. Try again");
-    }
-    return null;
-  }
-
-  Future<dynamic> getToCommentReply(int commentId) async {
-    var body = jsonEncode({
-      "comment_id": commentId,
-    });
-    try {
-      var response = await client.post(
-          Uri.parse("${baseurl}get_reply_comment.php"),
-          body: body,
-          headers: {
-            "Content-type": "application/json",
-          });
-      var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        return data;
-      } else {
-        RandomFunction.toast(data['status'] ?? "");
-      }
-    } on SocketException catch (_) {
-      throw Failure("No internet connection");
-    } on HttpException catch (_) {
-      throw Failure("Service not currently available");
-    } on TimeoutException catch (_) {
-      throw Failure("Poor internet connection");
-    } catch (e) {
-      throw Failure("Something went wrong. Try again");
-    }
-    return null;
-  }
-
   Future<Map<String, dynamic>?> fellowUser(String uId) async {
     var body = jsonEncode({"user": uId});
     var token = LocalStorage.getToken();
@@ -540,34 +480,6 @@ class VBlogService {
     return null;
   }
 
-  Future<dynamic> getByTag(String tag) async {
-    var body = jsonEncode({
-      "search_tag": tag,
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid
-    });
-    try {
-      var response = await client
-          .post(Uri.parse("${baseurl}search_tags.php"), body: body, headers: {
-        "Content-type": "application/json",
-      });
-      var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        return data;
-      } else {
-        //RandomFunction.toast(data['status']??"");
-      }
-    } on SocketException catch (_) {
-      throw Failure("No internet connection");
-    } on HttpException catch (_) {
-      throw Failure("Service not currently available");
-    } on TimeoutException catch (_) {
-      throw Failure("Poor internet connection");
-    } catch (e) {
-      throw Failure("Something went wrong. Try again");
-    }
-    return null;
-  }
-
   Future<Map<String, dynamic>?> getPostById(String postId) async {
     var body = jsonEncode({
       "post_id": postId,
@@ -599,35 +511,6 @@ class VBlogService {
     return null;
   }
 
-  Future<dynamic> createTags(
-      Map tag, String postId, String firebaseAuthID) async {
-    tag.addAll({"firebaseAuthID": firebaseAuthID, "post_id": postId});
-    var body = jsonEncode(tag);
-    print("The create tag body is $body");
-    try {
-      var response = await client
-          .post(Uri.parse("${baseurl}create_tags.php"), body: body, headers: {
-        "Content-type": "application/json",
-      });
-      var data = jsonDecode(response.body);
-      print(data);
-      if (response.statusCode == 200) {
-        return data;
-      } else {
-        //RandomFunction.toast(data['status']??"");
-      }
-    } on SocketException catch (_) {
-      throw Failure("No internet connection");
-    } on HttpException catch (_) {
-      throw Failure("Service not currently available");
-    } on TimeoutException catch (_) {
-      throw Failure("Poor internet connection");
-    } catch (e) {
-      throw Failure("Something went wrong. Try again");
-    }
-    return null;
-  }
-
   Future<dynamic> sendNotification(String message, String topic,
       {String title = "", String? postId, String? type}) async {
     var map = {
@@ -646,30 +529,6 @@ class VBlogService {
             "Content-type": "application/json",
             "Authorization": firebaseNotificationKey
           });
-      var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        return data;
-      } else {
-        //RandomFunction.toast(data['status']??"");
-      }
-    } on SocketException catch (_) {
-      throw Failure("No internet connection");
-    } on HttpException catch (_) {
-      throw Failure("Service not currently available");
-    } on TimeoutException catch (_) {
-      throw Failure("Poor internet connection");
-    } catch (e) {
-      throw Failure("Something went wrong. Try again");
-    }
-    return null;
-  }
-
-  Future<dynamic> getTopTags() async {
-    try {
-      var response =
-          await client.get(Uri.parse("${baseurl}trending_tags.php"), headers: {
-        "Content-type": "application/json",
-      });
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         return data;
@@ -778,35 +637,6 @@ class VBlogService {
       throw Failure("Poor internet connection");
     } catch (e) {
       print(e);
-      throw Failure("Something went wrong. Try again");
-    }
-    return null;
-  }
-
-  Future<Map<String, dynamic>?> getPostLikes(int postId) async {
-    var body = jsonEncode({
-      "firebaseAuthID": FirebaseAuth.instance.currentUser!.uid,
-      "post_id": postId,
-    });
-    try {
-      var response = await client.post(
-        Uri.parse("${baseurl}liker_detail.php"),
-        body: body,
-        headers: {
-          "Content-type": "application/json",
-        },
-      ).timeout(const Duration(seconds: 10));
-      var data = jsonDecode(response.body);
-      if (response.statusCode == 200) {
-        return data;
-      }
-    } on SocketException catch (_) {
-      throw Failure("No internet connection");
-    } on HttpException catch (_) {
-      throw Failure("Service not currently available");
-    } on TimeoutException catch (_) {
-      throw Failure("Poor internet connection");
-    } catch (e) {
       throw Failure("Something went wrong. Try again");
     }
     return null;

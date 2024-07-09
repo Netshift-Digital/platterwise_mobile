@@ -1,5 +1,4 @@
 import 'package:barcode_widget/barcode_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/model/restaurant/reservation_model.dart';

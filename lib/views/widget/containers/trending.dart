@@ -25,18 +25,6 @@ class Trending extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: 10.h,
-                ),
-                PlatButton(
-                    title: "Trending",
-                    height: 39,
-                    width: 84,
-                    textSize: 15,
-                    padding: 4,
-                    textColor: AppColor.g800,
-                    color: AppColor.g30,
-                    onTap: () {}),
-                SizedBox(
                   height: 20.h,
                 ),
                 Row(
