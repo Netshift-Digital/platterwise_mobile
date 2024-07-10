@@ -80,6 +80,21 @@ class UserViewModel extends BaseViewModel {
     return false;
   }
 
+  Future<bool> changePassword(String oldPassword, String newPassword) async {
+    try {
+      setState(AppState.busy);
+      var res = await userService.changePassword(oldPassword, newPassword);
+      setState(AppState.idle);
+      if (res != null) {
+        return true;
+      }
+    } catch (e) {
+      print(e.toString());
+      setState(AppState.idle);
+    }
+    return false;
+  }
+
   Future<bool> resetPassword(
       String email, String password, String token) async {
     try {

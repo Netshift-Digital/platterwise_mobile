@@ -226,7 +226,44 @@ class UserService {
             "Authorization": "Bearer $tokenT"
           }).timeout(const Duration(seconds: 20));
       var data = jsonDecode(response.body);
-       if (data["status_code"] == 200 && data["success"] == true) {
+      if (data["status_code"] == 200 && data["success"] == true) {
+        return data;
+      } else {
+        RandomFunction.toast(data["response"]);
+      }
+    } on SocketException catch (_) {
+      throw Failure("No internet connection");
+    } on HttpException catch (_) {
+      throw Failure("Service not currently available");
+    } on TimeoutException catch (_) {
+      throw Failure("Poor internet connection");
+    } catch (e) {
+      throw Failure("Something went wrong. Try again");
+    }
+    return null;
+  }
+
+  Future<Map<String, dynamic>?> changePassword(
+      String oldpassword, String newpassword) async {
+    var tokenT = LocalStorage.getToken();
+    var boDy = {
+      "old_password": oldpassword,
+      "new_password": newpassword,
+    };
+
+    try {
+      var response = await client.post(
+          Uri.parse(
+            "${baseurl3}user/change-password",
+          ),
+          body: jsonEncode(boDy),
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer $tokenT"
+          }).timeout(const Duration(seconds: 20));
+      var data = jsonDecode(response.body);
+      print("The data is $data");
+      if (data["status_code"] == 200 && data["success"] == true) {
         return data;
       } else {
         RandomFunction.toast(data["response"]);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:platterwave/utils/random_functions.dart';
 import 'package:platterwave/utils/size_config/size_config.dart';
 import 'package:platterwave/utils/size_config/size_extensions.dart';
 import 'package:platterwave/view_models/user_view_model.dart';
@@ -84,7 +85,8 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                     obscureText: true,
                     controller: _confirmPassword,
                     validator: (e) {
-                      if (_confirmPassword.text.trim() != e) {
+                      if (_confirmPassword.text.trim() !=
+                          _password.text.trim()) {
                         return "password does not match";
                       }
                     },
@@ -98,14 +100,18 @@ class _EditPasswordScreenState extends State<EditPasswordScreen> {
                         title: "Change Password",
                         onTap: () {
                           if (_forKey.currentState!.validate()) {
-                            // model
-                            //     .changePassword(
-                            //         _password.text, _currentPassword.text)
-                            //     .then((value) {
-                            //   if (value) {
-                            //     Navigator.pop(context);
-                            //   }
-                            // });
+                            model
+                                .changePassword(
+                                    _currentPassword.text, _password.text)
+                                .then((value) {
+                              if (value) {
+                                Future.delayed(Duration(seconds: 2), () {
+                                  RandomFunction.toast(
+                                      "Password Changed Successfully");
+                                });
+                                Navigator.pop(context);
+                              }
+                            });
                           }
                         }),
                   )
