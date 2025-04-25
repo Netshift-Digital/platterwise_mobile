@@ -94,8 +94,7 @@ class _MyAppState extends State<MyApp> {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/launcher_icon');
     final DarwinInitializationSettings initializationSettingsDarwin =
-        DarwinInitializationSettings(
-            onDidReceiveLocalNotification: (s, e, r, t) {});
+        DarwinInitializationSettings();
     final InitializationSettings initializationSettings =
         InitializationSettings(
             android: initializationSettingsAndroid,

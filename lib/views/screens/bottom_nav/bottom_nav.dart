@@ -4,6 +4,7 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:platterwave/data/local/local_storage.dart';
 import 'package:platterwave/main.dart';
 import 'package:platterwave/model/bottom_nav_model.dart';
@@ -23,7 +24,6 @@ import 'package:platterwave/views/screens/restaurant/screen/user_reservations.da
 import 'package:platterwave/views/screens/vblog/shared_post.dart';
 import 'package:platterwave/views/screens/vblog/timeline.dart';
 import 'package:provider/provider.dart';
-import 'package:svg_icon/svg_icon.dart';
 import '../../../res/text-theme.dart';
 
 class BottomNav extends StatefulWidget {
@@ -77,8 +77,9 @@ class _BottomNavState extends State<BottomNav> {
         items: bottomNav.map((e) {
           return BottomNavigationBarItem(
             label: "\n${e.title}",
-            icon:
-                e.icon.isEmpty ? const Icon(Icons.add_circle) : SvgIcon(e.icon),
+            icon: e.icon.isEmpty
+                ? const Icon(Icons.add_circle)
+                : SvgPicture.asset(e.icon),
           );
         }).toList(),
       ),

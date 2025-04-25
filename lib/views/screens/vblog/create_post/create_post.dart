@@ -217,7 +217,7 @@ class _CreatePostState extends State<CreatePost> {
     var croppedImage = <String>[];
     if (selectedImages.isNotEmpty) {
       for (var e in selectedImages) {
-        CroppedFile? croppedFile = await ImageCropper().cropImage(
+        File? croppedFile = await ImageCropper().cropImage(
           sourcePath: e.path,
           aspectRatioPresets: [
             CropAspectRatioPreset.square,
@@ -226,17 +226,12 @@ class _CreatePostState extends State<CreatePost> {
             CropAspectRatioPreset.ratio4x3,
             CropAspectRatioPreset.ratio16x9
           ],
-          uiSettings: [
-            AndroidUiSettings(
-                toolbarTitle: 'Cropper',
-                toolbarColor: Colors.deepOrange,
-                toolbarWidgetColor: Colors.white,
-                initAspectRatio: CropAspectRatioPreset.original,
-                lockAspectRatio: false),
-            IOSUiSettings(
-              title: 'Cropper',
-            ),
-          ],
+          androidUiSettings: AndroidUiSettings(
+              toolbarTitle: 'Cropper',
+              toolbarColor: Colors.deepOrange,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false),
         );
         if (croppedFile != null) {
           croppedImage.add(croppedFile.path);
@@ -379,17 +374,12 @@ class _CreatePostState extends State<CreatePost> {
         CropAspectRatioPreset.ratio4x3,
         CropAspectRatioPreset.ratio16x9
       ],
-      uiSettings: [
-        AndroidUiSettings(
-            toolbarTitle: 'Cropper',
-            toolbarColor: Colors.deepOrange,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        IOSUiSettings(
-          title: 'Cropper',
-        ),
-      ],
+      androidUiSettings: AndroidUiSettings(
+          toolbarTitle: 'Cropper',
+          toolbarColor: Colors.deepOrange,
+          toolbarWidgetColor: Colors.white,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false),
     );
   }
 
