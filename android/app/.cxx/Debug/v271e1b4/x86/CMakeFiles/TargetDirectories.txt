@@ -1,0 +1,2 @@
+/Users/macbook/FlutterProjects/platterwise_mobile/android/app/.cxx/Debug/v271e1b4/x86/CMakeFiles/edit_cache.dir
+/Users/macbook/FlutterProjects/platterwise_mobile/android/app/.cxx/Debug/v271e1b4/x86/CMakeFiles/rebuild_cache.dir

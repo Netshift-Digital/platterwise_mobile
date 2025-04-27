@@ -217,21 +217,23 @@ class _CreatePostState extends State<CreatePost> {
     var croppedImage = <String>[];
     if (selectedImages.isNotEmpty) {
       for (var e in selectedImages) {
-        File? croppedFile = await ImageCropper().cropImage(
+        CroppedFile? croppedFile = await ImageCropper().cropImage(
           sourcePath: e.path,
-          aspectRatioPresets: [
-            CropAspectRatioPreset.square,
-            CropAspectRatioPreset.ratio3x2,
-            CropAspectRatioPreset.original,
-            CropAspectRatioPreset.ratio4x3,
-            CropAspectRatioPreset.ratio16x9
+          // aspectRatioPresets: [
+          //   CropAspectRatioPreset.square,
+          //   CropAspectRatioPreset.ratio3x2,
+          //   CropAspectRatioPreset.original,
+          //   CropAspectRatioPreset.ratio4x3,
+          //   CropAspectRatioPreset.ratio16x9
+          // ],
+          uiSettings: [
+            AndroidUiSettings(
+                toolbarTitle: 'Cropper',
+                toolbarColor: Colors.deepOrange,
+                toolbarWidgetColor: Colors.white,
+                initAspectRatio: CropAspectRatioPreset.original,
+                lockAspectRatio: false)
           ],
-          androidUiSettings: AndroidUiSettings(
-              toolbarTitle: 'Cropper',
-              toolbarColor: Colors.deepOrange,
-              toolbarWidgetColor: Colors.white,
-              initAspectRatio: CropAspectRatioPreset.original,
-              lockAspectRatio: false),
         );
         if (croppedFile != null) {
           croppedImage.add(croppedFile.path);
@@ -367,19 +369,14 @@ class _CreatePostState extends State<CreatePost> {
   Future<void> cropImage(String imagePath) async {
     await ImageCropper().cropImage(
       sourcePath: imagePath,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
+      uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false)
       ],
-      androidUiSettings: AndroidUiSettings(
-          toolbarTitle: 'Cropper',
-          toolbarColor: Colors.deepOrange,
-          toolbarWidgetColor: Colors.white,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false),
     );
   }
 
